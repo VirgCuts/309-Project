@@ -50,10 +50,10 @@ class OwnerController {
      // function just to create dummy data
     @RequestMapping(method = RequestMethod.GET, path = "/owner/create")
     public String createDummyData() {
-        Owners o1 = new Owners(1, "John", "Doe", "404 Not found", "some numbers");
-        Owners o2 = new Owners(2, "Jane", "Doe", "Its a secret", "you wish");
-        Owners o3 = new Owners(3, "Some", "Pleb", "Right next to the Library", "515-345-41213");
-        Owners o4 = new Owners(4, "Chad", "Champion", "Reddit memes corner", "420-420-4200");
+        Owners o1 = new Owners(1, "IGOR'S THEME", "Tyler, the Creator", "Hip-Hop", "IGOR");
+        Owners o2 = new Owners(2, "Flashing Lights", "Kanye West", "Rap", "Graduation");
+        Owners o3 = new Owners(3, "How it go", "Yeat", "Rap", "AfterLyfe");
+        Owners o4 = new Owners(4, "Dance Now", "JID", "Rap", "The Forever Story");
         ownersRepository.save(o1);
         ownersRepository.save(o2);
         ownersRepository.save(o3);
