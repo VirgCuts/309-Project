@@ -4,7 +4,7 @@
     "type": "PACKAGED_MANIFESTS",
     "kind": "Directory"
   },
-  "applicationId": "com.example.viewtest",
+  "applicationId": "com.example.helloworldbuttontest",
   "variantName": "debug",
   "elements": [
     {

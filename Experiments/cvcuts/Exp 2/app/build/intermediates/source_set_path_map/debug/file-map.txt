@@ -1,47 +1,31 @@
-com.example.viewtest.app-appcompat-resources-1.6.1-0 C:\Users\carte\.gradle\caches\transforms-3\04a0f34cf908c682d73fc22f94c08cc8\transformed\appcompat-resources-1.6.1\res
-com.example.viewtest.app-cardview-1.0.0-1 C:\Users\carte\.gradle\caches\transforms-3\05282c1f0a97c352c32a939bc2096859\transformed\cardview-1.0.0\res
-com.example.viewtest.app-coordinatorlayout-1.1.0-2 C:\Users\carte\.gradle\caches\transforms-3\058e2b20403460f42e6113003ce03dc3\transformed\coordinatorlayout-1.1.0\res
-com.example.viewtest.app-lifecycle-livedata-ktx-2.6.2-3 C:\Users\carte\.gradle\caches\transforms-3\07860644c1db4214369b95041f64babb\transformed\lifecycle-livedata-ktx-2.6.2\res
-com.example.viewtest.app-recyclerview-1.1.0-4 C:\Users\carte\.gradle\caches\transforms-3\1fad258d92024336cf18f282cac03aa0\transformed\recyclerview-1.1.0\res
-com.example.viewtest.app-annotation-experimental-1.3.0-5 C:\Users\carte\.gradle\caches\transforms-3\20950aba1c926ba887c70028c7b332ad\transformed\annotation-experimental-1.3.0\res
-com.example.viewtest.app-core-1.9.0-6 C:\Users\carte\.gradle\caches\transforms-3\28a7af075d5af218c19b63a2f54b1523\transformed\core-1.9.0\res
-com.example.viewtest.app-window-1.0.0-7 C:\Users\carte\.gradle\caches\transforms-3\2c7f8c69dcc114f4d646b70eba2a43b1\transformed\window-1.0.0\res
-com.example.viewtest.app-navigation-runtime-2.7.2-8 C:\Users\carte\.gradle\caches\transforms-3\370dcb76a635d0023ce3052dad64e139\transformed\navigation-runtime-2.7.2\res
-com.example.viewtest.app-navigation-fragment-2.7.2-9 C:\Users\carte\.gradle\caches\transforms-3\3cc0c0d95c58aa175c16764ed2b609b9\transformed\navigation-fragment-2.7.2\res
-com.example.viewtest.app-lifecycle-runtime-ktx-2.6.2-10 C:\Users\carte\.gradle\caches\transforms-3\3f7d31676de45fd59953d89aa6b51945\transformed\lifecycle-runtime-ktx-2.6.2\res
-com.example.viewtest.app-emoji2-views-helper-1.2.0-11 C:\Users\carte\.gradle\caches\transforms-3\53638a9dfb2cb6b8a71b8ea55c383338\transformed\emoji2-views-helper-1.2.0\res
-com.example.viewtest.app-slidingpanelayout-1.2.0-12 C:\Users\carte\.gradle\caches\transforms-3\5526e62567e1af3b993e866271e9a3c4\transformed\slidingpanelayout-1.2.0\res
-com.example.viewtest.app-viewpager2-1.0.0-13 C:\Users\carte\.gradle\caches\transforms-3\581a9cb79a8f602c26f7a7528b0ac73d\transformed\viewpager2-1.0.0\res
-com.example.viewtest.app-navigation-common-2.7.2-14 C:\Users\carte\.gradle\caches\transforms-3\58e1c5091e13be983ad821b0231468d7\transformed\navigation-common-2.7.2\res
-com.example.viewtest.app-constraintlayout-2.1.4-15 C:\Users\carte\.gradle\caches\transforms-3\5acf9a84f6874f66961cd7fc314b86a2\transformed\constraintlayout-2.1.4\res
-com.example.viewtest.app-lifecycle-livedata-2.6.2-16 C:\Users\carte\.gradle\caches\transforms-3\673fbbad2341421d74914a8c9462e08a\transformed\lifecycle-livedata-2.6.2\res
-com.example.viewtest.app-lifecycle-livedata-core-2.6.2-17 C:\Users\carte\.gradle\caches\transforms-3\6aa2b5ec8f37161cf956e5dcfbde2f2b\transformed\lifecycle-livedata-core-2.6.2\res
-com.example.viewtest.app-navigation-ui-2.7.2-18 C:\Users\carte\.gradle\caches\transforms-3\6ce98467a3cc5bbc3fe1c18080563cf8\transformed\navigation-ui-2.7.2\res
-com.example.viewtest.app-core-runtime-2.2.0-19 C:\Users\carte\.gradle\caches\transforms-3\6edf734ce6549cba42d2d87568ec4c5d\transformed\core-runtime-2.2.0\res
-com.example.viewtest.app-activity-ktx-1.7.1-20 C:\Users\carte\.gradle\caches\transforms-3\739d27e3dfd766b349fcdf99142e60c5\transformed\activity-ktx-1.7.1\res
-com.example.viewtest.app-startup-runtime-1.1.1-21 C:\Users\carte\.gradle\caches\transforms-3\752f68e390483f1989f726856baf1dd5\transformed\startup-runtime-1.1.1\res
-com.example.viewtest.app-profileinstaller-1.3.0-22 C:\Users\carte\.gradle\caches\transforms-3\784ad8f1570ed9f0e3099a314a2f712a\transformed\profileinstaller-1.3.0\res
-com.example.viewtest.app-lifecycle-runtime-2.6.2-23 C:\Users\carte\.gradle\caches\transforms-3\809d8d241bb28b1ee11cc4c2910e3d00\transformed\lifecycle-runtime-2.6.2\res
-com.example.viewtest.app-savedstate-1.2.1-24 C:\Users\carte\.gradle\caches\transforms-3\8cc9538d07be5ee56813203a3bd5512d\transformed\savedstate-1.2.1\res
-com.example.viewtest.app-lifecycle-process-2.6.2-25 C:\Users\carte\.gradle\caches\transforms-3\913e343ad0c263176a97b028123e0c35\transformed\lifecycle-process-2.6.2\res
-com.example.viewtest.app-transition-1.4.1-26 C:\Users\carte\.gradle\caches\transforms-3\934d55a67fa2fe9c0af1ae5a19354ad0\transformed\transition-1.4.1\res
-com.example.viewtest.app-core-ktx-1.9.0-27 C:\Users\carte\.gradle\caches\transforms-3\96ab275d1a8424a226346d6acd77490d\transformed\core-ktx-1.9.0\res
-com.example.viewtest.app-emoji2-1.2.0-28 C:\Users\carte\.gradle\caches\transforms-3\9ec162b5cb5dad7a953e18733a42dbca\transformed\emoji2-1.2.0\res
-com.example.viewtest.app-fragment-ktx-1.6.0-29 C:\Users\carte\.gradle\caches\transforms-3\a3d25160b28ae301ef9b419dd7b0a83b\transformed\fragment-ktx-1.6.0\res
-com.example.viewtest.app-appcompat-1.6.1-30 C:\Users\carte\.gradle\caches\transforms-3\af575453595166fed38ef613cf3573b3\transformed\appcompat-1.6.1\res
-com.example.viewtest.app-savedstate-ktx-1.2.1-31 C:\Users\carte\.gradle\caches\transforms-3\ba1b121d18f1620627f2d013cdba8993\transformed\savedstate-ktx-1.2.1\res
-com.example.viewtest.app-lifecycle-viewmodel-ktx-2.6.2-32 C:\Users\carte\.gradle\caches\transforms-3\c087f0cb35f772a7a962aea7eef179ab\transformed\lifecycle-viewmodel-ktx-2.6.2\res
-com.example.viewtest.app-lifecycle-viewmodel-savedstate-2.6.2-33 C:\Users\carte\.gradle\caches\transforms-3\da101a64ffb312eb40f1ce9372819c15\transformed\lifecycle-viewmodel-savedstate-2.6.2\res
-com.example.viewtest.app-lifecycle-livedata-core-ktx-2.6.2-34 C:\Users\carte\.gradle\caches\transforms-3\dda7b588766c9322cffc3086495f0367\transformed\lifecycle-livedata-core-ktx-2.6.2\res
-com.example.viewtest.app-drawerlayout-1.1.1-35 C:\Users\carte\.gradle\caches\transforms-3\e2d2d3c4dd62635dbea352ab171561e5\transformed\drawerlayout-1.1.1\res
-com.example.viewtest.app-material-1.9.0-36 C:\Users\carte\.gradle\caches\transforms-3\e5f321a248aa217236dda4759916dcd9\transformed\material-1.9.0\res
-com.example.viewtest.app-activity-1.7.1-37 C:\Users\carte\.gradle\caches\transforms-3\e645e175f9406c6f0182c382118e89d6\transformed\activity-1.7.1\res
-com.example.viewtest.app-fragment-1.6.0-38 C:\Users\carte\.gradle\caches\transforms-3\ee592d92d95bbb31c5b5e0c1cbed7647\transformed\fragment-1.6.0\res
-com.example.viewtest.app-lifecycle-viewmodel-2.6.2-39 C:\Users\carte\.gradle\caches\transforms-3\f6c89efccee68d4203c2199646e1b5b6\transformed\lifecycle-viewmodel-2.6.2\res
-com.example.viewtest.app-pngs-40 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\build\generated\res\pngs\debug
-com.example.viewtest.app-resValues-41 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\build\generated\res\resValues\debug
-com.example.viewtest.app-packageDebugResources-42 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.example.viewtest.app-packageDebugResources-43 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.example.viewtest.app-merged_res-44 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\build\intermediates\merged_res\debug
-com.example.viewtest.app-debug-45 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\src\debug\res
-com.example.viewtest.app-main-46 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\src\main\res
+com.example.helloworldbuttontest.app-appcompat-resources-1.6.1-0 C:\Users\carte\.gradle\caches\transforms-3\04a0f34cf908c682d73fc22f94c08cc8\transformed\appcompat-resources-1.6.1\res
+com.example.helloworldbuttontest.app-cardview-1.0.0-1 C:\Users\carte\.gradle\caches\transforms-3\05282c1f0a97c352c32a939bc2096859\transformed\cardview-1.0.0\res
+com.example.helloworldbuttontest.app-coordinatorlayout-1.1.0-2 C:\Users\carte\.gradle\caches\transforms-3\058e2b20403460f42e6113003ce03dc3\transformed\coordinatorlayout-1.1.0\res
+com.example.helloworldbuttontest.app-recyclerview-1.1.0-3 C:\Users\carte\.gradle\caches\transforms-3\1fad258d92024336cf18f282cac03aa0\transformed\recyclerview-1.1.0\res
+com.example.helloworldbuttontest.app-annotation-experimental-1.3.0-4 C:\Users\carte\.gradle\caches\transforms-3\20950aba1c926ba887c70028c7b332ad\transformed\annotation-experimental-1.3.0\res
+com.example.helloworldbuttontest.app-core-1.9.0-5 C:\Users\carte\.gradle\caches\transforms-3\28a7af075d5af218c19b63a2f54b1523\transformed\core-1.9.0\res
+com.example.helloworldbuttontest.app-lifecycle-viewmodel-2.5.1-6 C:\Users\carte\.gradle\caches\transforms-3\42223789b523a40174f3a8b9f237feb5\transformed\lifecycle-viewmodel-2.5.1\res
+com.example.helloworldbuttontest.app-lifecycle-runtime-2.5.1-7 C:\Users\carte\.gradle\caches\transforms-3\4267d9e2d9c1fa0257ba3411a6120127\transformed\lifecycle-runtime-2.5.1\res
+com.example.helloworldbuttontest.app-lifecycle-process-2.4.1-8 C:\Users\carte\.gradle\caches\transforms-3\4eb4b953398cff91e70e367f7f0f5a04\transformed\lifecycle-process-2.4.1\res
+com.example.helloworldbuttontest.app-emoji2-views-helper-1.2.0-9 C:\Users\carte\.gradle\caches\transforms-3\53638a9dfb2cb6b8a71b8ea55c383338\transformed\emoji2-views-helper-1.2.0\res
+com.example.helloworldbuttontest.app-viewpager2-1.0.0-10 C:\Users\carte\.gradle\caches\transforms-3\581a9cb79a8f602c26f7a7528b0ac73d\transformed\viewpager2-1.0.0\res
+com.example.helloworldbuttontest.app-constraintlayout-2.1.4-11 C:\Users\carte\.gradle\caches\transforms-3\5acf9a84f6874f66961cd7fc314b86a2\transformed\constraintlayout-2.1.4\res
+com.example.helloworldbuttontest.app-startup-runtime-1.1.1-12 C:\Users\carte\.gradle\caches\transforms-3\752f68e390483f1989f726856baf1dd5\transformed\startup-runtime-1.1.1\res
+com.example.helloworldbuttontest.app-savedstate-1.2.0-13 C:\Users\carte\.gradle\caches\transforms-3\8112259a8539b511a3e61491affd27ea\transformed\savedstate-1.2.0\res
+com.example.helloworldbuttontest.app-core-ktx-1.9.0-14 C:\Users\carte\.gradle\caches\transforms-3\96ab275d1a8424a226346d6acd77490d\transformed\core-ktx-1.9.0\res
+com.example.helloworldbuttontest.app-emoji2-1.2.0-15 C:\Users\carte\.gradle\caches\transforms-3\9ec162b5cb5dad7a953e18733a42dbca\transformed\emoji2-1.2.0\res
+com.example.helloworldbuttontest.app-fragment-1.3.6-16 C:\Users\carte\.gradle\caches\transforms-3\a43d178abaa1b1b6bf236e0f0cca0e16\transformed\fragment-1.3.6\res
+com.example.helloworldbuttontest.app-lifecycle-livedata-core-2.5.1-17 C:\Users\carte\.gradle\caches\transforms-3\ad37f4a2d2342618b948888069029519\transformed\lifecycle-livedata-core-2.5.1\res
+com.example.helloworldbuttontest.app-appcompat-1.6.1-18 C:\Users\carte\.gradle\caches\transforms-3\af575453595166fed38ef613cf3573b3\transformed\appcompat-1.6.1\res
+com.example.helloworldbuttontest.app-lifecycle-viewmodel-savedstate-2.5.1-19 C:\Users\carte\.gradle\caches\transforms-3\c3df4177a7c2cb8c8aa27701b1e56613\transformed\lifecycle-viewmodel-savedstate-2.5.1\res
+com.example.helloworldbuttontest.app-activity-1.6.0-20 C:\Users\carte\.gradle\caches\transforms-3\df4f14cb1b234b4e780fd906db83cbe7\transformed\activity-1.6.0\res
+com.example.helloworldbuttontest.app-drawerlayout-1.1.1-21 C:\Users\carte\.gradle\caches\transforms-3\e2d2d3c4dd62635dbea352ab171561e5\transformed\drawerlayout-1.1.1\res
+com.example.helloworldbuttontest.app-transition-1.2.0-22 C:\Users\carte\.gradle\caches\transforms-3\e44573450bfeaacfbe89d93e4952b042\transformed\transition-1.2.0\res
+com.example.helloworldbuttontest.app-material-1.9.0-23 C:\Users\carte\.gradle\caches\transforms-3\e5f321a248aa217236dda4759916dcd9\transformed\material-1.9.0\res
+com.example.helloworldbuttontest.app-pngs-24 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\build\generated\res\pngs\debug
+com.example.helloworldbuttontest.app-resValues-25 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\build\generated\res\resValues\debug
+com.example.helloworldbuttontest.app-packageDebugResources-26 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.helloworldbuttontest.app-packageDebugResources-27 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.helloworldbuttontest.app-merged_res-28 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\build\intermediates\merged_res\debug
+com.example.helloworldbuttontest.app-debug-29 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\src\debug\res
+com.example.helloworldbuttontest.app-main-30 C:\Users\carte\Documents\309Local\km_203\Experiments\cvcuts\Exp 2\app\src\main\res
