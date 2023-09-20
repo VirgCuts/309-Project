@@ -160,12 +160,57 @@
         app:layout_constraintStart_toEndOf="@+id/button22"
         app:layout_constraintTop_toBottomOf="@+id/button10" />
 
+
     <Button
-        android:id="@+id/button27"
-        android:layout_width="wrap_content"
+        android:id="@+id/squareButton"
+        android:layout_width="128dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/square_button"
+        android:text="Click Me"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        tools:layout_editor_absoluteX="13dp" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="69dp" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="19dp" />
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="SpeakableTextPresentCheck">
+
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
