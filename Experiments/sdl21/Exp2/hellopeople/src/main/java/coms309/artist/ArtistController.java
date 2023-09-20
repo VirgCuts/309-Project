@@ -49,7 +49,7 @@ public class ArtistController {
     public @ResponseBody String createPerson(@RequestBody Artist artist) {
         System.out.println(artist);
         artistList.put(artist.getArtistName(), artist);
-        return "New person "+ artist.getArtistName() + " Saved";
+        return "New artist "+ artist.getArtistName() + " Saved";
     }
 
     // THIS IS THE READ OPERATION
@@ -58,7 +58,7 @@ public class ArtistController {
     // springboot automatically converts Person to JSON format when we return it
     // in this case because of @ResponseBody
     // Note: To READ we use GET method
-    @GetMapping("/artist/{firstName}")
+    @GetMapping("/artists/{artistName}")
     public @ResponseBody Artist getPerson(@PathVariable String artistName) {
         Artist a = artistList.get(artistName);
         return a;
@@ -71,7 +71,7 @@ public class ArtistController {
     // Here we are returning what we sent to the method
     // in this case because of @ResponseBody
     // Note: To UPDATE we use PUT method
-    @PutMapping("/artist/{firstName}")
+    @PutMapping("/artists/{artistName}")
     public @ResponseBody Artist updatePerson(@PathVariable String artistName, @RequestBody Artist a) {
         artistList.replace(artistName, a);
         return artistList.get(artistName);
@@ -83,7 +83,7 @@ public class ArtistController {
     // in this case because of @ResponseBody
     // Note: To DELETE we use delete method
     
-    @DeleteMapping("/artist/{firstName}")
+    @DeleteMapping("/artists/{artistName}")
     public @ResponseBody HashMap<String, Artist> deletePerson(@PathVariable String artistName) {
         artistList.remove(artistName);
         return artistList;

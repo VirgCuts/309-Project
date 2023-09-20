@@ -36,7 +36,6 @@ public class TestController {
 	
 	@PutMapping("/putTest/{message}")
 	public String putTest(@PathVariable String message) {
-		//TODO
 		savedData.setMessage(message);
 		return String.format("You sent a put request, so the saved message has been changed to %s", message);
 	}
