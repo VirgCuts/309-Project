@@ -1,6 +1,5 @@
 package com.example.sumon.androidvolley;
 
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.widget.ImageView;
 import com.android.volley.Cache;
 import com.android.volley.Cache.Entry;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.example.sumon.androidvolley.app.AppController;
 import com.example.sumon.androidvolley.utils.Const;
@@ -49,37 +49,32 @@ public class ImageRequestActivity extends Activity {
         imgNetWorkView.setImageUrl(Const.URL_IMAGE, imageLoader);
 
 
-        // If you are using normal ImageView
-		/*imageLoader.get(Const.URL_IMAGE, new ImageListener() {
+//        // If you are using normal ImageView
+//        ImageRequest imageRequest = new ImageRequest(Const.URL_IMAGE, response -> {
+//            // Set the loaded image to the ImageView
+//            imageView.setImageBitmap(response);
+//        }, 0, 0, ImageView.ScaleType.CENTER_CROP, null, error -> {
+//            // Handle error if the image cannot be loaded
+//            error.printStackTrace();
+//        });
+//        AppController.getInstance().addToRequestQueue(imageRequest);
 
-			@Override
-			public void onErrorResponse(VolleyError error) {
-				Log.e(TAG, "Image Load Error: " + error.getMessage());
-			}
-
-			@Override
-			public void onResponse(ImageContainer response, boolean arg1) {
-				if (response.getBitmap() != null) {
-					// load image into imageview
-					imageView.setImageBitmap(response.getBitmap());
-				}
-			}
-		});*/
 
         // Loading image with placeholder and error image
         imageLoader.get(Const.URL_IMAGE, ImageLoader.getImageListener(
-                imageView, R.drawable.ico_loading, R.drawable.ico_error));
+                imageView, R.drawable.ico_loading, R.drawable.ico_error
+        ));
 
         Cache cache = AppController.getInstance().getRequestQueue().getCache();
         Entry entry = cache.get(Const.URL_IMAGE);
-        if(entry != null){
+        if (entry != null) {
             try {
                 String data = new String(entry.data, "UTF-8");
                 // handle data, like converting it to xml, json, bitmap etc.,
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             // cached response doesn't exists. Make a network call here
         }
 
