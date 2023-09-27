@@ -17,6 +17,7 @@ public class AppController extends Application {
 	private RequestQueue mRequestQueue;
 	private ImageLoader mImageLoader;
 
+
 	private static AppController mInstance;
 
 	@Override

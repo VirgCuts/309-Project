@@ -13,13 +13,22 @@
         android:id="@+id/btnStringReq"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="String Request" />
+        android:text="Show Username Entered" />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:text="Response: " />
+
+    <EditText
+        android:id="@+id/userInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionGo"
+        android:hint="Username Here:">
+
+    </EditText>
 
     <TextView
         android:id="@+id/msgResponse"
