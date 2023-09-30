@@ -1,4 +1,4 @@
-package onetoone.Artist;
+package tables.Artists;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 
- * @author Vivek Bengre
+ * @author Conor O'Shea
  * 
  */ 
 
@@ -22,12 +22,15 @@ public class ArtistController {
 
     @Autowired
     ArtistRepository artistRepository;
+
+    @Autowired
+    SongRepository songRepository;
     
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
     @GetMapping(path = "/artist")
-    List<Artist> getAllArtist(){
+    List<Artist> getAllArtists(){
         return artistRepository.findAll();
     }
 
@@ -51,6 +54,18 @@ public class ArtistController {
             return null;
         artistRepository.save(request);
         return artistRepository.findById(id);
+    }
+
+    @PutMapping("/artist/{artistId}/song/{songId}")
+    String assignSongToArtist(@PathVariable int artistId,@PathVariable int songId){
+        Artist artist = artistRepository.findById(artistId);
+        Song song = songRepository.findById(songId);
+        if(artist == null || song == null)
+            return failure;
+        song.setArtist(artist);
+        artist.addSong(song);
+        artistRepository.save(artist);
+        return success;
     }
 
     @DeleteMapping(path = "/artist/{id}")

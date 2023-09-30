@@ -1,18 +1,18 @@
-package onetoone.Artist;
+package tables.Artists;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-//import onetoone.Song.Song;
+import tables.Songs.Song;
 
 /**
  * 
- * @author Vivek Bengre
+ * @author Conor O'Shea
  */ 
 
 @Entity
@@ -28,28 +28,28 @@ public class Artist {
     private String artistName;
     private int numPlatinums;
     private int numGrammys;
-    private String[] hasFeatures;
-    private String[] featuredOn;
+    private List<Artist> hasFeatures;
+    private List<Song> featuredOn;
 
     /*
      * @OneToOne creates a relation between the current entity/table(Laptop) with the entity/table defined below it(User)
      * @JsonIgnore is to assure that there is no infinite loop while returning either user/laptop objects (laptop->user->laptop->...)
      */
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "artist_id")
-    private Song song;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Song> songs;
 
-    public Artist(int id, String artistName, int numPlatinums, int numGrammys, String[] hasFeatures,
-                   String[] featuredOn) {
-        this.id = id;
+    public Artist(String artistName, int numPlatinums, int numGrammys, List<Artist> hasFeatures,
+                   List<Song> featuredOn) {
         this.artistName = artistName;
         this.numPlatinums = numPlatinums;
         this.numGrammys = numGrammys;
         this.hasFeatures = hasFeatures;
         this.featuredOn = featuredOn;
+        songs = new ArrayList<>();
     }
 
     public Artist() {
+        songs = new ArrayList<>();
     }
 
     // =============================== Getters and Setters for each field ================================== //
@@ -86,20 +86,37 @@ public class Artist {
         this.numGrammys = numGrammys;
     }
 
-    public String[] getHasFeatures(){
+    public List<Artist> getHasFeatures(){
         return hasFeatures;
     }
 
-    public void setHasFeatures(String[] hasFeatures){
+    public void setHasFeatures(List<Artist> hasFeatures){
         this.hasFeatures = hasFeatures;
     }
 
-    public String[] getFeaturedOn(){
+    public List<Song> getFeaturedOn(){
         return featuredOn;
     }
 
-    public void setFeaturedOn(String[] featuredOn){
+    public void setFeaturedOn(List<Song> featuredOn){
         this.featuredOn = featuredOn;
     }
+
+    public void addFeature(Song song){
+        this.featuredOn.add(song);
+    }
+
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
+    public void addSong(Song song){
+        this.songs.add(song);
+    }
+
 
 }
