@@ -1,4 +1,4 @@
-package tables.Songs;
+package onetoone.Songs;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 
- * @author Conor O'Shea
+ * @author Vivek Bengre
  * 
  */ 
 
@@ -26,26 +26,26 @@ public class SongController {
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
-    @GetMapping(path = "/song")
-    List<Song> getAllSongs(){
+    @GetMapping(path = "/laptops")
+    List<Song> getAllLaptops(){
         return songRepository.findAll();
     }
 
-    @GetMapping(path = "/song/{id}")
-    Song getSongById(@PathVariable int id){
+    @GetMapping(path = "/laptops/{id}")
+    Song getLaptopById(@PathVariable int id){
         return songRepository.findById(id);
     }
 
-    @PostMapping(path = "/song")
-    String createSong(@RequestBody Song song){
+    @PostMapping(path = "/laptops")
+    String createLaptop(@RequestBody Song song){
         if (song == null)
             return failure;
         songRepository.save(song);
         return success;
     }
 
-    @PutMapping(path = "/song/{id}")
-    Song updateSong(@PathVariable int id, @RequestBody Song request){
+    @PutMapping(path = "/laptops/{id}")
+    Song updateLaptop(@PathVariable int id, @RequestBody Song request){
         Song song = songRepository.findById(id);
         if(song == null)
             return null;
@@ -53,8 +53,8 @@ public class SongController {
         return songRepository.findById(id);
     }
 
-    @DeleteMapping(path = "/song/{id}")
-    String deleteSong(@PathVariable int id){
+    @DeleteMapping(path = "/laptops/{id}")
+    String deleteLaptop(@PathVariable int id){
         songRepository.deleteById(id);
         return success;
     }

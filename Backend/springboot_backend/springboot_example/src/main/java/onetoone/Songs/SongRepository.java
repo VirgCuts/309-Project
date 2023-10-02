@@ -1,16 +1,16 @@
-package tables.Artists;
+package onetoone.Songs;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
- * @author Conor O'Shea
+ * @author Vivek Bengre
  * 
  */ 
 
-public interface ArtistRepository extends JpaRepository<Artist, Long> {
-    Artist findById(int id);
+public interface SongRepository extends JpaRepository<Song, Long> {
+    Song findById(int id);
 
     @Transactional
     void deleteById(int id);

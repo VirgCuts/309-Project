@@ -1,4 +1,4 @@
-package tables.Artists;
+package onetoone.Artists;
 
 import java.util.List;
 
@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import onetoone.Songs.Song;
+import onetoone.Songs.SongRepository;
+
 /**
  * 
- * @author Conor O'Shea
+ * @author Vivek Bengre
  * 
  */ 
 
@@ -25,51 +28,51 @@ public class ArtistController {
 
     @Autowired
     SongRepository songRepository;
-    
+
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
-    @GetMapping(path = "/artist")
-    List<Artist> getAllArtists(){
+    @GetMapping(path = "/users")
+    List<Artist> getAllUsers(){
         return artistRepository.findAll();
     }
 
-    @GetMapping(path = "/artist/{id}")
-    Artist getArtistById(@PathVariable int id){
+    @GetMapping(path = "/users/{id}")
+    Artist getUserById( @PathVariable int id){
         return artistRepository.findById(id);
     }
 
-    @PostMapping(path = "/artist")
-    String createArtist(@RequestBody Artist artist){
+    @PostMapping(path = "/users")
+    String createUser(@RequestBody Artist artist){
         if (artist == null)
             return failure;
         artistRepository.save(artist);
         return success;
     }
 
-    @PutMapping(path = "/artist/{id}")
-    Artist updateArtist(@PathVariable int id, @RequestBody Artist request){
+    @PutMapping("/users/{id}")
+    Artist updateUser(@PathVariable int id, @RequestBody Artist request){
         Artist artist = artistRepository.findById(id);
         if(artist == null)
             return null;
         artistRepository.save(request);
         return artistRepository.findById(id);
-    }
-
-    @PutMapping("/artist/{artistId}/song/{songId}")
-    String assignSongToArtist(@PathVariable int artistId,@PathVariable int songId){
-        Artist artist = artistRepository.findById(artistId);
-        Song song = songRepository.findById(songId);
+    }   
+    
+    @PutMapping("/users/{userId}/laptops/{laptopId}")
+    String assignLaptopToUser(@PathVariable int userId,@PathVariable int laptopId){
+        Artist artist = artistRepository.findById(userId);
+        Song song = songRepository.findById(laptopId);
         if(artist == null || song == null)
             return failure;
-        song.setArtist(artist);
-        artist.addSong(song);
+        song.setUser(artist);
+        artist.setLaptop(song);
         artistRepository.save(artist);
         return success;
     }
 
-    @DeleteMapping(path = "/artist/{id}")
-    String deleteArtist(@PathVariable int id){
+    @DeleteMapping(path = "/users/{id}")
+    String deleteUser(@PathVariable int id){
         artistRepository.deleteById(id);
         return success;
     }

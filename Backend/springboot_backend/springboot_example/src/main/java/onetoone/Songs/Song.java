@@ -1,4 +1,4 @@
-package tables.Songs;
+package onetoone.Songs;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,11 +8,11 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import tables.Artists.Artist;
+import onetoone.Artists.Artist;
 
 /**
  * 
- * @author Conor O'Shea
+ * @author Vivek Bengre
  */ 
 
 @Entity
@@ -26,22 +26,23 @@ public class Song {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String songName;
-    private List<Artist> features;
     private String genre;
+//    private double cpuClock;
+//    private int cpuCores;
+//    private int ram;
+//    private String manufacturer;
+//    private int cost;
 
     /*
-     * @OneToOne creates a relation between the current entity/table(Song) with the entity/table defined below it(Artist)
-     * @JsonIgnore is to assure that there is no infinite loop while returning either Artist/Song objects (Song->Artist->Song->...)
+     * @OneToOne creates a relation between the current entity/table(Laptop) with the entity/table defined below it(User)
+     * @JsonIgnore is to assure that there is no infinite loop while returning either user/laptop objects (laptop->user->laptop->...)
      */
-    @ManyToOne
-    @JoinColumn(name = "artist_id")
+    @OneToOne
     @JsonIgnore
     private Artist artist;
-    // will also need album onetoone in the future
 
-    public Song(String songName, List<Artist> features, String genre) {
+    public Song(String songName, String genre) {
         this.songName = songName;
-        this.features = features;
         this.genre = genre;
     }
 
@@ -66,14 +67,6 @@ public class Song {
         this.songName = songName;
     }
 
-    public int getFeatures(){
-        return Features;
-    }
-
-    public void setFeatures(List<Artist> features){
-        this.features = features;
-    }
-
     public String getGenre(){
         return genre;
     }
@@ -82,11 +75,11 @@ public class Song {
         this.genre = genre;
     }
 
-    public Artist getArtist(){
+    public Artist getUser(){
         return artist;
     }
 
-    public void setArtist(Artist artist){
+    public void setUser(Artist artist){
         this.artist = artist;
     }
 
