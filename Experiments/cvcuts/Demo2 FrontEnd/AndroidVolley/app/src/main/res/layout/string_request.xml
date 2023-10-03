@@ -29,7 +29,8 @@
         android:inputType="text"
         android:minHeight="48dp"
         android:hint="Enter text here"
-        android:text="" />
+        android:text=""
+        android:imeOptions="actionSend"/>
 
     <TextView
         android:layout_width="fill_parent"

@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.EditText;
@@ -23,9 +25,7 @@ public class StringRequestActivity extends Activity {
     private Button btnStringReq, btnBack;
     private TextView msgResponse;
     private ProgressDialog pDialog;
-
-    private EditText searchText;
-
+    public EditText searchText;
     // This tag will be used to cancel the request
     private String tag_string_req = "string_req";
 
@@ -36,20 +36,28 @@ public class StringRequestActivity extends Activity {
 
         btnStringReq = (Button) findViewById(R.id.btnStringReq);
         btnBack = (Button) findViewById(R.id.btnBack);
+
         msgResponse = (TextView) findViewById(R.id.msgResponse);
-        searchText =  findViewById(R.id.searchText);
+        searchText = findViewById(R.id.searchText);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
 
-        btnStringReq.setOnClickListener(new View.OnClickListener() {
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                makeStringReq();
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    makeStringReq();
+                    handled = true;
+                }
+                return handled;
             }
         });
+
         btnBack.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(StringRequestActivity.this,
