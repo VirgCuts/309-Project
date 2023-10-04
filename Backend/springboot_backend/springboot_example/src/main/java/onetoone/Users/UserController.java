@@ -1,10 +1,7 @@
 package onetoone.Users;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
@@ -21,12 +18,39 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    @PostMapping(path = "/users/{name}")
+    String addSingleUser(@PathVariable String name)
+    {
+        User user = new User();
+        user.setName(name);
+        userRepository.save(user);
+        return "success";
+    }
+
     @GetMapping(path = "/leaderboard")
     List<User> getLeaderboard()
     {
         List<User> test = userRepository.findAll();
         test.sort(User::compareTo);
         return test;
+    }
+
+    @PostMapping(path = "/leaderboard/{name}/{score}")
+    String addUserLeaderboard(@PathVariable String name, @PathVariable int score)
+    {
+        User user = new User(name, score);
+        userRepository.save(user);
+        return "success";
+    }
+
+    @PutMapping(path = "/leaderboard/{name}/{score}")
+    User putUserLeaderboard(@PathVariable String name, @PathVariable int score)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return null;
+        user.setHighScore(score);
+        return userRepository.findByName(name);
     }
 
     @DeleteMapping(path = "/users/{id}")
