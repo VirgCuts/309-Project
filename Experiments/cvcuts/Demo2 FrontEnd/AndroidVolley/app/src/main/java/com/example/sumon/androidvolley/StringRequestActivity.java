@@ -18,14 +18,19 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.example.sumon.androidvolley.app.AppController;
 import com.example.sumon.androidvolley.utils.Const;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class StringRequestActivity extends Activity {
 
     private String TAG = StringRequestActivity.class.getSimpleName();
-    private Button btnStringReq, btnBack;
-    private TextView msgResponse;
+    private Button btnBack;
     private ProgressDialog pDialog;
-    public EditText searchText;
+    private TextView msgResponse;
+    private EditText searchText;
+    private TextView boolText;
+
     // This tag will be used to cancel the request
     private String tag_string_req = "string_req";
 
@@ -34,11 +39,12 @@ public class StringRequestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.string_request);
 
-        btnStringReq = (Button) findViewById(R.id.btnStringReq);
+
         btnBack = (Button) findViewById(R.id.btnBack);
 
         msgResponse = (TextView) findViewById(R.id.msgResponse);
         searchText = findViewById(R.id.searchText);
+        boolText = findViewById(R.id.boolText);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
@@ -51,6 +57,11 @@ public class StringRequestActivity extends Activity {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     makeStringReq();
                     handled = true;
+                    String jsonString = msgResponse.getText().toString();
+
+                    // Get the artist name from the EditText
+                    String artistToSearch = searchText.getText().toString();
+                    boolText.setText(searchArtistInJson(jsonString, artistToSearch));
                 }
                 return handled;
             }
@@ -67,10 +78,27 @@ public class StringRequestActivity extends Activity {
         });
     }
     //Checks edit text and compares it to the users in the data returns true of false depending on inclusion.
-    public boolean inDatabase() {
+    private String searchArtistInJson(String jsonString, String artistToSearch) {
 
-        return false;
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = jsonObject.getString("name");
+                if (name.equals(artistToSearch)) {
+                    JSONObject laptopObject = jsonObject.getJSONObject("laptop");
+                    return "Artist: " + name + " with song name: " + laptopObject.getString("songName") + " with " + jsonObject.getString("numPlatinums") + " platinum albums";
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "Song not found for " + artistToSearch;
     }
+
+
+
     private void showProgressDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
@@ -91,12 +119,14 @@ public class StringRequestActivity extends Activity {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, response.toString());
+
                 msgResponse.setText(response.toString());
                 hideProgressDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                System.out.print(TAG);
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 hideProgressDialog();
             }

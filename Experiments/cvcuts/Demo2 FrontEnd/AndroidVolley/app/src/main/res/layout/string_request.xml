@@ -15,12 +15,6 @@
         android:layout_height="wrap_content"
         android:text="Back" />
 
-    <Button
-        android:id="@+id/btnStringReq"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="String Request" />
-
     <EditText
         android:id="@+id/searchText"
         android:layout_width="match_parent"
@@ -33,6 +27,7 @@
         android:imeOptions="actionSend"/>
 
     <TextView
+        android:id="@+id/boolText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
