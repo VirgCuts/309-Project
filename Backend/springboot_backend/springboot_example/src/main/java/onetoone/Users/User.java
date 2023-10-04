@@ -3,9 +3,10 @@ package onetoone.Users;
 import onetoone.Songs.Song;
 
 import javax.persistence.*;
+import java.util.Comparator;
 
 @Entity
-public class User {
+public class User implements Comparator<User>, Comparable<User> {
 
     /*
      * The annotation @ID marks the field below as the primary key for the table created by springboot
@@ -57,5 +58,15 @@ public class User {
 
     public void setHighScore(int highScore){
         this.highScore = highScore;
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return o.highScore - this.highScore;
+    }
+
+    @Override
+    public int compare(User o1, User o2) {
+        return o2.highScore - o1.highScore;
     }
 }
