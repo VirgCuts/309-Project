@@ -52,9 +52,9 @@ class Main {
             artistRepository.save(artist3);
 
             User user1 = new User("Sam", 1000);
-            User user2 = new User("Keenan", 50);
+            User user2 = new User("Keenan", 33);
             User user3 = new User("Conor", 49);
-            User user4 = new User("Carter", 30);
+            User user4 = new User("Carter", 36);
             userRepository.save(user1);
             userRepository.save(user2);
             userRepository.save(user3);
