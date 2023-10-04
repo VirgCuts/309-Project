@@ -37,7 +37,7 @@ public class MainActivity extends Activity implements OnClickListener {
                 break;
             case R.id.btnImageRequest:
                 startActivity(new Intent(MainActivity.this,
-                        ImageRequestActivity.class));
+                        LeaderboardActivity.class));
                 break;
             default:
                 break;
