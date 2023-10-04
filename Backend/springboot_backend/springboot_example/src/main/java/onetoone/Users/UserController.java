@@ -9,6 +9,9 @@ import java.util.List;
 @RestController
 public class UserController {
 
+    private String success = "{\"message\":\"success\"}";
+    private String failure = "{\"message\":\"failure\"}";
+
     @Autowired
     UserRepository userRepository;
 
@@ -24,7 +27,7 @@ public class UserController {
         User user = new User();
         user.setName(name);
         userRepository.save(user);
-        return "success";
+        return success;
     }
 
     @GetMapping(path = "/leaderboard")
@@ -40,7 +43,7 @@ public class UserController {
     {
         User user = new User(name, score);
         userRepository.save(user);
-        return "success";
+        return success;
     }
 
     @PutMapping(path = "/leaderboard/{name}/{score}")
@@ -50,6 +53,7 @@ public class UserController {
         if (user == null)
             return null;
         user.setHighScore(score);
+        userRepository.save(user);
         return userRepository.findByName(name);
     }
 
@@ -57,13 +61,13 @@ public class UserController {
     String deleteUser(@PathVariable int id)
     {
         userRepository.deleteById(id);
-        return "success";
+        return success;
     }
 
     @DeleteMapping(path = "/leaderboard/{name}")
     String deleteUser(@PathVariable String name)
     {
         userRepository.deleteByName(name);
-        return "success";
+        return success;
     }
 }
