@@ -32,17 +32,17 @@ public class ArtistController {
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
-    @GetMapping(path = "/users")
+    @GetMapping(path = "/artists")
     List<Artist> getAllUsers(){
         return artistRepository.findAll();
     }
 
-    @GetMapping(path = "/users/{id}")
+    @GetMapping(path = "/artists/{id}")
     Artist getUserById( @PathVariable int id){
         return artistRepository.findById(id);
     }
 
-    @PostMapping(path = "/users")
+    @PostMapping(path = "/artists")
     String createUser(@RequestBody Artist artist){
         if (artist == null)
             return failure;
@@ -50,7 +50,7 @@ public class ArtistController {
         return success;
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/artists/{id}")
     Artist updateUser(@PathVariable int id, @RequestBody Artist request){
         Artist artist = artistRepository.findById(id);
         if(artist == null)
@@ -59,7 +59,7 @@ public class ArtistController {
         return artistRepository.findById(id);
     }   
     
-    @PutMapping("/users/{userId}/laptops/{laptopId}")
+    @PutMapping("/artists/{userId}/laptops/{laptopId}")
     String assignLaptopToUser(@PathVariable int userId,@PathVariable int laptopId){
         Artist artist = artistRepository.findById(userId);
         Song song = songRepository.findById(laptopId);
@@ -71,7 +71,7 @@ public class ArtistController {
         return success;
     }
 
-    @DeleteMapping(path = "/users/{id}")
+    @DeleteMapping(path = "/artists/{id}")
     String deleteUser(@PathVariable int id){
         artistRepository.deleteById(id);
         return success;
