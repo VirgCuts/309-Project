@@ -20,11 +20,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="Check if Artists in Database"
+        android:imeOptions="actionSend"
         android:inputType="text"
         android:minHeight="48dp"
-        android:hint="Enter text here"
-        android:text=""
-        android:imeOptions="actionSend"/>
+        android:text="" />
 
     <TextView
         android:id="@+id/boolText"
@@ -32,6 +32,112 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:text="Response: " />
+
+    <Button
+        android:id="@+id/deleteArtist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Artist" />
+
+    <EditText
+        android:id="@+id/deleteNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:hint="Enter Id to delete"
+        android:text=""
+        android:imeOptions="actionSend"/>
+
+<!--    <Button-->
+<!--        android:id="@+id/updateArtist"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Update Artist" />-->
+
+<!--    <EditText-->
+<!--        android:id="@+id/orgnArtist"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="text"-->
+<!--        android:minHeight="48dp"-->
+<!--        android:hint="Enter Current Artist to be Updateds Name"-->
+<!--        android:text=""-->
+<!--        android:imeOptions="actionSend"/>-->
+<!--    <EditText-->
+<!--        android:id="@+id/newArtist"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="text"-->
+<!--        android:minHeight="48dp"-->
+<!--        android:hint="Enter Name to replace Artist"-->
+<!--        android:text=""-->
+<!--        android:imeOptions="actionSend"/>-->
+
+
+
+    <Button
+        android:id="@+id/addArtist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Artist" />
+
+    <EditText
+        android:id="@+id/artistName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter New Artist Name"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/numPlat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter Number of Platinums"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:text="" />
+    <EditText
+        android:id="@+id/numGrammies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter Number of Grammies"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/song"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter Artists Song Name"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:text="" />
+
+    <EditText
+        android:id="@+id/songGenre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter Songs Genre"
+        android:imeOptions="actionSend"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:text="" />
 
     <TextView
         android:id="@+id/msgResponse"
