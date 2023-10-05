@@ -27,6 +27,9 @@ import com.example.sumon.androidvolley.utils.Const;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class StringRequestActivity extends Activity {
 
@@ -280,12 +283,14 @@ public class StringRequestActivity extends Activity {
             public void onResponse(String response) {
                 Log.d(TAG, response.toString());
 
+
                 msgResponse.setText(response.toString());
                 hideProgressDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                System.out.print(TAG);
                 System.out.print(TAG);
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 hideProgressDialog();
