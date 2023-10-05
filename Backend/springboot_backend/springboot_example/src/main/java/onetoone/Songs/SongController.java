@@ -26,26 +26,26 @@ public class SongController {
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
-    @GetMapping(path = "/laptops")
-    List<Song> getAllLaptops(){
+    @GetMapping(path = "/songs")
+    List<Song> getAllSongs(){
         return songRepository.findAll();
     }
 
-    @GetMapping(path = "/laptops/{id}")
-    Song getLaptopById(@PathVariable int id){
+    @GetMapping(path = "/songs/{id}")
+    Song getSongById(@PathVariable int id){
         return songRepository.findById(id);
     }
 
-    @PostMapping(path = "/laptops")
-    String createLaptop(@RequestBody Song song){
+    @PostMapping(path = "/songs")
+    String createSong(@RequestBody Song song){
         if (song == null)
             return failure;
         songRepository.save(song);
         return success;
     }
 
-    @PutMapping(path = "/laptops/{id}")
-    Song updateLaptop(@PathVariable int id, @RequestBody Song request){
+    @PutMapping(path = "/songs/{id}")
+    Song updateSong(@PathVariable int id, @RequestBody Song request){
         Song song = songRepository.findById(id);
         if(song == null)
             return null;
@@ -53,8 +53,8 @@ public class SongController {
         return songRepository.findById(id);
     }
 
-    @DeleteMapping(path = "/laptops/{id}")
-    String deleteLaptop(@PathVariable int id){
+    @DeleteMapping(path = "/songs/{id}")
+    String deleteSong(@PathVariable int id){
         songRepository.deleteById(id);
         return success;
     }
