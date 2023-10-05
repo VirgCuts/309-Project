@@ -75,11 +75,11 @@ public class Song {
         this.genre = genre;
     }
 
-    public Artist getUser(){
+    public Artist getArtist(){
         return artist;
     }
 
-    public void setUser(Artist artist){
+    public void setArtist(Artist artist){
         this.artist = artist;
     }
 

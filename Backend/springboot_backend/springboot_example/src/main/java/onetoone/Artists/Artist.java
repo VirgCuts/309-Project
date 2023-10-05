@@ -86,11 +86,11 @@ public class Artist {
         this.numGrammys = numGrammys;
     }
 
-    public Song getLaptop(){
+    public Song getSong(){
         return song;
     }
 
-    public void setLaptop(Song song){
+    public void setSong(Song song){
         this.song = song;
     }
     

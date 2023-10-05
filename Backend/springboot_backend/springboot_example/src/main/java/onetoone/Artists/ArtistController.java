@@ -33,17 +33,17 @@ public class ArtistController {
     private String failure = "{\"message\":\"failure\"}";
 
     @GetMapping(path = "/artists")
-    List<Artist> getAllUsers(){
+    List<Artist> getAllArtists(){
         return artistRepository.findAll();
     }
 
     @GetMapping(path = "/artists/{id}")
-    Artist getUserById( @PathVariable int id){
+    Artist getArtistById( @PathVariable int id){
         return artistRepository.findById(id);
     }
 
     @PostMapping(path = "/artists")
-    String createUser(@RequestBody Artist artist){
+    String createArtist(@RequestBody Artist artist){
         if (artist == null)
             return failure;
         artistRepository.save(artist);
@@ -51,7 +51,7 @@ public class ArtistController {
     }
 
     @PutMapping("/artists/{id}")
-    Artist updateUser(@PathVariable int id, @RequestBody Artist request){
+    Artist updateArtist(@PathVariable int id, @RequestBody Artist request){
         Artist artist = artistRepository.findById(id);
         if(artist == null)
             return null;
@@ -59,20 +59,20 @@ public class ArtistController {
         return artistRepository.findById(id);
     }   
     
-    @PutMapping("/artists/{userId}/laptops/{laptopId}")
-    String assignLaptopToUser(@PathVariable int userId,@PathVariable int laptopId){
-        Artist artist = artistRepository.findById(userId);
-        Song song = songRepository.findById(laptopId);
+    @PutMapping("/artists/{artistId}/songs/{songId}")
+    String assignSongToArtist(@PathVariable int artistId,@PathVariable int songId){
+        Artist artist = artistRepository.findById(artistId);
+        Song song = songRepository.findById(songId);
         if(artist == null || song == null)
             return failure;
-        song.setUser(artist);
-        artist.setLaptop(song);
+        song.setArtist(artist);
+        artist.setSong(song);
         artistRepository.save(artist);
         return success;
     }
 
     @DeleteMapping(path = "/artists/{id}")
-    String deleteUser(@PathVariable int id){
+    String deleteArtist(@PathVariable int id){
         artistRepository.deleteById(id);
         return success;
     }
