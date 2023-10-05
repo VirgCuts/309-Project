@@ -11,59 +11,105 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
 import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.sumon.androidvolley.app.AppController;
 import com.example.sumon.androidvolley.utils.Const;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StringRequestActivity extends Activity {
 
-    private String TAG = StringRequestActivity.class.getSimpleName();
-    private Button btnBack;
+    private final String TAG = StringRequestActivity.class.getSimpleName();
     private ProgressDialog pDialog;
     private TextView msgResponse;
     private EditText searchText;
     private TextView boolText;
 
-    // This tag will be used to cancel the request
-    private String tag_string_req = "string_req";
+    private EditText deleteNum, orgnArtist, newArtist, artistName, numPlat, numGrammies,song,songGenre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.string_request);
 
+        Button btnBack = findViewById(R.id.btnBack);
+        Button deleteButton = findViewById(R.id.deleteArtist);
+        //Button updateButton = findViewById(R.id.updateArtist);
+        Button addButton = findViewById(R.id.addArtist);
+        artistName = findViewById(R.id.artistName);
+        numPlat = findViewById(R.id.numPlat);
+        numGrammies = findViewById(R.id.numGrammies);
+        song = findViewById(R.id.song);
+        songGenre = findViewById(R.id.songGenre);
 
-        btnBack = (Button) findViewById(R.id.btnBack);
 
-        msgResponse = (TextView) findViewById(R.id.msgResponse);
+
+        msgResponse = findViewById(R.id.msgResponse);
         searchText = findViewById(R.id.searchText);
         boolText = findViewById(R.id.boolText);
+        deleteNum = findViewById(R.id.deleteNum);
+
+        //orgnArtist = findViewById(R.id.orgnArtist);
+
+        //newArtist = findViewById(R.id.newArtist);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(false);
-
+        makeStringReq();
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    makeStringReq();
-                    handled = true;
-                    String jsonString = msgResponse.getText().toString();
 
-                    // Get the artist name from the EditText
+
+                    handled = true;
+
+                    String jsonString = msgResponse.getText().toString();
                     String artistToSearch = searchText.getText().toString();
+
                     boolText.setText(searchArtistInJson(jsonString, artistToSearch));
+
                 }
                 return handled;
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                addArtistToDB(artistName.getText().toString(), Integer.parseInt(numPlat.getText().toString()), Integer.parseInt(numGrammies.getText().toString()) ,song.getText().toString(),songGenre.getText().toString());
+            }
+        });
+//        updateButton.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                updateArtistInDB(orgnArtist.getText().toString(), newArtist.getText().toString());
+//            }
+//        });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                deleteArtistInDB(deleteNum.getText().toString());
             }
         });
 
@@ -73,31 +119,148 @@ public class StringRequestActivity extends Activity {
             public void onClick(View v) {
                 startActivity(new Intent(StringRequestActivity.this,
                         MainActivity.class));
-
             }
         });
     }
     //Checks edit text and compares it to the users in the data returns true of false depending on inclusion.
     private String searchArtistInJson(String jsonString, String artistToSearch) {
-
         try {
             JSONArray jsonArray = new JSONArray(jsonString);
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String name = jsonObject.getString("name");
-                if (name.equals(artistToSearch)) {
-                    JSONObject laptopObject = jsonObject.getJSONObject("laptop");
-                    return "Artist: " + name + " with song name: " + laptopObject.getString("songName") + " with " + jsonObject.getString("numPlatinums") + " platinum albums";
+                String artistName = jsonObject.getString("name").trim(); // Trim whitespace
+
+                if (artistName.equals(artistToSearch)) { // Use equals for case-sensitive comparison
+                    // Match found, display the associated song
+                    String songName = jsonObject.getJSONObject("song").getString("songName");
+                    showToast("Artist Found");
+                    return "Song: " + songName;
                 }
             }
+
+            // If no match is found
+            showToast("Artist not found.");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return "Song not found for " + artistToSearch;
     }
 
+    private void addArtistToDB(String artistName, int numPlatinums, int numGrammys, String songName, String songGenre) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists"; // Replace with your API endpoint URL
 
+        // Create a JSONObject to send the artist and song data
+        JSONObject artistData = new JSONObject();
+        try {
+            artistData.put("name", artistName);
+            artistData.put("numPlatinums", numPlatinums);
+            artistData.put("numGrammys", numGrammys);
+
+            // Create a JSONObject for the song
+            JSONObject songData = new JSONObject();
+            songData.put("songName", songName);
+            songData.put("genre", songGenre);
+
+            // Add the song data to the artist data
+            artistData.put("song", songData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            showToast("Error creating JSON object.");
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                artistData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        showToast("Artist and song added successfully.");
+                        // Handle any additional logic after successfully adding the artist and song
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        showToast("Error adding artist and song: " + error.getMessage());
+                    }
+                });
+
+        // Add the request to the request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+    private void updateArtistInDB(String currentArtist, String newArtistName) {
+        // Create a JSONObject to send the old and new artist names
+        JSONObject artistData = new JSONObject();
+        if(currentArtist == null || newArtistName == null) {
+            showToast("One of the names are Null");
+        }
+        else {
+            try {
+                artistData.put("currentName", currentArtist);
+                artistData.put("newName", newArtistName);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Define the URL for your API endpoint
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/";
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.PUT,
+                url,
+                artistData,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        showToast("Artist name updated successfully");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        showToast("Error updating artist name: " + error.getMessage());
+                    }
+                });
+
+        // Add the request to the request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+
+
+    private void deleteArtistInDB(String idNum){
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + idNum; // Include the artist ID in the URL
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.DELETE,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        makeStringReq();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        showToast("Error deleting artist: " + error.getMessage());
+                    }
+                });
+
+        // Add the request to the request queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 
     private void showProgressDialog() {
         if (!pDialog.isShowing())
@@ -120,6 +283,7 @@ public class StringRequestActivity extends Activity {
             public void onResponse(String response) {
                 Log.d(TAG, response.toString());
 
+
                 msgResponse.setText(response.toString());
                 hideProgressDialog();
             }
@@ -127,12 +291,14 @@ public class StringRequestActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.print(TAG);
+                System.out.print(TAG);
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 hideProgressDialog();
             }
         });
 
         // Adding request to request queue
+        String tag_string_req = "string_req";
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }

@@ -29,10 +29,10 @@ public class MainActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(MainActivity.this,
                         StringRequestActivity.class));
                 break;
-            case R.id.btnJsonRequest:
-                startActivity(new Intent(MainActivity.this,
-                        JsonRequestActivity.class));
-                break;
+//            case R.id.btnJsonRequest:
+//                startActivity(new Intent(MainActivity.this,
+//                        JsonRequestActivity.class));
+//                break;
             default:
                 break;
         }
