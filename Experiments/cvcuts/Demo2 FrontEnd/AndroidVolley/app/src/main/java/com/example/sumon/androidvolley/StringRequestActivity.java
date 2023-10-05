@@ -27,18 +27,13 @@ import com.example.sumon.androidvolley.utils.Const;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class StringRequestActivity extends Activity {
-
     private final String TAG = StringRequestActivity.class.getSimpleName();
     private ProgressDialog pDialog;
     private TextView msgResponse;
     private EditText searchText;
     private TextView boolText;
-
     private EditText deleteNum, orgnArtist, newArtist, artistName, numPlat, numGrammies,song,songGenre;
 
     @Override
@@ -56,15 +51,12 @@ public class StringRequestActivity extends Activity {
         song = findViewById(R.id.song);
         songGenre = findViewById(R.id.songGenre);
 
-
-
         msgResponse = findViewById(R.id.msgResponse);
         searchText = findViewById(R.id.searchText);
         boolText = findViewById(R.id.boolText);
         deleteNum = findViewById(R.id.deleteNum);
 
         //orgnArtist = findViewById(R.id.orgnArtist);
-
         //newArtist = findViewById(R.id.newArtist);
 
         pDialog = new ProgressDialog(this);
@@ -77,14 +69,12 @@ public class StringRequestActivity extends Activity {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
 
-
                     handled = true;
 
                     String jsonString = msgResponse.getText().toString();
                     String artistToSearch = searchText.getText().toString();
 
                     boolText.setText(searchArtistInJson(jsonString, artistToSearch));
-
                 }
                 return handled;
             }
@@ -277,7 +267,6 @@ public class StringRequestActivity extends Activity {
      * */
     private void makeStringReq() {
         showProgressDialog();
-
         StringRequest strReq = new StringRequest(Method.GET, Const.URL_STRING_REQ, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
