@@ -270,23 +270,27 @@ public class ArtistActivity extends Activity {
      * */
     private void makeStringReq() {
         showProgressDialog();
-
-        StringRequest strReq = new StringRequest(Method.GET, Const.URL_STRING_REQ, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Method.GET, "http://coms-309-022.class.las.iastate.edu:8080/artists/", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, response.toString());
+
+
                 msgResponse.setText(response.toString());
                 hideProgressDialog();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                System.out.print(TAG);
+                System.out.print(TAG);
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 hideProgressDialog();
             }
         });
 
         // Adding request to request queue
+        String tag_string_req = "string_req";
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }

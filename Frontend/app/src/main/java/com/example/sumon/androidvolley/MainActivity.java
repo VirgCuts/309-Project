@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements OnClickListener {
-    private Button btnJson, btnString, btnImage;
+    private Button btnJson, btnString, btnImage, btnArtists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +17,13 @@ public class MainActivity extends Activity implements OnClickListener {
         btnString = (Button) findViewById(R.id.btnStringRequest);
         btnJson = (Button) findViewById(R.id.btnJsonRequest);
         btnImage = (Button) findViewById(R.id.btnleaderboard);
+        btnArtists = (Button) findViewById(R.id.btnArtists);
 
         // button click listeners
         btnString.setOnClickListener(this);
         btnJson.setOnClickListener(this);
         btnImage.setOnClickListener(this);
+        btnArtists.setOnClickListener(this);
     }
 
     @Override
@@ -38,6 +40,10 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.btnleaderboard:
                 startActivity(new Intent(MainActivity.this,
                         LeaderboardActivity.class));
+                break;
+            case R.id.btnArtists:
+                startActivity(new Intent(MainActivity.this,
+                        ArtistActivity.class));
                 break;
             default:
                 break;
