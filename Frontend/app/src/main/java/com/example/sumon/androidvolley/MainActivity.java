@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements OnClickListener {
-    private Button btnJson, btnString, btnImage;
+    private Button btnJson, btnString, btnLeaderboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,12 +16,12 @@ public class MainActivity extends Activity implements OnClickListener {
 
         btnString = (Button) findViewById(R.id.btnStringRequest);
         btnJson = (Button) findViewById(R.id.btnJsonRequest);
-        btnImage = (Button) findViewById(R.id.btnleaderboard);
+        btnLeaderboard = (Button) findViewById(R.id.btnleaderboard);
 
         // button click listeners
         btnString.setOnClickListener(this);
         btnJson.setOnClickListener(this);
-        btnImage.setOnClickListener(this);
+        btnLeaderboard.setOnClickListener(this);
     }
 
     @Override
