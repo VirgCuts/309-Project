@@ -183,7 +183,7 @@ public class LeaderboardActivity extends Activity {
     private void updateScore(String username, int newScore) {
         // Create a JSON request to your API with the updated score
         // Modify the URL and request method as per your API's requirements
-        String url = "git://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + username + "/" + newScore;
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + username + "/" + newScore;
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
                 url,
