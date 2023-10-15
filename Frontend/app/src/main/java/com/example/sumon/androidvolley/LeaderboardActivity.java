@@ -141,8 +141,7 @@ public class LeaderboardActivity extends Activity {
     }
 
     private void retrieveLeaderboardData() {
-        // Create a Volley request to retrieve the leaderboard data
-        // Modify the URL as per your API's endpoint
+
         String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard";
 
         JsonArrayRequest request = new JsonArrayRequest(
@@ -181,8 +180,6 @@ public class LeaderboardActivity extends Activity {
     }
     // Function to update score using Volley
     private void updateScore(String username, int newScore) {
-        // Create a JSON request to your API with the updated score
-        // Modify the URL and request method as per your API's requirements
         String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + username + "/" + newScore;
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.PUT,
@@ -217,8 +214,7 @@ public class LeaderboardActivity extends Activity {
     }
     // Function to delete a player using Volley
     private void deletePlayer(String usernameToDelete) {
-        // Create a JSON request to your API to delete the player by username
-        // Modify the URL and request method as per your API's requirements
+
         String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + usernameToDelete;
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.DELETE,
@@ -316,13 +312,18 @@ public class LeaderboardActivity extends Activity {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_layout, parent, false);
             }
 
+            TextView playerRankTextView = convertView.findViewById(R.id.playerRank);
             TextView playerNameTextView = convertView.findViewById(R.id.playerUsernameTextView);
             TextView scoreTextView = convertView.findViewById(R.id.scoreTextView);
 
+
             PlayerData player = getItem(position);
             if (player != null) {
+                int rank = position + 1;
+                playerRankTextView.setText(String.valueOf(rank));
                 playerNameTextView.setText(player.getUsername());
                 scoreTextView.setText(String.valueOf(player.getScore()));
+
             }
 
             return convertView;

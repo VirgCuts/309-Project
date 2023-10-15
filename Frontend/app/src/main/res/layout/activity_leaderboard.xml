@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:foregroundTint="#F1EEEE">
 
     <!-- Leaderboard List -->
+
+
     <RelativeLayout
+        android:id="@+id/leaderBoardTop"
         android:layout_width="match_parent"
-        android:layout_height="293dp"
+        android:layout_height="350dp"
         android:background="#12AFA6">
+
 
         <ImageView
             android:id="@+id/circleImageView"
@@ -18,13 +24,14 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
+            android:layout_below="@id/leaderBoardTitle"
             android:background="@drawable/circular_shape"
             android:src="@drawable/ic_white_star" />
 
         <TextView
             android:id="@+id/leaderBoardTitle"
             android:layout_width="match_parent"
-            android:layout_height="26dp"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="38dp"
@@ -32,18 +39,120 @@
             android:text="Leaderboard"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
+
+            android:textSize="30sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/playerRankTextViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/circleImageView"
+            android:layout_marginStart="90dp"
+            android:gravity="center"
+            android:text="Rank"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
             android:textSize="20sp"
+             />
+
+        <!-- Player Score TextView -->
+        <TextView
+            android:id="@+id/playerScoreTextViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/circleImageView"
+            android:layout_marginEnd="90dp"
+            android:gravity="center"
+            android:text="Score"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+          />
+
+        <!-- Player Score TextView -->
+
+        <TextView
+            android:id="@+id/playerRankTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@id/playerRankTextViewTitle"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="107dp"
+            android:layout_marginTop="0dp"
+            android:gravity="center"
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/playerScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_below="@id/playerScoreTextViewTitle"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="109dp"
+            android:gravity="center"
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/leaderBoardTop"
+        android:background="@color/greyWithTransparency"
+        android:fadingEdge="horizontal|vertical|none"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:id="@+id/leaderboardListHeader">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".3"
+            android:gravity="left"
+            android:text="Rank"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Name"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:gravity="left"
+            android:text="Score"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/leaderboardListView"
         android:layout_width="match_parent"
         android:layout_height="316dp"
+        android:layout_below="@id/leaderboardListHeader"
         android:layout_above="@id/inputEditText"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="2dp" />
 
     <!-- Button Layout -->
     <LinearLayout
@@ -82,16 +191,17 @@
     <!-- EditText for Input -->
     <EditText
         android:id="@+id/inputEditText"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter Username..."
-        android:layout_above="@+id/buttonLayout" />
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/buttonLayout"
+        android:hint="Enter Username..." />
+
     <EditText
         android:id="@+id/inputEditTextScore"
-        android:inputType="number"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:layout_above="@+id/buttonLayout"
         android:layout_toRightOf="@id/inputEditText"
         android:hint="Enter Score..."
-        android:layout_above="@+id/buttonLayout" />
+        android:inputType="number" />
 </RelativeLayout>

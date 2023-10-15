@@ -24,4 +24,6 @@ public class PlayerData {
     public void setScore(int score) {
         this.score = score;
     }
+
+
 }

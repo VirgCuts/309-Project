@@ -6,6 +6,14 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
+    <TextView
+        android:id="@+id/playerRank"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".3"
+        android:text="Rank"
+        android:textSize="16sp"
+        />
     <!-- Player's Username Column -->
     <TextView
         android:id="@+id/playerUsernameTextView"
@@ -20,9 +28,10 @@
         android:id="@+id/scoreTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight=".5"
         android:text="Score"
         android:textSize="16sp"
-        android:gravity="end" />
+        android:gravity="left" />
+
 
 </LinearLayout>
