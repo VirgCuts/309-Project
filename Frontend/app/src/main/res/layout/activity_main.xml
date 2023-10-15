@@ -19,6 +19,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="Leaderboard" />
+    <Button
+        android:id="@+id/btnChatRoom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Chatroom" />
 
     <Button
         android:id="@+id/btnArtists"

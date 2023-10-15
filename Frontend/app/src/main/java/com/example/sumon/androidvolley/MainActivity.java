@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements OnClickListener {
-    private Button btnLeaderboard, btnArtists;
+    private Button btnLeaderboard, btnArtists, btnChatRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +17,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
         btnLeaderboard = (Button) findViewById(R.id.btnleaderboard);
         btnArtists = (Button) findViewById(R.id.btnArtists);
+        btnChatRoom = (Button) findViewById(R.id.btnChatRoom);
+
 
         // button click listeners
 
