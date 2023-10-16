@@ -2,19 +2,15 @@ package com.example.androidexample;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.java_websocket.handshake.ServerHandshake;
-import org.w3c.dom.Text;
 
-public class MainActivity extends AppCompatActivity implements WebSocketListener{
+public class MessageBoard extends AppCompatActivity implements WebSocketListener{
 
     private String BASE_URL = "ws://10.0.2.2:8080/chat/";
 
@@ -25,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements WebSocketListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.message_board);
 
         /* initialize UI elements */
         connectBtn = (Button) findViewById(R.id.bt1);
@@ -40,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements WebSocketListener
 
             // Establish WebSocket connection and set listener
             WebSocketManager.getInstance().connectWebSocket(serverUrl);
-            WebSocketManager.getInstance().setWebSocketListener(MainActivity.this);
+            WebSocketManager.getInstance().setWebSocketListener(MessageBoard.this);
         });
 
         /* send button listener */
