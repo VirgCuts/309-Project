@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 import onetoone.Songs.Song;
+import onetoone.Albums.Album;
 
 /**
  * 
@@ -42,6 +43,10 @@ public class Artist {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "song_id")
     private Song song;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "album_id")
+    private Album album;
 
     public Artist(String name, int numPlatinums, int numGrammys) {
         this.name = name;
@@ -92,6 +97,14 @@ public class Artist {
 
     public void setSong(Song song){
         this.song = song;
+    }
+
+    public Album getAlbum(){
+        return album;
+    }
+
+    public void setAlbum(Album album){
+        this.album = album;
     }
     
 }

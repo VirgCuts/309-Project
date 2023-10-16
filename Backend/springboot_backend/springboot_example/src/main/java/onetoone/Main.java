@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import onetoone.Albums.Album;
+import onetoone.Albums.AlbumRepository;
 import onetoone.Songs.Song;
 import onetoone.Songs.SongRepository;
 import onetoone.Artists.Artist;
@@ -44,9 +46,11 @@ class Main {
             Song song1 = new Song("Just Dance", "Pop");
             Song song2 = new Song("Off the Grid", "Rap");
             Song song3 = new Song("Fast Car", "Country");
+            Album album1 = new Album("Graduation", "Rap");
             artist1.setSong(song1);
             artist2.setSong(song2);
             artist3.setSong(song3);
+            artist1.setAlbum(album1);
             artistRepository.save(artist1);
             artistRepository.save(artist2);
             artistRepository.save(artist3);
