@@ -1,44 +1,84 @@
 package com.example.sumon.androidvolley;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ChatActivity extends AppCompatActivity {
+import org.java_websocket.handshake.ServerHandshake;
 
-    private EditText messageInput;
-    private Button sendButton;
-    private TextView toolbarTitle;
-    private ScrollView chatScrollView;
+public class ChatActivity extends AppCompatActivity implements WebSocketListener{
+
+    private String BASE_URL = "ws://10.0.2.2:8080/chat/";
+
+    private Button connectBtn, sendBtn;
+    private EditText usernameEtx, msgEtx;
+    private TextView msgTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatroom_layout);
 
-        // Initialize views
-        messageInput = findViewById(R.id.message_input);
-        sendButton = findViewById(R.id.send_button);
-        toolbarTitle = findViewById(R.id.toolbar_title);
-        chatScrollView = findViewById(R.id.chat_scrollview);
+        /* initialize UI elements */
+        connectBtn = (Button) findViewById(R.id.connect_button);
+        sendBtn = (Button) findViewById(R.id.send_button);
+        usernameEtx = (EditText) findViewById(R.id.username_input);
+        msgEtx = (EditText) findViewById(R.id.message_input);
+        msgTv = (TextView) findViewById(R.id.chatMessage);
 
-        // Set the toolbar title
-        toolbarTitle.setText("Chat Room");
+        /* connect button listener */
+        connectBtn.setOnClickListener(view -> {
+            String serverUrl = BASE_URL + usernameEtx.getText().toString();
 
-        // Set a click listener for the send button
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle sending the message
-                String message = messageInput.getText().toString();
-                // Implement message sending logic here
-                // You can add the message to the chat container
-                // dynamically within the ScrollView.
+            // Establish WebSocket connection and set listener
+            WebSocketManager.getInstance().connectWebSocket(serverUrl);
+            WebSocketManager.getInstance().setWebSocketListener(ChatActivity.this);
+        });
+
+        /* send button listener */
+        sendBtn.setOnClickListener(v -> {
+            try {
+
+                // send message
+                WebSocketManager.getInstance().sendMessage(msgEtx.getText().toString());
+            } catch (Exception e) {
+                Log.d("ExceptionSendMessage:", e.getMessage().toString());
             }
         });
     }
+    @Override
+    public void onWebSocketMessage(String message) {
+        /**
+         * In Android, all UI-related operations must be performed on the main UI thread
+         * to ensure smooth and responsive user interfaces. The 'runOnUiThread' method
+         * is used to post a runnable to the UI thread's message queue, allowing UI updates
+         * to occur safely from a background or non-UI thread.
+         */
+        runOnUiThread(() -> {
+            String s = msgTv.getText().toString();
+            msgTv.setText(s + "\n"+message);
+        });
+    }
+
+    @Override
+    public void onWebSocketClose(int code, String reason, boolean remote) {
+        String closedBy = remote ? "server" : "local";
+        runOnUiThread(() -> {
+            String s = msgTv.getText().toString();
+            msgTv.setText(s + "---\nconnection closed by " + closedBy + "\nreason: " + reason);
+        });
+    }
+
+    @Override
+    public void onWebSocketOpen(ServerHandshake handshakedata) {}
+
+    @Override
+    public void onWebSocketError(Exception ex) {}
 }
+

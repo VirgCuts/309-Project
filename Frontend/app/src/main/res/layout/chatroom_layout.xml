@@ -23,7 +23,7 @@
     <ScrollView
         android:id="@+id/chat_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="575dp"
         android:layout_below="@+id/toolbar"
         >
 
@@ -33,15 +33,48 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/chatMessage"></TextView>
             <!-- Chat messages will be added here dynamically -->
         </LinearLayout>
     </ScrollView>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/sendMessage"
+        android:layout_below="@id/chat_scrollview"
+        >
+        <EditText
+            android:id="@+id/username_input"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:hint="Username"
+            android:background="#fff"
 
+            android:layout_toLeftOf="@+id/connect_button"
+            android:layout_toStartOf="@+id/connect_button"/>
+
+        <Button
+            android:id="@+id/connect_button"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Connect"
+            android:background="?attr/colorPrimary"
+            android:textColor="#fff"
+            android:padding="10dp"
+
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
     <!-- Message Input Area -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:id="@+id/sendMessage">
 
         <EditText
             android:id="@+id/message_input"
