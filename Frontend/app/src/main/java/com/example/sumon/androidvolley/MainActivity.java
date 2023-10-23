@@ -24,6 +24,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
         btnLeaderboard.setOnClickListener(this);
         btnArtists.setOnClickListener(this);
+        btnChatRoom.setOnClickListener(this);
     }
 
     @Override
@@ -36,6 +37,10 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.btnArtists:
                 startActivity(new Intent(MainActivity.this,
                         ArtistActivity.class));
+                break;
+            case R.id.btnChatRoom:
+                startActivity(new Intent(MainActivity.this,
+                        ChatActivity.class));
                 break;
             default:
                 break;
