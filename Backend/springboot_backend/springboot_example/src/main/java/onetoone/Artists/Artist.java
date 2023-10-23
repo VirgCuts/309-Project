@@ -7,9 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 import onetoone.Songs.Song;
 import onetoone.Albums.Album;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -40,9 +44,12 @@ public class Artist {
      * in the database (more info : https://www.baeldung.com/jpa-cascade-types)
      * @JoinColumn defines the ownership of the foreign key i.e. the user table will have a field called laptop_id
      */
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "song_id")
-    private Song song;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "song_id")
+//    private Song song;
+
+    @OneToMany
+    private List<Song> songs;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "album_id")
@@ -91,12 +98,24 @@ public class Artist {
         this.numGrammys = numGrammys;
     }
 
-    public Song getSong(){
-        return song;
+//    public Song getSong(){
+//        return song;
+//    }
+//
+//    public void setSong(Song song){
+//        this.song = song;
+//    }
+
+    public List<Song> getSongs() {
+        return songs;
     }
 
-    public void setSong(Song song){
-        this.song = song;
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
+    public void addSongs(Song songs){
+        this.songs.add(songs);
     }
 
     public Album getAlbum(){
