@@ -3,7 +3,7 @@ package onetoone.Users;
 import onetoone.Songs.Song;
 
 import javax.persistence.*;
-import java.util.Comparator;
+import java.util.*;
 
 @Entity
 public class User implements Comparator<User>, Comparable<User> {
@@ -17,6 +17,8 @@ public class User implements Comparator<User>, Comparable<User> {
     private int id;
     private String name;
     private int highScore;
+
+    private List<String> chatLogs;
 
 
     /*
@@ -58,6 +60,14 @@ public class User implements Comparator<User>, Comparable<User> {
 
     public void setHighScore(int highScore){
         this.highScore = highScore;
+    }
+
+    public List<String> getChatLogs(){
+        return chatLogs;
+    }
+
+    public void addToChatLogs(String message){
+
     }
 
     @Override

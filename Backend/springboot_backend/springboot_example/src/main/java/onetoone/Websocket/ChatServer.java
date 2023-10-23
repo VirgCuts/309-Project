@@ -12,8 +12,11 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import onetoone.Users.User;
+import onetoone.Users.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -41,6 +44,9 @@ public class ChatServer {
 
     // server side logger
     private final Logger logger = LoggerFactory.getLogger(ChatServer.class);
+
+    @Autowired
+    UserRepository userRepository;
 
     /**
      * This method is called when a new WebSocket connection is established.
@@ -108,6 +114,9 @@ public class ChatServer {
         else { // Message to whole chat
             broadcast(username + ": " + message);
         }
+
+        userRepository.findByName(username).addToChatLogs(message);
+
     }
 
     /**

@@ -17,6 +17,8 @@
 
   <name>one-to-one</name>
 
+  <packaging>jar</packaging>
+
   <properties>
 
     <!-- Generic properties -->
