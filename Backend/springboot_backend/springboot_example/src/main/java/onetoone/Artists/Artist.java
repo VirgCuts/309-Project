@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.OneToMany;
 
 import onetoone.Songs.Song;
+import onetoone.Albums.Album;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,10 @@ public class Artist {
 
     @OneToMany
     private List<Song> songs;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "album_id")
+    private Album album;
 
     public Artist(String name, int numPlatinums, int numGrammys) {
         this.name = name;
@@ -113,5 +118,12 @@ public class Artist {
         this.songs.add(songs);
     }
 
+    public Album getAlbum(){
+        return album;
+    }
 
+    public void setAlbum(Album album){
+        this.album = album;
+    }
+    
 }

@@ -4,8 +4,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import onetoone.Albums.Album;
+import onetoone.Albums.AlbumRepository;
 import onetoone.Songs.Song;
 import onetoone.Songs.SongRepository;
 import onetoone.Artists.Artist;
@@ -21,6 +24,7 @@ import onetoone.Users.UserRepository;
 
 @SpringBootApplication
 @EnableJpaRepositories
+@ComponentScan(basePackages = {"onetoone.Websocket"})
 class Main {
 
     public static void main(String[] args) {
@@ -44,9 +48,13 @@ class Main {
             Song song1 = new Song("Just Dance", "Pop");
             Song song2 = new Song("Off the Grid", "Rap");
             Song song3 = new Song("Fast Car", "Country");
+
             artist1.addSongs(song1);
             artist2.addSongs(song2);
             artist3.addSongs(song3);
+            Album album1 = new Album("Graduation", "Rap");
+            artist1.setAlbum(album1);
+
             artistRepository.save(artist1);
             artistRepository.save(artist2);
             artistRepository.save(artist3);
