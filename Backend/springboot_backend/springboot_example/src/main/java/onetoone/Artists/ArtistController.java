@@ -66,7 +66,7 @@ public class ArtistController {
         if(artist == null || song == null)
             return failure;
         song.setArtist(artist);
-        artist.setSong(song);
+        artist.addSongs(song);
         artistRepository.save(artist);
         return success;
     }
