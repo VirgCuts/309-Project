@@ -7,20 +7,19 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements OnClickListener {
-    private Button btnLeaderboard, btnArtists;
+    private Button btnLeaderboard, btnArtists, btnWebsocket;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         btnLeaderboard = (Button) findViewById(R.id.btnleaderboard);
         btnArtists = (Button) findViewById(R.id.btnArtists);
-
-        // button click listeners
+        btnWebsocket = (Button) findViewById(R.id.btnWebsocket);
 
         btnLeaderboard.setOnClickListener(this);
         btnArtists.setOnClickListener(this);
+        btnWebsocket.setOnClickListener(this);
     }
 
     @Override
@@ -33,6 +32,10 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.btnArtists:
                 startActivity(new Intent(MainActivity.this,
                         ArtistActivity.class));
+                break;
+            case R.id.btnWebsocket:
+                startActivity(new Intent(MainActivity.this,
+                        MessageBoard.class));
                 break;
             default:
                 break;

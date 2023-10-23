@@ -1,7 +1,8 @@
-package com.example.androidexample;
+package com.example.sumon.androidvolley;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -10,11 +11,12 @@ import android.widget.TextView;
 
 import org.java_websocket.handshake.ServerHandshake;
 
-public class MessageBoard extends AppCompatActivity implements WebSocketListener{
+import java.util.Objects;
 
-    private String BASE_URL = "ws://10.0.2.2:8080/chat/";
+public class MessageBoard extends AppCompatActivity implements WebSocketListener {
 
-    private Button connectBtn, sendBtn;
+    private final String BASE_URL = "ws://10.0.2.2:8080/chat/";
+
     private EditText usernameEtx, msgEtx;
     private TextView msgTv;
 
@@ -24,8 +26,8 @@ public class MessageBoard extends AppCompatActivity implements WebSocketListener
         setContentView(R.layout.message_board);
 
         /* initialize UI elements */
-        connectBtn = (Button) findViewById(R.id.bt1);
-        sendBtn = (Button) findViewById(R.id.bt2);
+        Button connectBtn = (Button) findViewById(R.id.bt1);
+        Button sendBtn = (Button) findViewById(R.id.bt2);
         usernameEtx = (EditText) findViewById(R.id.et1);
         msgEtx = (EditText) findViewById(R.id.et2);
         msgTv = (TextView) findViewById(R.id.tx1);
@@ -46,26 +48,22 @@ public class MessageBoard extends AppCompatActivity implements WebSocketListener
                 // send message
                 WebSocketManager.getInstance().sendMessage(msgEtx.getText().toString());
             } catch (Exception e) {
-                Log.d("ExceptionSendMessage:", e.getMessage().toString());
+                Log.d("ExceptionSendMessage:", Objects.requireNonNull(e.getMessage()));
             }
         });
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onWebSocketMessage(String message) {
-        /**
-         * In Android, all UI-related operations must be performed on the main UI thread
-         * to ensure smooth and responsive user interfaces. The 'runOnUiThread' method
-         * is used to post a runnable to the UI thread's message queue, allowing UI updates
-         * to occur safely from a background or non-UI thread.
-         */
         runOnUiThread(() -> {
             String s = msgTv.getText().toString();
             msgTv.setText(s + "\n"+message);
         });
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {
         String closedBy = remote ? "server" : "local";
