@@ -14,7 +14,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 public class ChatActivity extends AppCompatActivity implements WebSocketListener{
 
-    private String BASE_URL = "ws://echo.websocket.org";
+    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu/chat/";
 
     private Button connectBtn, sendBtn;
     private EditText usernameEtx, msgEtx;
@@ -34,8 +34,9 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
         /* connect button listener */
         connectBtn.setOnClickListener(view -> {
-            String serverUrl = BASE_URL + usernameEtx.getText().toString();
 
+            String serverUrl = BASE_URL + usernameEtx.getText().toString();
+            Log.d("URL", "URL is " + serverUrl);
             // Establish WebSocket connection and set listener
             WebSocketManager.getInstance().connectWebSocket(serverUrl);
             WebSocketManager.getInstance().setWebSocketListener(ChatActivity.this);
@@ -52,6 +53,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
             }
         });
     }
+
     @Override
     public void onWebSocketMessage(String message) {
         /**
@@ -80,5 +82,6 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
     @Override
     public void onWebSocketError(Exception ex) {}
+
 }
 
