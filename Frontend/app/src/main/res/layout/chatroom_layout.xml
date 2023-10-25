@@ -16,16 +16,43 @@
             android:text="Chat Room"
             android:textColor="#fff"
             android:textSize="18sp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
     </androidx.appcompat.widget.Toolbar>
+
+    <!-- Username and Connect -->
+    <RelativeLayout
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar">
+
+        <EditText
+            android:id="@+id/username_input"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
+            android:hint="Username"
+            android:background="#fff" />
+
+        <Button
+            android:id="@+id/connect_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_toEndOf="@+id/username_input"
+            android:layout_toRightOf="@+id/username_input"
+            android:background="?attr/colorPrimary"
+            android:padding="10dp"
+            android:text="Connect"
+            android:textColor="#fff" />
+    </RelativeLayout>
 
     <!-- Chat Messages -->
     <ScrollView
         android:id="@+id/chat_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="575dp"
-        android:layout_below="@+id/toolbar"
-        >
+        android:layout_height="0dp"
+        android:layout_below="@+id/username"
+        android:layout_above="@+id/sendMessage">
 
         <LinearLayout
             android:id="@+id/chat_container"
@@ -40,41 +67,13 @@
             <!-- Chat messages will be added here dynamically -->
         </LinearLayout>
     </ScrollView>
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/sendMessage"
-        android:layout_below="@id/chat_scrollview"
-        >
-        <EditText
-            android:id="@+id/username_input"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:padding="10dp"
-            android:hint="Username"
-            android:background="#fff"
 
-            android:layout_toLeftOf="@+id/connect_button"
-            android:layout_toStartOf="@+id/connect_button"/>
-
-        <Button
-            android:id="@+id/connect_button"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="Connect"
-            android:background="?attr/colorPrimary"
-            android:textColor="#fff"
-            android:padding="10dp"
-
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
     <!-- Message Input Area -->
     <RelativeLayout
+        android:id="@+id/sendMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/sendMessage">
+        android:layout_alignParentBottom="true">
 
         <EditText
             android:id="@+id/message_input"
@@ -83,9 +82,8 @@
             android:padding="10dp"
             android:hint="Type a message"
             android:background="#fff"
-
             android:layout_toLeftOf="@+id/send_button"
-            android:layout_toStartOf="@+id/send_button"/>
+            android:layout_toStartOf="@+id/send_button" />
 
         <Button
             android:id="@+id/send_button"
@@ -95,8 +93,7 @@
             android:background="?attr/colorPrimary"
             android:textColor="#fff"
             android:padding="10dp"
-
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 </RelativeLayout>

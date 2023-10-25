@@ -14,7 +14,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 public class ChatActivity extends AppCompatActivity implements WebSocketListener{
 
-    private String BASE_URL = "ws://10.0.2.2:8080/chat/";
+    private String BASE_URL = "ws://echo.websocket.org";
 
     private Button connectBtn, sendBtn;
     private EditText usernameEtx, msgEtx;

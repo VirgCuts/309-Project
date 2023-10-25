@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/appNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="IMMACULATE TASTE"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <ImageView
+    android:id="@+id/logoImageView"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:src="@drawable/music_logo"
+    android:layout_gravity="center"
+    android:layout_marginBottom="32dp"/>
+
+
+    <Button
+    android:id="@+id/lobbyButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/lobby"
+    style="@style/CustomButtonStyle"
+    android:layout_marginBottom="16dp"/>
+
+    <Button
+    android:id="@+id/btnleaderboard"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/leaderboard"
+    style="@style/CustomButtonStyle"
+    android:layout_marginBottom="16dp"/>
+
+    <!-- Settings Button -->
+    <Button
+    android:id="@+id/settingsButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/settings"
+    style="@style/CustomButtonStyle"/>
+
+</LinearLayout>

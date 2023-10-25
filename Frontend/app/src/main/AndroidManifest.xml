@@ -19,10 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".LobbyActivity"></activity>
         <activity android:name=".LeaderboardActivity"></activity>
         <activity android:name=".ArtistActivity"></activity>
-        <activity android:name=".ChatActivity"></activity>
+        <activity android:name=".ChatActivity"
+            android:windowSoftInputMode="adjustResize">
+
+        </activity>
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>
