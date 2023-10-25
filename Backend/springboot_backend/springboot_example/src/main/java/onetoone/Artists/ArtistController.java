@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import onetoone.Songs.Song;
 import onetoone.Songs.SongRepository;
+import onetoone.Albums.Album;
+import onetoone.Albums.AlbumRepository;
 
 /**
  * 
@@ -28,6 +30,9 @@ public class ArtistController {
 
     @Autowired
     SongRepository songRepository;
+
+    @Autowired
+    AlbumRepository albumRepository;
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
@@ -67,6 +72,18 @@ public class ArtistController {
             return failure;
         song.setArtist(artist);
         artist.addSongs(song);
+        artistRepository.save(artist);
+        return success;
+    }
+
+    @PutMapping("/artists/{artistId}/albums/{albumId}")
+    String assignAlbumToArtist(@PathVariable int artistId,@PathVariable int albumId){
+        Artist artist = artistRepository.findById(artistId);
+        Album album = albumRepository.findById(albumId);
+        if(artist == null || album == null)
+            return failure;
+        album.setArtist(artist);
+        artist.setAlbum(album);
         artistRepository.save(artist);
         return success;
     }

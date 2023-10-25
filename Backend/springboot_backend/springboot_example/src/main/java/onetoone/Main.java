@@ -16,6 +16,11 @@ import onetoone.Artists.ArtistRepository;
 import onetoone.Users.User;
 import onetoone.Users.UserRepository;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.net.URL;
+import java.util.HashMap;
+
 /**
  * 
  * @author Vivek Bengre
@@ -41,6 +46,36 @@ class Main {
      */
     @Bean
     CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("km203_song_db.csv"));
+            String[] artist_names = reader.readLine().split(",");
+            String[] song_names = reader.readLine().split(",");
+            String[] date = reader.readLine().split(",");
+            String[] genres = reader.readLine().split(",");
+            Artist[] artist_list = new Artist[artist_names.length];
+            HashMap<String, Artist> hash = new HashMap<>();
+            for(int i = 0; i < artist_names.length; i++) {
+                if (!hash.containsKey(artist_names[i])) {
+                    artist_list[i] = new Artist(artist_names[i], 0, 0);
+                    hash.put(artist_names[i], artist_list[i]);
+                    Song song_input = new Song(song_names[i], genres[i]);
+                    artist_list[i].addSongs(song_input);
+                    artistRepository.save(artist_list[i]);
+                }
+                else {
+                    Artist getter = hash.get(artist_names[i]);
+                    Song song_input = new Song(song_names[i], genres[i]);
+                    getter.addSongs(song_input);
+                    artistRepository.save(artist_list[i]);
+                }
+            }
+            reader.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         return args -> {
             Artist artist1 = new Artist("John", 1, 2);
             Artist artist2 = new Artist("Jane", 2, 5);
