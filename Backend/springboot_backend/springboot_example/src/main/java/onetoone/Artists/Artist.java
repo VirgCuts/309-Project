@@ -48,7 +48,7 @@ public class Artist {
 //    @JoinColumn(name = "song_id")
 //    private Song song;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Song> songs;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -59,9 +59,11 @@ public class Artist {
         this.name = name;
         this.numPlatinums = numPlatinums;
         this.numGrammys = numGrammys;
+        songs = new ArrayList<>();
     }
 
     public Artist() {
+        songs = new ArrayList<>();
     }
 
     // =============================== Getters and Setters for each field ================================== //
@@ -114,8 +116,8 @@ public class Artist {
         this.songs = songs;
     }
 
-    public void addSongs(Song songs){
-        this.songs.add(songs);
+    public void addSongs(Song song){
+        this.songs.add(song);
     }
 
     public Album getAlbum(){
