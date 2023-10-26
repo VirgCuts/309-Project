@@ -2,6 +2,7 @@ package com.example.sumon.androidvolley;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +13,10 @@ import android.widget.Toast;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -27,7 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeaderboardActivity extends Activity {
+public class LeaderboardActivity extends AppCompatActivity {
 
     private ListView leaderboardListView;
     private EditText inputEditText;
@@ -39,11 +44,14 @@ public class LeaderboardActivity extends Activity {
     private List<PlayerData> leaderboardData;
     private CustomAdapter adapter;
     private int selectedItemPosition = -1;
-
+    private Navigation navigationHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
+
+        navigationHelper = new Navigation(this);
+        navigationHelper.setupNavigation();
 
         leaderboardListView = findViewById(R.id.leaderboardListView);
         inputEditText = findViewById(R.id.inputEditText);
@@ -133,6 +141,12 @@ public class LeaderboardActivity extends Activity {
                 }
             }
         });
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     private void clearInput() {

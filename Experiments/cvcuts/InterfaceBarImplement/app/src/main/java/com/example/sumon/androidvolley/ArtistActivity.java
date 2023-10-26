@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Request.Method;
@@ -28,7 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ArtistActivity extends Activity {
+public class ArtistActivity extends AppCompatActivity {
 
     private final String TAG = ArtistActivity.class.getSimpleName();
     private ProgressDialog pDialog;
@@ -38,14 +42,18 @@ public class ArtistActivity extends Activity {
     private String tag_string_req = "string_req";
     private EditText deleteNum, orgnArtist, newArtist, artistName, numPlat, numGrammies,song,songGenre;
 
+    private Navigation navigationHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.artist_activity);
 
+        navigationHelper = new Navigation(this);
+        navigationHelper.setupNavigation();
+
         Button btnBack = findViewById(R.id.btnBack);
         Button deleteButton = findViewById(R.id.deleteArtist);
-        //Button updateButton = findViewById(R.id.updateArtist);
         Button addButton = findViewById(R.id.addArtist);
         artistName = findViewById(R.id.artistName);
         numPlat = findViewById(R.id.numPlat);
@@ -57,10 +65,6 @@ public class ArtistActivity extends Activity {
         searchText = findViewById(R.id.searchText);
         boolText = findViewById(R.id.boolText);
         deleteNum = findViewById(R.id.deleteNum);
-
-        //orgnArtist = findViewById(R.id.orgnArtist);
-
-        //newArtist = findViewById(R.id.newArtist);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
@@ -91,13 +95,6 @@ public class ArtistActivity extends Activity {
                 addArtistToDB(artistName.getText().toString(), Integer.parseInt(numPlat.getText().toString()), Integer.parseInt(numGrammies.getText().toString()) ,song.getText().toString(),songGenre.getText().toString());
             }
         });
-//        updateButton.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                updateArtistInDB(orgnArtist.getText().toString(), newArtist.getText().toString());
-//            }
-//        });
         deleteButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -115,7 +112,12 @@ public class ArtistActivity extends Activity {
             }
         });
     }
-    //Checks edit text and compares it to the users in the data returns true of false depending on inclusion.
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
     private String searchArtistInJson(String jsonString, String artistToSearch) {
         try {
             JSONArray jsonArray = new JSONArray(jsonString);
@@ -132,14 +134,12 @@ public class ArtistActivity extends Activity {
                 }
             }
 
-            // If no match is found
             showToast("Artist not found.");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return "Song not found for " + artistToSearch;
     }
-
     private void addArtistToDB(String artistName, int numPlatinums, int numGrammys, String songName, String songGenre) {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists"; // Replace with your API endpoint URL
 
