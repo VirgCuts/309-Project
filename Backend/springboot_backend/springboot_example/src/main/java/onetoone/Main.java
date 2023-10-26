@@ -67,7 +67,15 @@ class Main {
                     String song_name = input[2];
                     String genre = input[4];
                     if (genre.equals("hip hop")) {
-                        Song song = new Song(song_name, genre);
+                        Song song;
+                        if (song_name.contains("feat.")) {
+                            String full_song_name = song_name.split("feat.")[0].trim();
+                            String feature_name = song_name.split("feat.")[1].trim();
+                            song = new Song(full_song_name, genre, feature_name);
+                        }
+                        else {
+                            song = new Song(song_name, genre, "");
+                        }
                         if (!hash.containsKey(artist_name)) {
                             Artist artist = new Artist(artist_name, 0, 0);
                             hash.put(artist_name, artist);
