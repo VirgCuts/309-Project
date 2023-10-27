@@ -141,7 +141,7 @@ public class LeaderboardActivity extends Activity {
      * Retrieve leaderboard data from the API using Volley.
      */
     private void retrieveLeaderboardData() {
-        // URL of the API to retrieve leaderboard data
+
         String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard";
 
         JsonArrayRequest request = new JsonArrayRequest(
@@ -186,7 +186,7 @@ public class LeaderboardActivity extends Activity {
      * @param newScore The new score to set for the player.
      */
     private void updateScore(String username, int newScore) {
-        // URL of the API to update a player's score
+
         String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + username + "/" + newScore;
 
         JsonObjectRequest request = new JsonObjectRequest(
@@ -226,7 +226,7 @@ public class LeaderboardActivity extends Activity {
      * @param usernameToDelete The username of the player to delete.
      */
     private void deletePlayer(String usernameToDelete) {
-        // URL of the API to delete a player
+
         String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + usernameToDelete;
 
         JsonObjectRequest request = new JsonObjectRequest(
@@ -346,12 +346,14 @@ public class LeaderboardActivity extends Activity {
             TextView playerNameTextView = convertView.findViewById(R.id.playerUsernameTextView);
             TextView scoreTextView = convertView.findViewById(R.id.scoreTextView);
 
+
             PlayerData player = getItem(position);
             if (player != null) {
                 int rank = position + 1;
                 playerRankTextView.setText(String.valueOf(rank));
                 playerNameTextView.setText(player.getUsername());
                 scoreTextView.setText(String.valueOf(player.getScore()));
+
             }
 
             return convertView;
