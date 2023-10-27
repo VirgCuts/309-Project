@@ -46,6 +46,10 @@ public class MainActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(MainActivity.this,
                         SettingsActivity.class));
                 break;
+            case R.id.btnChatRoom:
+                startActivity(new Intent(MainActivity.this,
+                        ChatActivity.class));
+                break;
             default:
                 break;
         }

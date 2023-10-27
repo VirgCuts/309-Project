@@ -6,9 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
 
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -20,10 +22,12 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
     private EditText usernameEtx, msgEtx;
     private TextView msgTv;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatroom_layout);
+
 
         /* initialize UI elements */
         connectBtn = (Button) findViewById(R.id.connect_button);

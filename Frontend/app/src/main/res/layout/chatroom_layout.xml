@@ -4,10 +4,14 @@
 
     <!-- Toolbar -->
 <<<<<<< HEAD
+<<<<<<< HEAD
     <androidx.appcompat.widget.Toolbar
 =======
     <android.widget.Toolbar
 >>>>>>> dcd82b5 (New chatroom UI plus a few other additions)
+=======
+    <androidx.appcompat.widget.Toolbar
+>>>>>>> cba2f6a (Added androidx dependencies (plus troubleshooting) and implemented chatroom layout)
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -52,8 +56,12 @@
     </RelativeLayout>
 =======
             android:layout_gravity="center"/>
+<<<<<<< HEAD
     </android.widget.Toolbar>
 >>>>>>> dcd82b5 (New chatroom UI plus a few other additions)
+=======
+    </androidx.appcompat.widget.Toolbar>
+>>>>>>> cba2f6a (Added androidx dependencies (plus troubleshooting) and implemented chatroom layout)
 
     <!-- Chat Messages -->
     <ScrollView
@@ -66,8 +74,14 @@
 
 =======
         android:layout_height="match_parent"
+<<<<<<< HEAD
         android:layout_below="@+id/toolbar">
 >>>>>>> dcd82b5 (New chatroom UI plus a few other additions)
+=======
+        android:layout_below="@+id/toolbar"
+        >
+
+>>>>>>> cba2f6a (Added androidx dependencies (plus troubleshooting) and implemented chatroom layout)
         <LinearLayout
             android:id="@+id/chat_container"
             android:layout_width="match_parent"
@@ -99,6 +113,7 @@
             android:id="@+id/message_input"
             android:layout_width="match_parent"
 <<<<<<< HEAD
+<<<<<<< HEAD
             android:layout_height="50dp"
             android:padding="10dp"
             android:hint="Type a message"
@@ -107,6 +122,9 @@
             android:layout_toStartOf="@+id/send_button" />
 =======
             android:layout_height="wrap_content"
+=======
+            android:layout_height="50dp"
+>>>>>>> cba2f6a (Added androidx dependencies (plus troubleshooting) and implemented chatroom layout)
             android:padding="10dp"
             android:hint="Type a message"
             android:background="#fff"
@@ -119,10 +137,14 @@
             android:id="@+id/send_button"
             android:layout_width="wrap_content"
 <<<<<<< HEAD
+<<<<<<< HEAD
             android:layout_height="50dp"
 =======
             android:layout_height="wrap_content"
 >>>>>>> dcd82b5 (New chatroom UI plus a few other additions)
+=======
+            android:layout_height="50dp"
+>>>>>>> cba2f6a (Added androidx dependencies (plus troubleshooting) and implemented chatroom layout)
             android:text="Send"
             android:background="?attr/colorPrimary"
             android:textColor="#fff"
