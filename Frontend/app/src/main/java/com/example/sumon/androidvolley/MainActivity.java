@@ -7,7 +7,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements OnClickListener {
+
     private Button btnLeaderboard, btnLobby, btnSettings;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,8 +18,10 @@ public class MainActivity extends Activity implements OnClickListener {
 
 
         btnLeaderboard = (Button) findViewById(R.id.btnleaderboard);
+
         btnLobby = (Button) findViewById(R.id.lobbyButton);
         btnSettings = (Button) findViewById(R.id.settingsButton);
+
 
 
         // button click listeners
