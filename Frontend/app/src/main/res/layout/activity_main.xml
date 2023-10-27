@@ -7,18 +7,17 @@
     android:paddingLeft="16dp"
     android:paddingRight="1dp"
     android:paddingTop="16dp"
-    tools:context=".MainActivity" >
-
-
-
+     >
 
 
     <Button
-        android:id="@+id/btnleaderboard"
+        android:id="@+id/btnChatRoom"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:text="Leaderboard" />
+
+
+        android:text="Chatroom" />
 
     <Button
         android:id="@+id/btnArtists"

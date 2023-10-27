@@ -1,0 +1,24 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer Circle - Darker Gray -->
+    <item>
+        <shape
+            android:shape="oval">
+            <solid android:color="@android:color/darker_gray" />
+            <stroke
+                android:width="4dp"
+                android:color="#FFFFFF" /> <!-- White border -->
+        </shape>
+    </item>
+    <!-- Inner Circle - Gradient -->
+    <item android:bottom="4dp" android:left="4dp" android:right="4dp" android:top="4dp">
+        <shape
+            android:shape="oval">
+            <gradient
+                android:startColor="#FFFFFF"
+            android:endColor="#808080"
+            android:gradientRadius="60%"
+            android:type="radial" />
+        </shape>
+    </item>
+
+</layer-list>

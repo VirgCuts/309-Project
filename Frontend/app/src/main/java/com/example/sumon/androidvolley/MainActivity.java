@@ -7,21 +7,31 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements OnClickListener {
-    private Button btnLeaderboard, btnArtists;
+
+
+    private Button btnLeaderboard, btnLobby, btnSettings;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_menu_layout);
 
 
         btnLeaderboard = (Button) findViewById(R.id.btnleaderboard);
-        btnArtists = (Button) findViewById(R.id.btnArtists);
+
+
+        btnLobby = (Button) findViewById(R.id.lobbyButton);
+        btnSettings = (Button) findViewById(R.id.settingsButton);
+
+
 
         // button click listeners
 
         btnLeaderboard.setOnClickListener(this);
-        btnArtists.setOnClickListener(this);
+        btnLobby.setOnClickListener(this);
+        btnSettings.setOnClickListener(this);
     }
 
     @Override
@@ -31,9 +41,14 @@ public class MainActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(MainActivity.this,
                         LeaderboardActivity.class));
                 break;
-            case R.id.btnArtists:
+            case R.id.lobbyButton:
                 startActivity(new Intent(MainActivity.this,
-                        ArtistActivity.class));
+                        LobbyActivity.class));
+
+                break;
+            case R.id.settingsButton:
+                startActivity(new Intent(MainActivity.this,
+                        SettingsActivity.class));
                 break;
             default:
                 break;
