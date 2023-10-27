@@ -8,7 +8,9 @@ import android.widget.Button;
 
 public class MainActivity extends Activity implements OnClickListener {
 
+
     private Button btnLeaderboard, btnLobby, btnSettings;
+
 
 
     @Override
@@ -18,6 +20,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 
         btnLeaderboard = (Button) findViewById(R.id.btnleaderboard);
+
 
         btnLobby = (Button) findViewById(R.id.lobbyButton);
         btnSettings = (Button) findViewById(R.id.settingsButton);
@@ -41,14 +44,11 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.lobbyButton:
                 startActivity(new Intent(MainActivity.this,
                         LobbyActivity.class));
+
                 break;
             case R.id.settingsButton:
                 startActivity(new Intent(MainActivity.this,
                         SettingsActivity.class));
-                break;
-            case R.id.btnChatRoom:
-                startActivity(new Intent(MainActivity.this,
-                        ChatActivity.class));
                 break;
             default:
                 break;

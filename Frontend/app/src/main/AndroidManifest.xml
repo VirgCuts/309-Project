@@ -22,15 +22,15 @@
         <activity android:name=".LobbyActivity"></activity>
         <activity android:name=".LeaderboardActivity"></activity>
         <activity android:name=".ArtistActivity"></activity>
-<<<<<<< HEAD
+
+
         <activity android:name=".ChatActivity"
             android:windowSoftInputMode="adjustResize">
 
         </activity>
         <activity android:name=".SettingsActivity"></activity>
-=======
-        <activity android:name=".ChatActivity"></activity>
->>>>>>> cba2f6a (Added androidx dependencies (plus troubleshooting) and implemented chatroom layout)
+
+
     </application>
 
 </manifest>

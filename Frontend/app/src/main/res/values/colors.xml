@@ -4,10 +4,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="greyWithTransparency">#4D667279</color>
-<<<<<<< HEAD
+
     <color name="backgroundColor">#12AFA6</color>
     <color name="buttonColor">#3F51B5</color>
     <color name="white">#FFFFFF</color>
-=======
->>>>>>> 7a4c42a (Updated Leaderboard UI with working rank)
+
+
 </resources>
