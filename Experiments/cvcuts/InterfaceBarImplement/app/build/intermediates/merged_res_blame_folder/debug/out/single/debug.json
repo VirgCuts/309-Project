@@ -1,0 +1,90 @@
+[
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-hdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "com.example.sumon.androidvolley.app-merged_res-36:/layout_artist_activity.xml.flat",
+        "source": "com.example.sumon.androidvolley.app-main-38:/layout/artist_activity.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "com.example.sumon.androidvolley.app-merged_res-36:/layout_activity_leaderboard.xml.flat",
+        "source": "com.example.sumon.androidvolley.app-main-38:/layout/activity_leaderboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\menu_navigation_menu.xml.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\menu\\navigation_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\layout_message_board.xml.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\layout\\message_board.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\drawable-v24_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\drawable-v24\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-xxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\layout_artist_activity.xml.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\layout\\artist_activity.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\layout_activity_leaderboard.xml.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\layout\\activity_leaderboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\layout_list_item_layout.xml.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\layout\\list_item_layout.xml"
+    },
+    {
+        "merged": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-merged_res-36:\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\carte\\.gradle\\daemon\\8.0\\com.example.sumon.androidvolley.app-main-38:\\mipmap-mdpi\\ic_launcher.png"
+    }
+]
