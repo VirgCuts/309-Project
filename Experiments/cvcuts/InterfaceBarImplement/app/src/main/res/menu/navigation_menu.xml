@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+    tools:ignore="HardcodedText">
+
+    <item
+        android:id="@+id/btnleaderboard"
+        android:title="Leaderboard"
+        />
+
+    <item
+        android:id="@+id/btnArtists"
+        android:title="To Artist Changes" />
+
+    <item
+        android:id="@+id/btnWebsocket"
+        android:title="To Web Sockets" />
+
+<!--    <Button-->
+<!--        android:id="@+id/btnleaderboard"-->
+<!--        android:layout_width="fill_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        android:text="Leaderboard" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btnArtists"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        android:text="To Artist Changes" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/btnWebsocket"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        android:text="To Web Sockets" />-->
+
+</menu>
