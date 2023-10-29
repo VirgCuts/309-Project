@@ -1,6 +1,12 @@
 package com.example.game.gameFiles;
 
-public class SinglePlayerGame implements GameViewInterface, GameControllerInterface {
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.game.R;
+
+public class SinglePlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface {
     private String[][] gridData; // Store grid data, initialize it in initializeGrid()
     private int correctGuesses;
     private int totalGuesses;
@@ -8,6 +14,12 @@ public class SinglePlayerGame implements GameViewInterface, GameControllerInterf
     private long endTime;
 
     // Implement methods from GameGridInterface
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.single_player);
+
+    }
     @Override
     public void initializeGrid() {
         // Initialize the 3x3 grid with random data
