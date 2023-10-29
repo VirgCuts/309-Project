@@ -51,15 +51,16 @@ public class Artist {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Song> songs;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "album_id")
-    private Album album;
+    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "album_id")
+    private List<Album> albums;
 
     public Artist(String name, int numPlatinums, int numGrammys) {
         this.name = name;
         this.numPlatinums = numPlatinums;
         this.numGrammys = numGrammys;
         songs = new ArrayList<>();
+        albums = new ArrayList<>();
     }
 
     public Artist() {
@@ -120,12 +121,23 @@ public class Artist {
         this.songs.add(song);
     }
 
-    public Album getAlbum(){
-        return album;
+//    public Album getAlbum(){
+//        return album;
+//    }
+//
+//    public void setAlbum(Album album){
+//        this.album = album;
+//    }
+    public List<Album> getAlbums() {
+    return albums;
+}
+
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
     }
 
-    public void setAlbum(Album album){
-        this.album = album;
+    public void addAlbums(Album album){
+        this.albums.add(album);
     }
     
 }
