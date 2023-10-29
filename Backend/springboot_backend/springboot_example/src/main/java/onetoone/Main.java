@@ -61,30 +61,34 @@ class Main {
                 BufferedReader reader = new BufferedReader(new FileReader("km203_song_db.csv"));
                 HashMap<String, Artist> hash = new HashMap<>();
                 String[] categories = reader.readLine().split(",");
-                for (int i = 0; i < 28370; i++) {
-                    String[] input = reader.readLine().split(",");
-                    String artist_name = input[1];
-                    String song_name = input[2];
-                    String genre = input[4];
-                    if (genre.equals("hip hop")) {
-                        Song song;
-                        if (song_name.contains("feat.")) {
-                            String full_song_name = song_name.split("feat.")[0].trim();
-                            String feature_name = song_name.split("feat.")[1].trim();
-                            song = new Song(full_song_name, genre, feature_name);
-                        }
-                        else {
-                            song = new Song(song_name, genre, "");
-                        }
-                        if (!hash.containsKey(artist_name)) {
-                            Artist artist = new Artist(artist_name, 0, 0);
-                            hash.put(artist_name, artist);
-                            artist.addSongs(song);
-                            artistRepository.save(artist);
-                        } else {
-                            Artist getter = hash.get(artist_name);
-                            getter.addSongs(song);
-                            songRepository.save(song);
+                if (artistRepository.findById(1) == null) {
+                    for (int i = 0; i < 28370; i++) {
+                        String[] input = reader.readLine().split(",");
+                        String artist_name = input[1];
+                        String song_name = input[2];
+                        String genre = input[4];
+                        if (genre.equals("hip hop")) {
+                            Song song;
+                            if (song_name.contains("feat.")) {
+                                String full_song_name = song_name.split("feat.")[0].trim();
+                                String feature_name = song_name.split("feat.")[1].trim();
+                                song = new Song(full_song_name, genre, feature_name);
+                            } else {
+                                song = new Song(song_name, genre, "");
+                            }
+                            if (!hash.containsKey(artist_name)) {
+                                Artist artist = new Artist(artist_name, 0, 0);
+                                hash.put(artist_name, artist);
+                                artist.addSongs(song);
+                                song.setArtist(artist);
+                                artistRepository.save(artist);
+                                songRepository.save(song);
+                            } else {
+                                Artist getter = hash.get(artist_name);
+                                getter.addSongs(song);
+                                song.setArtist(getter);
+                                songRepository.save(song);
+                            }
                         }
                     }
                 }
