@@ -47,6 +47,53 @@ public class ArtistController {
         return artistRepository.findById(id);
     }
 
+    @GetMapping(path = "/artists/{id}/songs")
+    List<Song> getArtistSongs( @PathVariable int id) {
+        Artist artist = artistRepository.findById(id);
+        return artist.getSongs();
+    }
+
+    @GetMapping(path = "/artists/{id}/name/{check}")
+    boolean getArtistNameContains( @PathVariable int id, @PathVariable String check) {
+        Artist artist = artistRepository.findById(id);
+        String artistName = artist.getName();
+        return artistName.contains(check);
+    }
+
+    @GetMapping(path = "/artists/{id}/features/{feature}")
+    boolean getArtistFeatureCheck( @PathVariable int id, @PathVariable String feature) {
+        Artist artist = artistRepository.findById(id);
+        List<Song> songList = artist.getSongs();
+        for (int i = 0; i < songList.size(); i++) {
+            if (songList.get(i).getFeature().contains(feature)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @GetMapping(path = "/artists/{id}/artists2/{id2}")
+    boolean getArtistHaveSongTogether( @PathVariable int id, @PathVariable int id2) {
+        Artist artist1 = artistRepository.findById(id);
+        String artist1name = artist1.getName();
+        List<Song> songList1 = artist1.getSongs();
+        Artist artist2 = artistRepository.findById(id2);
+        String artist2name = artist2.getName();
+        List<Song> songList2 = artist2.getSongs();
+        boolean returner = false;
+        for (int i = 0; i < songList1.size(); i++) {
+            if (songList1.get(i).getFeature().contains(artist2name)) {
+                returner =  true;
+            }
+        }
+        for (int i = 0; i < songList2.size(); i++) {
+            if (songList2.get(i).getFeature().contains(artist1name)) {
+                returner =  true;
+            }
+        }
+        return returner;
+    }
+
     @PostMapping(path = "/artists")
     String createArtist(@RequestBody Artist artist){
         if (artist == null)
