@@ -2,32 +2,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Toolbar -->
-
-    <androidx.appcompat.widget.Toolbar
-
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp">
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chat Room"
-            android:textColor="#fff"
-            android:textSize="18sp"/>
-
-
-    </androidx.appcompat.widget.Toolbar>
-
     <!-- Username and Connect -->
     <RelativeLayout
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar">
+        android:layout_alignParentTop="true"
+        >
 
         <EditText
             android:id="@+id/username_input"
