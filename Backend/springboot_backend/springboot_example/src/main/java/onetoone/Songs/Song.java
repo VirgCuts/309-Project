@@ -29,11 +29,7 @@ public class Song {
     private int id;
     private String songName;
     private String genre;
-//    private double cpuClock;
-//    private int cpuCores;
-//    private int ram;
-//    private String manufacturer;
-//    private int cost;
+    private String feature;
 
     /*
      * @OneToOne creates a relation between the current entity/table(Laptop) with the entity/table defined below it(User)
@@ -49,9 +45,10 @@ public class Song {
     private Artist artist;
 
 
-    public Song(String songName, String genre) {
+    public Song(String songName, String genre, String feature) {
         this.songName = songName;
         this.genre = genre;
+        this.feature = feature;
     }
 
     public Song() {
@@ -81,6 +78,14 @@ public class Song {
 
     public void setGenre(String genre){
         this.genre = genre;
+    }
+
+    public String getFeature(){
+        return feature;
+    }
+
+    public void setFeature(String feature){
+        this.feature = feature;
     }
 
     public Artist getArtist(){

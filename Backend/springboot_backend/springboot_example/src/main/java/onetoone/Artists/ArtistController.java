@@ -83,7 +83,7 @@ public class ArtistController {
         if(artist == null || album == null)
             return failure;
         album.setArtist(artist);
-        artist.setAlbum(album);
+        artist.addAlbums(album);
         artistRepository.save(artist);
         return success;
     }
