@@ -19,6 +19,7 @@
         <item name="android:elevation">2dp</item>
         <item name="android:stateListAnimator">@animator/lift_on_touch</item>
     </style>
+    <string name="chat_activity_title">Chat Room</string>
 
 
 </resources>
