@@ -23,8 +23,9 @@
 
     <androidx.gridlayout.widget.GridLayout
         android:layout_width="match_parent"
+        android:id="@+id/gridLayout"
         android:layout_below="@id/Points"
-        android:layout_height="match_parent">
+        android:layout_height="300dp">
 
         <TextView
             android:id="@+id/Row1"
@@ -155,7 +156,15 @@
             app:layout_column="3"
             app:layout_row="3"
             android:background="@drawable/edit_text_native" />
+
     </androidx.gridlayout.widget.GridLayout>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:text="End Game"
+        android:id="@+id/endGameButton"
+        android:layout_below="@+id/gridLayout"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/winnerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:text="Player X wins!"
+        android:layout_marginBottom="20dp" />
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/winnerGrid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/winnerText"
+        android:layout_centerHorizontal="true"
+        android:background="#FFFFF"
+        android:padding="1dp"
+        >
+
+        <!-- Row labels -->
+        <TextView android:text="Row 1" android:gravity="center" app:layout_column="1" app:layout_row="0" android:layout_width="80dp" android:layout_height="80dp"/>
+        <TextView android:text="Row 2" android:gravity="center" app:layout_column="2" app:layout_row="0" android:layout_width="80dp" android:layout_height="80dp"/>
+        <TextView android:text="Row 3" android:gravity="center" app:layout_column="3" app:layout_row="0" android:layout_width="80dp" android:layout_height="80dp"/>
+
+        <!-- Column labels -->
+        <TextView android:text="Col 1" android:gravity="center" app:layout_column="0" app:layout_row="1" android:layout_width="80dp" android:layout_height="80dp"/>
+
+        <TextView android:layout_width="80dp" android:layout_height="80dp" android:gravity="center" android:text="R1C1" android:id="@+id/r1c1" android:background="@drawable/border_cell_topleft" />
+        <TextView android:layout_width="80dp" android:layout_height="80dp" android:gravity="center" android:text="R1C2" android:id="@+id/r1c2" android:background="@drawable/border_cell_middle_topbottom"/>
+        <TextView android:layout_width="80dp" android:layout_height="80dp" android:gravity="center" android:text="R1C3" android:id="@+id/r1c3" android:background="@drawable/border_cell_topright"/>
+
+        <TextView android:text="Col 2" android:gravity="center" app:layout_column="0" app:layout_row="2" android:layout_width="80dp" android:layout_height="80dp"/>
+        <TextView android:layout_width="80dp" android:layout_height="80dp" android:gravity="center" android:text="R2C1" android:id="@+id/r2c1" android:background="@drawable/border_cell_middle_leftright"/>
+        <TextView android:layout_width="80dp" android:layout_height="80dp" android:gravity="center" android:text="R2C2" android:id="@+id/r2c2" />
+        <TextView android:layout_width="80dp" android:layout_height="80dp" android:gravity="center" android:text="R2C3" android:id="@+id/r2c3" android:background="@drawable/border_cell_middle_leftright"/>
+
+        <TextView android:text="Col 3" android:gravity="center" app:layout_column="0" app:layout_row="3" android:layout_width="80dp" android:layout_height="80dp"/>
+        <TextView android:layout_width="80dp" android:layout_height="80dp" android:gravity="center" android:text="R3C1" android:id="@+id/r3c1" android:background="@drawable/border_cell_bottomleft"/>
+        <TextView android:layout_width="80dp" android:layout_height="80dp" android:gravity="center" android:text="R3C2" android:id="@+id/r3c2" android:background="@drawable/border_cell_middle_topbottom"/>
+        <TextView android:layout_width="80dp" android:layout_height="80dp" android:gravity="center" android:text="R3C3" android:id="@+id/r3c3" android:background="@drawable/border_cell_bottomright"/>
+
+    </androidx.gridlayout.widget.GridLayout>
+
+    <Button
+        android:id="@+id/restartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restart"
+        android:layout_below="@+id/winnerGrid"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+</RelativeLayout>
