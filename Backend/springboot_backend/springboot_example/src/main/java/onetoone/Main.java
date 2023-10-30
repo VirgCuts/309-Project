@@ -29,7 +29,6 @@ import java.util.HashMap;
 
 @SpringBootApplication
 @EnableJpaRepositories
-@ComponentScan(basePackages = {"onetoone.Websocket"})
 class Main {
 
     public static void main(String[] args) {
