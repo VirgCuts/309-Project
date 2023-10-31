@@ -1,43 +1,25 @@
 package com.example.sumon.androidvolley;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.MenuItem;
 
-public class MainActivity extends Activity implements OnClickListener {
-    private Button btnLeaderboard, btnArtists;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity{
+    private Navigation navigationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        btnLeaderboard = (Button) findViewById(R.id.btnleaderboard);
-        btnArtists = (Button) findViewById(R.id.btnArtists);
-
-        // button click listeners
-
-        btnLeaderboard.setOnClickListener(this);
-        btnArtists.setOnClickListener(this);
+        navigationHelper = new Navigation(this);
+        navigationHelper.setupNavigation();
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnleaderboard:
-                startActivity(new Intent(MainActivity.this,
-                        LeaderboardActivity.class));
-                break;
-            case R.id.btnArtists:
-                startActivity(new Intent(MainActivity.this,
-                        ArtistActivity.class));
-                break;
-            default:
-                break;
-        }
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
-
 }
