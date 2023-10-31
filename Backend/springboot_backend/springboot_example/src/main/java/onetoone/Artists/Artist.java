@@ -1,17 +1,11 @@
 package onetoone.Artists;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import onetoone.Songs.Song;
 import onetoone.Albums.Album;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +16,8 @@ import java.util.List;
  */ 
 
 @Entity
+//@IdClass(Artist.class)
+//public class Artist implements Serializable {
 public class Artist {
 
      /* 
@@ -31,6 +27,7 @@ public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Id
     private String name;
     private int numPlatinums;
     private int numGrammys;
