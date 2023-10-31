@@ -1,5 +1,7 @@
 package onetoone.Users;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import onetoone.Songs.Song;
 
 import javax.persistence.*;
@@ -18,6 +20,9 @@ public class User implements Comparator<User>, Comparable<User> {
     private String name;
     private int highScore;
 
+    @Transient
+    public Board board;
+
 
     /*
      * @OneToOne creates a relation between the current entity/table(Laptop) with the entity/table defined below it(User)
@@ -29,6 +34,8 @@ public class User implements Comparator<User>, Comparable<User> {
     public User(String name, int highScore) {
         this.name = name;
         this.highScore = highScore;
+        this.board = new Board();
+        initializeBoard();
     }
 
     public User() {
@@ -68,5 +75,18 @@ public class User implements Comparator<User>, Comparable<User> {
     @Override
     public int compare(User o1, User o2) {
         return o2.highScore - o1.highScore;
+    }
+
+    public void initializeBoard() { this.board.initializeBoard(); }
+
+    public void hasWon() { this.board.getWon(); }
+
+    public String boardToString() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(this.board);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
