@@ -35,7 +35,6 @@ public class User implements Comparator<User>, Comparable<User> {
         this.name = name;
         this.highScore = highScore;
         this.board = new Board();
-        initializeBoard();
     }
 
     public User() {
@@ -77,9 +76,7 @@ public class User implements Comparator<User>, Comparable<User> {
         return o2.highScore - o1.highScore;
     }
 
-    public void initializeBoard() { this.board.initializeBoard(); }
-
-    public void hasWon() { this.board.getWon(); }
+    public boolean hasWon() { return this.board.getWon(); }
 
     public String boardToString() {
         try {

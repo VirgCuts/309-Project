@@ -6,10 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Board {
     private static final int gameSize = 3;
-    private Boolean won;
+    private boolean won;
     private int[][] game;
 
-    public void initializeBoard() {
+    public Board() {
         this.game = new int[gameSize][gameSize];
         for (int i = 0; i < gameSize; i++)
             for (int j = 0; j < gameSize; j++)
