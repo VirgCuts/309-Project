@@ -16,9 +16,7 @@ import java.util.List;
  */ 
 
 @Entity
-//@IdClass(Artist.class)
 public class Artist implements Serializable {
-//public class Artist {
 
      /* 
      * The annotation @ID marks the field below as the primary key for the table created by springboot
@@ -28,7 +26,6 @@ public class Artist implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-//    @Id
     private String name;
 
     private int numPlatinums;
@@ -118,14 +115,7 @@ public class Artist implements Serializable {
     public void addSongs(Song song){
         this.songs.add(song);
     }
-
-//    public Album getAlbum(){
-//        return album;
-//    }
-//
-//    public void setAlbum(Album album){
-//        this.album = album;
-//    }
+    
     public List<Album> getAlbums() {
     return albums;
 }

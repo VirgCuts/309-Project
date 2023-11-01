@@ -53,11 +53,11 @@ public class ArtistController {
         return artist.getSongs();
     }
 
-//    @GetMapping(path = "/artists/{name}/name/{check}")
-//    boolean getArtistNameContains( @PathVariable String name, @PathVariable String check) {
-//        Artist artist = artistRepository.findByName(name);
-//        return artist.getName().contains(check);
-//    }
+    @GetMapping(path = "/artists/{name}/name/{check}")
+    boolean getArtistNameContains( @PathVariable String name, @PathVariable String check) {
+        Artist artist = artistRepository.findByName(name);
+        return artist.getName().contains(check);
+    }
 
     @GetMapping(path = "/artists/{id}/features/{feature}")
     boolean getArtistFeatureCheck( @PathVariable int id, @PathVariable String feature) {
@@ -140,9 +140,9 @@ public class ArtistController {
         return success;
     }
 
-//    @DeleteMapping(path = "/artistname/{name}")
-//    String deleteArtistByName(@PathVariable String name){
-//        artistRepository.deleteByName(name);
-//        return success;
-//    }
+    @DeleteMapping(path = "/artistname/{name}")
+    String deleteArtistByName(@PathVariable String name){
+        artistRepository.deleteByName(name);
+        return success;
+    }
 }
