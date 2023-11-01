@@ -50,6 +50,14 @@ public class User implements Comparator<User>, Comparable<User> {
         this.id = id;
     }
 
+    public Board getBoard(){
+        return board;
+    }
+
+    public void setBoard(Board board){
+        this.board = board;
+    }
+
     public String getName(){
         return name;
     }
