@@ -58,4 +58,11 @@ public class SongController {
         songRepository.deleteById(id);
         return success;
     }
+
+    // for the game directly
+    @GetMapping(path = "/songsname/{name}/game/{check}")
+    boolean checkIfSongContains(@PathVariable String name, @PathVariable String check){
+        Song song = songRepository.findByName(name);
+        return song.getSongName().contains(check);
+    }
 }

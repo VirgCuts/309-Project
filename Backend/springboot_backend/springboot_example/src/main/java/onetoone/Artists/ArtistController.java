@@ -140,4 +140,11 @@ public class ArtistController {
         artistRepository.deleteById(id);
         return success;
     }
+
+    // for the game directly
+    @GetMapping(path = "/artistsname/{name}/game/{check}")
+    boolean checkIfArtistContains(@PathVariable String name, @PathVariable String check){
+        Artist artist = artistRepository.findByName(name);
+        return artist.getName().contains(check);
+    }
 }
