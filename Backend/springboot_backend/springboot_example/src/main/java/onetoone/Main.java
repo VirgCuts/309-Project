@@ -47,8 +47,8 @@ class Main {
     CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository, AlbumRepository albumRepository) {
         return args -> {
             userRepository.deleteAllInBatch();
-            Album album1 = new Album("Graduation", "Rap");
-            albumRepository.save(album1);
+//            Album album1 = new Album("Graduation", "Rap");
+//            albumRepository.save(album1);
             User user1 = new User("Sam", 1000);
             User user2 = new User("Keenan", 33);
             User user3 = new User("Conor", 49);
@@ -57,46 +57,46 @@ class Main {
             userRepository.save(user2);
             userRepository.save(user3);
             userRepository.save(user4);
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader("km203_song_db.csv"));
-                HashMap<String, Artist> hash = new HashMap<>();
-                String[] categories = reader.readLine().split(",");
-                if (artistRepository.findById(1) == null) {
-                    for (int i = 0; i < 28370; i++) {
-                        String[] input = reader.readLine().split(",");
-                        String artist_name = input[1];
-                        String song_name = input[2];
-                        String genre = input[4];
-                        if (genre.equals("hip hop")) {
-                            Song song;
-                            if (song_name.contains("feat.")) {
-                                String full_song_name = song_name.split("feat.")[0].trim();
-                                String feature_name = song_name.split("feat.")[1].trim();
-                                song = new Song(full_song_name, genre, feature_name);
-                            } else {
-                                song = new Song(song_name, genre, "");
-                            }
-                            if (!hash.containsKey(artist_name)) {
-                                Artist artist = new Artist(artist_name, 0, 0);
-                                hash.put(artist_name, artist);
-                                artist.addSongs(song);
-                                song.setArtist(artist);
-                                artistRepository.save(artist);
-                                songRepository.save(song);
-                            } else {
-                                Artist getter = hash.get(artist_name);
-                                getter.addSongs(song);
-                                song.setArtist(getter);
-                                songRepository.save(song);
-                            }
-                        }
-                    }
-                }
-                reader.close();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+//            try {
+//                BufferedReader reader = new BufferedReader(new FileReader("km203_song_db.csv"));
+//                HashMap<String, Artist> hash = new HashMap<>();
+//                String[] categories = reader.readLine().split(",");
+//                if (artistRepository.findById(1) == null) {
+//                    for (int i = 0; i < 28370; i++) {
+//                        String[] input = reader.readLine().split(",");
+//                        String artist_name = input[1];
+//                        String song_name = input[2];
+//                        String genre = input[4];
+//                        if (genre.equals("hip hop")) {
+//                            Song song;
+//                            if (song_name.contains("feat.")) {
+//                                String full_song_name = song_name.split("feat.")[0].trim();
+//                                String feature_name = song_name.split("feat.")[1].trim();
+//                                song = new Song(full_song_name, genre, feature_name);
+//                            } else {
+//                                song = new Song(song_name, genre, "");
+//                            }
+//                            if (!hash.containsKey(artist_name)) {
+//                                Artist artist = new Artist(artist_name, 0, 0);
+//                                hash.put(artist_name, artist);
+//                                artist.addSongs(song);
+//                                song.setArtist(artist);
+//                                artistRepository.save(artist);
+//                                songRepository.save(song);
+//                            } else {
+//                                Artist getter = hash.get(artist_name);
+//                                getter.addSongs(song);
+//                                song.setArtist(getter);
+//                                songRepository.save(song);
+//                            }
+//                        }
+//                    }
+//                }
+//                reader.close();
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
         };
     }
 

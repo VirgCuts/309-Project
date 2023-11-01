@@ -1,9 +1,14 @@
 package onetoone.Websocket;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Hashtable;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -65,6 +70,9 @@ public class ChatServer {
 
             // map current username with session
             usernameSessionMap.put(username, session);
+
+            //send welcome image to user
+            userJoinImage(session);
 
             // send to the user joining in
             sendMessageToPArticularUser(username, "Welcome to the chat, " + username);
@@ -175,5 +183,23 @@ public class ChatServer {
                 logger.info("[Broadcast Exception] " + e.getMessage());
             }
         });
+    }
+
+    /**
+     *"https://www.freepik.com/free-vector/hipster-portrait-animals_3797245.htm#query=bear%20illustration&position=24&from_view=search&track=ais -> Image by macrovector on Freepik
+     */
+    private void userJoinImage(Session session){
+        try {
+            File f = new File("welcomeimage.jpg");
+            BufferedImage image = ImageIO.read(f);
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", output);
+            ByteBuffer byteBuffer = ByteBuffer.wrap(output.toByteArray());
+            session.getBasicRemote().sendBinary(byteBuffer);
+            output.close();
+            byteBuffer.clear();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 }
