@@ -34,11 +34,8 @@ public class Song {
 //    private Artist artist;
 
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "artist_id"),
-            @JoinColumn(name = "artist_name")
-    }
-    )
+    @JoinColumn(name = "artist_id", referencedColumnName = "id")
+    @JoinColumn(name = "artist_name", referencedColumnName = "name")
     @JsonIgnore
     private Artist artist;
 
