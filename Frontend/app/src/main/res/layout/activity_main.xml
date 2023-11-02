@@ -26,4 +26,25 @@
         android:layout_marginBottom="20dp"
         android:text="To Artist Changes" />
 
+    <Button
+        android:id="@+id/lobby1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Lobby 1" />
+
+    <Button
+        android:id="@+id/lobby2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Lobby 2" />
+
+    <Button
+        android:id="@+id/lobby3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="Lobby 3" />
+
 </LinearLayout>
