@@ -23,25 +23,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class SinglePlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface {
-
-    private int totalGuesses;
-    private long startTime;
-    private long endTime;
     private TextView timerTextView;
-
     private Button endGameButton;
     private Handler handler = new Handler();
     private int seconds = 240;
-
     private int points = 0;
-
     private GameState gameState;
-
     private PlayerBoard playerBoard;
     private int correctGuesses = 0;
     private final int TOTAL_EDIT_TEXTS = 9;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,46 +165,19 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     editText.getBackground().mutate().clearColorFilter(); // Use your original EditText drawable here
                     editText.setText("");
                 }
-            }, 280);
+            }, 280);// Set a delay to revert the color
         }
-
-        // Set a delay to revert the color
-
     }
     private void animateFlash(EditText editText) {
         Animation flash = AnimationUtils.loadAnimation(this, R.anim.shake_and_flash_animation);
         editText.startAnimation(flash);
     }
-
-    @Override
-    public void showMessageBox(String message) {
-        // Show a message box to the user
-    }
-
-    @Override
-    public void startGame() {
-        // Start the game, initialize variables, calls timer, initialize grid, etc
-    }
-
-    @Override
-    public void handleBoxClick(EditText editText) {
-        // Handle grid box clicks
-    }
-
-    @Override
-    public void handleUserInput(EditText editText, String userInput) {
-        // Handle user's input, check correctness, update score
-    }
-
     @Override
     public void endGame() {
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
         showWinnerDialog("User", playerBoard.getGrid());
     }
-    @Override
-    public void showEndGameScore(int score) {
-        // Show the player's final score
-    }
+
     private void setEditTextListener(final EditText editText) {
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
