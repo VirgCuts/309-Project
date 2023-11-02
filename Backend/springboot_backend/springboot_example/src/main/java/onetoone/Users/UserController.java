@@ -70,4 +70,26 @@ public class UserController {
         userRepository.deleteByName(name);
         return success;
     }
+
+    @PutMapping(path = "/canChat/{name}/true")
+    String banUserFromChat(@PathVariable String name)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return failure;
+        user.setCanChat(true);
+        userRepository.save(user);
+        return success;
+    }
+
+    @PutMapping(path = "/canChat/{name}/false")
+    String unbanUserFromChat(@PathVariable String name)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return failure;
+        user.setCanChat(false);
+        userRepository.save(user);
+        return success;
+    }
 }
