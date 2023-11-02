@@ -13,22 +13,22 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
             android:exported="true">
+        </activity>
+        <activity android:name=".LobbyActivity"></activity>
+        <activity android:name=".LeaderboardActivity"></activity>
+        <activity android:name=".ArtistActivity"></activity>
+        <activity android:name=".ChatActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".GameWebSockets"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LobbyActivity"></activity>
-        <activity android:name=".LeaderboardActivity"></activity>
-        <activity android:name=".ArtistActivity"></activity>
-
-
-        <activity android:name=".ChatActivity"
-            android:windowSoftInputMode="adjustResize">
-
-        </activity>
-        <activity android:name=".SettingsActivity"></activity>
 
 
     </application>
