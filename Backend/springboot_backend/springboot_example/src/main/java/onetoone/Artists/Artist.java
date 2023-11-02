@@ -1,17 +1,11 @@
 package onetoone.Artists;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import onetoone.Songs.Song;
 import onetoone.Albums.Album;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +16,7 @@ import java.util.List;
  */ 
 
 @Entity
-public class Artist {
+public class Artist implements Serializable {
 
      /* 
      * The annotation @ID marks the field below as the primary key for the table created by springboot
@@ -31,11 +25,12 @@ public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
+
     private int numPlatinums;
     private int numGrammys;
-//    private String emailId;
-//    private boolean ifActive;
+
 
 
     /*
@@ -120,14 +115,7 @@ public class Artist {
     public void addSongs(Song song){
         this.songs.add(song);
     }
-
-//    public Album getAlbum(){
-//        return album;
-//    }
-//
-//    public void setAlbum(Album album){
-//        this.album = album;
-//    }
+    
     public List<Album> getAlbums() {
     return albums;
 }

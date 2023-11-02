@@ -1,12 +1,6 @@
 package onetoone.Songs;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -40,7 +34,8 @@ public class Song {
 //    private Artist artist;
 
     @ManyToOne
-    @JoinColumn(name = "artist_id")
+    @JoinColumn(name = "artist_id", referencedColumnName = "id")
+    @JoinColumn(name = "artist_name", referencedColumnName = "name")
     @JsonIgnore
     private Artist artist;
 
