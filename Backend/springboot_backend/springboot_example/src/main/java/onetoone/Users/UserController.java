@@ -72,7 +72,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/canChat/{name}/true")
-    String banUserFromChat(@PathVariable String name)
+    String unbanUserFromChat(@PathVariable String name)
     {
         User user = userRepository.findByName(name);
         if (user == null)
@@ -83,7 +83,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/canChat/{name}/false")
-    String unbanUserFromChat(@PathVariable String name)
+    String banUserFromChat(@PathVariable String name)
     {
         User user = userRepository.findByName(name);
         if (user == null)
