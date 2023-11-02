@@ -62,7 +62,7 @@ public class SongController {
     // for the game directly
     @GetMapping(path = "/songsname/{name}/game/{check}")
     boolean checkIfSongContains(@PathVariable String name, @PathVariable String check){
-        Song song = songRepository.findByName(name);
+        Song song = songRepository.findBySongName(name);
         return song.getSongName().contains(check);
     }
 }
