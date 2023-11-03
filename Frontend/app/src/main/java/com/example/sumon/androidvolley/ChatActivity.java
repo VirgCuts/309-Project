@@ -2,6 +2,7 @@ package com.example.sumon.androidvolley;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,6 +10,8 @@ import android.widget.LinearLayout;
 
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -34,12 +37,15 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
     private EditText usernameEtx, msgEtx, userBan;
     private TextView msgTv, tvBanCount;
 
+    private Navigation navigationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatroom_layout);
 
+        navigationHelper = new Navigation(this);
+        navigationHelper.setupNavigation();
 
         /* initialize UI elements */
         connectBtn = (Button) findViewById(R.id.connect_button);
