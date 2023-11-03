@@ -167,21 +167,19 @@ public class ArtistController {
         return false;
     }
 
-    @GetMapping(path = "/artists/{name}/artist/{check1}/songs/{songName}/song/{check2}")
-    boolean checkIfSongAndArtistContains(@PathVariable String name, @PathVariable String check1,
+    @GetMapping(path = "/artists/{name}/artist/{check1}/songs/{check2}")
+    String checkIfSongAndArtistContains(@PathVariable String name, @PathVariable String check1,
                                 @PathVariable String songName, @PathVariable String check2){
         Artist artist = artistRepository.findByName(name);
         if (artist.getName().contains(check1)) {
             List<Song> songList = artist.getSongs();
             for (int i = 0; i < songList.size(); i++) {
-                if (songList.get(i).getSongName().equals(songName)) {
-                    if (songList.get(i).getSongName().contains(check2)) {
-                        return true;
-                    }
+                if (songList.get(i).getSongName().contains(check2)) {
+                    return success;
                 }
             }
         }
-        return false;
+        return failure;
     }
 
     @GetMapping(path = "/artists/categories")
