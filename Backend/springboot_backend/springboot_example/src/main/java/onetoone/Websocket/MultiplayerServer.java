@@ -36,8 +36,12 @@ import onetoone.Users.Board;
 @Component
 public class MultiplayerServer {
 
+    private static UserRepository userRepository;
+
     @Autowired
-    UserRepository userRepository;
+    public void setUserRepository(UserRepository repo) {
+        userRepository = repo;  // we are setting the static variable
+    }
 
     // Store all socket session and their corresponding username
     // Two maps for the ease of retrieval by key
