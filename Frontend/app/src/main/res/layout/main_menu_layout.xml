@@ -38,29 +38,6 @@
     android:layout_marginBottom="32dp"/>
 
 
-    <Button
-    android:id="@+id/lobbyButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/lobby"
-    style="@style/CustomButtonStyle"
-    android:layout_marginBottom="16dp"/>
-
-    <Button
-    android:id="@+id/btnleaderboard"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/leaderboard"
-    style="@style/CustomButtonStyle"
-    android:layout_marginBottom="16dp"/>
-
-    <!-- Settings Button -->
-    <Button
-    android:id="@+id/settingsButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/settings"
-    style="@style/CustomButtonStyle"/>
 
 
 </LinearLayout>
