@@ -51,4 +51,5 @@
     android:text="@string/settings"
     style="@style/CustomButtonStyle"/>
 
+
 </LinearLayout>
