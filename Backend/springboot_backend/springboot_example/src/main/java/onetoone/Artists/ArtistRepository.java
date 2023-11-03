@@ -12,6 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
     Artist findById(int id);
 
+    Artist findByName(String name);
+
     @Transactional
     void deleteById(int id);
+
+    @Transactional
+    void deleteByName(String name);
 }

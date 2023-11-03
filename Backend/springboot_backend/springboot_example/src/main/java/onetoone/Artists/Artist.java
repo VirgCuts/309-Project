@@ -1,14 +1,13 @@
 package onetoone.Artists;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import onetoone.Songs.Song;
+import onetoone.Albums.Album;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -17,7 +16,7 @@ import onetoone.Songs.Song;
  */ 
 
 @Entity
-public class Artist {
+public class Artist implements Serializable {
 
      /* 
      * The annotation @ID marks the field below as the primary key for the table created by springboot
@@ -26,11 +25,12 @@ public class Artist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
+
     private int numPlatinums;
     private int numGrammys;
-//    private String emailId;
-//    private boolean ifActive;
+
 
 
     /*
@@ -39,17 +39,27 @@ public class Artist {
      * in the database (more info : https://www.baeldung.com/jpa-cascade-types)
      * @JoinColumn defines the ownership of the foreign key i.e. the user table will have a field called laptop_id
      */
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "song_id")
-    private Song song;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "song_id")
+//    private Song song;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Song> songs;
+
+    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "album_id")
+    private List<Album> albums;
 
     public Artist(String name, int numPlatinums, int numGrammys) {
         this.name = name;
         this.numPlatinums = numPlatinums;
         this.numGrammys = numGrammys;
+        songs = new ArrayList<>();
+        albums = new ArrayList<>();
     }
 
     public Artist() {
+        songs = new ArrayList<>();
     }
 
     // =============================== Getters and Setters for each field ================================== //
@@ -86,12 +96,36 @@ public class Artist {
         this.numGrammys = numGrammys;
     }
 
-    public Song getSong(){
-        return song;
+//    public Song getSong(){
+//        return song;
+//    }
+//
+//    public void setSong(Song song){
+//        this.song = song;
+//    }
+
+    public List<Song> getSongs() {
+        return songs;
     }
 
-    public void setSong(Song song){
-        this.song = song;
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
+    public void addSongs(Song song){
+        this.songs.add(song);
+    }
+    
+    public List<Album> getAlbums() {
+    return albums;
+}
+
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
+    }
+
+    public void addAlbums(Album album){
+        this.albums.add(album);
     }
     
 }

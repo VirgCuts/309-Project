@@ -1,10 +1,6 @@
 package onetoone.Songs;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,23 +23,27 @@ public class Song {
     private int id;
     private String songName;
     private String genre;
-//    private double cpuClock;
-//    private int cpuCores;
-//    private int ram;
-//    private String manufacturer;
-//    private int cost;
+    private String feature;
 
     /*
      * @OneToOne creates a relation between the current entity/table(Laptop) with the entity/table defined below it(User)
      * @JsonIgnore is to assure that there is no infinite loop while returning either user/laptop objects (laptop->user->laptop->...)
      */
-    @OneToOne
+//    @OneToOne
+//    @JsonIgnore
+//    private Artist artist;
+
+    @ManyToOne
+    @JoinColumn(name = "artist_id", referencedColumnName = "id")
+    @JoinColumn(name = "artist_name", referencedColumnName = "name")
     @JsonIgnore
     private Artist artist;
 
-    public Song(String songName, String genre) {
+
+    public Song(String songName, String genre, String feature) {
         this.songName = songName;
         this.genre = genre;
+        this.feature = feature;
     }
 
     public Song() {
@@ -73,6 +73,14 @@ public class Song {
 
     public void setGenre(String genre){
         this.genre = genre;
+    }
+
+    public String getFeature(){
+        return feature;
+    }
+
+    public void setFeature(String feature){
+        this.feature = feature;
     }
 
     public Artist getArtist(){

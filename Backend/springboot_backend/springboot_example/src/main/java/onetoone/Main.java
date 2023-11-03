@@ -4,14 +4,22 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import onetoone.Albums.Album;
+import onetoone.Albums.AlbumRepository;
 import onetoone.Songs.Song;
 import onetoone.Songs.SongRepository;
 import onetoone.Artists.Artist;
 import onetoone.Artists.ArtistRepository;
 import onetoone.Users.User;
 import onetoone.Users.UserRepository;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.net.URL;
+import java.util.HashMap;
 
 /**
  * 
@@ -36,21 +44,11 @@ class Main {
      * As mentioned in User.java just associating the Laptop object with the User will save it into the database because of the CascadeType
      */
     @Bean
-    CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository) {
+    CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository, AlbumRepository albumRepository) {
         return args -> {
-            Artist artist1 = new Artist("John", 1, 2);
-            Artist artist2 = new Artist("Jane", 2, 5);
-            Artist artist3 = new Artist("Justin", 5, 7);
-            Song song1 = new Song("Just Dance", "Pop");
-            Song song2 = new Song("Off the Grid", "Rap");
-            Song song3 = new Song("Fast Car", "Country");
-            artist1.setSong(song1);
-            artist2.setSong(song2);
-            artist3.setSong(song3);
-            artistRepository.save(artist1);
-            artistRepository.save(artist2);
-            artistRepository.save(artist3);
-
+            userRepository.deleteAllInBatch();
+            Album album1 = new Album("Graduation", "Rap");
+            albumRepository.save(album1);
             User user1 = new User("Sam", 1000);
             User user2 = new User("Keenan", 33);
             User user3 = new User("Conor", 49);
@@ -59,7 +57,46 @@ class Main {
             userRepository.save(user2);
             userRepository.save(user3);
             userRepository.save(user4);
-
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader("km203_song_db.csv"));
+                HashMap<String, Artist> hash = new HashMap<>();
+                String[] categories = reader.readLine().split(",");
+                if (artistRepository.findById(1) == null) {
+                    for (int i = 0; i < 28370; i++) {
+                        String[] input = reader.readLine().split(",");
+                        String artist_name = input[1];
+                        String song_name = input[2];
+                        String genre = input[4];
+                        if (genre.equals("hip hop")) {
+                            Song song;
+                            if (song_name.contains("feat.")) {
+                                String full_song_name = song_name.split("feat.")[0].trim();
+                                String feature_name = song_name.split("feat.")[1].trim();
+                                song = new Song(full_song_name, genre, feature_name);
+                            } else {
+                                song = new Song(song_name, genre, "");
+                            }
+                            if (!hash.containsKey(artist_name)) {
+                                Artist artist = new Artist(artist_name, 0, 0);
+                                hash.put(artist_name, artist);
+                                artist.addSongs(song);
+                                song.setArtist(artist);
+                                artistRepository.save(artist);
+                                songRepository.save(song);
+                            } else {
+                                Artist getter = hash.get(artist_name);
+                                getter.addSongs(song);
+                                song.setArtist(getter);
+                                songRepository.save(song);
+                            }
+                        }
+                    }
+                }
+                reader.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         };
     }
 

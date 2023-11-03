@@ -1,6 +1,7 @@
 package onetoone.Artists;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import onetoone.Songs.Song;
 import onetoone.Songs.SongRepository;
+import onetoone.Albums.Album;
+import onetoone.Albums.AlbumRepository;
 
 /**
  * 
@@ -29,6 +32,9 @@ public class ArtistController {
     @Autowired
     SongRepository songRepository;
 
+    @Autowired
+    AlbumRepository albumRepository;
+
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
@@ -40,6 +46,58 @@ public class ArtistController {
     @GetMapping(path = "/artists/{id}")
     Artist getArtistById( @PathVariable int id){
         return artistRepository.findById(id);
+    }
+
+    @GetMapping(path = "/artists/{id}/songs")
+    List<Song> getArtistSongs( @PathVariable int id) {
+        Artist artist = artistRepository.findById(id);
+        return artist.getSongs();
+    }
+
+    @GetMapping(path = "/artists/{name}/study")
+    Artist getArtistByName( @PathVariable String name) {
+        return artistRepository.findByName(name);
+    }
+
+    @GetMapping(path = "/artists/random")
+    Artist getRandomArtist() {
+        Random rand = new Random();
+        int randomNum = rand.nextInt(437);
+        return artistRepository.findById(randomNum);
+    }
+
+    @GetMapping(path = "/artists/{id}/features/{feature}")
+    boolean getArtistFeatureCheck( @PathVariable int id, @PathVariable String feature) {
+        Artist artist = artistRepository.findById(id);
+        List<Song> songList = artist.getSongs();
+        for (int i = 0; i < songList.size(); i++) {
+            if (songList.get(i).getFeature().contains(feature)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @GetMapping(path = "/artists/{id}/artists2/{id2}")
+    boolean getArtistHaveSongTogether( @PathVariable int id, @PathVariable int id2) {
+        Artist artist1 = artistRepository.findById(id);
+        String artist1name = artist1.getName();
+        List<Song> songList1 = artist1.getSongs();
+        Artist artist2 = artistRepository.findById(id2);
+        String artist2name = artist2.getName();
+        List<Song> songList2 = artist2.getSongs();
+        boolean returner = false;
+        for (int i = 0; i < songList1.size(); i++) {
+            if (songList1.get(i).getFeature().contains(artist2name)) {
+                returner =  true;
+            }
+        }
+        for (int i = 0; i < songList2.size(); i++) {
+            if (songList2.get(i).getFeature().contains(artist1name)) {
+                returner =  true;
+            }
+        }
+        return returner;
     }
 
     @PostMapping(path = "/artists")
@@ -66,7 +124,19 @@ public class ArtistController {
         if(artist == null || song == null)
             return failure;
         song.setArtist(artist);
-        artist.setSong(song);
+        artist.addSongs(song);
+        artistRepository.save(artist);
+        return success;
+    }
+
+    @PutMapping("/artists/{artistId}/albums/{albumId}")
+    String assignAlbumToArtist(@PathVariable int artistId,@PathVariable int albumId){
+        Artist artist = artistRepository.findById(artistId);
+        Album album = albumRepository.findById(albumId);
+        if(artist == null || album == null)
+            return failure;
+        album.setArtist(artist);
+        artist.addAlbums(album);
         artistRepository.save(artist);
         return success;
     }
@@ -75,5 +145,32 @@ public class ArtistController {
     String deleteArtist(@PathVariable int id){
         artistRepository.deleteById(id);
         return success;
+    }
+
+    // for the game directly
+    @GetMapping(path = "/artists/{name}/game/{check}")
+    boolean checkIfArtistContains(@PathVariable String name, @PathVariable String check){
+        Artist artist = artistRepository.findByName(name);
+        return artist.getName().contains(check);
+    }
+
+    @GetMapping(path = "/artists/{name}/songs/{songId}/game/{check}")
+    boolean checkIfSongContains(@PathVariable String name, @PathVariable int songId,
+                                @PathVariable String check){
+        Artist artist = artistRepository.findByName(name);
+        List<Song> songList = artist.getSongs();
+        for (int i = 0; i < songList.size(); i++) {
+            if (songList.get(i).getSongName().contains(check)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @GetMapping(path = "/artists/categories")
+    String getCategories(){
+        return "Artist with 'lil' in their name, Artist with 'ill' in their name, " +
+                "Artist with 'x' in their name, Song with 'her' in the name, Song with 'men' in the name, " +
+                "Song with 'hip hop' in the name";
     }
 }

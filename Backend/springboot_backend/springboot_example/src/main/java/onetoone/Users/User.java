@@ -1,5 +1,7 @@
 package onetoone.Users;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import onetoone.Songs.Song;
 
 import javax.persistence.*;
@@ -17,6 +19,11 @@ public class User implements Comparator<User>, Comparable<User> {
     private int id;
     private String name;
     private int highScore;
+    private boolean canChat;
+    private int banStrikes;
+
+    @Transient
+    public Board board;
 
 
     /*
@@ -29,6 +36,9 @@ public class User implements Comparator<User>, Comparable<User> {
     public User(String name, int highScore) {
         this.name = name;
         this.highScore = highScore;
+        this.board = new Board();
+        this.canChat = true;
+        this.banStrikes = 0;
     }
 
     public User() {
@@ -42,6 +52,14 @@ public class User implements Comparator<User>, Comparable<User> {
 
     public void setId(int id){
         this.id = id;
+    }
+
+    public Board getBoard(){
+        return board;
+    }
+
+    public void setBoard(Board board){
+        this.board = board;
     }
 
     public String getName(){
@@ -60,6 +78,18 @@ public class User implements Comparator<User>, Comparable<User> {
         this.highScore = highScore;
     }
 
+    public boolean getCanChat(){
+        return canChat;
+    }
+
+    public void setCanChat(boolean canChat){
+        this.canChat = canChat;
+    }
+
+    public int getBanStrikes() { return this.banStrikes; }
+
+    public void setBanStrikes(int banStrikes) { this.banStrikes = banStrikes; }
+
     @Override
     public int compareTo(User o) {
         return o.highScore - this.highScore;
@@ -68,5 +98,16 @@ public class User implements Comparator<User>, Comparable<User> {
     @Override
     public int compare(User o1, User o2) {
         return o2.highScore - o1.highScore;
+    }
+
+    public boolean hasWon() { return this.board.getWon(); }
+
+    public String boardToString() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(this.board);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
