@@ -105,10 +105,14 @@ public class MultiplayerServer {
         String name1 = combined.getName1();
         String name2 = combined.getName2();
         Board board1 = combined.getBoard();
+        logger.info("Before user1old declaration");
         User user1old = userRepository.findByName(name1);
+        logger.info("Username: " + user1old.getName());
+
         // update the board state of user1 in backend
         user1old.setBoard(board1);
         userRepository.save(user1old);
+        logger.info("After saving to repo");
         // so frontend does not have access to user object, so need to make the board manually and
         // retrieve the users by username given
 
