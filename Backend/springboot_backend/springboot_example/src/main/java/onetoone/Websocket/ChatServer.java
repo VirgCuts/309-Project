@@ -69,6 +69,7 @@ public class ChatServer {
             session.close();
         } else if (existingUser == null) {
             session.getBasicRemote().sendText("Username doesn't exist within database");
+            session.close();
         } else {
             // map current session with username
             sessionUsernameMap.put(session, username);
