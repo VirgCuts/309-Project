@@ -167,10 +167,35 @@ public class ArtistController {
         return false;
     }
 
+    @GetMapping(path = "/artists/{name}/artist/{check1}/songs/{songName}/song/{check2}")
+    boolean checkIfSongAndArtistContains(@PathVariable String name, @PathVariable String check1,
+                                @PathVariable String songName, @PathVariable String check2){
+        Artist artist = artistRepository.findByName(name);
+        if (artist.getName().contains(check1)) {
+            List<Song> songList = artist.getSongs();
+            for (int i = 0; i < songList.size(); i++) {
+                if (songList.get(i).getSongName().equals(songName)) {
+                    if (songList.get(i).getSongName().contains(check2)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     @GetMapping(path = "/artists/categories")
-    String getCategories(){
-        return "Artist with 'lil' in their name, Artist with 'ill' in their name, " +
-                "Artist with 'x' in their name, Song with 'her' in the name, Song with 'men' in the name, " +
-                "Song with 'hip hop' in the name";
+    String[] getCategories(){
+        String[] jsonArray = {
+                "{\"text\":\"Artist with 'lil' in their name\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"lil\"}",
+                "{\"text\":\"Artist with 'ill' in their name\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"ill\"}",
+                "{\"text\":\"Artist with 'x' in their name\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"x\"}",
+                "{\"text\":\"Song with 'her' in their name\",\"subject\":\"Song\",\"check\":\"with\",\"keyword\":\"her\"}",
+                "{\"text\":\"Song with 'men' in their name\",\"subject\":\"Song\",\"check\":\"with\",\"keyword\":\"men\"}",
+                "{\"text\":\"Song with 'hip hop' in their name\",\"subject\":\"Song\",\"check\":\"with\",\"keyword\":\"hip hop\"}"
+        };
+
+        return jsonArray;
+
     }
 }

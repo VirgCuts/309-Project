@@ -15,6 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.java_websocket.handshake.ServerHandshake;
 
 public class ChatActivity extends AppCompatActivity implements WebSocketListener{
@@ -26,9 +33,9 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
 
 
-    private Button connectBtn, sendBtn;
-    private EditText usernameEtx, msgEtx;
-    private TextView msgTv;
+    private Button connectBtn, sendBtn, btnGetBanCount;
+    private EditText usernameEtx, msgEtx, userBan;
+    private TextView msgTv, tvBanCount;
 
     private Navigation navigationHelper;
 
@@ -67,10 +74,47 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
             }
         });
+        btnGetBanCount = (Button) findViewById(R.id.ban_count);
+        userBan = (EditText) findViewById(R.id.username_inputban);
+        tvBanCount = (TextView) findViewById(R.id.tvBanCount);
+
+        // Set the listener for the get ban count button
+        btnGetBanCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get the username from the input field
+                String username = userBan.getText().toString();
+                // Make the GET request to fetch ban count
+                getBanCountForUser(username);
+            }
+        });
+
+
     }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+
+    // Method to make a GET request to the backend
+    private void getBanCountForUser(String username) {
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://http://coms-309-022.class.las.iastate.edu:8080/banStrikes/" + username;
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the response (ban count) on the TextView
+                        tvBanCount.setText("Ban Count: " + response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                tvBanCount.setText("That didn't work!");
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
     @Override
     public void onWebSocketMessage(String message) {

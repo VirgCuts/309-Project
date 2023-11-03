@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Shake animation -->
+    <translate
+        android:duration="45"
+        android:fromXDelta="-8%"
+        android:toXDelta="8%"
+        android:repeatCount="1"
+        android:repeatMode="reverse" />
+
+</set>
