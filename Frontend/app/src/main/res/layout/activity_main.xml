@@ -38,6 +38,14 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="Multiplayer" />
+
+        <Button
+            android:id="@+id/btnStudy"
+            style="@style/CustomButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Study" />
     </LinearLayout>
 
     <!-- This is the navigation view which draws and shows the navigation drawer. Include the menu created in the menu folder. -->
