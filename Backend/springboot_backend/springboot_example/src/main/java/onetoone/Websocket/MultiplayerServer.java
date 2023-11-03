@@ -144,29 +144,31 @@ public class MultiplayerServer {
         logger.info("After the user has been saved in close");
         Board board1 = user1.getBoard();
         logger.info("User 1: " + user1 + " Board 1: " + board1);
-        if (user1.getHighScore() < board1.getScore()) {
-            user1.setHighScore(board1.getScore());
-            userRepository.save(user1);
-        }
-        logger.info("After high score is saved");
-        ObjectMapper mapper = new ObjectMapper();
-        String boardData = mapper.writeValueAsString(board1);
-        logger.info("Before keys check");
+        if (board1 != null) {
+            if (user1.getHighScore() < board1.getScore()) {
+                user1.setHighScore(board1.getScore());
+                userRepository.save(user1);
+            }
+            logger.info("After high score is saved");
+            ObjectMapper mapper = new ObjectMapper();
+            String boardData = mapper.writeValueAsString(board1);
+            logger.info("Before keys check");
 
-        Set<Session> keys = sessionUsernameMap.keySet();
-        String user2 = "opponent";
-        for(Session key: keys){
-            if (!key.getId().equals(session.getId())) {
-                user2 = sessionUsernameMap.get(key);
-                if (!user2.equals(username)) {
-                    break;
+            Set<Session> keys = sessionUsernameMap.keySet();
+            String user2 = "opponent";
+            for (Session key : keys) {
+                if (!key.getId().equals(session.getId())) {
+                    user2 = sessionUsernameMap.get(key);
+                    if (!user2.equals(username)) {
+                        break;
+                    }
                 }
             }
-        }
-        logger.info("After keys check");
+            logger.info("After keys check");
 
-        sendBoardDataToOpponent(user2, boardData);
-        logger.info("After sendboardata");
+            sendBoardDataToOpponent(user2, boardData);
+            logger.info("After sendboardata");
+        }
 
 
         // remove user from memory mappings
