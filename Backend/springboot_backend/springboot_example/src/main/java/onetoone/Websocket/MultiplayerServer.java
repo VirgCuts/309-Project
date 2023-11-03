@@ -143,6 +143,7 @@ public class MultiplayerServer {
         User user1 = userRepository.findByName(username);
         logger.info("After the user has been saved in close");
         Board board1 = user1.getBoard();
+        logger.info("User 1: " + user1 + " Board 1: " + board1);
         if (user1.getHighScore() < board1.getScore()) {
             user1.setHighScore(board1.getScore());
             userRepository.save(user1);
