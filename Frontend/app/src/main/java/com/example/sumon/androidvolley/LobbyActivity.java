@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LobbyActivity extends AppCompatActivity implements OnClickListener {
-//    private Button btnArtists, btnChatRoom;
-private Navigation navigationHelper;
+    private Button singlePlayer, multiPlayer;
+    private Navigation navigationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,15 +22,12 @@ private Navigation navigationHelper;
         navigationHelper = new Navigation(this);
         navigationHelper.setupNavigation();
 
-//        btnArtists = (Button) findViewById(R.id.btnArtists);
-//        btnChatRoom = (Button) findViewById(R.id.btnChatRoom);
-
+        singlePlayer = (Button) findViewById(R.id.singlePlayer);
+        multiPlayer = (Button) findViewById(R.id.multiPlayer);
 
         // button click listeners
-
-
-//        btnArtists.setOnClickListener(this);
-//        btnChatRoom.setOnClickListener(this);
+        singlePlayer.setOnClickListener(this);
+        multiPlayer.setOnClickListener(this);
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -38,18 +35,18 @@ private Navigation navigationHelper;
     }
     @Override
     public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.btnArtists:
-//                startActivity(new Intent(LobbyActivity.this,
-//                        ArtistActivity.class));
-//                break;
-//            case R.id.btnChatRoom:
-//                startActivity(new Intent(LobbyActivity.this,
-//                        ChatActivity.class));
-//                break;
-//            default:
-//                break;
-//        }
+        switch (v.getId()) {
+            case R.id.singlePlayer:
+                startActivity(new Intent(LobbyActivity.this,
+                        SinglePlayerGame.class));
+                break;
+            case R.id.multiPlayer:
+                startActivity(new Intent(LobbyActivity.this,
+                        GameWebSockets.class));
+                break;
+            default:
+                break;
+        }
     }
 
 }

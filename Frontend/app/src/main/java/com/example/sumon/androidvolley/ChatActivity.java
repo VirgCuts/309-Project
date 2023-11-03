@@ -91,7 +91,10 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
 
     }
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
     // Method to make a GET request to the backend
     private void getBanCountForUser(String username) {
         // Instantiate the RequestQueue.
