@@ -105,7 +105,7 @@ public class MultiplayerServer {
         String name1 = combined.getName1();
         String name2 = combined.getName2();
         Board board1 = combined.getBoard();
-        logger.info("Before user1old declaration");
+        logger.info("Before user1old declaration, name1: " + name1 + " name2: " + name2);
         User user1old = userRepository.findByName(name1);
         logger.info("Username: " + user1old.getName());
 
@@ -121,7 +121,7 @@ public class MultiplayerServer {
         String boardData = mapper.writeValueAsString(board1);
 
 //        UNCOMMENT when it is solved how to split given data and get opponent username
-//        sendBoardDataToOpponent(name2, boardData);
+        sendBoardDataToOpponent(name2, boardData);
 
     }
 
@@ -141,29 +141,40 @@ public class MultiplayerServer {
 
         // save new high score and send final board to opponent
         User user1 = userRepository.findByName(username);
+        logger.info("After the user has been saved in close");
         Board board1 = user1.getBoard();
-        if (user1.getHighScore() < board1.getScore()) {
-            user1.setHighScore(board1.getScore());
-            userRepository.save(user1);
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        String boardData = mapper.writeValueAsString(board1);
+        logger.info("User 1: " + user1 + " Board 1: " + board1);
+        if (board1 != null) {
+            if (user1.getHighScore() < board1.getScore()) {
+                user1.setHighScore(board1.getScore());
+                userRepository.save(user1);
+            }
+            logger.info("After high score is saved");
+            ObjectMapper mapper = new ObjectMapper();
+            String boardData = mapper.writeValueAsString(board1);
+            logger.info("Before keys check");
 
-        Set<Session> keys = sessionUsernameMap.keySet();
-        String user2 = "opponent";
-        for(Session key: keys){
-            if (!key.getId().equals(session.getId())) {
-                user2 = sessionUsernameMap.get(key);
-                if (!user2.equals(username)) {
-                    break;
+            Set<Session> keys = sessionUsernameMap.keySet();
+            String user2 = "opponent";
+            for (Session key : keys) {
+                if (!key.getId().equals(session.getId())) {
+                    user2 = sessionUsernameMap.get(key);
+                    if (!user2.equals(username)) {
+                        break;
+                    }
                 }
             }
+            logger.info("After keys check");
+
+            sendBoardDataToOpponent(user2, boardData);
+            logger.info("After sendboardata");
         }
-        sendBoardDataToOpponent(user2, boardData);
+
 
         // remove user from memory mappings
         sessionUsernameMap.remove(session);
         usernameSessionMap.remove(username);
+        logger.info("After removal");
 
 
         // send user score to db for high score and send opponents final board
