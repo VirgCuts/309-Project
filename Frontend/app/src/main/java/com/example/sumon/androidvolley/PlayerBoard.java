@@ -3,6 +3,9 @@ package com.example.sumon.androidvolley;
 public class PlayerBoard {
     private final int BOARD_SIZE = 3;
     private String[][] grid;
+    private String[] col;
+
+    private String[] row;
 
     public PlayerBoard() {
         grid = new String[BOARD_SIZE][BOARD_SIZE];
@@ -12,6 +15,8 @@ public class PlayerBoard {
                 grid[i][j] = "";
             }
         }
+        col = new String[3];
+        row = new String[3];
     }
 
     public PlayerBoard(PlayerBoard original) {
@@ -53,6 +58,22 @@ public class PlayerBoard {
         }
     }
 
+    public void editCol(int c, String value) {
+            col[c] = value;
+    }
+
+    public void editRow(int r, String value) {
+        row[r] = value;
+    }
+
+    public String getCol(int c) {
+        return col[c];
+    }
+
+    public String getRow(int r) {
+        return row[r];
+    }
+
 
     /**
      * Checks if the given position is valid in the grid.
@@ -80,5 +101,6 @@ public class PlayerBoard {
         }
         return sb.toString();
     }
+
 }
 

@@ -5,6 +5,7 @@ import android.widget.EditText;
 public interface GameControllerInterface {
 
 
-    boolean checkAnswer(EditText editText, String userAnswer);
+    boolean checkAnswer(EditText editText, String userAnswer);  //No backend
+    //void checkAnswer(EditText editText); //For backend
     void endGame();
 }

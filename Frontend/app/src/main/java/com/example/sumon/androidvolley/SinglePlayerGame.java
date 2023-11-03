@@ -20,18 +20,43 @@ import android.view.animation.AnimationUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SinglePlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface {
     private TextView timerTextView;
     private Button endGameButton;
     private Handler handler = new Handler();
-    private int seconds = 240;
+    private int seconds = 10;
     private int points = 0;
     private GameState gameState;
     private PlayerBoard playerBoard;
     private int correctGuesses = 0;
     private final int TOTAL_EDIT_TEXTS = 9;
+
+    private int[] cellIds;
+
+    private EditText[] allEditTexts;
+
+    private RequestQueue queue;
+
+    private EditText r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +68,15 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         String[] col = {"Has a grammy","Has a platinum record","Has a song with Kanye"};
         String[] row = {"Has a song with Drake","Has a song with Kid Cudi","Has a song produced my Pharrel Williams"};
 
-        EditText r1c2 = findViewById(R.id.r1c2);
-        EditText r1c3 = findViewById(R.id.r1c3);
-        EditText r2c1 = findViewById(R.id.r2c1);
-        EditText r2c2 = findViewById(R.id.r2c2);
-        EditText r2c3 = findViewById(R.id.r2c3);
-        EditText r3c1 = findViewById(R.id.r3c1);
-        EditText r3c2 = findViewById(R.id.r3c2);
-        EditText r3c3 = findViewById(R.id.r3c3);
-        EditText r1c1 = findViewById(R.id.r1c1);
+        r1c2 = findViewById(R.id.r1c2);
+        r1c3 = findViewById(R.id.r1c3);
+        r2c1 = findViewById(R.id.r2c1);
+        r2c2 = findViewById(R.id.r2c2);
+        r2c3 = findViewById(R.id.r2c3);
+        r3c1 = findViewById(R.id.r3c1);
+        r3c2 = findViewById(R.id.r3c2);
+        r3c3 = findViewById(R.id.r3c3);
+        r1c1 = findViewById(R.id.r1c1);
 
         r1c1.setText("");
         r1c2.setText("");
@@ -73,6 +98,20 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setEditTextListener(r3c2);
         setEditTextListener(r3c3);
 
+        queue = Volley.newRequestQueue(this);
+
+        allEditTexts = new EditText[9];
+        allEditTexts[0] = r1c1;
+        allEditTexts[1] = r1c2;
+        allEditTexts[2] = r1c3;
+        allEditTexts[3] = r2c1;
+        allEditTexts[4] = r2c2;
+        allEditTexts[5] = r2c3;
+        allEditTexts[6] = r3c1;
+        allEditTexts[7] = r3c2;
+        allEditTexts[8] = r3c3;
+
+
         playerBoard = new PlayerBoard();
 
         endGameButton = findViewById(R.id.endGameButton);
@@ -87,6 +126,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         // Start the timer
         Timer();
         setPoints();
+
     }
 
 
@@ -112,7 +152,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 String time = String.format("%d:%02d", minutes, remainingSeconds);
                 timerTextView.setText(time);
 
-
+                handler.postDelayed(this, 1000); // Call this Runnable after 1 second delay
             }
         });
     }
@@ -134,11 +174,12 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             }
         }
     }
-    @Override
+    //CheckAnswer with no backend
     public boolean checkAnswer(EditText editText, String userAnswer) {
         String enteredText = editText.getText().toString().trim(); // Get the text entered in the EditText and remove leading/trailing spaces
         return enteredText.equalsIgnoreCase(userAnswer); // Compare the entered text with the userAnswer (case-insensitive)
     }
+
     @Override
     public void setBoxText(TextView textView, String text) {
         textView.setText(text);
@@ -177,7 +218,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
         showWinnerDialog("User", playerBoard.getGrid());
     }
-
+    //SetEditText with no backend
     private void setEditTextListener(final EditText editText) {
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -249,5 +290,14 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             }
         });
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacksAndMessages(null); // Remove any callbacks and messages from the handler
+    }
+
+    //Backend Support
+    //
+
 
 }
