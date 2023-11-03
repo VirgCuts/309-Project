@@ -34,6 +34,8 @@ import org.springframework.stereotype.Component;
 @ServerEndpoint("/chat/{username}")
 @Component
 public class ChatServer {
+    @Autowired
+    UserRepository userRepository;
 
     // Store all socket session and their corresponding username
     // Two maps for the ease of retrieval by key
@@ -42,10 +44,6 @@ public class ChatServer {
 
     // server side logger
     private final Logger logger = LoggerFactory.getLogger(ChatServer.class);
-
-    //user database
-    @Autowired
-    UserRepository userRepository;
 
     //banned words
     private final List<String> bannedWords = Arrays.asList("test", "testing");
@@ -60,19 +58,23 @@ public class ChatServer {
 
         // server side log
         logger.info("[onOpen] " + username);
+        logger.info("[onOpen] testing logger");
         username = username.trim();
-        User existingUser = userRepository.findByName(username);
+        User existingUser = new User();
+        try {
+            existingUser = userRepository.findByName(username);
+        } catch(Exception e) {
+            logger.info("[onOpen] exception caught: " + e.toString());
+        }
 
         logger.info("[onOpen] after userRepository");
 
         // Handle the case of a duplicate username
         if (usernameSessionMap.containsKey(username)) {
             session.getBasicRemote().sendText("Username is already in use");
-            System.out.println(username);
             session.close();
         } else if (existingUser == null) {
             session.getBasicRemote().sendText("Username doesn't exist within database");
-            System.out.println(username);
             session.close();
         } else {
             // map current session with username
