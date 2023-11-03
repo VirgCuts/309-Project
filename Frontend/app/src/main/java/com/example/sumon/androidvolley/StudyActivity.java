@@ -30,6 +30,55 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StudyActivity extends Activity {
+    private final String TAG = StudyActivity.class.getSimpleName();
+    private EditText msgResponse;
+    private TextView random;
+
+    private String currentArtist;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.study_db);
+
+//        Button btnBack = findViewById(R.id.btnBack);
+        Button getRandomButton = findViewById(R.id.button);
+
+        msgResponse = findViewById(R.id.songGuess);
+        random = findViewById(R.id.artistName);
+
+//        pDialog = new ProgressDialog(this);
+//        pDialog.setMessage("Loading...");
+//        pDialog.setCancelable(false);
+//        makeStringReq();
+
+        msgResponse.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) { // Use EditorInfo.IME_ACTION_DONE
+                    String artistToSearch = currentArtist;
+                    String songToSearch = msgResponse.getText().toString();
+
+                    boolean checker = checkArtistSong(artistToSearch, songToSearch);
+                    if (checker) {
+                        showToast("Correct!");
+                    }
+                    else {
+                        showToast("Incorrect, try again");
+                    }
+
+                    return true; // Return true to indicate that the action has been handled
+                }
+                return false; // Return false if not handled
+            }
+        });
+        getRandomButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                retrieveRandomArtist();
+            }
+        });
+    }
 
 
 
@@ -56,7 +105,54 @@ public class StudyActivity extends Activity {
                                 int grammys = artistJson.getInt("numGrammys");
                                 String songs = artistJson.getString("songs");
                                 String albums = artistJson.getString("albums");
-                                showToast("Name a song from this artist: " + name);
+                                random.setText("Your random artist is: " + name);
+                                currentArtist = name;
+//                                showToast("Name a song from this artist: " + name);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error.getMessage());
+                        showToast(error.getMessage());
+                    }
+                }
+        );
+
+        // Add the request to the Volley request queue
+        Volley.newRequestQueue(this).add(request);
+    }
+
+    private void checkArtistSong(String artist, String song) {
+
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artist + "/songs/" + song;
+//        String url = "http://localhost:8080/artists/random";
+
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Handle the response from the server
+                        // Parse the JSON array to populate the leaderboardData list
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject artistJson = response;
+                                String name = artistJson.getString("name");
+                                int plat = artistJson.getInt("numPlatinums");
+                                int grammys = artistJson.getInt("numGrammys");
+                                String songs = artistJson.getString("songs");
+                                String albums = artistJson.getString("albums");
+                                random.setText("Your random artist is: " + name);
+                                currentArtist = name;
+//                                showToast("Name a song from this artist: " + name);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

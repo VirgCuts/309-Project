@@ -30,7 +30,7 @@
         tools:layout_editor_absoluteY="299dp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/artistName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Your random artist is: "
@@ -38,10 +38,10 @@
         tools:layout_editor_absoluteY="216dp" />
 
     <EditText
-        android:id="@+id/textView4"
+        android:id="@+id/songGuess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter song here"
-        tools:layout_editor_absoluteX="169dp"
-        tools:layout_editor_absoluteY="340dp" />
+        tools:layout_editor_absoluteX="139dp"
+        tools:layout_editor_absoluteY="355dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
