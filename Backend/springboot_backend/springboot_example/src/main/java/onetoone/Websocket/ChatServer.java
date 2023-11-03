@@ -66,9 +66,11 @@ public class ChatServer {
         // Handle the case of a duplicate username
         if (usernameSessionMap.containsKey(username)) {
             session.getBasicRemote().sendText("Username is already in use");
+            System.out.println(username);
             session.close();
         } else if (existingUser == null) {
             session.getBasicRemote().sendText("Username doesn't exist within database");
+            System.out.println(username);
             session.close();
         } else {
             // map current session with username
