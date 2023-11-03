@@ -19,6 +19,8 @@ public class User implements Comparator<User>, Comparable<User> {
     private int id;
     private String name;
     private int highScore;
+    private boolean canChat;
+    private int banStrikes;
 
     @Transient
     public Board board;
@@ -35,6 +37,8 @@ public class User implements Comparator<User>, Comparable<User> {
         this.name = name;
         this.highScore = highScore;
         this.board = new Board();
+        this.canChat = true;
+        this.banStrikes = 0;
     }
 
     public User() {
@@ -48,6 +52,14 @@ public class User implements Comparator<User>, Comparable<User> {
 
     public void setId(int id){
         this.id = id;
+    }
+
+    public Board getBoard(){
+        return board;
+    }
+
+    public void setBoard(Board board){
+        this.board = board;
     }
 
     public String getName(){
@@ -65,6 +77,18 @@ public class User implements Comparator<User>, Comparable<User> {
     public void setHighScore(int highScore){
         this.highScore = highScore;
     }
+
+    public boolean getCanChat(){
+        return canChat;
+    }
+
+    public void setCanChat(boolean canChat){
+        this.canChat = canChat;
+    }
+
+    public int getBanStrikes() { return this.banStrikes; }
+
+    public void setBanStrikes(int banStrikes) { this.banStrikes = banStrikes; }
 
     @Override
     public int compareTo(User o) {

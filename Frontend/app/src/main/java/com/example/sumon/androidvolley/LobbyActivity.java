@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class LobbyActivity extends Activity implements OnClickListener {
-    private Button btnArtists, btnChatRoom, btnSinglePlayer;
+//    private Button btnArtists, btnChatRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,37 +16,31 @@ public class LobbyActivity extends Activity implements OnClickListener {
 
 
 
-        btnArtists = (Button) findViewById(R.id.btnArtists);
-        btnChatRoom = (Button) findViewById(R.id.btnChatRoom);
-        btnSinglePlayer = (Button) findViewById(R.id.btnsingleplayer);
+//        btnArtists = (Button) findViewById(R.id.btnArtists);
+//        btnChatRoom = (Button) findViewById(R.id.btnChatRoom);
 
 
         // button click listeners
 
 
-        btnArtists.setOnClickListener(this);
-        btnChatRoom.setOnClickListener(this);
-        btnSinglePlayer.setOnClickListener(this);
+//        btnArtists.setOnClickListener(this);
+//        btnChatRoom.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnArtists:
-                startActivity(new Intent(LobbyActivity.this,
-                        ArtistActivity.class));
-                break;
-            case R.id.btnChatRoom:
-                startActivity(new Intent(LobbyActivity.this,
-                        ChatActivity.class));
-                break;
-            case R.id.btnsingleplayer:
-                startActivity(new Intent(LobbyActivity.this,
-                        SinglePlayerGame.class));
-                break;
-            default:
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.btnArtists:
+//                startActivity(new Intent(LobbyActivity.this,
+//                        ArtistActivity.class));
+//                break;
+//            case R.id.btnChatRoom:
+//                startActivity(new Intent(LobbyActivity.this,
+//                        ChatActivity.class));
+//                break;
+//            default:
+//                break;
+//        }
     }
 
 }
