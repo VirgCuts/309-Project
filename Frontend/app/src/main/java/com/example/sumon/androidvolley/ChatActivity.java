@@ -72,8 +72,17 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
          * to occur safely from a background or non-UI thread.
          */
         runOnUiThread(() -> {
-            String s = msgTv.getText().toString();
-            msgTv.setText(s + "\n"+message);
+            // Assuming that the backend sends a JSON string with a "type" field
+            // Check if the message contains "ban" information
+            if (message.contains("\"type\":\"ban\"")) {
+                // Handle the ban message, e.g., disable the send button
+                sendBtn.setEnabled(false);
+                // Possibly parse the JSON to extract the actual ban message
+            }
+
+            // Display the received message in the chat
+            String currentText = msgTv.getText().toString();
+            msgTv.setText(currentText + "\n" + message);
         });
     }
 
