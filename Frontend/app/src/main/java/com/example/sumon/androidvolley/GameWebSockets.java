@@ -18,6 +18,9 @@ public class GameWebSockets extends AppCompatActivity implements WebSocketListen
     private EditText usernameEtx, msgEtx;
     private TextView msgTv;
 
+    private String Player1, Player2 = "Mark", boardState;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,31 +30,51 @@ public class GameWebSockets extends AppCompatActivity implements WebSocketListen
         connectBtn = (Button) findViewById(R.id.connect_button);
         sendBtn = (Button) findViewById(R.id.send_button);
         usernameEtx = (EditText) findViewById(R.id.username_input);
-        msgEtx = (EditText) findViewById(R.id.message_input);
         msgTv = (TextView) findViewById(R.id.chatMessage);
+
+        boardState = "[true, true, true]" +
+                     "[true, true, true]" +
+                     "[true, true, true]";
+
 
         /* connect button listener */
         connectBtn.setOnClickListener(view -> {
 
             String serverUrl = BASE_URL + usernameEtx.getText().toString();
             Log.d("URL", "URL is " + serverUrl);
+            Player1 = usernameEtx.getText().toString();
 
             // Establish WebSocket connection and set listener
             WebSocketManager.getInstance().connectWebSocket(serverUrl);
             WebSocketManager.getInstance().setWebSocketListener(GameWebSockets.this);
+
+            String s = msgTv.getText().toString();
+            msgTv.setText(s + "\n"+ "Button Clicked");
         });
 
         /* send button listener */
         sendBtn.setOnClickListener(v -> {
             try {
 
-                // send message
-                WebSocketManager.getInstance().sendMessage(msgEtx.getText().toString());
+                // sends the edit text message
+                WebSocketManager.getInstance().sendMessage(boardToString(Player1 ,Player2));
+                String s = msgTv.getText().toString();
+                msgTv.setText(s + "\n"+boardToString(Player1 ,Player2));
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
             }
         });
     }
+
+    private String boardToString(String user, String user2) {
+        return "{" +
+                ", sender='" + user + '\'' +
+                ", receiver='" + user2 + '\'' +
+                ", senderBoard=\n" + boardState +
+                '}';
+    }
+
+
     //receive board state here
     @Override
     public void onWebSocketMessage(String message) {
