@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,10 +18,7 @@ import android.widget.TextView;
 import android.view.KeyEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,11 +27,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,22 +47,14 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     private PlayerBoard playerBoard;
     private int correctGuesses = 0;
     private final int TOTAL_EDIT_TEXTS = 9;
-
     private int[] cellIds;
-
     private EditText[] allEditTexts;
-
     private RequestQueue queue;
-
     private EditText r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3;
-
     private TextView col1,col2,col3,row1,row2,row3;
-
     String[] col;
     String[] row;
     private boolean categoriesLoaded = false;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +77,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         row1 = findViewById(R.id.row1);
         row2 = findViewById(R.id.row2);
         row3 = findViewById(R.id.row3);
-
 
         fetchCategories();
 
@@ -186,9 +173,45 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         }
     }
     //CheckAnswer with no backend
-    public boolean checkAnswer(EditText editText, String userAnswer) {
+    public boolean checkAnswer(EditText editText, String artistCheck, String songCheck) {
         String enteredText = editText.getText().toString().trim(); // Get the text entered in the EditText and remove leading/trailing spaces
-        return enteredText.equalsIgnoreCase(userAnswer); // Compare the entered text with the userAnswer (case-insensitive)
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/"+ enteredText + "/artist/" + artistCheck +"/songs/"+ songCheck;
+
+
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Handle the response from the server
+                        // Parse the JSON array to populate the leaderboardData list
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject artistJson = response;
+                                String message = artistJson.getString("message");
+
+                                Log.d("SUCCESS", message);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error.getMessage());
+//                        showToast(error.getMessage());
+                    }
+                }
+        );
+
+        queue.add(request);
+        return enteredText.equalsIgnoreCase(artistCheck); // Compare the entered text with the userAnswer (case-insensitive)
     }
 
     @Override
@@ -240,13 +263,19 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     String[] parts = tag.split(",");
                     int row = Integer.parseInt(parts[0]);
                     int column = Integer.parseInt(parts[1]);
+                    //getting the song statement that needs to be checked and artist statement from array set fetch
+                    String songCheck = "her";
+                    String artistCheck = "lil";
+
                     String userAnswer = "1";
 
-                    if (checkAnswer(editText, userAnswer)) {
+                    if (checkAnswer(editText, artistCheck,songCheck)) {
                         updatePlayerBoard(editText, userAnswer);
                         changeBoxColor(editText, true);
                         editText.setEnabled(false);  // Disable the EditText
                         correctGuesses++; // Increment the counter for correct answers
+                        points = points +100;
+                        setPoints();
                         if(correctGuesses == TOTAL_EDIT_TEXTS) {
                             endGame();  // End the game if all answers are correct
                         }
@@ -331,7 +360,38 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     public void onResponse(String response) {
                         // Handle the backend response here
                         // Assuming the response is a comma-separated string of categories
-                        String[] categories = response.split(", ");
+                        Log.d("CATEGORIES", response);
+                        String input = response;
+                        input = input.substring(1, input.length() - 1);
+
+                        String[] elements = input.split(",");
+
+                        String[] categories = new String[elements.length/4];
+                        String[] artistKeywords = new String[elements.length/8];
+                        String[] songKeywords = new String[elements.length/8];
+                        Log.d("LENGTH", Integer.toString(songKeywords.length));
+                        try {
+                            JSONArray jsonArray = new JSONArray(response);
+
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                String jsonStr = jsonArray.getString(i);
+                                JSONObject jsonObject = new JSONObject(jsonStr);
+                                String text = jsonObject.getString("text");
+                                String subject = jsonObject.getString("subject");
+                                String check = jsonObject.getString("check");
+                                String keyword = jsonObject.getString("keyword");
+
+                                Log.d("ELETEXT",text);
+
+                                categories[i] = text;
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Log.d("ELEORIGIN",Integer.toString(categories.length));
                         // Use the fetched categories to set up the game
                         setUpGameBoard(categories);
                     }
