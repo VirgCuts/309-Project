@@ -34,8 +34,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -298,6 +300,18 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 cell.setText(winnerBoard[i][j]);
             }
         }
+        TextView cell = dialogView.findViewById(R.id.Col1);
+        cell.setText(col1.getText());
+        TextView cell2 = dialogView.findViewById(R.id.Col2);
+        cell2.setText(col2.getText());
+        TextView cell3 = dialogView.findViewById(R.id.Col3);
+        cell3.setText(col3.getText());
+        TextView cell4 = dialogView.findViewById(R.id.Row1);
+        cell4.setText(row1.getText());
+        TextView cell5 = dialogView.findViewById(R.id.Row2);
+        cell5.setText(row2.getText());
+        TextView cell6 = dialogView.findViewById(R.id.Row3);
+        cell6.setText(row3.getText());
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -329,9 +343,8 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Handle the backend response here
-                        // Assuming the response is a comma-separated string of categories
-                        String[] categories = response.split(", ");
+                        // Parse the response to a List of Maps to represent the JSON objects
+                        List<Map<String, String>> categories = parseCategories(response);
                         // Use the fetched categories to set up the game
                         setUpGameBoard(categories);
                     }
@@ -345,27 +358,41 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
         queue.add(stringRequest); // Add the request to the RequestQueue
     }
-    private void setUpGameBoard(String[] categories) {
-        // Set up the game board with the categories
-        // This method assumes an even split of categories for rows and columns
-        int halfLength = categories.length / 2;
-        row = Arrays.copyOfRange(categories, 0, halfLength);
-        col = Arrays.copyOfRange(categories, halfLength, categories.length);
-        row1.setText(row[0]);
-        row2.setText(row[1]);
-        row3.setText(row[2]);
-        col1.setText(col[0]);
-        col2.setText(col[1]);
-        col3.setText(col[2]);
-        categoriesLoaded = true;
-        playerBoard.editCol(0,col[0]);
-        playerBoard.editCol(1,col[1]);
-        playerBoard.editCol(2,col[2]);
-        playerBoard.editRow(0,row[0]);
-        playerBoard.editRow(1,row[1]);
-        playerBoard.editRow(2,row[2]);
-        startGame();
+    private List<Map<String, String>> parseCategories(String jsonResponse) {
+        List<Map<String, String>> categoryList = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                String categoryJson = jsonArray.getString(i);
+                JSONObject jsonObject = new JSONObject(categoryJson);
+                Map<String, String> categoryMap = new HashMap<>();
+                categoryMap.put("text", jsonObject.getString("text"));
+                categoryMap.put("subject", jsonObject.getString("subject"));
+                categoryMap.put("check", jsonObject.getString("check"));
+                categoryMap.put("keyword", jsonObject.getString("keyword"));
+                categoryList.add(categoryMap);
+            }
+        } catch (JSONException e) {
+            // Handle the exception
+        }
+        return categoryList;
+    }
+    private void setUpGameBoard(List<Map<String, String>> categories) {
+        // Assuming you have a layout or a way to set categories to your game board
+        for (int i = 0; i < categories.size(); i++) {
+            Map<String, String> category = categories.get(i);
+            // Here, use the category map to set up your game board
+            row1.setText(category.get("text"));
+            row2.setText(category.get("text"));
+            row3.setText(category.get("text"));
+            col1.setText(category.get("text"));
+            col2.setText(category.get("text"));
+            col3.setText(category.get("text"));
 
+        }
+        // Indicate that categories are loaded and start the game
+        categoriesLoaded = true;
+        startGame();
     }
 
     private void showErrorDialog() {
