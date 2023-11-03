@@ -66,6 +66,12 @@ public class ArtistController {
         return artistRepository.findById(randomNum);
     }
 
+    @GetMapping(path = "/artists/{name}/name/{check}")
+    boolean getArtistNameContains( @PathVariable String name, @PathVariable String check) {
+        Artist artist = artistRepository.findByName(name);
+        return artist.getName().contains(check);
+    }
+
     @GetMapping(path = "/artists/{id}/features/{feature}")
     boolean getArtistFeatureCheck( @PathVariable int id, @PathVariable String feature) {
         Artist artist = artistRepository.findById(id);

@@ -44,6 +44,10 @@ public class LobbyActivity extends AppCompatActivity implements OnClickListener 
                 startActivity(new Intent(LobbyActivity.this,
                         GameWebSockets.class));
                 break;
+            case R.id.btnStudy:
+                startActivity(new Intent(LobbyActivity.this,
+                        StudyActivity.class));
+                break;
             default:
                 break;
         }
