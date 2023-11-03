@@ -151,8 +151,14 @@ public class StudyActivity extends Activity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject artistJson = response;
-                                checker[0] = response.getBoolean("");
-//                                String name = artistJson.getString("name");
+                                String message = artistJson.getString("message");
+                                if (message.equals("success")) {
+                                    checker[0] = true;
+                                }
+                                else {
+                                    checker[0] = false;
+                                }
+
 //                                int plat = artistJson.getInt("numPlatinums");
 //                                int grammys = artistJson.getInt("numGrammys");
 //                                String songs = artistJson.getString("songs");
