@@ -45,10 +45,13 @@ public class ChatServer {
 
     //user database
     private static UserRepository userRepository;
+    private static MessageRepository messageRepository;
+
 
     @Autowired
-    public void setUserRepository(UserRepository repo) {
-        userRepository = repo;  // we are setting the static variable
+    public void setUserRepository(UserRepository usrRepo, MessageRepository msgRepo) {
+        userRepository = usrRepo;  // we are setting the static variable
+        messageRepository = msgRepo;
     }
 
     //banned words
@@ -80,6 +83,8 @@ public class ChatServer {
 
             // map current username with session
             usernameSessionMap.put(username, session);
+
+            sendMessageToPArticularUser(username, getChatHistory());
 
             if (existingUser.getCanChat()){
                 // send to the user joining in
@@ -142,6 +147,7 @@ public class ChatServer {
         } else {
             sendMessageToPArticularUser(username, "[DM from server]: sorry buddy, you've been banned, no messaging for you.");
         }
+        messageRepository.save(new Message(username, message));
     }
 
     /**
@@ -227,4 +233,18 @@ public class ChatServer {
         }
         return false;
     }
+
+    private String getChatHistory() {
+        List<Message> messages = messageRepository.findAll();
+
+        // convert the list to a string
+        StringBuilder sb = new StringBuilder();
+        if(messages != null && messages.size() != 0) {
+            for (Message message : messages) {
+                sb.append(message.getUserName() + ": " + message.getContent() + "\n");
+            }
+        }
+        return sb.toString();
+    }
+
 }
