@@ -145,23 +145,27 @@ public class ArtistActivity extends Activity {
 
     private void retrieveRandomArtist() {
 
-//        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/random";
-        String url = "http://localhost:8080/artists/random";
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/random";
+//        String url = "http://localhost:8080/artists/random";
 
 
-        JsonArrayRequest request = new JsonArrayRequest(
+        JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
                 null,
-                new Response.Listener<JSONArray>() {
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
                         // Handle the response from the server
                         // Parse the JSON array to populate the leaderboardData list
                         for (int i = 0; i < response.length(); i++) {
                             try {
-                                JSONObject artistJson = response.getJSONObject(i);
+                                JSONObject artistJson = response;
                                 String name = artistJson.getString("name");
+                                int plat = artistJson.getInt("numPlatinums");
+                                int grammys = artistJson.getInt("numGrammys");
+                                String songs = artistJson.getString("songs");
+                                String albums = artistJson.getString("albums");
                                 showToast("Name a song from this artist: " + name);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -172,7 +176,8 @@ public class ArtistActivity extends Activity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        showToast("Error retrieving leaderboard data: " + error.getMessage());
+                        System.out.println(error.getMessage());
+                        showToast(error.getMessage());
                     }
                 }
         );
