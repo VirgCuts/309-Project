@@ -92,4 +92,13 @@ public class UserController {
         userRepository.save(user);
         return success;
     }
+
+    @GetMapping(path = "/banStrikes/{name}")
+    int getBanStrikeCountForUser(@PathVariable String name)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return 0;
+        return user.getBanStrikes();
+    }
 }
