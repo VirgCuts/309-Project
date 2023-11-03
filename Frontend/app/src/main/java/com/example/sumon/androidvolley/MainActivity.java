@@ -1,58 +1,25 @@
 package com.example.sumon.androidvolley;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-
-public class MainActivity extends Activity implements OnClickListener {
+import android.view.MenuItem;
 
 
-    private Button btnLeaderboard, btnLobby, btnSettings;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-
+public class MainActivity extends AppCompatActivity{
+    private Navigation navigationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu_layout);
 
-
-        btnLeaderboard = (Button) findViewById(R.id.btnleaderboard);
-
-
-        btnLobby = (Button) findViewById(R.id.lobbyButton);
-        btnSettings = (Button) findViewById(R.id.settingsButton);
-
-
-
-        // button click listeners
-
-        btnLeaderboard.setOnClickListener(this);
-        btnLobby.setOnClickListener(this);
-        btnSettings.setOnClickListener(this);
+        navigationHelper = new Navigation(this);
+        navigationHelper.setupNavigation();
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnleaderboard:
-                startActivity(new Intent(MainActivity.this,
-                        LeaderboardActivity.class));
-                break;
-            case R.id.lobbyButton:
-                startActivity(new Intent(MainActivity.this,
-                        LobbyActivity.class));
-
-                break;
-            case R.id.settingsButton:
-                startActivity(new Intent(MainActivity.this,
-                        SettingsActivity.class));
-                break;
-            default:
-                break;
-        }
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
-
 }
