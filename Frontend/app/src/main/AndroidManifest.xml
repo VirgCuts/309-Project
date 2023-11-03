@@ -9,7 +9,7 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:label="@string/chat_activity_title"
+        android:label="Immaculate Taste"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
             android:exported="true">
@@ -27,11 +27,11 @@
 
         <activity android:name=".ChatActivity"
             android:windowSoftInputMode="adjustResize">
-
         </activity>
         <activity android:name=".SettingsActivity"></activity>
-
-
+        <activity android:name=".GameWebSockets"></activity>
+        <activity android:name=".Navigation"></activity>
+        <activity android:name=".SinglePlayerGame"></activity>
     </application>
 
 </manifest>

@@ -13,6 +13,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 
 import onetoone.Users.User;
 import onetoone.Users.Board;
@@ -35,8 +36,12 @@ import onetoone.Users.Board;
 @Component
 public class MultiplayerServer {
 
+    private static UserRepository userRepository;
+
     @Autowired
-    UserRepository userRepository;
+    public void setUserRepository(UserRepository repo) {
+        userRepository = repo;  // we are setting the static variable
+    }
 
     // Store all socket session and their corresponding username
     // Two maps for the ease of retrieval by key
@@ -70,11 +75,6 @@ public class MultiplayerServer {
             // map current username with session
             usernameSessionMap.put(username, session);
 
-            // send to the user joining in
-//            sendMessageToPArticularUser(username, "Welcome to the chat, " + username);
-
-            // send to everyone in the chat
-//            broadcast("User: " + username + " has joined the chat");
         }
     }
 
@@ -96,19 +96,31 @@ public class MultiplayerServer {
         // get the message which will be a json containing user1 and their updated board state
         ObjectMapper mapper = new ObjectMapper();
         // somehow split the username and board class
-        String name1 = mapper.readValue(message, String.class);
-        String name2 = mapper.readValue(message, String.class);
+
+//        String name1 = mapper.readValue(message, String.class);
+////        String name2 = mapper.readValue(message, String.class);
+//
+//        User user1old = userRepository.findByName(name1);
+        CombinedJSON combined = mapper.readValue(message, CombinedJSON.class);
+        String name1 = combined.getName1();
+        String name2 = combined.getName2();
+        Board board1 = combined.getBoard();
+        logger.info("Before user1old declaration, name1: " + name1 + " name2: " + name2);
         User user1old = userRepository.findByName(name1);
-        Board board1 = mapper.readValue(message, Board.class);
+        logger.info("Username: " + user1old.getName());
+
         // update the board state of user1 in backend
         user1old.setBoard(board1);
         userRepository.save(user1old);
+        logger.info("After saving to repo");
         // so frontend does not have access to user object, so need to make the board manually and
         // retrieve the users by username given
 
         // send updated user1 board to opponent (other user2)
         // this will be jsonified board data
         String boardData = mapper.writeValueAsString(board1);
+
+//        UNCOMMENT when it is solved how to split given data and get opponent username
         sendBoardDataToOpponent(name2, boardData);
 
     }
@@ -127,12 +139,45 @@ public class MultiplayerServer {
         // server side log
         logger.info("[onClose] " + username);
 
+        // save new high score and send final board to opponent
+        User user1 = userRepository.findByName(username);
+        logger.info("After the user has been saved in close");
+        Board board1 = user1.getBoard();
+        logger.info("User 1: " + user1 + " Board 1: " + board1);
+        if (board1 != null) {
+            if (user1.getHighScore() < board1.getScore()) {
+                user1.setHighScore(board1.getScore());
+                userRepository.save(user1);
+            }
+            logger.info("After high score is saved");
+            ObjectMapper mapper = new ObjectMapper();
+            String boardData = mapper.writeValueAsString(board1);
+            logger.info("Before keys check");
+
+            Set<Session> keys = sessionUsernameMap.keySet();
+            String user2 = "opponent";
+            for (Session key : keys) {
+                if (!key.getId().equals(session.getId())) {
+                    user2 = sessionUsernameMap.get(key);
+                    if (!user2.equals(username)) {
+                        break;
+                    }
+                }
+            }
+            logger.info("After keys check");
+
+            sendBoardDataToOpponent(user2, boardData);
+            logger.info("After sendboardata");
+        }
+
+
         // remove user from memory mappings
         sessionUsernameMap.remove(session);
         usernameSessionMap.remove(username);
+        logger.info("After removal");
 
-//        // send the message to chat
-//        broadcast(username + " disconnected");
+
+        // send user score to db for high score and send opponents final board
     }
 
     /**
@@ -165,18 +210,4 @@ public class MultiplayerServer {
         }
     }
 
-//    /**
-//     * Broadcasts a message to all users in the chat.
-//     *
-//     * @param message The message to be broadcasted to all users.
-//     */
-//    private void broadcast(String message) {
-//        sessionUsernameMap.forEach((session, username) -> {
-//            try {
-//                session.getBasicRemote().sendText(message);
-//            } catch (IOException e) {
-//                logger.info("[Broadcast Exception] " + e.getMessage());
-//            }
-//        });
-//    }
 }

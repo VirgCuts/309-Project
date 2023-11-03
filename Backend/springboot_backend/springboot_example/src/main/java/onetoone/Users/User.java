@@ -18,6 +18,7 @@ public class User implements Comparator<User>, Comparable<User> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    private String password;
     private int highScore;
     private boolean canChat;
     private int banStrikes;
@@ -33,8 +34,18 @@ public class User implements Comparator<User>, Comparable<User> {
      * @JoinColumn defines the ownership of the foreign key i.e. the user table will have a field called laptop_id
      */
 
+    public User(String name, String password) {
+        this.name = name;
+        this.password = password;
+        this.highScore = 0;
+        this.board = new Board();
+        this.canChat = true;
+        this.banStrikes = 0;
+    }
+
     public User(String name, int highScore) {
         this.name = name;
+        this.password = "";
         this.highScore = highScore;
         this.board = new Board();
         this.canChat = true;
@@ -69,6 +80,10 @@ public class User implements Comparator<User>, Comparable<User> {
     public void setName(String name){
         this.name = name;
     }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
 
     public int getHighScore(){
         return highScore;

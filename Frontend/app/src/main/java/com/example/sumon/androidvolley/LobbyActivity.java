@@ -2,43 +2,47 @@ package com.example.sumon.androidvolley;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class LobbyActivity extends Activity implements OnClickListener {
-    private Button btnArtists, btnChatRoom, btnStudy;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class LobbyActivity extends AppCompatActivity implements OnClickListener {
+    private Button singlePlayer, multiPlayer;
+    private Navigation navigationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        navigationHelper = new Navigation(this);
+        navigationHelper.setupNavigation();
 
-
-        btnArtists = (Button) findViewById(R.id.btnArtists);
-        btnChatRoom = (Button) findViewById(R.id.btnChatRoom);
-        btnStudy = (Button) findViewById(R.id.btnStudy);
-
+        singlePlayer = (Button) findViewById(R.id.singlePlayer);
+        multiPlayer = (Button) findViewById(R.id.multiPlayer);
 
         // button click listeners
-
-
-        btnArtists.setOnClickListener(this);
-        btnChatRoom.setOnClickListener(this);
-        btnStudy.setOnClickListener(this);
+        singlePlayer.setOnClickListener(this);
+        multiPlayer.setOnClickListener(this);
     }
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnArtists:
+            case R.id.singlePlayer:
                 startActivity(new Intent(LobbyActivity.this,
-                        ArtistActivity.class));
+                        SinglePlayerGame.class));
                 break;
-            case R.id.btnChatRoom:
+            case R.id.multiPlayer:
                 startActivity(new Intent(LobbyActivity.this,
-                        ChatActivity.class));
+                        GameWebSockets.class));
                 break;
             case R.id.btnStudy:
                 startActivity(new Intent(LobbyActivity.this,

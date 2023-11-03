@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Android Volley</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
     <string name="lobby">Lobby</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="settings">Settings</string>

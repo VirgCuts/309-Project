@@ -154,9 +154,65 @@ public class ArtistController {
     }
 
     // for the game directly
-    @GetMapping(path = "/artistsname/{name}/game/{check}")
+    @GetMapping(path = "/artists/{name}/game/{check}")
     boolean checkIfArtistContains(@PathVariable String name, @PathVariable String check){
         Artist artist = artistRepository.findByName(name);
         return artist.getName().contains(check);
+    }
+
+    @GetMapping(path = "/artists/{name}/songs/{songId}/game/{check}")
+    boolean checkIfSongContains(@PathVariable String name, @PathVariable int songId,
+                                @PathVariable String check){
+        Artist artist = artistRepository.findByName(name);
+        List<Song> songList = artist.getSongs();
+        for (int i = 0; i < songList.size(); i++) {
+            if (songList.get(i).getSongName().contains(check)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @GetMapping(path = "/artists/{name}/artist/{check1}/songs/{check2}")
+    String checkIfSongAndArtistContains(@PathVariable String name, @PathVariable String check1,
+                                @PathVariable String songName, @PathVariable String check2){
+        Artist artist = artistRepository.findByName(name);
+        if (artist.getName().contains(check1)) {
+            List<Song> songList = artist.getSongs();
+            for (int i = 0; i < songList.size(); i++) {
+                if (songList.get(i).getSongName().contains(check2)) {
+                    return success;
+                }
+            }
+        }
+        return failure;
+    }
+
+    @GetMapping(path = "/artists/categories")
+    String[] getCategories(){
+        String[] jsonArray = {
+                "{\"text\":\"Artist with 'lil' in their name\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"lil\"}",
+                "{\"text\":\"Artist with 'ill' in their name\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"ill\"}",
+                "{\"text\":\"Artist with 'x' in their name\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"x\"}",
+                "{\"text\":\"Song with 'her' in their name\",\"subject\":\"Song\",\"check\":\"with\",\"keyword\":\"her\"}",
+                "{\"text\":\"Song with 'men' in their name\",\"subject\":\"Song\",\"check\":\"with\",\"keyword\":\"men\"}",
+                "{\"text\":\"Song with 'hip hop' in their name\",\"subject\":\"Song\",\"check\":\"with\",\"keyword\":\"hip hop\"}"
+        };
+
+        return jsonArray;
+
+    }
+
+    // for study
+    @GetMapping(path = "/artists/{name}/songs/{songName}")
+    String getArtistHasSong( @PathVariable String name, @PathVariable String songName) {
+        Artist artist = artistRepository.findByName(name);
+        List<Song> songList = artist.getSongs();
+        for (int i = 0; i < songList.size(); i++) {
+            if (songList.get(i).getSongName().equals(songName)) {
+                return success;
+            }
+        }
+        return failure;
     }
 }

@@ -44,8 +44,12 @@ public class ChatServer {
     private final Logger logger = LoggerFactory.getLogger(ChatServer.class);
 
     //user database
+    private static UserRepository userRepository;
+
     @Autowired
-    UserRepository userRepository;
+    public void setUserRepository(UserRepository repo) {
+        userRepository = repo;  // we are setting the static variable
+    }
 
     //banned words
     private final List<String> bannedWords = Arrays.asList("test", "testing");
@@ -69,6 +73,7 @@ public class ChatServer {
             session.close();
         } else if (existingUser == null) {
             session.getBasicRemote().sendText("Username doesn't exist within database");
+            session.close();
         } else {
             // map current session with username
             sessionUsernameMap.put(session, username);

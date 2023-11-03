@@ -1,0 +1,118 @@
+[
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/layout_end_game_popup.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/layout/end_game_popup.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_border_cell_left.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/border_cell_left.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_border_cell_topleft.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/border_cell_topleft.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_border_cell_topright.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/border_cell_topright.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_border_cell_bottomleft.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/border_cell_bottomleft.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_ic_launcher_background.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/xml_backup_rules.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.example.game.app-merged_res-32:/layout_end_game_popup.xml.flat",
+        "source": "com.example.game.app-main-34:/layout/end_game_popup.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_edit_text_correct.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/edit_text_correct.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_edit_text_native.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/edit_text_native.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-anydpi/ic_launcher_round.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_border_cell_bottomright.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/border_cell_bottomright.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_border_cell_middle_topbottom.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/border_cell_middle_topbottom.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_border_cell_middle_leftright.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/border_cell_middle_leftright.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/drawable_border_cell_right.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/drawable/border_cell_right.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-anydpi/ic_launcher.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/layout_single_player.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/layout/single_player.xml"
+    },
+    {
+        "merged": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-merged_res-32:/xml_data_extraction_rules.xml.flat",
+        "source": "/Users/keenanjacobs/.gradle/daemon/8.0/com.example.game.app-main-34:/xml/data_extraction_rules.xml"
+    }
+]

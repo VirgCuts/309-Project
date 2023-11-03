@@ -30,6 +30,15 @@ public class UserController {
         return success;
     }
 
+    //registration, should be used for making users from now on
+    @PostMapping(path = "/users/{name}/{password}")
+    String addSingleUserWithPassword(@PathVariable String name, @PathVariable String password)
+    {
+        User user = new User(name, password);
+        userRepository.save(user);
+        return success;
+    }
+
     @GetMapping(path = "/leaderboard")
     List<User> getLeaderboard()
     {
@@ -91,5 +100,14 @@ public class UserController {
         user.setCanChat(false);
         userRepository.save(user);
         return success;
+    }
+
+    @GetMapping(path = "/banStrikes/{name}")
+    int getBanStrikeCountForUser(@PathVariable String name)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return 0;
+        return user.getBanStrikes();
     }
 }
