@@ -34,6 +34,8 @@ public class StudyActivity extends Activity {
     private EditText msgResponse;
     private TextView random;
 
+    private TextView displayCorrect;
+
     private String currentArtist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class StudyActivity extends Activity {
 
         msgResponse = findViewById(R.id.songGuess);
         random = findViewById(R.id.artistName);
+        displayCorrect = findViewById(R.id.displayCorrectness);
 
 //        pDialog = new ProgressDialog(this);
 //        pDialog.setMessage("Loading...");
@@ -60,10 +63,10 @@ public class StudyActivity extends Activity {
 
                     boolean checker = checkArtistSong(artistToSearch, songToSearch);
                     if (checker) {
-                        showToast("Correct!");
+                        displayCorrect.setText("Correct!");
                     }
                     else {
-                        showToast("Incorrect, try again");
+                        displayCorrect.setText("Incorrect");
                     }
 
                     return true; // Return true to indicate that the action has been handled
@@ -118,7 +121,7 @@ public class StudyActivity extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         System.out.println(error.getMessage());
-                        showToast(error.getMessage());
+//                        showToast(error.getMessage());
                     }
                 }
         );
@@ -127,10 +130,13 @@ public class StudyActivity extends Activity {
         Volley.newRequestQueue(this).add(request);
     }
 
-    private void checkArtistSong(String artist, String song) {
-
+    private boolean checkArtistSong(String artist, String song) {
+        artist = artist.replace(' ', '-');
+        song = song.replace(' ', '-');
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artist + "/songs/" + song;
 //        String url = "http://localhost:8080/artists/random";
+
+        final boolean[] checker = {false};
 
 
         JsonObjectRequest request = new JsonObjectRequest(
@@ -145,13 +151,14 @@ public class StudyActivity extends Activity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject artistJson = response;
-                                String name = artistJson.getString("name");
-                                int plat = artistJson.getInt("numPlatinums");
-                                int grammys = artistJson.getInt("numGrammys");
-                                String songs = artistJson.getString("songs");
-                                String albums = artistJson.getString("albums");
-                                random.setText("Your random artist is: " + name);
-                                currentArtist = name;
+                                checker[0] = response.getBoolean("");
+//                                String name = artistJson.getString("name");
+//                                int plat = artistJson.getInt("numPlatinums");
+//                                int grammys = artistJson.getInt("numGrammys");
+//                                String songs = artistJson.getString("songs");
+//                                String albums = artistJson.getString("albums");
+//                                random.setText("Your random artist is: " + name);
+//                                currentArtist = name;
 //                                showToast("Name a song from this artist: " + name);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -163,16 +170,17 @@ public class StudyActivity extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         System.out.println(error.getMessage());
-                        showToast(error.getMessage());
+//                        showToast(error.getMessage());
                     }
                 }
         );
 
         // Add the request to the Volley request queue
         Volley.newRequestQueue(this).add(request);
+        return checker[0];
     }
 
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
+//    private void showToast(String message) {
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+//    }
 }

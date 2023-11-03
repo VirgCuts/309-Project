@@ -22,6 +22,7 @@
         <activity android:name=".LobbyActivity"></activity>
         <activity android:name=".LeaderboardActivity"></activity>
         <activity android:name=".ArtistActivity"></activity>
+        <activity android:name=".StudyActivity"></activity>
 
 
         <activity android:name=".ChatActivity"

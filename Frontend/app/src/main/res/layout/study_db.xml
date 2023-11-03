@@ -1,47 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <Button
         android:id="@+id/button"
-        android:layout_width="115dp"
-        android:layout_height="54dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Get Random Artist"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="108dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
+<!--    tools:layout_editor_absoluteX="148dp"-->
+<!--    tools:layout_editor_absoluteY="108dp"-->
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Click to generate a random artist:"
-        tools:layout_editor_absoluteX="101dp"
-        tools:layout_editor_absoluteY="46dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+<!--        tools:layout_editor_absoluteX="101dp"-->
+<!--        tools:layout_editor_absoluteY="46dp"-->
+
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
         android:text="Enter a song from this artist"
-        tools:layout_editor_absoluteX="118dp"
-        tools:layout_editor_absoluteY="299dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button" />
+<!--    tools:layout_editor_absoluteX="118dp"-->
+<!--    tools:layout_editor_absoluteY="299dp"-->
 
     <TextView
         android:id="@+id/artistName"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Your random artist is: "
-        tools:layout_editor_absoluteX="136dp"
-        tools:layout_editor_absoluteY="216dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+<!--    tools:layout_editor_absoluteX="136dp"-->
+<!--    tools:layout_editor_absoluteY="216dp"-->
 
     <EditText
         android:id="@+id/songGuess"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Enter song here"
-        tools:layout_editor_absoluteX="139dp"
-        tools:layout_editor_absoluteY="355dp" />
+        android:layout_marginTop="20dp"
+        android:hint="Enter song here"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/artistName" />
+
+    <TextView
+        android:id="@+id/displayCorrectness"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Waiting for answer..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/songGuess" />
+    <!--        tools:layout_editor_absoluteX="139dp"-->
+    <!--        tools:layout_editor_absoluteY="355dp"-->
 </androidx.constraintlayout.widget.ConstraintLayout>

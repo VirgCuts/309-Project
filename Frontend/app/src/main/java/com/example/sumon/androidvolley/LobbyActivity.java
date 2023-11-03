@@ -7,7 +7,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class LobbyActivity extends Activity implements OnClickListener {
-    private Button btnArtists, btnChatRoom;
+    private Button btnArtists, btnChatRoom, btnStudy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +18,7 @@ public class LobbyActivity extends Activity implements OnClickListener {
 
         btnArtists = (Button) findViewById(R.id.btnArtists);
         btnChatRoom = (Button) findViewById(R.id.btnChatRoom);
+        btnStudy = (Button) findViewById(R.id.btnStudy);
 
 
         // button click listeners
@@ -25,6 +26,7 @@ public class LobbyActivity extends Activity implements OnClickListener {
 
         btnArtists.setOnClickListener(this);
         btnChatRoom.setOnClickListener(this);
+        btnStudy.setOnClickListener(this);
     }
 
     @Override
@@ -37,6 +39,10 @@ public class LobbyActivity extends Activity implements OnClickListener {
             case R.id.btnChatRoom:
                 startActivity(new Intent(LobbyActivity.this,
                         ChatActivity.class));
+                break;
+            case R.id.btnStudy:
+                startActivity(new Intent(LobbyActivity.this,
+                        StudyActivity.class));
                 break;
             default:
                 break;
