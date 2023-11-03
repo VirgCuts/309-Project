@@ -29,7 +29,10 @@ public class Album {
      * @JsonIgnore is to assure that there is no infinite loop while returning either user/laptop objects (laptop->user->laptop->...)
      */
     @ManyToOne
-    @JoinColumn(name = "artist_id")
+    @JoinColumns({
+            @JoinColumn(name = "artist_id", referencedColumnName = "id"),
+            @JoinColumn(name = "artist_name", referencedColumnName = "name")
+    })
     @JsonIgnore
     private Artist artist;
 

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/Points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Points: "
+        android:textSize="30sp"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time:  "
+        android:textSize="30sp" />
+
+    <androidx.gridlayout.widget.GridLayout
+        android:layout_width="match_parent"
+        android:id="@+id/gridLayout"
+        android:layout_below="@id/Points"
+        android:layout_height="300dp">
+
+        <TextView
+            android:id="@+id/Row1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Row 1"
+            app:layout_column="0"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/Row2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Row 2"
+            app:layout_column="0"
+            app:layout_row="2" />
+
+        <TextView
+            android:id="@+id/Row3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Row 3"
+            app:layout_column="0"
+            app:layout_row="3" />
+
+
+        <TextView
+            android:id="@+id/Col1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Col 1"
+            app:layout_column="1"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/Col2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Col 2"
+            app:layout_column="2"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/Col3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Col 3"
+            app:layout_column="3"
+            app:layout_row="0" />
+
+        <EditText
+            android:id="@+id/r1c1"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_column="1"
+            app:layout_row="1"
+            android:background="@drawable/edit_text_native" />
+
+        <EditText
+            android:id="@+id/r1c2"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_column="1"
+            app:layout_row="2"
+            android:background="@drawable/edit_text_native" />
+
+        <EditText
+            android:id="@+id/r1c3"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_column="1"
+            app:layout_row="3"
+            android:background="@drawable/edit_text_native" />
+
+        <EditText
+            android:id="@+id/r2c1"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_column="2"
+            app:layout_row="1"
+            android:background="@drawable/edit_text_native" />
+
+        <EditText
+            android:id="@+id/r2c2"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_column="2"
+            app:layout_row="2"
+            android:background="@drawable/edit_text_native" />
+
+        <EditText
+            android:id="@+id/r2c3"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_column="2"
+            app:layout_row="3"
+            android:background="@drawable/edit_text_native" />
+
+        <EditText
+            android:id="@+id/r3c1"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_column="3"
+            app:layout_row="1"
+            android:background="@drawable/edit_text_native" />
+
+        <EditText
+            android:id="@+id/r3c2"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_column="3"
+            app:layout_row="2"
+            android:background="@drawable/edit_text_native" />
+
+        <EditText
+            android:id="@+id/r3c3"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_column="3"
+            app:layout_row="3"
+            android:background="@drawable/edit_text_native" />
+
+    </androidx.gridlayout.widget.GridLayout>
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:text="End Game"
+        android:id="@+id/endGameButton"
+        android:layout_below="@+id/gridLayout"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
+
+
+
