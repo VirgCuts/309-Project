@@ -198,4 +198,17 @@ public class ArtistController {
         return jsonArray;
 
     }
+
+    // for study
+    @GetMapping(path = "/artists/{name}/songs/{songName}")
+    boolean getArtistHasSong( @PathVariable String name, @PathVariable String songName) {
+        Artist artist = artistRepository.findByName(name);
+        List<Song> songList = artist.getSongs();
+        for (int i = 0; i < songList.size(); i++) {
+            if (songList.get(i).getSongName().equals(songName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
