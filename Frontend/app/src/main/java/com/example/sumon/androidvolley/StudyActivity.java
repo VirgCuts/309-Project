@@ -57,17 +57,17 @@ public class StudyActivity extends Activity {
         msgResponse.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) { // Use EditorInfo.IME_ACTION_DONE
+                if (actionId == EditorInfo.IME_ACTION_DONE && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) { // Use EditorInfo.IME_ACTION_DONE
                     String artistToSearch = currentArtist;
                     String songToSearch = msgResponse.getText().toString();
 
                     boolean checker = checkArtistSong(artistToSearch, songToSearch);
-                    if (checker) {
-                        displayCorrect.setText("Correct!");
-                    }
-                    else {
-                        displayCorrect.setText("Incorrect");
-                    }
+//                    if (checker) {
+//                        displayCorrect.setText("Correct!");
+//                    }
+//                    else {
+//                        displayCorrect.setText("Incorrect");
+//                    }
 
                     return true; // Return true to indicate that the action has been handled
                 }
@@ -131,8 +131,8 @@ public class StudyActivity extends Activity {
     }
 
     private boolean checkArtistSong(String artist, String song) {
-        artist = artist.replace(' ', '-');
-        song = song.replace(' ', '-');
+//        artist = artist.replace(' ', '-');
+//        song = song.replace(' ', '-');
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artist + "/songs/" + song;
 //        String url = "http://localhost:8080/artists/random";
 
@@ -154,9 +154,11 @@ public class StudyActivity extends Activity {
                                 String message = artistJson.getString("message");
                                 if (message.equals("success")) {
                                     checker[0] = true;
+                                    displayCorrect.setText("Correct!");
                                 }
                                 else {
                                     checker[0] = false;
+                                    displayCorrect.setText("Incorrect!");
                                 }
 
 //                                int plat = artistJson.getInt("numPlatinums");
