@@ -53,12 +53,6 @@ public class ArtistController {
         return artist.getSongs();
     }
 
-    @GetMapping(path = "/artists/{name}/name/{check}")
-    boolean getArtistNameContains( @PathVariable String name, @PathVariable String check) {
-        Artist artist = artistRepository.findByName(name);
-        return artist.getName().contains(check);
-    }
-
     @GetMapping(path = "/artists/{id}/features/{feature}")
     boolean getArtistFeatureCheck( @PathVariable int id, @PathVariable String feature) {
         Artist artist = artistRepository.findById(id);
@@ -141,9 +135,29 @@ public class ArtistController {
     }
 
     // for the game directly
-    @GetMapping(path = "/artistsname/{name}/game/{check}")
+    @GetMapping(path = "/artists/{name}/game/{check}")
     boolean checkIfArtistContains(@PathVariable String name, @PathVariable String check){
         Artist artist = artistRepository.findByName(name);
         return artist.getName().contains(check);
+    }
+
+    @GetMapping(path = "/artists/{name}/songs/{songId}/game/{check}")
+    boolean checkIfSongContains(@PathVariable String name, @PathVariable int songId,
+                                @PathVariable String check){
+        Artist artist = artistRepository.findByName(name);
+        List<Song> songList = artist.getSongs();
+        for (int i = 0; i < songList.size(); i++) {
+            if (songList.get(i).getSongName().contains(check)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @GetMapping(path = "/artists/categories")
+    String getCategories(){
+        return "Artist with 'lil' in their name, Artist with 'ill' in their name, " +
+                "Artist with 'x' in their name, Song with 'her' in the name, Song with 'men' in the name, " +
+                "Song with 'hip hop' in the name";
     }
 }

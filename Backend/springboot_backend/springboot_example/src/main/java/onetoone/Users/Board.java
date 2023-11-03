@@ -9,12 +9,15 @@ public class Board {
     private boolean won;
     private int[][] game;
 
+    private int score;
+
     public Board() {
         this.game = new int[gameSize][gameSize];
         for (int i = 0; i < gameSize; i++)
             for (int j = 0; j < gameSize; j++)
                 this.game[i][j] = 0;
         this.won = false;
+        this.score = 0;
     }
 
     //user has won if no zeros
@@ -30,7 +33,12 @@ public class Board {
     //only call when user guesses correctly
     public void updateBoard(int x, int y) {
         this.game[x][y] = 1;
+        this.score++;
         this.won = this.winCheck();
+    }
+
+    public int getScore() {
+        return this.score;
     }
 
     public int[][] getGame() { return game; }
