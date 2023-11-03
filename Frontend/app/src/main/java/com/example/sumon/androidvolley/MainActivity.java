@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu_layout);
 
+
         navigationHelper = new Navigation(this);
         navigationHelper.setupNavigation();
     }

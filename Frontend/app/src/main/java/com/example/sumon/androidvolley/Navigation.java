@@ -49,6 +49,9 @@ public class Navigation {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 // Handle navigation view item clicks here.
                 switch (item.getItemId()) {
+                    case R.id.home:
+                        activity.startActivity(new Intent(activity, MainActivity.class));
+                        break;
                     case R.id.btnleaderboard:
                         activity.startActivity(new Intent(activity, LeaderboardActivity.class));
                         break;
@@ -56,8 +59,15 @@ public class Navigation {
                         activity.startActivity(new Intent(activity, ArtistActivity.class));
                         break;
                     case R.id.btnWebsocket:
-                        activity.startActivity(new Intent(activity, MainActivity.class));
+                        activity.startActivity(new Intent(activity, ChatActivity.class));
                         break;
+                    case R.id.btnLobby:
+                        activity.startActivity(new Intent(activity, LobbyActivity.class));
+                        break;
+                    case R.id.btnSettings:
+                        activity.startActivity(new Intent(activity, SettingsActivity.class));
+                        break;
+
                     default:
                         break;
                 }

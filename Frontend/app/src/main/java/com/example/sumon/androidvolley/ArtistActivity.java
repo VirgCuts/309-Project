@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Request.Method;
@@ -28,7 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ArtistActivity extends Activity {
+public class ArtistActivity extends AppCompatActivity {
 
     private final String TAG = ArtistActivity.class.getSimpleName();
     private ProgressDialog pDialog;
@@ -38,10 +42,15 @@ public class ArtistActivity extends Activity {
     private String tag_string_req = "string_req";
     private EditText deleteNum, orgnArtist, newArtist, artistName, numPlat, numGrammies,song,songGenre;
 
+    private Navigation navigationHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.artist_activity);
+
+        navigationHelper = new Navigation(this);
+        navigationHelper.setupNavigation();
 
         Button btnBack = findViewById(R.id.btnBack);
         Button deleteButton = findViewById(R.id.deleteArtist);
@@ -115,6 +124,12 @@ public class ArtistActivity extends Activity {
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
     //Checks edit text and compares it to the users in the data returns true of false depending on inclusion.
     private String searchArtistInJson(String jsonString, String artistToSearch) {
         try {
