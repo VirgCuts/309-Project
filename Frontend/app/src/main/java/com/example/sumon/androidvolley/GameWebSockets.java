@@ -18,7 +18,7 @@ public class GameWebSockets extends AppCompatActivity implements WebSocketListen
     private EditText usernameEtx;
     private TextView msgTv;
 
-    private String Player1, Player2 = "Keenan", boardState;
+    private String Player1, Player2 = "Conor", boardState;
 
 
     @Override
