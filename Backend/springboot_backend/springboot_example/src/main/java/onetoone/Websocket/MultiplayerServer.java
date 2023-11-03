@@ -121,7 +121,7 @@ public class MultiplayerServer {
         String boardData = mapper.writeValueAsString(board1);
 
 //        UNCOMMENT when it is solved how to split given data and get opponent username
-//        sendBoardDataToOpponent(name2, boardData);
+        sendBoardDataToOpponent(name2, boardData);
 
     }
 
