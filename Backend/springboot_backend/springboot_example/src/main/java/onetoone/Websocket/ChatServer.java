@@ -138,16 +138,18 @@ public class ChatServer {
                 if (!containsBannedWord) {
                     sendMessageToPArticularUser(destUserName, "[DM from " + username + "]: " + actualMessage);
                     sendMessageToPArticularUser(username, "[DM from " + username + "]: " + actualMessage);
+                    messageRepository.save(new Message(username, message));
                 }
             } else { // Message to whole chat
                 boolean containsBannedWord = messageCheck(message, username);
-                if (!containsBannedWord)
+                if (!containsBannedWord) {
                     broadcast(username + ": " + message);
+                    messageRepository.save(new Message(username, message));
+                }
             }
         } else {
             sendMessageToPArticularUser(username, "[DM from server]: sorry buddy, you've been banned, no messaging for you.");
         }
-        messageRepository.save(new Message(username, message));
     }
 
     /**
