@@ -175,7 +175,7 @@ public class ArtistController {
 
     @GetMapping(path = "/artists/{name}/artist/{check1}/songs/{check2}")
     String checkIfSongAndArtistContains(@PathVariable String name, @PathVariable String check1,
-                                @PathVariable String songName, @PathVariable String check2){
+                                        @PathVariable String check2){
         Artist artist = artistRepository.findByName(name);
         if (artist != null) {
             if (artist.getName().contains(check1)) {
