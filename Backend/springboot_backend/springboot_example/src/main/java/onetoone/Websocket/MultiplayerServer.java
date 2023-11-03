@@ -105,7 +105,7 @@ public class MultiplayerServer {
         String name1 = combined.getName1();
         String name2 = combined.getName2();
         Board board1 = combined.getBoard();
-        logger.info("Before user1old declaration");
+        logger.info("Before user1old declaration, name1: " + name1 + " name2: " + name2);
         User user1old = userRepository.findByName(name1);
         logger.info("Username: " + user1old.getName());
 
@@ -141,13 +141,16 @@ public class MultiplayerServer {
 
         // save new high score and send final board to opponent
         User user1 = userRepository.findByName(username);
+        logger.info("After the user has been saved in close");
         Board board1 = user1.getBoard();
         if (user1.getHighScore() < board1.getScore()) {
             user1.setHighScore(board1.getScore());
             userRepository.save(user1);
         }
+        logger.info("After high score is saved");
         ObjectMapper mapper = new ObjectMapper();
         String boardData = mapper.writeValueAsString(board1);
+        logger.info("Before keys check");
 
         Set<Session> keys = sessionUsernameMap.keySet();
         String user2 = "opponent";
@@ -159,11 +162,16 @@ public class MultiplayerServer {
                 }
             }
         }
+        logger.info("After keys check");
+
         sendBoardDataToOpponent(user2, boardData);
+        logger.info("After sendboardata");
+
 
         // remove user from memory mappings
         sessionUsernameMap.remove(session);
         usernameSessionMap.remove(username);
+        logger.info("After removal");
 
 
         // send user score to db for high score and send opponents final board
