@@ -1,6 +1,7 @@
 package onetoone.Artists;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,6 +52,18 @@ public class ArtistController {
     List<Song> getArtistSongs( @PathVariable int id) {
         Artist artist = artistRepository.findById(id);
         return artist.getSongs();
+    }
+
+    @GetMapping(path = "/artists/{name}/study")
+    Artist getArtistByName( @PathVariable String name) {
+        return artistRepository.findByName(name);
+    }
+
+    @GetMapping(path = "/artists/random")
+    Artist getRandomArtist() {
+        Random rand = new Random();
+        int randomNum = rand.nextInt(437);
+        return artistRepository.findById(randomNum);
     }
 
     @GetMapping(path = "/artists/{name}/name/{check}")

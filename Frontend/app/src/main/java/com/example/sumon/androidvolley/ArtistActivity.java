@@ -19,6 +19,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -44,7 +45,9 @@ public class ArtistActivity extends Activity {
         setContentView(R.layout.artist_activity);
 
         Button btnBack = findViewById(R.id.btnBack);
-        Button deleteButton = findViewById(R.id.deleteArtist);
+//        Button deleteButton = findViewById(R.id.deleteArtist);
+        Button getRandomButton = findViewById(R.id.deleteArtist);
+
         //Button updateButton = findViewById(R.id.updateArtist);
         Button addButton = findViewById(R.id.addArtist);
         artistName = findViewById(R.id.artistName);
@@ -98,11 +101,11 @@ public class ArtistActivity extends Activity {
 //                updateArtistInDB(orgnArtist.getText().toString(), newArtist.getText().toString());
 //            }
 //        });
-        deleteButton.setOnClickListener(new View.OnClickListener() {
+        getRandomButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                deleteArtistInDB(deleteNum.getText().toString());
+                retrieveRandomArtist();
             }
         });
 
@@ -138,6 +141,44 @@ public class ArtistActivity extends Activity {
             e.printStackTrace();
         }
         return "Song not found for " + artistToSearch;
+    }
+
+    private void retrieveRandomArtist() {
+
+//        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/random";
+        String url = "http://localhost:8080/artists/random";
+
+
+        JsonArrayRequest request = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // Handle the response from the server
+                        // Parse the JSON array to populate the leaderboardData list
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject artistJson = response.getJSONObject(i);
+                                String name = artistJson.getString("name");
+                                showToast("Name a song from this artist: " + name);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        showToast("Error retrieving leaderboard data: " + error.getMessage());
+                    }
+                }
+        );
+
+        // Add the request to the Volley request queue
+        Volley.newRequestQueue(this).add(request);
     }
 
     private void addArtistToDB(String artistName, int numPlatinums, int numGrammys, String songName, String songGenre) {
