@@ -1,6 +1,7 @@
 package com.example.sumon.androidvolley;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -33,15 +34,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SinglePlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface {
     private TextView timerTextView;
     private Button endGameButton;
     private Handler handler = new Handler();
-    private int seconds = 10;
+    private int seconds = 240;
     private int points = 0;
     private GameState gameState;
     private PlayerBoard playerBoard;
@@ -56,17 +60,19 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
     private EditText r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3;
 
+    private TextView col1,col2,col3,row1,row2,row3;
+
+    String[] col;
+    String[] row;
+    private boolean categoriesLoaded = false;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        queue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_player);
-
-        //NOTE: All of this information will have to come from websocket
-        //connection to the backend
-        String[] col = {"Has a grammy","Has a platinum record","Has a song with Kanye"};
-        String[] row = {"Has a song with Drake","Has a song with Kid Cudi","Has a song produced my Pharrel Williams"};
 
         r1c2 = findViewById(R.id.r1c2);
         r1c3 = findViewById(R.id.r1c3);
@@ -77,6 +83,15 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         r3c2 = findViewById(R.id.r3c2);
         r3c3 = findViewById(R.id.r3c3);
         r1c1 = findViewById(R.id.r1c1);
+        col1 = findViewById(R.id.col1);
+        col2 = findViewById(R.id.col2);
+        col3 = findViewById(R.id.col3);
+        row1 = findViewById(R.id.row1);
+        row2 = findViewById(R.id.row2);
+        row3 = findViewById(R.id.row3);
+
+
+        fetchCategories();
 
         r1c1.setText("");
         r1c2.setText("");
@@ -97,8 +112,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setEditTextListener(r3c1);
         setEditTextListener(r3c2);
         setEditTextListener(r3c3);
-
-        queue = Volley.newRequestQueue(this);
 
         allEditTexts = new EditText[9];
         allEditTexts[0] = r1c1;
@@ -123,9 +136,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         });
 
         timerTextView = findViewById(R.id.timer);
-        // Start the timer
-        Timer();
-        setPoints();
+
 
     }
 
@@ -225,7 +236,12 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (event != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                     // you may need a way to determine which answer to check against based on the EditText
+                    String tag = (String) editText.getTag();
+                    String[] parts = tag.split(",");
+                    int row = Integer.parseInt(parts[0]);
+                    int column = Integer.parseInt(parts[1]);
                     String userAnswer = "1";
+
                     if (checkAnswer(editText, userAnswer)) {
                         updatePlayerBoard(editText, userAnswer);
                         changeBoxColor(editText, true);
@@ -244,6 +260,15 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             }
         });
     }
+    private String extractKeyword(String category) {
+        Pattern pattern = Pattern.compile("'(.*?)'");
+        Matcher matcher = pattern.matcher(category);
+        if (matcher.find()) {
+            return matcher.group(1); // This will return the word between the single quotes
+        }
+        return ""; // Return empty if no match is found
+    }
+
 
     //NOTE: winnerBoard will be changed to a new custom class called Board
     private void showWinnerDialog(String winner, String[][] winnerBoard) {
@@ -295,9 +320,67 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         super.onDestroy();
         handler.removeCallbacksAndMessages(null); // Remove any callbacks and messages from the handler
     }
-
     //Backend Support
-    //
+    private void fetchCategories() {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/categories"; // Replace with your actual backend server URL
 
+        // StringRequest for fetching a string response from the given URL
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle the backend response here
+                        // Assuming the response is a comma-separated string of categories
+                        String[] categories = response.split(", ");
+                        // Use the fetched categories to set up the game
+                        setUpGameBoard(categories);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Handle error
+                showErrorDialog();
+            }
+        });
 
+        queue.add(stringRequest); // Add the request to the RequestQueue
+    }
+    private void setUpGameBoard(String[] categories) {
+        // Set up the game board with the categories
+        // This method assumes an even split of categories for rows and columns
+        int halfLength = categories.length / 2;
+        row = Arrays.copyOfRange(categories, 0, halfLength);
+        col = Arrays.copyOfRange(categories, halfLength, categories.length);
+        row1.setText(row[0]);
+        row2.setText(row[1]);
+        row3.setText(row[2]);
+        col1.setText(col[0]);
+        col2.setText(col[1]);
+        col3.setText(col[2]);
+        categoriesLoaded = true;
+        playerBoard.editCol(0,col[0]);
+        playerBoard.editCol(1,col[1]);
+        playerBoard.editCol(2,col[2]);
+        playerBoard.editRow(0,row[0]);
+        playerBoard.editRow(1,row[1]);
+        playerBoard.editRow(2,row[2]);
+        startGame();
+
+    }
+
+    private void showErrorDialog() {
+        // Show an error dialog to the user
+        new AlertDialog.Builder(this)
+                .setTitle("Error")
+                .setMessage("Could not fetch categories from the server.")
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+    private void startGame() {
+        if (categoriesLoaded) {
+            Timer(); // Start the timer
+            setPoints(); // Set initial points
+        }
+    }
 }
