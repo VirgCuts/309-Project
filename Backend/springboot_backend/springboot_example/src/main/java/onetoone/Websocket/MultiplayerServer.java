@@ -93,11 +93,15 @@ public class MultiplayerServer {
         ObjectMapper mapper = new ObjectMapper();
         // somehow split the username and board class
 
-        String name1 = mapper.readValue(message, String.class);
-//        String name2 = mapper.readValue(message, String.class);
-
+//        String name1 = mapper.readValue(message, String.class);
+////        String name2 = mapper.readValue(message, String.class);
+//
+//        User user1old = userRepository.findByName(name1);
+        CombinedJSON combined = mapper.readValue(message, CombinedJSON.class);
+        String name1 = combined.getName1();
+        String name2 = combined.getName2();
+        Board board1 = combined.getBoard();
         User user1old = userRepository.findByName(name1);
-        Board board1 = mapper.readValue(message, Board.class);
         // update the board state of user1 in backend
         user1old.setBoard(board1);
         userRepository.save(user1old);
