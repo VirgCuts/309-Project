@@ -201,14 +201,14 @@ public class ArtistController {
 
     // for study
     @GetMapping(path = "/artists/{name}/songs/{songName}")
-    Song getArtistHasSong( @PathVariable String name, @PathVariable String songName) {
+    String getArtistHasSong( @PathVariable String name, @PathVariable String songName) {
         Artist artist = artistRepository.findByName(name);
         List<Song> songList = artist.getSongs();
         for (int i = 0; i < songList.size(); i++) {
             if (songList.get(i).getSongName().equals(songName)) {
-                return songList.get(i);
+                return success;
             }
         }
-        return null;
+        return failure;
     }
 }
