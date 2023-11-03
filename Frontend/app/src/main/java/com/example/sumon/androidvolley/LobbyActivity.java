@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LobbyActivity extends AppCompatActivity implements OnClickListener {
-    private Button singlePlayer, multiPlayer;
+    private Button singlePlayer, multiPlayer, btnStudy;
     private Navigation navigationHelper;
 
     @Override
@@ -24,10 +24,12 @@ public class LobbyActivity extends AppCompatActivity implements OnClickListener 
 
         singlePlayer = (Button) findViewById(R.id.singlePlayer);
         multiPlayer = (Button) findViewById(R.id.multiPlayer);
+        btnStudy = (Button) findViewById(R.id.btnStudy);
 
         // button click listeners
         singlePlayer.setOnClickListener(this);
         multiPlayer.setOnClickListener(this);
+        btnStudy.setOnClickListener(this);
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
