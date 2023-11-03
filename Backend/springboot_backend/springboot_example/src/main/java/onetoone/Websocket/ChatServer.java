@@ -60,8 +60,10 @@ public class ChatServer {
 
         // server side log
         logger.info("[onOpen] " + username);
-
+        username = username.trim();
         User existingUser = userRepository.findByName(username);
+
+        logger.info("[onOpen] after userRepository");
 
         // Handle the case of a duplicate username
         if (usernameSessionMap.containsKey(username)) {
