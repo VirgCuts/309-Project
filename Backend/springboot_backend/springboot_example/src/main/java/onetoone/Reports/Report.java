@@ -26,7 +26,7 @@ public class Report {
     private Date sent = new Date();
 
     @ManyToOne
-    @JoinColumn(name = "reportedUser_id")
+    @JoinColumn(name = "reportedUser_id", referencedColumnName = "id")
     @JsonIgnore
     private User reportedUser;
 

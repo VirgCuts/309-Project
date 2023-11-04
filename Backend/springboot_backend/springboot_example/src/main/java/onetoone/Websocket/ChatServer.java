@@ -98,7 +98,6 @@ public class ChatServer {
                 // send to everyone in the chat
                 broadcast("User: " + username + " has joined the chat, but can't say anything because they've been bad.");
             }
-
         }
     }
 
@@ -241,6 +240,7 @@ public class ChatServer {
 
         // convert the list to a string
         StringBuilder sb = new StringBuilder();
+        sb.append("History\n");
         if(messages != null && messages.size() != 0) {
             for (Message message : messages) {
                 sb.append(message.getUserName() + ": " + message.getContent() + "\n");

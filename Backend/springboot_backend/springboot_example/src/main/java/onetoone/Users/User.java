@@ -24,6 +24,7 @@ public class User implements Comparator<User>, Comparable<User> {
     private int highScore;
     private boolean canChat;
     private int banStrikes;
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Report> reports;
 
     @Transient
