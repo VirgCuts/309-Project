@@ -32,6 +32,7 @@
         <activity android:name=".GameWebSockets"></activity>
         <activity android:name=".Navigation"></activity>
         <activity android:name=".SinglePlayerGame"></activity>
+        <activity android:name=".ReportUserActivity"></activity>
     </application>
 
 </manifest>
