@@ -20,6 +20,7 @@ public class User implements Comparator<User>, Comparable<User> {
     private String name;
     private String password;
     private int highScore;
+    private int highScoreTime;
     private boolean canChat;
     private int banStrikes;
 
@@ -38,6 +39,7 @@ public class User implements Comparator<User>, Comparable<User> {
         this.name = name;
         this.password = password;
         this.highScore = 0;
+        this.highScoreTime = 240;
         this.board = new Board();
         this.canChat = true;
         this.banStrikes = 0;
@@ -47,6 +49,7 @@ public class User implements Comparator<User>, Comparable<User> {
         this.name = name;
         this.password = "";
         this.highScore = highScore;
+        this.highScoreTime = 240;
         this.board = new Board();
         this.canChat = true;
         this.banStrikes = 0;
@@ -91,6 +94,14 @@ public class User implements Comparator<User>, Comparable<User> {
 
     public void setHighScore(int highScore){
         this.highScore = highScore;
+    }
+
+    public int getHighScoreTime(){
+        return highScore;
+    }
+
+    public void setHighScoreTime(int highScoreTime){
+        this.highScoreTime = highScoreTime;
     }
 
     public boolean getCanChat(){
