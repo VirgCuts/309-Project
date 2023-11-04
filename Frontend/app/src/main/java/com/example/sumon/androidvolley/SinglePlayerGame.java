@@ -379,17 +379,14 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     }
     private void setUpGameBoard(List<Map<String, String>> categories) {
         // Assuming you have a layout or a way to set categories to your game board
-        for (int i = 0; i < categories.size(); i++) {
-            Map<String, String> category = categories.get(i);
-            // Here, use the category map to set up your game board
-            row1.setText(category.get("text"));
-            row2.setText(category.get("text"));
-            row3.setText(category.get("text"));
-            col1.setText(category.get("text"));
-            col2.setText(category.get("text"));
-            col3.setText(category.get("text"));
+        row1.setText(categories.get(0).get("text"));
+        row2.setText(categories.get(1).get("text"));
+        row3.setText(categories.get(2).get("text"));
 
-        }
+        // Set up columns with the next three categories
+        col1.setText(categories.get(3).get("text"));
+        col2.setText(categories.get(4).get("text"));
+        col3.setText(categories.get(5).get("text"));
         // Indicate that categories are loaded and start the game
         categoriesLoaded = true;
         startGame();
