@@ -28,12 +28,25 @@ public class ReportController {
         return reportRepository.findByReportedUser(reportedUsername);
     }
 
-    @PostMapping(path = "/report/{username}/{reportedUsername}")
-    String makeReport(@PathVariable String username, @PathVariable String reportedUsername, @RequestBody String content) {
-        User user = userRepository.findByName(reportedUsername);
+    @PostMapping(path = "/report/{username}/{reported}")
+    String makeReport(@PathVariable String username, @PathVariable String reported, @RequestBody String reportInfo) {
+        int index;
+        String reportedUser;
+        String reportedMessage;
+        if (reported.contains("[DM from")) {
+            index = reported.indexOf(":");
+            int dmindex = reported.indexOf("m");
+            reportedUser = reported.substring(dmindex + 2, index - 1);
+            reportedMessage = reported.substring(index + 2);
+        } else {
+            index = reported.indexOf(":");
+            reportedUser = reported.substring(0, index);
+            reportedMessage = reported.substring(index + 2);
+        }
+        User user = userRepository.findByName(reportedUser);
         if (user == null)
             return failure;
-        Report report = new Report(username, reportedUsername, content);
+        Report report = new Report(username, reportedUser, reportedMessage, reportInfo);
         user.addReport(report);
         userRepository.save(user);
         return success;

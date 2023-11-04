@@ -21,6 +21,9 @@ public class Report {
     @Lob
     private String content;
 
+    @Lob
+    private String reportedMessage;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "sent")
     private Date sent = new Date();
@@ -32,10 +35,11 @@ public class Report {
 
     public Report() {};
 
-    public Report(String username, String reportedUsername, String content) {
+    public Report(String username, String reportedUsername, String content, String reportedMessage) {
         this.username = username;
         this.reportedUsername = reportedUsername;
         this.content = content;
+        this.reportedMessage = reportedMessage;
     }
 
     public String getUsername() {
