@@ -1,11 +1,11 @@
-package onetoone.Websocket;
+package onetoone.Reports;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import onetoone.Artists.Artist;
 
 import javax.persistence.*;
 import java.util.Date;
-
+import onetoone.Users.User;
 @Entity
 public class Report {
     @Id
@@ -13,10 +13,10 @@ public class Report {
     private Long id;
 
     @Column
-    private String userName;
+    private String username;
 
     @Column
-    private String reportedUserName;
+    private String reportedUsername;
 
     @Lob
     private String content;
@@ -26,32 +26,32 @@ public class Report {
     private Date sent = new Date();
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "reportedUser_id")
     @JsonIgnore
     private User reportedUser;
-    
+
     public Report() {};
 
-    public Report(String userName, String reportedUserName, String content) {
-        this.userName = userName;
-        this.reportedUserName = reportedUserName;
+    public Report(String username, String reportedUsername, String content) {
+        this.username = username;
+        this.reportedUsername = reportedUsername;
         this.content = content;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getReportedUserName() {
-        return reportedUserName;
+    public String getReportedUsername() {
+        return reportedUsername;
     }
 
-    public void setReportedUserName(String reportedUserName) {
-        this.reportedUserName = reportedUserName;
+    public void setReportedUsername(String reportedUsername) {
+        this.reportedUsername = reportedUsername;
     }
 
     public String getContent() {
@@ -68,5 +68,13 @@ public class Report {
 
     public void setSent(Date sent) {
         this.sent = sent;
+    }
+
+    public User getReportedUser() {
+        return reportedUser;
+    }
+
+    public void setReportedUser(User user) {
+        this.reportedUser = user;
     }
 }
