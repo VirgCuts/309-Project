@@ -50,35 +50,26 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     private Handler handler = new Handler();
     private int seconds = 240;
     private int points = 0;
-    private GameState gameState;
+
     private PlayerBoard playerBoard;
     private int correctGuesses = 0;
     private final int TOTAL_EDIT_TEXTS = 9;
-
-    private int[] cellIds;
-
-    private EditText[] allEditTexts;
-
     private RequestQueue queue;
-
     private EditText r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3;
-
     private TextView col1,col2,col3,row1,row2,row3;
-
-    String[] col;
-    String[] row;
     private boolean categoriesLoaded = false;
+    //Used for the categories. Stored in a String[][] format.
+    //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         queue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_player);
+        fetchCategories();
 
+        //Set up the player's grid
         r1c2 = findViewById(R.id.r1c2);
         r1c3 = findViewById(R.id.r1c3);
         r2c1 = findViewById(R.id.r2c1);
@@ -94,9 +85,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         row1 = findViewById(R.id.row1);
         row2 = findViewById(R.id.row2);
         row3 = findViewById(R.id.row3);
-
-
-        fetchCategories();
 
         r1c1.setText("");
         r1c2.setText("");
@@ -118,18 +106,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setEditTextListener(r3c2);
         setEditTextListener(r3c3);
 
-        allEditTexts = new EditText[9];
-        allEditTexts[0] = r1c1;
-        allEditTexts[1] = r1c2;
-        allEditTexts[2] = r1c3;
-        allEditTexts[3] = r2c1;
-        allEditTexts[4] = r2c2;
-        allEditTexts[5] = r2c3;
-        allEditTexts[6] = r3c1;
-        allEditTexts[7] = r3c2;
-        allEditTexts[8] = r3c3;
-
-
         playerBoard = new PlayerBoard();
 
         endGameButton = findViewById(R.id.endGameButton);
@@ -139,10 +115,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 endGame();
             }
         });
-
         timerTextView = findViewById(R.id.timer);
-
-
     }
 
 
@@ -173,21 +146,24 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         });
     }
     private void updatePlayerBoard(EditText editText, String answer) {
-        // Here, we'll determine the position of the editText and update the playerBoard.
-        // For simplicity, I'm assuming the EditTexts' ids are stored in an array.
-        int[] cellIds = {
-                R.id.r1c1, R.id.r1c2, R.id.r1c3,
-                R.id.r2c1, R.id.r2c2, R.id.r2c3,
-                R.id.r3c1, R.id.r3c2, R.id.r3c3
-        };
+        // Get the tag from the EditText, which contains the row and column information
+        String tag = (String) editText.getTag();
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if(cellIds[i * 3 + j] == editText.getId()) {
-                    playerBoard.edit(i, j, answer);
-                    return;
-                }
+        // Split the tag to separate row and column values
+        String[] parts = tag.split(",");
+        if (parts.length == 2) {
+            try {
+                // Parse the row and column from the tag
+                int row = Integer.parseInt(parts[0]) - 1; // Subtract 1 if your row/column indices start at 1
+                int column = Integer.parseInt(parts[1]) - 1; // Subtract 1 if your row/column indices start at 1
+
+                // Update the playerBoard with the answer at the specified row and column
+                playerBoard.edit(row, column, answer);
+            } catch (NumberFormatException e) {
+                Log.e("updatePlayerBoard", "Invalid tag format for EditText: " + tag, e);
             }
+        } else {
+            Log.e("updatePlayerBoard", "Tag on EditText does not contain both row and column information: " + tag);
         }
     }
     // Modified checkAnswer method with network call
@@ -225,8 +201,8 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             }
         });
 
-// Add the request to your RequestQueue
-// Assuming 'queue' is an instance of RequestQueue
+        // Add the request to your RequestQueue
+        // Assuming 'queue' is an instance of RequestQueue
         queue.add(stringRequest);
     }
 
