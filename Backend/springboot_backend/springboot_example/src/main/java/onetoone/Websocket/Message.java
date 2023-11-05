@@ -25,12 +25,15 @@ public class Message {
     @Column(name = "sent")
     private Date sent = new Date();
 
+    private int likes;
+
 
     public Message() {};
 
     public Message(String userName, String content) {
         this.userName = userName;
         this.content = content;
+        this.likes = 0;
     }
 
     public Long getId() {
@@ -65,6 +68,10 @@ public class Message {
         this.sent = sent;
     }
 
+    public int getLikes() {return likes;}
 
+    public void setLikes(int likes) {this.likes = likes;}
+    public void addLike() {this.likes++;}
+    public void removeLike() {this.likes--;}
 }
 

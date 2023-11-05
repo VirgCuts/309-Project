@@ -1,0 +1,78 @@
+<!-- layout/reports_activity.xml -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Button to get all reports -->
+    <Button
+        android:id="@+id/btnGetAllReports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get All Reports"/>
+
+    <!-- EditText for entering a username to get reports for a specific user -->
+    <EditText
+        android:layout_below="@+id/btnGetAllReports"
+        android:id="@+id/etUsernameForReport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter username"
+        android:inputType="textPersonName"/>
+
+    <!-- Button to get reports for a specific user -->
+    <Button
+        android:layout_below="@+id/etUsernameForReport"
+        android:id="@+id/btnGetUsersReports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Get User's Reports"/>
+    <EditText
+        android:id="@+id/username_inputban"
+        android:layout_below="@id/btnGetUsersReports"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:padding="10dp"
+        android:hint="Username"
+        android:background="#fff" />
+
+    <Button
+        android:id="@+id/ban_count"
+        android:layout_below="@+id/btnGetUsersReports"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/username_inputban"
+        android:background="?attr/colorPrimary"
+        android:padding="5dp"
+        android:text="Strikes"
+        android:textColor="#fff" />
+
+    <!-- ScrollView to contain the reports -->
+    <ScrollView
+        android:layout_below="@+id/ban_count"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/containerReports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:id="@+id/tvBanCount"
+                android:layout_below="@id/containerReports"/>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</RelativeLayout>
+
+
