@@ -86,6 +86,17 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/songGuess" />
+
+    <TextView
+        android:id="@+id/songGuessCorrect"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Please find an artist..."
+        android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/displayCorrectness" /> />
     <!--        tools:layout_editor_absoluteX="139dp"-->
     <!--        tools:layout_editor_absoluteY="355dp"-->
 </androidx.constraintlayout.widget.ConstraintLayout>

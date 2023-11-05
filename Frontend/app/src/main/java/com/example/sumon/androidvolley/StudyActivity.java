@@ -35,6 +35,9 @@ public class StudyActivity extends Activity {
     private TextView random;
 
     private TextView displayCorrect;
+    private TextView songGuessCorrect;
+    private int count = 0;
+    public int currentArtistLimit = 0;
 
     private String currentArtist;
     @Override
@@ -48,6 +51,7 @@ public class StudyActivity extends Activity {
         msgResponse = findViewById(R.id.songGuess);
         random = findViewById(R.id.artistName);
         displayCorrect = findViewById(R.id.displayCorrectness);
+        songGuessCorrect = findViewById(R.id.songGuessCorrect);
 
 //        pDialog = new ProgressDialog(this);
 //        pDialog.setMessage("Loading...");
@@ -62,12 +66,10 @@ public class StudyActivity extends Activity {
                     String songToSearch = msgResponse.getText().toString();
 
                     boolean checker = checkArtistSong(artistToSearch, songToSearch);
-//                    if (checker) {
-//                        displayCorrect.setText("Correct!");
-//                    }
-//                    else {
-//                        displayCorrect.setText("Incorrect");
-//                    }
+                    if (checker) {
+                        count++;
+                        songGuessCorrect.setText("Number correct: " + count + "/" + currentArtistLimit);
+                    }
 
                     return true; // Return true to indicate that the action has been handled
                 }
@@ -88,7 +90,6 @@ public class StudyActivity extends Activity {
     private void retrieveRandomArtist() {
 
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/random";
-//        String url = "http://localhost:8080/artists/random";
 
 
         JsonObjectRequest request = new JsonObjectRequest(
@@ -110,6 +111,7 @@ public class StudyActivity extends Activity {
                                 String albums = artistJson.getString("albums");
                                 random.setText("Your random artist is: " + name);
                                 currentArtist = name;
+                                currentArtistLimit = checkArtistSongNumber(name);
 //                                showToast("Name a song from this artist: " + name);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -128,6 +130,7 @@ public class StudyActivity extends Activity {
 
         // Add the request to the Volley request queue
         Volley.newRequestQueue(this).add(request);
+        count = 0;
     }
 
     private boolean checkArtistSong(String artist, String song) {
@@ -186,6 +189,47 @@ public class StudyActivity extends Activity {
         // Add the request to the Volley request queue
         Volley.newRequestQueue(this).add(request);
         return checker[0];
+    }
+
+    private int checkArtistSongNumber(String artist) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artist + "/songs/study";
+
+        final int[] numberSongs = {0};
+
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Handle the response from the server
+                        // Parse the JSON array to populate the leaderboardData list
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject artistJson = response;
+                                String message = artistJson.getString("numSongs");
+                                numberSongs[0] = Integer.parseInt(message);
+                                songGuessCorrect.setText("Number correct: 0/" + message);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error.getMessage());
+//                        showToast(error.getMessage());
+                    }
+                }
+        );
+
+        // Add the request to the Volley request queue
+        Volley.newRequestQueue(this).add(request);
+        return numberSongs[0];
     }
 
 //    private void showToast(String message) {
