@@ -89,10 +89,12 @@ class Main {
                                 Artist getter = hash.get(artist_name);
                                 getter.addSongs(song);
                                 song.setArtist(getter);
+                                artistRepository.save(getter);
                                 songRepository.save(song);
                             }
                         }
                     }
+
                 }
                 reader.close();
             }

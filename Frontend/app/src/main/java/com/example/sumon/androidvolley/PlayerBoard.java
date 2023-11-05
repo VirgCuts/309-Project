@@ -3,9 +3,9 @@ package com.example.sumon.androidvolley;
 public class PlayerBoard {
     private final int BOARD_SIZE = 3;
     private String[][] grid;
-    private String[] col;
+    private String[][] col;
 
-    private String[] row;
+    private String[][] row;
 
     public PlayerBoard() {
         grid = new String[BOARD_SIZE][BOARD_SIZE];
@@ -15,8 +15,8 @@ public class PlayerBoard {
                 grid[i][j] = "";
             }
         }
-        col = new String[3];
-        row = new String[3];
+        col = new String[3][4];
+        row = new String[3][4];
     }
 
     public PlayerBoard(PlayerBoard original) {
@@ -58,20 +58,26 @@ public class PlayerBoard {
         }
     }
 
-    public void editCol(int c, String value) {
-            col[c] = value;
+    public void editCol(int c, String text, String subject, String check, String keyword) {
+            col[c][0] = text;
+            col[c][1] = subject;
+            col[c][2] = check;
+            col[c][3] = keyword;
     }
 
-    public void editRow(int r, String value) {
-        row[r] = value;
+    public void editRow(int c, String text, String subject, String check, String keyword) {
+        row[c][0] = text;
+        row[c][1] = subject;
+        row[c][2] = check;
+        row[c][3] = keyword;
     }
 
-    public String getCol(int c) {
-        return col[c];
+    public String getCol(int co, int check) {
+        return col[co][check];
     }
 
-    public String getRow(int r) {
-        return row[r];
+    public String getRow(int ro, int check) {
+        return row[ro][check];
     }
 
 
