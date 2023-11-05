@@ -33,6 +33,7 @@
         <activity android:name=".Navigation"></activity>
         <activity android:name=".SinglePlayerGame"></activity>
         <activity android:name=".ReportUserActivity"></activity>
+        <activity android:name=".AdminActivity"></activity>
     </application>
 
 </manifest>
