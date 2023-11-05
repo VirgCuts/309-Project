@@ -47,6 +47,12 @@ public class UserController {
         return test;
     }
 
+    @GetMapping(path = "/leaderboard/{name}")
+    User getUserLeaderboardInfo(@PathVariable String name)
+    {
+        return userRepository.findByName(name);
+    }
+
     @PostMapping(path = "/leaderboard/{name}/{score}")
     String addUserLeaderboard(@PathVariable String name, @PathVariable int score)
     {
@@ -65,20 +71,14 @@ public class UserController {
         userRepository.save(user);
         return userRepository.findByName(name);
     }
-
-    @DeleteMapping(path = "/users/{id}")
-    String deleteUser(@PathVariable int id)
-    {
-        userRepository.deleteById(id);
-        return success;
-    }
-
+    
     @DeleteMapping(path = "/leaderboard/{name}")
     String deleteUser(@PathVariable String name)
     {
         userRepository.deleteByName(name);
         return success;
     }
+
 
     @PutMapping(path = "/canChat/{name}/true")
     String unbanUserFromChat(@PathVariable String name)
