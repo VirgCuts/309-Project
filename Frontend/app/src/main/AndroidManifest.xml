@@ -13,11 +13,11 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+           <intent-filter>-->
+               <action android:name="android.intent.action.MAIN" />
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+               <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".LobbyActivity"></activity>
         <activity android:name=".LeaderboardActivity"></activity>
@@ -32,15 +32,15 @@
         <activity android:name=".GameWebSockets"></activity>
         <activity android:name=".Navigation"></activity>
         <activity android:name=".SinglePlayerGame"></activity>
+<<<<<<< Frontend/app/src/main/AndroidManifest.xml
         <activity android:name=".MultiPlayerGame"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
+            
         </activity>
+=======
+        <activity android:name=".ReportUserActivity"></activity>
+        <activity android:name=".AdminActivity"></activity>
+>>>>>>> Frontend/app/src/main/AndroidManifest.xml
     </application>
 
 </manifest>
