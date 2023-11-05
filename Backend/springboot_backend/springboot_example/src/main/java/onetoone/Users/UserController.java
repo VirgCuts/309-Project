@@ -39,6 +39,7 @@ public class UserController {
         return success;
     }
 
+    //leaderboard mappings
     @GetMapping(path = "/leaderboard")
     List<User> getLeaderboard()
     {
@@ -67,6 +68,19 @@ public class UserController {
         return userRepository.findByName(name);
     }
 
+    @DeleteMapping(path = "/leaderboard/{name}")
+    String deleteUser(@PathVariable String name)
+    {
+        userRepository.deleteByName(name);
+        return success;
+    }
+
+    
+
+
+    //end of leaderboard mappings
+
+
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id)
     {
@@ -74,12 +88,7 @@ public class UserController {
         return success;
     }
 
-    @DeleteMapping(path = "/leaderboard/{name}")
-    String deleteUser(@PathVariable String name)
-    {
-        userRepository.deleteByName(name);
-        return success;
-    }
+
 
     @PutMapping(path = "/canChat/{name}/true")
     String unbanUserFromChat(@PathVariable String name)

@@ -131,6 +131,31 @@ public class User implements Comparator<User>, Comparable<User> {
         this.highScoreTimeWeekly = highScoreTimeWeekly;
     }
 
+    public void setAllHighScores(int highScore, int highScoreTime) {
+        if (this.highScore < highScore){
+            this.highScore = highScore;
+            this.highScoreTime = highScoreTime;
+        }
+        if (this.highScoreMonthly < highScore) {
+            this.highScoreMonthly = highScore;
+            this.highScoreTimeMonthly = highScoreTime;
+        }
+        if (this.highScoreWeekly < highScore) {
+            this.highScoreWeekly = highScore;
+            this.highScoreTimeWeekly = highScoreTime;
+        }
+    }
+
+    public void resetWeeklyScore() {
+        this.highScoreWeekly = 0;
+        this.highScoreTimeWeekly = 0;
+    }
+
+    public void resetMonthlyScore() {
+        this.highScoreMonthly = 0;
+        this.highScoreTimeMonthly = 0;
+    }
+
     public boolean getCanChat(){
         return canChat;
     }
