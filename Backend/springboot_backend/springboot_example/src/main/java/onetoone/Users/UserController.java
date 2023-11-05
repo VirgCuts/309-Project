@@ -110,4 +110,28 @@ public class UserController {
             return 0;
         return user.getBanStrikes();
     }
+
+
+    /*
+    Mapping for color related requests
+     */
+    @GetMapping(path = "/gameColor/{name}")
+    String getSelectedColor(@PathVariable String name)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return failure;
+        return "{\"color\":\"" + user.getSelectedColor() + "\"}";
+    }
+
+    @PutMapping(path = "/gameColor/{name}/{color}")
+    String setSelectedColor(@PathVariable String name, @PathVariable String color)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return failure;
+        user.setSelectedColor(color);
+        userRepository.save(user);
+        return success;
+    }
 }
