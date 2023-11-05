@@ -242,9 +242,9 @@ public class ShopActivity extends AppCompatActivity {
         }
     }
     public void buyColor(Button button, int cost, String color) {
-
         if(checkPoints(cost)) {
             changeBuyToSelect(button, color);
+            //addColorToUser(color);
             setSelectColor(color);
             getPurchased();
             setPurchased(color);
