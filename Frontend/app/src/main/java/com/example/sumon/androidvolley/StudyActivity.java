@@ -36,6 +36,7 @@ public class StudyActivity extends Activity {
 
     private TextView displayCorrect;
     private TextView songGuessCorrect;
+    private TextView songList;
     private int count = 0;
     public int currentArtistLimit = 0;
 
@@ -47,11 +48,13 @@ public class StudyActivity extends Activity {
 
 //        Button btnBack = findViewById(R.id.btnBack);
         Button getRandomButton = findViewById(R.id.button);
+        Button showAnswers = findViewById(R.id.showAllAnswers);
 
         msgResponse = findViewById(R.id.songGuess);
         random = findViewById(R.id.artistName);
         displayCorrect = findViewById(R.id.displayCorrectness);
         songGuessCorrect = findViewById(R.id.songGuessCorrect);
+        songList = findViewById(R.id.songList);
 
 //        pDialog = new ProgressDialog(this);
 //        pDialog.setMessage("Loading...");
@@ -81,6 +84,13 @@ public class StudyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 retrieveRandomArtist();
+            }
+        });
+        showAnswers.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                showAllAnswers(currentArtist);
             }
         });
     }
@@ -131,6 +141,41 @@ public class StudyActivity extends Activity {
         // Add the request to the Volley request queue
         Volley.newRequestQueue(this).add(request);
         count = 0;
+    }
+
+    private void showAllAnswers(String name) {
+
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + name + "/string/study";
+
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Handle the response from the server
+                        // Parse the JSON array to populate the leaderboardData list
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject artistJson = response;
+                                String list = artistJson.getString("list");
+                                songList.setText("The artists' songs are: " + list);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error.getMessage());
+//                        showToast(error.getMessage());
+                    }
+                }
+        );
     }
 
     private boolean checkArtistSong(String artist, String song) {
