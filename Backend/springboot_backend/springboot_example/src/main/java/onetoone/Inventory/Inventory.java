@@ -31,9 +31,17 @@ public class Inventory {
     }
 
     public String inventoryToString() {
-        return "{ \"orange\": " + this.orange + ", \"purple\": " + this.purple + ", \"lightblue\": " + this.lightblue + ", \"yellow\": " + this.yellow + ", \"magenta\": " + this.magenta + ", \"green\": " + this.green + " }";
+        return "" + this.orange + ", " + this.purple + ", " + this.lightblue + ", " + this.yellow + ", " + this.magenta + ", " + this.green;
     }
 
     public User getUser() { return this.user; }
-    public void setUser(User user) { this.user = user; }
+    public void setUser(User user) { this.user = user;}
+
+    public void setOrange(boolean orange) {this.orange = orange; }
+    public void setPurple(boolean purple) {this.purple = purple; }
+    public void setLightblue(boolean lightblue) {this.lightblue = lightblue; }
+    public void setYellow(boolean yellow) {this.yellow = yellow; }
+    public void setMagenta(boolean magenta) {this.magenta = magenta; }
+    public void setGreen(boolean green) {this.green = green; }
+
 }
