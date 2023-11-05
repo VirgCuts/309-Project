@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -49,33 +50,26 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     private Handler handler = new Handler();
     private int seconds = 240;
     private int points = 0;
-    private GameState gameState;
+
     private PlayerBoard playerBoard;
     private int correctGuesses = 0;
     private final int TOTAL_EDIT_TEXTS = 9;
-
-    private int[] cellIds;
-
-    private EditText[] allEditTexts;
-
     private RequestQueue queue;
-
     private EditText r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3;
-
     private TextView col1,col2,col3,row1,row2,row3;
-
-    String[] col;
-    String[] row;
     private boolean categoriesLoaded = false;
-
-
+    //Used for the categories. Stored in a String[][] format.
+    //Each category has [[text, subject, check, keyword],[...]]
+    List<Map<String, String>> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         queue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_player);
+        fetchCategories();
 
+        //Set up the player's grid
         r1c2 = findViewById(R.id.r1c2);
         r1c3 = findViewById(R.id.r1c3);
         r2c1 = findViewById(R.id.r2c1);
@@ -91,9 +85,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         row1 = findViewById(R.id.row1);
         row2 = findViewById(R.id.row2);
         row3 = findViewById(R.id.row3);
-
-
-        fetchCategories();
 
         r1c1.setText("");
         r1c2.setText("");
@@ -115,18 +106,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setEditTextListener(r3c2);
         setEditTextListener(r3c3);
 
-        allEditTexts = new EditText[9];
-        allEditTexts[0] = r1c1;
-        allEditTexts[1] = r1c2;
-        allEditTexts[2] = r1c3;
-        allEditTexts[3] = r2c1;
-        allEditTexts[4] = r2c2;
-        allEditTexts[5] = r2c3;
-        allEditTexts[6] = r3c1;
-        allEditTexts[7] = r3c2;
-        allEditTexts[8] = r3c3;
-
-
         playerBoard = new PlayerBoard();
 
         endGameButton = findViewById(R.id.endGameButton);
@@ -136,10 +115,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 endGame();
             }
         });
-
         timerTextView = findViewById(R.id.timer);
-
-
     }
 
 
@@ -170,27 +146,25 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         });
     }
     private void updatePlayerBoard(EditText editText, String answer) {
-        // Here, we'll determine the position of the editText and update the playerBoard.
-        // For simplicity, I'm assuming the EditTexts' ids are stored in an array.
-        int[] cellIds = {
-                R.id.r1c1, R.id.r1c2, R.id.r1c3,
-                R.id.r2c1, R.id.r2c2, R.id.r2c3,
-                R.id.r3c1, R.id.r3c2, R.id.r3c3
-        };
+        // Get the tag from the EditText, which contains the row and column information
+        String tag = (String) editText.getTag();
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if(cellIds[i * 3 + j] == editText.getId()) {
-                    playerBoard.edit(i, j, answer);
-                    return;
-                }
+        // Split the tag to separate row and column values
+        String[] parts = tag.split(",");
+        if (parts.length == 2) {
+            try {
+                // Parse the row and column from the tag
+                int row = Integer.parseInt(parts[0]) - 1; // Subtract 1 if your row/column indices start at 1
+                int column = Integer.parseInt(parts[1]) - 1; // Subtract 1 if your row/column indices start at 1
+
+                // Update the playerBoard with the answer at the specified row and column
+                playerBoard.edit(row, column, answer);
+            } catch (NumberFormatException e) {
+                Log.e("updatePlayerBoard", "Invalid tag format for EditText: " + tag, e);
             }
+        } else {
+            Log.e("updatePlayerBoard", "Tag on EditText does not contain both row and column information: " + tag);
         }
-    }
-    //CheckAnswer with no backend
-    public boolean checkAnswer(EditText editText, String userAnswer) {
-        String enteredText = editText.getText().toString().trim(); // Get the text entered in the EditText and remove leading/trailing spaces
-        return enteredText.equalsIgnoreCase(userAnswer); // Compare the entered text with the userAnswer (case-insensitive)
     }
 
     @Override
@@ -231,48 +205,8 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
         showWinnerDialog("User", playerBoard.getGrid());
     }
-    //SetEditText with no backend
-    private void setEditTextListener(final EditText editText) {
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                    // you may need a way to determine which answer to check against based on the EditText
-                    String tag = (String) editText.getTag();
-                    String[] parts = tag.split(",");
-                    int row = Integer.parseInt(parts[0]);
-                    int column = Integer.parseInt(parts[1]);
-                    String userAnswer = "1";
-
-                    if (checkAnswer(editText, userAnswer)) {
-                        updatePlayerBoard(editText, userAnswer);
-                        changeBoxColor(editText, true);
-                        editText.setEnabled(false);  // Disable the EditText
-                        correctGuesses++; // Increment the counter for correct answers
-                        if(correctGuesses == TOTAL_EDIT_TEXTS) {
-                            endGame();  // End the game if all answers are correct
-                        }
-                    } else {
-                        changeBoxColor(editText, false);
-                    }
-
-                    return true;  // Consume the event
-                }
-                return false;  // Let system handle the event
-            }
-        });
-    }
-    private String extractKeyword(String category) {
-        Pattern pattern = Pattern.compile("'(.*?)'");
-        Matcher matcher = pattern.matcher(category);
-        if (matcher.find()) {
-            return matcher.group(1); // This will return the word between the single quotes
-        }
-        return ""; // Return empty if no match is found
-    }
 
 
-    //NOTE: winnerBoard will be changed to a new custom class called Board
     private void showWinnerDialog(String winner, String[][] winnerBoard) {
         // Create and show the custom dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -344,7 +278,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     @Override
                     public void onResponse(String response) {
                         // Parse the response to a List of Maps to represent the JSON objects
-                        List<Map<String, String>> categories = parseCategories(response);
+                        categories = parseCategories(response);
                         // Use the fetched categories to set up the game
                         setUpGameBoard(categories);
                     }
@@ -406,5 +340,179 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             Timer(); // Start the timer
             setPoints(); // Set initial points
         }
+    }
+    // Update the setEditTextListener to use the new checkAnswer method with a callback
+    private void setEditTextListener(final EditText editText) {
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (event != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    // Get the relevant tag data
+                    String tag = (String) editText.getTag();
+                    String[] parts = tag.split(",");
+                    final int row = Integer.parseInt(parts[0]);
+                    final int column = Integer.parseInt(parts[1]);
+                    String check1 = "";
+                    String check2 = "";
+                    final String userAnswer = editText.getText().toString().trim();
+                    if(row == 1){
+                        check1 = categories.get(0).get("keyword");
+                    } else if (row == 2) {
+                        check1 = categories.get(1).get("keyword");
+                    }else if (row == 3){
+                        check1 = categories.get(2).get("keyword");
+                    }
+
+                    if(column == 1){
+                        check2 = categories.get(3).get("keyword");
+                    } else if (column == 2) {
+                        check2 = categories.get(4).get("keyword");
+                    }else if (column == 3){
+                        check2 = categories.get(5).get("keyword");
+                    }
+
+                    // Make the backend call and pass the callback
+                    checkIfArtistAndSongContains(userAnswer, check1, check2, new AnswerCheckCallback() {
+                        @Override
+                        public void onResult(boolean isCorrect) {
+                            if (isCorrect) {
+                                updatePlayerBoard(editText, userAnswer);
+                                changeBoxColor(editText, true);
+                                editText.setEnabled(false);  // Disable the EditText
+                                correctGuesses++; // Increment the counter for correct answers
+                                if(correctGuesses == TOTAL_EDIT_TEXTS) {
+                                    endGame();  // End the game if all answers are correct
+                                }
+                            } else {
+                                changeBoxColor(editText, false);
+                            }
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    // Define a callback interface for response handling
+    interface AnswerCheckCallback {
+        void onResult(boolean isCorrect);
+    }
+    // Modified checkAnswer method with network call
+    public void checkAnswer(String subject, String check, int col, int row) {
+        if (subject == "Artist"){
+            if(check == "with"){
+
+            } else if (check == "features") {
+
+            }
+        }
+        if(subject == "Artist"){
+            if(check == "features"){
+
+            }
+        }
+    }
+    public void checkAnswer(String subject, String subject2, String check, String check2, int col, int row){
+
+    }
+    private void checkIfArtistAndSongContains(String userAnswer, String check1, String check2, AnswerCheckCallback callback){
+        // Assuming 'userAnswer' contains the name to be checked
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + userAnswer + "/artist/" + check1 + "/songs/" + check2;
+        // Create a StringRequest for the network call
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            // Convert the response string to a JSONObject
+                            JSONObject jsonObject = new JSONObject(response);
+                            // Extract the message value
+                            String resultMessage = jsonObject.optString("message", "failure");
+                            // Check if the message indicates a success
+                            boolean result = "success".equalsIgnoreCase(resultMessage);
+                            // Invoke the callback with the result
+                            callback.onResult(result);
+                        } catch (JSONException e) {
+                            // If there's an error parsing the JSON, treat it as a failure
+                            callback.onResult(false);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Handle error, maybe invoke the callback with 'false'
+                callback.onResult(false);
+            }
+        });
+
+        // Add the request to your RequestQueue
+        // Assuming 'queue' is an instance of RequestQueue
+        queue.add(stringRequest);
+    }
+    private void checkArtistFeature(int artistId, String feature, AnswerCheckCallback callback ) { //Artist id will be changed
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artistId + "/features/" + feature; //Artist id will be changed
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            // Convert the response string to a JSONObject
+                            JSONObject jsonObject = new JSONObject(response);
+                            // Extract the message value
+                            String resultMessage = jsonObject.optString("message", "failure");
+                            // Check if the message indicates a success
+                            boolean result = "success".equalsIgnoreCase(resultMessage);
+                            // Invoke the callback with the result
+                            callback.onResult(result);
+                        } catch (JSONException e) {
+                            // If there's an error parsing the JSON, treat it as a failure
+                            callback.onResult(false);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Handle error, maybe invoke the callback with 'false'
+                callback.onResult(false);
+            }
+        });
+
+        // Add the request to your RequestQueue
+        // Assuming 'queue' is an instance of RequestQueue
+        queue.add(stringRequest);
+    }
+    private void checkIfArtistsHaveSongTogether(int artistId1, int artistId2, AnswerCheckCallback callback) { //Artist id will be changed
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artistId1 + "/artists2/" + artistId2; //Artist id will be changed
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            // Convert the response string to a JSONObject
+                            JSONObject jsonObject = new JSONObject(response);
+                            // Extract the message value
+                            String resultMessage = jsonObject.optString("message", "failure");
+                            // Check if the message indicates a success
+                            boolean result = "success".equalsIgnoreCase(resultMessage);
+                            // Invoke the callback with the result
+                            callback.onResult(result);
+                        } catch (JSONException e) {
+                            // If there's an error parsing the JSON, treat it as a failure
+                            callback.onResult(false);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Handle error, maybe invoke the callback with 'false'
+                callback.onResult(false);
+            }
+        });
+
+        // Add the request to your RequestQueue
+        // Assuming 'queue' is an instance of RequestQueue
+        queue.add(stringRequest);
     }
 }
