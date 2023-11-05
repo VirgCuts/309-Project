@@ -159,6 +159,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
 
                 // Update the playerBoard with the answer at the specified row and column
                 playerBoard.edit(row, column, answer);
+                Log.d("PLRBOR",playerBoard.toString());
             } catch (NumberFormatException e) {
                 Log.e("updatePlayerBoard", "Invalid tag format for EditText: " + tag, e);
             }
@@ -375,7 +376,9 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     checkIfArtistAndSongContains(userAnswer, check1, check2, new AnswerCheckCallback() {
                         @Override
                         public void onResult(boolean isCorrect) {
-                            if (isCorrect) {
+                            boolean correct = true;
+                            //change to isCorrect
+                            if (correct) {
                                 updatePlayerBoard(editText, userAnswer);
                                 changeBoxColor(editText, true);
                                 editText.setEnabled(false);  // Disable the EditText
