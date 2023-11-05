@@ -23,6 +23,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ShopActivity extends AppCompatActivity {
     private Navigation navigationHelper;
     private Button orange, purple, lightblue, yellow, magenta, green, white;
@@ -90,13 +95,67 @@ public class ShopActivity extends AppCompatActivity {
             }
         });
     }
-    //runs on startup to see if a color has been priorly purchased
-    public void checkPurchased() {
+    public void purchasedButtons(Array colorArr) {
+        //orange,purple,lightblue,yellow,magenta,green
+        String input = "false, false, true, true, false, false";
+        String[] substrings = input.split(",");
+        boolean[] booleanArray = new boolean[substrings.length];
 
+        for (int i = 0; i < substrings.length; i++) {
+            booleanArray[i] = Boolean.parseBoolean(substrings[i].trim());
+        }
+
+        // Print the boolean array to verify the result
+        for (boolean value : booleanArray) {
+            Log.d("VAL",Boolean.toString(value));
+        }
+    }
+    //runs on startup to see if a color has been priorly purchased
+    public void getPurchased() {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/inventory/"+User;
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("GETPUR",response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("GETURERR",error.toString());
+                    }
+                }
+        );
+        Volley.newRequestQueue(this).add(request);
     }
     //sends color to backend to notify that color is now owned by user
-    public void addColorToUser(String color) {
+    public void setPurchased(String color) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/inventory/"+User+"/" + color;
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.PUT,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("SETPUR",response.toString());
 
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("SETPURERR",error.toString());
+                    }
+                }
+        );
+        Volley.newRequestQueue(this).add(request);
     }
     //sends selected color to backend to notify that it is now the selected color
     public String getSelectColor() {
@@ -164,7 +223,6 @@ public class ShopActivity extends AppCompatActivity {
         balance = findViewById(R.id.balance);
         balance.setText("Balance: " + getBalance(User));
     }
-
     public boolean checkPoints(int neededPts) {
         if(bal < neededPts) {
             //throw some kinda indicator
@@ -180,7 +238,8 @@ public class ShopActivity extends AppCompatActivity {
             changeBuyToSelect(button, color);
             //addColorToUser(color);
             setSelectColor(color);
-
+            getPurchased();
+            setPurchased(color);
             if(button.getText().toString().equals("SELECT")) {
 
             }
@@ -192,7 +251,6 @@ public class ShopActivity extends AppCompatActivity {
         View view = findViewById(R.id.shop);
         Snackbar snackbar = Snackbar.make(view, "Your Current Color is - " + color, Snackbar.LENGTH_INDEFINITE);
         snackbar.show();
-        button.setText("Select");
     }
 
     @Override
