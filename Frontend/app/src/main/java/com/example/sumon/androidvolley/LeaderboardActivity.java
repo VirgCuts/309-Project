@@ -77,7 +77,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         leaderboardData = new ArrayList<>();
         adapter = new CustomAdapter(leaderboardData);
         leaderboardListView.setAdapter(adapter);
-        promptUsername();
         // Set up the ViewPager2 with the adapter
         viewPager.setAdapter(new ScreenSlidePagerAdapter(this));
 
@@ -139,34 +138,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         retrieveLeaderboardData("");
 
     }
-    // Method to show prompt and handle input
-    private void promptUsername() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Username");
 
-        final EditText inputField = new EditText(this);
-        inputField.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(inputField);
-
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String inputUsername = inputField.getText().toString();
-                // Use the username for something or store it in SharedPreferences if needed
-                // For example:
-                // getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit().putString(USERNAME_KEY, inputUsername).apply();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                // Handle what you want to do if the user cancels the input
-            }
-        });
-
-        builder.show();
-    }
     private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
         public ScreenSlidePagerAdapter(FragmentActivity fa) {
             super(fa);

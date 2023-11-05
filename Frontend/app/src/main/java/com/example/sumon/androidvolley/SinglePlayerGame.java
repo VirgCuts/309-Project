@@ -65,6 +65,8 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     private static final String PREFS_NAME = "LeaderboardPrefs";
     private static final String USERNAME_KEY = "username";
 
+    private String username = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +111,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setEditTextListener(r3c1);
         setEditTextListener(r3c2);
         setEditTextListener(r3c3);
+        username = getUsername(this);
 
+        Log.d("Username", username);
         playerBoard = new PlayerBoard();
 
         endGameButton = findViewById(R.id.endGameButton);
@@ -151,7 +155,12 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
     public String getUsername(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(USERNAME_KEY, null); // Return null or a default value if not found
+        String username = prefs.getString(USERNAME_KEY, null); // Return null if not found
+
+        // Debugging log
+        Log.d("SharedPreferences", "Retrieving username: " + username);
+
+        return username;
     }
     private void updatePlayerBoard(EditText editText, String answer) {
         // Get the tag from the EditText, which contains the row and column information
@@ -211,8 +220,8 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     @Override
     public void endGame() {
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
-        showWinnerDialog("User", playerBoard.getGrid());
-        addToLeaderboard("user", points);
+        showWinnerDialog(username, playerBoard.getGrid());
+        addToLeaderboard(username, points);
 
     }
 
@@ -274,6 +283,18 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 alertDialog.dismiss();
                 startActivity(new Intent(SinglePlayerGame.this,
                         MainActivity.class));
+            }
+        });
+
+        Button showScore = dialogView.findViewById(R.id.showScoreButton);
+        showScore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Restart your game here
+                correctGuesses = 0;
+                alertDialog.dismiss();
+                startActivity(new Intent(SinglePlayerGame.this,
+                        LeaderboardActivity.class));
             }
         });
     }
