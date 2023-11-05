@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity{
             markFirstRun();
         }
         String username = getUsername(this);
-        Log.d("Username", username);
 
     }
     // Method to show prompt and handle input
