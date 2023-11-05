@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -50,22 +51,24 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     private Button endGameButton;
     private Handler handler = new Handler();
     private int seconds = 240;
-    private int points = 0;
+    public int points = 0;
 
     private PlayerBoard playerBoard;
+    private sendBoard sendBoard;
     private int correctGuesses = 0;
     private final int TOTAL_EDIT_TEXTS = 9;
     private RequestQueue queue;
     private EditText r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3;
-
     private TextView o1,o2,o3,o4,o5,o6,o7,o8,o9;
-    private TextView col1,col2,col3,row1,row2,row3;
+    private TextView col1,col2,col3,row1,row2,row3, pointView;
     private boolean categoriesLoaded = false;
     //Used for the categories. Stored in a String[][] format.
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
     private String Player1 = "Carter", Player2 = "Conor";
     private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/multiplayer/";
+    private boolean end = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         row1 = findViewById(R.id.row1);
         row2 = findViewById(R.id.row2);
         row3 = findViewById(R.id.row3);
+        pointView = findViewById(R.id.Points);
 
         o1 = findViewById(R.id.o1);
         o2 = findViewById(R.id.o2);
@@ -132,7 +136,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         setEditTextListener(r3c3);
 
         playerBoard = new PlayerBoard();
-
+        sendBoard = new sendBoard();
         endGameButton = findViewById(R.id.endGameButton);
         endGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +144,6 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                 endGame();
             }
         });
-        timerTextView = findViewById(R.id.timer);
     }
 
 
@@ -184,7 +187,10 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
 
                 // Update the playerBoard with the answer at the specified row and column
                 playerBoard.edit(row, column, answer);
-                sendBoardState(playerBoard);
+                sendBoard.edit(row, column,answer);
+                points = points+100;
+                setPoints();
+                sendBoardState(sendBoard);
 
             } catch (NumberFormatException e) {
                 Log.e("updatePlayerBoard", "Invalid tag format for EditText: " + tag, e);
@@ -193,7 +199,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             Log.e("updatePlayerBoard", "Tag on EditText does not contain both row and column information: " + tag);
         }
     }
-    private void sendBoardState(PlayerBoard board) {
+    private void sendBoardState(sendBoard board) {
         try {
             // sends the edit text message
 
@@ -220,8 +226,10 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     }
 
     public void setPoints() {
-        TextView pointView = findViewById(R.id.Points);
-        pointView.setText("Points: "+ points);
+            TextView pointView = findViewById(R.id.Points);
+            pointView.setText("Points: "+ points);
+
+
     }
     @Override
     public void changeBoxColor(EditText editText, boolean isCorrect) {
@@ -247,27 +255,59 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         Animation flash = AnimationUtils.loadAnimation(this, R.anim.shake_and_flash_animation);
         editText.startAnimation(flash);
     }
+
     @Override
     public void endGame() {
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
-        showWinnerDialog("User", playerBoard.getGrid());
+        if(end) {
+            startActivity(new Intent(MultiPlayerGame.this,
+                    MainActivity.class));
+        }
+        else {
+            showWinnerDialog(Player1, playerBoard.getGrid());
+        }
+
+    }
+    private void turnOffEdit(EditText editText) {
+
+        editText.setFocusable(false);
+        editText.setFocusableInTouchMode(false);
+        editText.setClickable(false);
+        int semiTransparentRed = Color.argb(128, 255, 0, 0);
+        ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentRed, PorterDuff.Mode.SRC_ATOP);
+        editText.getBackground().mutate().setColorFilter(colorFilter);
+        animateFlash(editText);
     }
 
+    private void showLoserDialog(String loser) {
+        Log.d("LOSER", "Calling ENDGAME LOSER");
+        end = true;
+        pointView.setText("YOU LOSE- LPoints: " + points);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(r1c1.getWindowToken(), 0);
+        r1c1.clearFocus();
+        turnOffEdit(r1c1);
+        turnOffEdit(r1c2);
+        turnOffEdit(r1c3);
+        turnOffEdit(r2c1);
+        turnOffEdit(r2c2);
+        turnOffEdit(r2c3);
+        turnOffEdit(r3c1);
+        turnOffEdit(r3c2);
+        turnOffEdit(r3c3);
 
+    }
     private void showWinnerDialog(String winner, String[][] winnerBoard) {
         // Create and show the custom dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.end_game_popup, null);
+        View dialogView = inflater.inflate(R.layout.end_game_multi_popup, null);
         builder.setView(dialogView);
 
         // Set Winner Text
         TextView winnerText = dialogView.findViewById(R.id.winnerText);
         winnerText.setText("Player " + winner + " wins");  // Change 'Player X' dynamically based on game result
 
-        // Set Time Remaining Text
-        TextView timeRemainingText = dialogView.findViewById(R.id.timeRemainingText);
-        timeRemainingText.setText("Time Remaining: " + timerTextView.getText().toString());
 
         // Populate the winner's board grid
         int[] cellIds = {
@@ -373,6 +413,9 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         startGame();
     }
 
+    private void callEnd() {
+        showLoserDialog(Player1);
+    }
     private void showErrorDialog() {
         // Show an error dialog to the user
         new AlertDialog.Builder(this)
@@ -424,11 +467,19 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                             boolean correct = true;
                             //change to isCorrect
                             if (correct) {
-                                updatePlayerBoard(editText, userAnswer);
-                                changeBoxColor(editText, true);
-                                editText.setEnabled(false);  // Disable the EditText
-                                correctGuesses++; // Increment the counter for correct answers
+                                Log.d("EIND", String.valueOf(end));
+                                if(end) {
+                                    startActivity(new Intent(MultiPlayerGame.this,
+                                            MainActivity.class));
+                                }
+                                else {
+                                    updatePlayerBoard(editText, userAnswer);
+                                    changeBoxColor(editText, true);
+                                    editText.setEnabled(false);  // Disable the EditText
+                                    correctGuesses++; // Increment the counter for correct answers
+                                }
                                 if(correctGuesses == TOTAL_EDIT_TEXTS) {
+                                    WebSocketManager.getInstance().disconnectWebSocket();
                                     endGame();  // End the game if all answers are correct
                                 }
                             } else {
@@ -461,19 +512,45 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentGreen, PorterDuff.Mode.SRC_ATOP);
             textView.getBackground().mutate().setColorFilter(colorFilter);
         }
+        if(view == 8) {
+            callEnd();
+        }
     }
     @Override
     public void onWebSocketMessage(String message) {
         Log.d("RECIEVED", message);
-//        String[] boardValues = message.split(",");
-//
-//        for (int i =0; i < boardValues.length; i++) {
-//            if(Integer.parseInt(boardValues[i]) == 1) {
-//                changeOppColor(i);
-//            }
-//        }
+
+        try {
+            // Parse the JSON string
+            JSONObject jsonObject = new JSONObject(message);
+            Log.d("GAMIE",jsonObject.toString());
+            // Extract the "game" object
+            JSONArray gameS = jsonObject.getJSONArray("game");
+            //creates a string representation of the board to be changed
+            String boardGrid = gameS.toString();
+            Log.d("ARRIQ",boardGrid.toString());
+            //[[1,1,1],[1,1,0],[0,0,0]]
+            boardGrid = boardGrid.replace("[", "").replace("]", "");
+            Log.d("ARRCL",boardGrid);
+            //1,1,1,1,1,0,0,0,0
+
+            String[] boardValues = boardGrid.split(",");
+            int winTally = 0;
+            for (int i =0; i < boardValues.length; i++) {
+                if(Integer.parseInt(boardValues[i]) == 1) {
+                    changeOppColor(i);
+
+                }
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
     }
+
 
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {

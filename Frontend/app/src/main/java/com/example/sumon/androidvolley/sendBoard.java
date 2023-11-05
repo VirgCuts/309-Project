@@ -1,30 +1,43 @@
 package com.example.sumon.androidvolley;
 
-public class PlayerBoard {
+import android.util.Log;
+
+public class sendBoard {
     private final int BOARD_SIZE = 3;
-    public String[][] griddle;
-    private String[][] grid;
+    private String[][] griddle;
     private String[][] col;
 
     private String[][] row;
 
-    public PlayerBoard() {
-        grid = new String[BOARD_SIZE][BOARD_SIZE];
+    public sendBoard() {
+        griddle = new String[BOARD_SIZE][BOARD_SIZE];
         // Initialize the grid with empty strings
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                grid[i][j] = "";
+                if(j == 0) {
+                    griddle[i][j] = "[0,";
+                }
+                else if(i== 2 && j == 2) {
+                    griddle[i][j] = "0]";
+                }
+                else if(j == 2) {
+                    griddle[i][j] = "0],";
+                }
+                else {
+                    griddle[i][j] = "0,";
+                }
             }
         }
+
         col = new String[3][4];
         row = new String[3][4];
     }
 
-    public PlayerBoard(PlayerBoard original) {
-        this.grid = new String[BOARD_SIZE][BOARD_SIZE];
+    public sendBoard(PlayerBoard original) {
+        this.griddle = new String[BOARD_SIZE][BOARD_SIZE];
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                this.grid[i][j] = original.grid[i][j];
+                this.griddle[i][j] = original.griddle[i][j];
             }
         }
     }
@@ -38,7 +51,7 @@ public class PlayerBoard {
      */
     public String get(int row, int col) {
         if (isValidPosition(row, col)) {
-            return grid[row][col];
+            return griddle[row][col];
         }
         return null; // Or throw an exception
     }
@@ -50,9 +63,21 @@ public class PlayerBoard {
      * @param col - The column of the desired position.
      * @param value - The new value to set.
      */
+
     public void edit(int row, int col, String value) {
         if (isValidPosition(row, col)) {
-            grid[row][col] = value;
+            if(col == 0) {
+                griddle[row][col] = "[1,";
+            }
+            else if(row == 2 && col == 2) {
+                griddle[row][col] = "1]";
+            }
+            else if(col == 2) {
+                griddle[row][col] = "1],";
+            }
+            else {
+                griddle[row][col] = "1,";
+            }
         } else {
             // Handle invalid positions (e.g., throw an exception or print an error)
             System.out.println("Invalid position!");
@@ -94,7 +119,8 @@ public class PlayerBoard {
     }
 
     public String[][] getGrid() {
-        return grid;
+
+        return griddle;
     }
 
     @Override
@@ -102,7 +128,8 @@ public class PlayerBoard {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                sb.append(grid[i][j]).append(" ");
+                String newValue = griddle[i][j];
+                sb.append(newValue).append("");
             }
             sb.append("\n");
         }
