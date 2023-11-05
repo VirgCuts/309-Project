@@ -150,9 +150,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
         popupMenu.setOnMenuItemClickListener(item -> {
             String title = item.getTitle().toString();
-            if ("Like message".equals(title)) {
-                // Handle "like message" action
-            } else if ("Report user".equals(title)) {
+            if ("Report user".equals(title)) {
                 String messageContent = ((TextView) anchorView).getText().toString();
                 Intent intent = new Intent(this, ReportUserActivity.class);
                 // You can put extra data into the intent if needed, for example, the user ID to report
