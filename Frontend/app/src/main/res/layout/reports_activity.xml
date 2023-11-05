@@ -48,11 +48,18 @@
         android:padding="5dp"
         android:text="Strikes"
         android:textColor="#fff" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:id="@+id/tvBanCount"
+        android:layout_below="@id/username_inputban"/>
 
     <!-- ScrollView to contain the reports -->
     <ScrollView
-        android:layout_below="@+id/ban_count"
+        android:layout_below="@+id/tvBanCount"
         android:layout_width="match_parent"
+
         android:layout_height="300dp"
         android:layout_weight="1">
 
@@ -61,12 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:id="@+id/tvBanCount"
-                android:layout_below="@id/containerReports"/>
+
         </LinearLayout>
 
 
