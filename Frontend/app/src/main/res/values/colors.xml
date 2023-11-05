@@ -8,6 +8,13 @@
     <color name="backgroundColor">#12AFA6</color>
     <color name="buttonColor">#3F51B5</color>
     <color name="white">#FFFFFF</color>
+    <color name="boardColor">#FFFFFF</color>
+    <color name="boardColorO">#F86E2E</color>
+    <color name="boardColorP">#8800FF</color>
+    <color name="boardColorLB">#23A8D1</color>
+    <color name="boardColorY">#FFFF00</color>
+    <color name="boardColorM">#D724FF</color>
+    <color name="boardColorG">#17D501</color>
     <color name="edit_text_correct">#14CA00</color>
     <color name="edit_text_incorrect">#FF0000</color>
     <color name="edit_text_original">#FFFFFF</color>

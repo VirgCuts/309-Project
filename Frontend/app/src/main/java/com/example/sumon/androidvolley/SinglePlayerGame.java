@@ -68,6 +68,8 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     private String username = "";
 
 
+    private String Player1 = "Carter", selected="white";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         queue = Volley.newRequestQueue(this);
@@ -116,6 +118,8 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         Log.d("Username", username);
         playerBoard = new PlayerBoard();
 
+        getSelectColor();
+
         endGameButton = findViewById(R.id.endGameButton);
         endGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +128,106 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             }
         });
         timerTextView = findViewById(R.id.timer);
+    }
+    //calls to backend to see if player has a selected background gets string of color
+    public void getBackground(String color) {
+        Log.d("BCKCOL",color);
+        if(color.equals("orange")) {
+            changeBoardColor("orange");
+        }
+        else if(color.equals("purple")) {
+            changeBoardColor("purple");
+        }
+        else if(color.equals("lightblue")) {
+            changeBoardColor("lightblue");
+        }
+        else if(color.equals("yellow")) {
+            changeBoardColor("yellow");
+        }
+        else if(color.equals("magenta")) {
+            changeBoardColor("magenta");
+        }
+        else if(color.equals("green")) {
+            changeBoardColor("green");
+        }
+    }
+    public void getSelectColor() {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+Player1;
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("SINGLEGET",response.toString());
+                        String value = response.toString();
+                        String[] splitValue = value.split(":");
+                        value = splitValue[1];
+                        value = value.replace("}", "");
+                        value = value.replace("\"", "");
+                        Log.d("GET", value);
+                        getBackground(value);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("ERRGET",error.toString());
+
+                    }
+                }
+        );
+        Volley.newRequestQueue(this).add(request);
+    }
+    public void setBackColor(EditText editText, String color) {
+        if(color == "orange") {
+            int boardColor = getResources().getColor(R.color.boardColorO);
+            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
+            editText.getBackground().setColorFilter(colorFilter);
+
+        }
+        else if (color == "purple") {
+            int boardColor = getResources().getColor(R.color.boardColorP);
+            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
+            editText.getBackground().setColorFilter(colorFilter);
+        }
+        else if (color =="lightblue") {
+            int boardColor = getResources().getColor(R.color.boardColorLB);
+            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
+            editText.getBackground().setColorFilter(colorFilter);
+        }
+        else if (color == "yellow") {
+            int boardColor = getResources().getColor(R.color.boardColorY);
+            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
+            editText.getBackground().setColorFilter(colorFilter);
+        }
+        else if (color == "magenta") {
+            int boardColor = getResources().getColor(R.color.boardColorM);
+            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
+            editText.getBackground().setColorFilter(colorFilter);
+        }
+        else if (color == "green") {
+            int boardColor = getResources().getColor(R.color.boardColorG);
+            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
+            editText.getBackground().setColorFilter(colorFilter);
+        }
+    }
+    public void changeBoardColor(String color) {
+        setBackColor(r1c1, color);
+        setBackColor(r1c2, color);
+        setBackColor(r1c3, color);
+        setBackColor(r2c1, color);
+        setBackColor(r2c2, color);
+        setBackColor(r2c3, color);
+        setBackColor(r3c1, color);
+        setBackColor(r3c2, color);
+        setBackColor(r3c3, color);
+    }
+    public void changeOneColor(EditText editText, String color) {
+        setBackColor(editText, color);
     }
 
     @Override

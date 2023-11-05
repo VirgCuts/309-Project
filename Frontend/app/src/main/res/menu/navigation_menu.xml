@@ -27,7 +27,8 @@
 
     <item
         android:id="@+id/btnSettings"
-        android:title="To Settings" />
+        android:title="To Shop" />
+
     <item
         android:id="@+id/btnAdmin"
         android:title="To Admin" />
