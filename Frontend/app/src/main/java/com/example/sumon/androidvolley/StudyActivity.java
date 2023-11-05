@@ -145,7 +145,7 @@ public class StudyActivity extends Activity {
 
     private void showAllAnswers(String name) {
 
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + name + "/string/study";
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + name + "/songs/string/study";
 
 
         JsonObjectRequest request = new JsonObjectRequest(
@@ -162,6 +162,7 @@ public class StudyActivity extends Activity {
                                 JSONObject artistJson = response;
                                 String list = artistJson.getString("list");
                                 songList.setText("The artists' songs are: " + list);
+                                Log.d("List", list);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -176,6 +177,7 @@ public class StudyActivity extends Activity {
                     }
                 }
         );
+        Volley.newRequestQueue(this).add(request);
     }
 
     private boolean checkArtistSong(String artist, String song) {
