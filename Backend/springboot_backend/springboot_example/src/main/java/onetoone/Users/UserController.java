@@ -121,7 +121,7 @@ public class UserController {
         User user = userRepository.findByName(name);
         if (user == null)
             return failure;
-        return "{\"numSongs\":\"" + user.getSelectedColor() + "\"}";
+        return "{\"color\":\"" + user.getSelectedColor() + "\"}";
     }
 
     @PutMapping(path = "/gameColor/{name}/{color}")
