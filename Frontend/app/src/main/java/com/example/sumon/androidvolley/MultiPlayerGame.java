@@ -209,7 +209,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     "  }" +
                     "}";
             Log.d("SENDBOARD",boardState);
-            WebSocketManager.getInstance().sendMessage(board.toString());
+            WebSocketManager.getInstance().sendMessage(boardState);
         } catch (Exception e) {
             Log.d("ExceptionSendMessage:", e.getMessage().toString());
         }
