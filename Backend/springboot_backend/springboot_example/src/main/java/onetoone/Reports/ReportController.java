@@ -25,7 +25,7 @@ public class ReportController {
 
     @GetMapping(path = "/reports/{reportedUsername}")
     List<Report> getAllReportsForUser(@PathVariable String reportedUsername) {
-        return reportRepository.findByReportedUser(reportedUsername);
+        return reportRepository.findByReportedUsername(reportedUsername);
     }
 
     @PostMapping(path = "/report/{username}/{reported}")
