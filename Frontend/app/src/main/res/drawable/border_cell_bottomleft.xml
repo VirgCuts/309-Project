@@ -10,7 +10,7 @@
     <!-- Top border -->
     <item android:top="1dp" android:right="1dp" android:left="1dp" android:bottom="1dp">
         <shape android:shape="rectangle">
-            <solid android:color="#FFFFFF" />
+            <solid android:color="@color/boardColor" />
             <corners android:bottomLeftRadius="30dp" LeftRadius="30dp"/>
         </shape>
     </item>

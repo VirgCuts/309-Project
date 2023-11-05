@@ -64,9 +64,11 @@ public class Navigation {
                     case R.id.btnLobby:
                         activity.startActivity(new Intent(activity, LobbyActivity.class));
                         break;
+                        //change Later just to quickly add shop
                     case R.id.btnSettings:
-                        activity.startActivity(new Intent(activity, SettingsActivity.class));
+                        activity.startActivity(new Intent(activity, ShopActivity.class));
                         break;
+
 
                     default:
                         break;
