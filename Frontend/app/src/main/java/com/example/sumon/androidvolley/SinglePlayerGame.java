@@ -352,6 +352,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     String[] parts = tag.split(",");
                     final int row = Integer.parseInt(parts[0]);
                     final int column = Integer.parseInt(parts[1]);
+                    Log.d("Row, Column", String.valueOf(row) + String.valueOf(column));
                     String check1 = "";
                     String check2 = "";
                     final String userAnswer = editText.getText().toString().trim();
@@ -370,7 +371,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     }else if (column == 3){
                         check2 = categories.get(5).get("keyword");
                     }
-
+                    Log.d("keywords", check1 + check2);
                     // Make the backend call and pass the callback
                     checkIfArtistAndSongContains(userAnswer, check1, check2, new AnswerCheckCallback() {
                         @Override
@@ -380,11 +381,14 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                                 changeBoxColor(editText, true);
                                 editText.setEnabled(false);  // Disable the EditText
                                 correctGuesses++; // Increment the counter for correct answers
+                                points = points + 10;
                                 if(correctGuesses == TOTAL_EDIT_TEXTS) {
+                                    points = points + seconds;
                                     endGame();  // End the game if all answers are correct
                                 }
                             } else {
                                 changeBoxColor(editText, false);
+                                points = points - 5;
                             }
                         }
                     });
@@ -421,6 +425,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         // Assuming 'userAnswer' contains the name to be checked
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + userAnswer + "/artist/" + check1 + "/songs/" + check2;
         // Create a StringRequest for the network call
+        Log.d("URL",url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
