@@ -14,7 +14,7 @@ public class PlayerBoard {
         // Initialize the grid with empty strings
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                grid[i][j] = "";
+                grid[i][j] = "0,";
             }
         }
         col = new String[3][4];
@@ -53,7 +53,7 @@ public class PlayerBoard {
      */
     public void edit(int row, int col, String value) {
         if (isValidPosition(row, col)) {
-            grid[row][col] = "1";
+            grid[row][col] = "1,";
         } else {
             // Handle invalid positions (e.g., throw an exception or print an error)
             System.out.println("Invalid position!");
@@ -103,7 +103,8 @@ public class PlayerBoard {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                sb.append(grid[i][j]).append("0+");
+                String newValue = grid[i][j];
+                sb.append(newValue).append("");
             }
             sb.append("\n");
         }

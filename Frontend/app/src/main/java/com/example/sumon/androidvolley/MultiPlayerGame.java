@@ -31,6 +31,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,7 +45,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class MultiPlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface {
+public class MultiPlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface,WebSocketListener {
     private TextView timerTextView;
     private Button endGameButton;
     private Handler handler = new Handler();
@@ -56,11 +57,15 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     private final int TOTAL_EDIT_TEXTS = 9;
     private RequestQueue queue;
     private EditText r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3;
+
+    private TextView o1,o2,o3,o4,o5,o6,o7,o8,o9;
     private TextView col1,col2,col3,row1,row2,row3;
     private boolean categoriesLoaded = false;
     //Used for the categories. Stored in a String[][] format.
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
+    private String Player1 = "Carter", Player2 = "Conor";
+    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/multiplayer/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +73,15 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         super.onCreate(savedInstanceState);
         setContentView(R.layout.multi_player);
         fetchCategories();
+//
+        String serverUrl = BASE_URL + Player1;
+        Log.d("URL", "URL is " + serverUrl);
 
+        // Establish WebSocket connection and set listener
+        WebSocketManager.getInstance().connectWebSocket(serverUrl);
+        WebSocketManager.getInstance().setWebSocketListener(MultiPlayerGame.this);
+
+        //
         //Set up the player's grid
         r1c2 = findViewById(R.id.r1c2);
         r1c3 = findViewById(R.id.r1c3);
@@ -85,6 +98,18 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         row1 = findViewById(R.id.row1);
         row2 = findViewById(R.id.row2);
         row3 = findViewById(R.id.row3);
+
+        o1 = findViewById(R.id.o1);
+        o2 = findViewById(R.id.o2);
+        o3 = findViewById(R.id.o3);
+        o4 = findViewById(R.id.o4);
+        o5 = findViewById(R.id.o5);
+        o6 = findViewById(R.id.o6);
+        o7 = findViewById(R.id.o7);
+        o8 = findViewById(R.id.o8);
+        o9 = findViewById(R.id.o9);
+
+
 
         r1c1.setText("");
         r1c2.setText("");
@@ -159,7 +184,8 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
 
                 // Update the playerBoard with the answer at the specified row and column
                 playerBoard.edit(row, column, answer);
-                Log.d("PLRBOR",playerBoard.toString());
+                sendBoardState(playerBoard);
+
             } catch (NumberFormatException e) {
                 Log.e("updatePlayerBoard", "Invalid tag format for EditText: " + tag, e);
             }
@@ -167,7 +193,15 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             Log.e("updatePlayerBoard", "Tag on EditText does not contain both row and column information: " + tag);
         }
     }
-
+    private void sendBoardState(PlayerBoard board) {
+        try {
+            // sends the edit text message
+            Log.d("SENDBOARD",board.toString());
+            WebSocketManager.getInstance().sendMessage(board.toString());
+        } catch (Exception e) {
+            Log.d("ExceptionSendMessage:", e.getMessage().toString());
+        }
+    }
     @Override
     public void setBoxText(TextView textView, String text) {
         textView.setText(text);
@@ -338,7 +372,6 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     }
     private void startGame() {
         if (categoriesLoaded) {
-            Timer(); // Start the timer
             setPoints(); // Set initial points
         }
     }
@@ -396,6 +429,48 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onWebSocketOpen(ServerHandshake handshakedata) {
+
+    }
+    //changes the colors of the o1-09 squares to reflect what the opponent has answered correctly
+    private void changeOppColor(int view) {
+        String textViewID = "o" + (view + 1); // Add 1 to match your 0-8 input
+
+        int textViewResID = getResources().getIdentifier(textViewID, "id", getPackageName());
+
+        // Check if the resource was found
+        if (textViewResID != 0) {
+            TextView textView = findViewById(textViewResID);
+
+            int semiTransparentGreen = Color.argb(128, 0, 255, 0);
+            ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentGreen, PorterDuff.Mode.SRC_ATOP);
+            textView.getBackground().mutate().setColorFilter(colorFilter);
+        }
+    }
+    @Override
+    public void onWebSocketMessage(String message) {
+        Log.d("RECIEVED", message);
+        String[] boardValues = message.split(",");
+
+        for (int i =0; i < boardValues.length; i++) {
+            if(Integer.parseInt(boardValues[i]) == 1) {
+                changeOppColor(i);
+            }
+        }
+
+    }
+
+    @Override
+    public void onWebSocketClose(int code, String reason, boolean remote) {
+
+    }
+
+    @Override
+    public void onWebSocketError(Exception ex) {
+
     }
 
     // Define a callback interface for response handling

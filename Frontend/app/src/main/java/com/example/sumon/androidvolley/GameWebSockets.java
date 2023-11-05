@@ -18,8 +18,7 @@ public class GameWebSockets extends AppCompatActivity implements WebSocketListen
     private EditText usernameEtx;
     private TextView msgTv;
 
-    private String Player1, Player2 = "Conor", boardState;
-
+    private String Player1 = "Carter", Player2 = "Conor", boardState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +31,6 @@ public class GameWebSockets extends AppCompatActivity implements WebSocketListen
         usernameEtx = (EditText) findViewById(R.id.username_input);
         msgTv = (TextView) findViewById(R.id.chatMessage);
 
-//        boardState = "[[true, true, true]," +
-//                     "[true, true, true]," +
-//                     "[true, true, true]]";
           boardState = "";
         /* connect button listener */
         connectBtn.setOnClickListener(view -> {
