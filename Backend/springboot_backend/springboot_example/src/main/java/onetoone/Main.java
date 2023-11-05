@@ -1,5 +1,6 @@
 package onetoone;
 
+import onetoone.Reports.ReportRepository;
 import onetoone.Websocket.MessageRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -45,7 +46,7 @@ class Main {
      * As mentioned in User.java just associating the Laptop object with the User will save it into the database because of the CascadeType
      */
     @Bean
-    CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository, AlbumRepository albumRepository, MessageRepository messageRepository) {
+    CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository, AlbumRepository albumRepository, MessageRepository messageRepository, ReportRepository reportRepository) {
         return args -> {
             userRepository.deleteAllInBatch();
             Album album1 = new Album("Graduation", "Rap");
@@ -88,10 +89,12 @@ class Main {
                                 Artist getter = hash.get(artist_name);
                                 getter.addSongs(song);
                                 song.setArtist(getter);
+                                artistRepository.save(getter);
                                 songRepository.save(song);
                             }
                         }
                     }
+
                 }
                 reader.close();
             }

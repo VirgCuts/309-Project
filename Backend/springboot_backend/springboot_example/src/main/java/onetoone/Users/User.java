@@ -2,10 +2,12 @@ package onetoone.Users;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import onetoone.Reports.Report;
 import onetoone.Songs.Song;
 
 import javax.persistence.*;
 import java.util.Comparator;
+import java.util.List;
 
 @Entity
 public class User implements Comparator<User>, Comparable<User> {
@@ -22,6 +24,8 @@ public class User implements Comparator<User>, Comparable<User> {
     private int highScore;
     private boolean canChat;
     private int banStrikes;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Report> reports;
 
     @Transient
     public Board board;
@@ -104,6 +108,12 @@ public class User implements Comparator<User>, Comparable<User> {
     public int getBanStrikes() { return this.banStrikes; }
 
     public void setBanStrikes(int banStrikes) { this.banStrikes = banStrikes; }
+
+    public List<Report> getReports() { return this.reports; }
+
+    public void setReports(List<Report> reports) { this.reports = reports; }
+
+    public void addReport(Report report) {this.reports.add(report); }
 
     @Override
     public int compareTo(User o) {
