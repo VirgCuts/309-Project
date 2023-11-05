@@ -113,8 +113,6 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         o8 = findViewById(R.id.o8);
         o9 = findViewById(R.id.o9);
 
-
-
         r1c1.setText("");
         r1c2.setText("");
         r1c3.setText("");
@@ -464,9 +462,8 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     checkIfArtistAndSongContains(userAnswer, check1, check2, new AnswerCheckCallback() {
                         @Override
                         public void onResult(boolean isCorrect) {
-                            boolean correct = true;
                             //change to isCorrect
-                            if (correct) {
+                            if (isCorrect) {
                                 Log.d("EIND", String.valueOf(end));
                                 if(end) {
                                     startActivity(new Intent(MultiPlayerGame.this,
