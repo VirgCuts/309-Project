@@ -48,6 +48,12 @@ public class UserController {
         return test;
     }
 
+    @GetMapping(path = "/leaderboard/{name}")
+    User getUserLeaderboardInfo(@PathVariable String name)
+    {
+        return userRepository.findByName(name);
+    }
+
     @PostMapping(path = "/leaderboard/{name}/{score}")
     String addUserLeaderboard(@PathVariable String name, @PathVariable int score)
     {
@@ -119,5 +125,29 @@ public class UserController {
         if (user == null)
             return 0;
         return user.getBanStrikes();
+    }
+
+
+    /*
+    Mapping for color related requests
+     */
+    @GetMapping(path = "/gameColor/{name}")
+    String getSelectedColor(@PathVariable String name)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return failure;
+        return "{\"color\":\"" + user.getSelectedColor() + "\"}";
+    }
+
+    @PutMapping(path = "/gameColor/{name}/{color}")
+    String setSelectedColor(@PathVariable String name, @PathVariable String color)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return failure;
+        user.setSelectedColor(color);
+        userRepository.save(user);
+        return success;
     }
 }

@@ -10,7 +10,6 @@ import java.net.URI;
 /**
  * Singleton WebSocketManager instance used for managing WebSocket connections
  * in the Android application.
- *
  * This instance ensures that there is only one WebSocketManager throughout
  * the application's lifecycle, allowing for centralized WebSocket handling.
  */

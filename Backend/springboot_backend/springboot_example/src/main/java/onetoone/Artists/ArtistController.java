@@ -217,4 +217,24 @@ public class ArtistController {
         }
         return failure;
     }
+
+    @GetMapping(path = "/artists/{name}/songs/study")
+    String getArtistSongNumber( @PathVariable String name) {
+        Artist artist = artistRepository.findByName(name);
+        int returner = artist.getSongs().size();
+        return "{\"numSongs\":\"" + returner + "\"}";
+    }
+
+    @GetMapping(path = "/artists/{name}/songs/string/study")
+    String getArtistSongsStringForm( @PathVariable String name) {
+        Artist artist = artistRepository.findByName(name);
+        List<Song> songList = artist.getSongs();
+        String returner = "";
+        for (int i = 0; i < songList.size() - 1; i++) {
+            returner = returner + songList.get(i).getSongName() + ", ";
+        }
+        returner = returner + songList.get(songList.size() - 1).getSongName();
+        return "{\"list\":\"" + returner + "\"}";
+    }
 }
+
