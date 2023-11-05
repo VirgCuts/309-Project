@@ -3,6 +3,7 @@ package com.example.sumon.androidvolley;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
@@ -61,6 +62,11 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     //Used for the categories. Stored in a String[][] format.
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
+    private static final String PREFS_NAME = "LeaderboardPrefs";
+    private static final String USERNAME_KEY = "username";
+
+    private String username = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +111,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setEditTextListener(r3c1);
         setEditTextListener(r3c2);
         setEditTextListener(r3c3);
+        username = getUsername(this);
 
+        Log.d("Username", username);
         playerBoard = new PlayerBoard();
 
         endGameButton = findViewById(R.id.endGameButton);
@@ -117,7 +125,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         });
         timerTextView = findViewById(R.id.timer);
     }
-
 
     @Override
     public void Timer() {
@@ -144,6 +151,16 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 handler.postDelayed(this, 1000); // Call this Runnable after 1 second delay
             }
         });
+    }
+
+    public String getUsername(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String username = prefs.getString(USERNAME_KEY, null); // Return null if not found
+
+        // Debugging log
+        Log.d("SharedPreferences", "Retrieving username: " + username);
+
+        return username;
     }
     private void updatePlayerBoard(EditText editText, String answer) {
         // Get the tag from the EditText, which contains the row and column information
@@ -203,7 +220,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     @Override
     public void endGame() {
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
-        showWinnerDialog("User", playerBoard.getGrid());
+        showWinnerDialog(username, playerBoard.getGrid());
+        addToLeaderboard(username, points);
+
     }
 
 
@@ -221,6 +240,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         // Set Time Remaining Text
         TextView timeRemainingText = dialogView.findViewById(R.id.timeRemainingText);
         timeRemainingText.setText("Time Remaining: " + timerTextView.getText().toString());
+
+        TextView pointsText = dialogView.findViewById(R.id.pointsTextView);
+        pointsText.setText("Points: " + String.valueOf(points));
 
         // Populate the winner's board grid
         int[] cellIds = {
@@ -247,6 +269,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         TextView cell6 = dialogView.findViewById(R.id.Row3);
         cell6.setText(row3.getText());
 
+
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
@@ -260,6 +283,18 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 alertDialog.dismiss();
                 startActivity(new Intent(SinglePlayerGame.this,
                         MainActivity.class));
+            }
+        });
+
+        Button showScore = dialogView.findViewById(R.id.showScoreButton);
+        showScore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Restart your game here
+                correctGuesses = 0;
+                alertDialog.dismiss();
+                startActivity(new Intent(SinglePlayerGame.this,
+                        LeaderboardActivity.class));
             }
         });
     }
@@ -279,6 +314,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     public void onResponse(String response) {
                         // Parse the response to a List of Maps to represent the JSON objects
                         categories = parseCategories(response);
+                        Log.d("Categories", response);
                         // Use the fetched categories to set up the game
                         setUpGameBoard(categories);
                     }
@@ -312,6 +348,11 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         return categoryList;
     }
     private void setUpGameBoard(List<Map<String, String>> categories) {
+        if (categories == null || categories.size() < 6) {
+            Log.e("setUpGameBoard", "Categories have not been loaded properly.");
+            showErrorDialog();
+            return;
+        }
         // Assuming you have a layout or a way to set categories to your game board
         row1.setText(categories.get(0).get("text"));
         row2.setText(categories.get(1).get("text"));
@@ -381,14 +422,17 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                                 changeBoxColor(editText, true);
                                 editText.setEnabled(false);  // Disable the EditText
                                 correctGuesses++; // Increment the counter for correct answers
-                                points = points + 10;
+                                points = points + 15;
+                                setPoints();
                                 if(correctGuesses == TOTAL_EDIT_TEXTS) {
                                     points = points + seconds;
+                                    setPoints();
                                     endGame();  // End the game if all answers are correct
                                 }
                             } else {
                                 changeBoxColor(editText, false);
                                 points = points - 5;
+                                setPoints();
                             }
                         }
                     });
@@ -520,4 +564,40 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         // Assuming 'queue' is an instance of RequestQueue
         queue.add(stringRequest);
     }
+    private void addToLeaderboard(String username, int score) {
+        // URL of the API to add a new player
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + username + "/" + score;
+
+        try {
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("name", username);
+            requestBody.put("highScore", score);
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    requestBody,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            // Handle the response from the server (if needed)
+                            // Create a new PlayerData object and add it to your leaderboardData list
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }
+            );
+
+            // Add the request to the Volley request queue
+            Volley.newRequestQueue(this).add(request);
+        } catch (JSONException e) {
+
+        }
+    }
+
 }
