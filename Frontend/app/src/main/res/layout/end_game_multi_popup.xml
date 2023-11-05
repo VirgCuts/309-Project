@@ -11,24 +11,15 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textSize="20sp"
-        android:paddingTop="20dp"
+        android:padding="20dp"
         android:text="Player X wins!"
-        android:layout_marginBottom="10dp" />
-    <TextView
-        android:id="@+id/pointsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/winnerText"
-        android:text="Points: "
-        android:textSize="18sp"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_marginBottom="20dp" />
     <TextView
         android:id="@+id/timeRemainingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pointsTextView"
-        android:text="Time Remaining: "
+        android:layout_below="@+id/winnerText"
+        android:text=""
         android:textSize="18sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp" />
@@ -68,27 +59,13 @@
         <TextView android:layout_width="80dp" android:layout_height="80dp" android:gravity="center" android:text="R3C3" android:id="@+id/r3c3" android:background="@drawable/border_cell_bottomright"/>
 
     </GridLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/winnerGrid"
-        android:gravity="center_horizontal"
-        >
+
     <Button
         android:id="@+id/restartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
         android:text="Restart"
+        android:layout_below="@+id/winnerGrid"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"/>
-    <Button
-        android:id="@+id/showScoreButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show Score"
-        android:layout_toLeftOf="@+id/restartButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
-    </RelativeLayout>
 </RelativeLayout>

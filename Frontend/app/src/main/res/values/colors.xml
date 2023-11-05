@@ -18,6 +18,9 @@
     <color name="edit_text_correct">#14CA00</color>
     <color name="edit_text_incorrect">#FF0000</color>
     <color name="edit_text_original">#FFFFFF</color>
+    <color name="light_gray">#B1B1B1</color>
+    <color name="alternateButtonColor">#7135FF</color>
+    <color name="correctColor">#EA6500</color>
 
 
 </resources>

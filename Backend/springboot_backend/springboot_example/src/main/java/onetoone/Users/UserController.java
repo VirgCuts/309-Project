@@ -39,12 +39,19 @@ public class UserController {
         return success;
     }
 
+    //leaderboard mappings
     @GetMapping(path = "/leaderboard")
     List<User> getLeaderboard()
     {
         List<User> test = userRepository.findAll();
         test.sort(User::compareTo);
         return test;
+    }
+
+    @GetMapping(path = "/leaderboard/{name}")
+    User getUserLeaderboardInfo(@PathVariable String name)
+    {
+        return userRepository.findByName(name);
     }
 
     @PostMapping(path = "/leaderboard/{name}/{score}")
@@ -61,16 +68,10 @@ public class UserController {
         User user = userRepository.findByName(name);
         if (user == null)
             return null;
-        user.setHighScore(score);
+        if (user.getHighScore() < score)
+            user.setHighScore(score);
         userRepository.save(user);
         return userRepository.findByName(name);
-    }
-
-    @DeleteMapping(path = "/users/{id}")
-    String deleteUser(@PathVariable int id)
-    {
-        userRepository.deleteById(id);
-        return success;
     }
 
     @DeleteMapping(path = "/leaderboard/{name}")
@@ -79,6 +80,16 @@ public class UserController {
         userRepository.deleteByName(name);
         return success;
     }
+    //end of leaderboard mappings
+
+    @DeleteMapping(path = "/users/{id}")
+    String deleteUser(@PathVariable int id)
+    {
+        userRepository.deleteById(id);
+        return success;
+    }
+
+
 
     @PutMapping(path = "/canChat/{name}/true")
     String unbanUserFromChat(@PathVariable String name)
@@ -109,5 +120,29 @@ public class UserController {
         if (user == null)
             return 0;
         return user.getBanStrikes();
+    }
+
+
+    /*
+    Mapping for color related requests
+     */
+    @GetMapping(path = "/gameColor/{name}")
+    String getSelectedColor(@PathVariable String name)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return failure;
+        return "{\"color\":\"" + user.getSelectedColor() + "\"}";
+    }
+
+    @PutMapping(path = "/gameColor/{name}/{color}")
+    String setSelectedColor(@PathVariable String name, @PathVariable String color)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return failure;
+        user.setSelectedColor(color);
+        userRepository.save(user);
+        return success;
     }
 }

@@ -29,6 +29,10 @@
         android:id="@+id/btnSettings"
         android:title="To Shop" />
 
+    <item
+        android:id="@+id/btnAdmin"
+        android:title="To Admin" />
+
 <!--    <Button-->
 <!--        android:id="@+id/btnleaderboard"-->
 <!--        android:layout_width="fill_parent"-->

@@ -3,7 +3,6 @@ package com.example.sumon.androidvolley;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
@@ -13,6 +12,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,6 +32,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,38 +46,45 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class SinglePlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface {
+public class MultiPlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface,WebSocketListener {
     private TextView timerTextView;
     private Button endGameButton;
     private Handler handler = new Handler();
     private int seconds = 240;
-    private int points = 0;
+    public int points = 0;
 
     private PlayerBoard playerBoard;
+    private sendBoard sendBoard;
     private int correctGuesses = 0;
     private final int TOTAL_EDIT_TEXTS = 9;
     private RequestQueue queue;
     private EditText r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3;
-    private TextView col1,col2,col3,row1,row2,row3;
+    private TextView o1,o2,o3,o4,o5,o6,o7,o8,o9;
+    private TextView col1,col2,col3,row1,row2,row3, pointView;
     private boolean categoriesLoaded = false;
     //Used for the categories. Stored in a String[][] format.
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
-    private static final String PREFS_NAME = "LeaderboardPrefs";
-    private static final String USERNAME_KEY = "username";
+    private String Player1 = "Carter", Player2 = "Conor";
+    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/multiplayer/";
+    private boolean end = false;
 
-    private String username = "";
-
-
-    private String Player1 = "Carter", selected="white";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         queue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.single_player);
+        setContentView(R.layout.multi_player);
         fetchCategories();
+//
+        String serverUrl = BASE_URL + Player1;
+        Log.d("URL", "URL is " + serverUrl);
 
+        // Establish WebSocket connection and set listener
+        WebSocketManager.getInstance().connectWebSocket(serverUrl);
+        WebSocketManager.getInstance().setWebSocketListener(MultiPlayerGame.this);
+
+        //
         //Set up the player's grid
         r1c2 = findViewById(R.id.r1c2);
         r1c3 = findViewById(R.id.r1c3);
@@ -93,6 +101,17 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         row1 = findViewById(R.id.row1);
         row2 = findViewById(R.id.row2);
         row3 = findViewById(R.id.row3);
+        pointView = findViewById(R.id.Points);
+
+        o1 = findViewById(R.id.o1);
+        o2 = findViewById(R.id.o2);
+        o3 = findViewById(R.id.o3);
+        o4 = findViewById(R.id.o4);
+        o5 = findViewById(R.id.o5);
+        o6 = findViewById(R.id.o6);
+        o7 = findViewById(R.id.o7);
+        o8 = findViewById(R.id.o8);
+        o9 = findViewById(R.id.o9);
 
         r1c1.setText("");
         r1c2.setText("");
@@ -113,13 +132,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setEditTextListener(r3c1);
         setEditTextListener(r3c2);
         setEditTextListener(r3c3);
-        username = getUsername(this);
 
-        Log.d("Username", username);
         playerBoard = new PlayerBoard();
-
-        getSelectColor();
-
+        sendBoard = new sendBoard();
         endGameButton = findViewById(R.id.endGameButton);
         endGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,108 +142,8 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 endGame();
             }
         });
-        timerTextView = findViewById(R.id.timer);
     }
-    //calls to backend to see if player has a selected background gets string of color
-    public void getBackground(String color) {
-        Log.d("BCKCOL",color);
-        if(color.equals("orange")) {
-            changeBoardColor("orange");
-        }
-        else if(color.equals("purple")) {
-            changeBoardColor("purple");
-        }
-        else if(color.equals("lightblue")) {
-            changeBoardColor("lightblue");
-        }
-        else if(color.equals("yellow")) {
-            changeBoardColor("yellow");
-        }
-        else if(color.equals("magenta")) {
-            changeBoardColor("magenta");
-        }
-        else if(color.equals("green")) {
-            changeBoardColor("green");
-        }
-    }
-    public void getSelectColor() {
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+Player1;
 
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("SINGLEGET",response.toString());
-                        String value = response.toString();
-                        String[] splitValue = value.split(":");
-                        value = splitValue[1];
-                        value = value.replace("}", "");
-                        value = value.replace("\"", "");
-                        Log.d("GET", value);
-                        getBackground(value);
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("ERRGET",error.toString());
-
-                    }
-                }
-        );
-        Volley.newRequestQueue(this).add(request);
-    }
-    public void setBackColor(EditText editText, String color) {
-        if(color == "orange") {
-            int boardColor = getResources().getColor(R.color.boardColorO);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-
-        }
-        else if (color == "purple") {
-            int boardColor = getResources().getColor(R.color.boardColorP);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-        }
-        else if (color =="lightblue") {
-            int boardColor = getResources().getColor(R.color.boardColorLB);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-        }
-        else if (color == "yellow") {
-            int boardColor = getResources().getColor(R.color.boardColorY);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-        }
-        else if (color == "magenta") {
-            int boardColor = getResources().getColor(R.color.boardColorM);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-        }
-        else if (color == "green") {
-            int boardColor = getResources().getColor(R.color.boardColorG);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-        }
-    }
-    public void changeBoardColor(String color) {
-        setBackColor(r1c1, color);
-        setBackColor(r1c2, color);
-        setBackColor(r1c3, color);
-        setBackColor(r2c1, color);
-        setBackColor(r2c2, color);
-        setBackColor(r2c3, color);
-        setBackColor(r3c1, color);
-        setBackColor(r3c2, color);
-        setBackColor(r3c3, color);
-    }
-    public void changeOneColor(EditText editText, String color) {
-        setBackColor(editText, color);
-    }
 
     @Override
     public void Timer() {
@@ -256,16 +171,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             }
         });
     }
-
-    public String getUsername(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String username = prefs.getString(USERNAME_KEY, null); // Return null if not found
-
-        // Debugging log
-        Log.d("SharedPreferences", "Retrieving username: " + username);
-
-        return username;
-    }
     private void updatePlayerBoard(EditText editText, String answer) {
         // Get the tag from the EditText, which contains the row and column information
         String tag = (String) editText.getTag();
@@ -280,6 +185,11 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
                 // Update the playerBoard with the answer at the specified row and column
                 playerBoard.edit(row, column, answer);
+                sendBoard.edit(row, column,answer);
+                points = points+100;
+                setPoints();
+                sendBoardState(sendBoard);
+
             } catch (NumberFormatException e) {
                 Log.e("updatePlayerBoard", "Invalid tag format for EditText: " + tag, e);
             }
@@ -287,15 +197,37 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             Log.e("updatePlayerBoard", "Tag on EditText does not contain both row and column information: " + tag);
         }
     }
+    private void sendBoardState(sendBoard board) {
+        try {
+            // sends the edit text message
 
+            String boardState = "{" +
+                    "  \"name1\": \""+ Player1 + "\"," +
+                    "  \"name2\": \""+ Player2 + "\"," +
+                    "  \"board\": {" +
+                    "    \"game\": [" +
+                    board.toString() +
+                    "    ]," +
+                    "    \"won\": false," +
+                    "    \"score\": 0" +
+                    "  }" +
+                    "}";
+            Log.d("SENDBOARD",boardState);
+            WebSocketManager.getInstance().sendMessage(boardState);
+        } catch (Exception e) {
+            Log.d("ExceptionSendMessage:", e.getMessage().toString());
+        }
+    }
     @Override
     public void setBoxText(TextView textView, String text) {
         textView.setText(text);
     }
 
     public void setPoints() {
-        TextView pointView = findViewById(R.id.Points);
-        pointView.setText("Points: "+ points);
+            TextView pointView = findViewById(R.id.Points);
+            pointView.setText("Points: "+ points);
+
+
     }
     @Override
     public void changeBoxColor(EditText editText, boolean isCorrect) {
@@ -321,32 +253,59 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         Animation flash = AnimationUtils.loadAnimation(this, R.anim.shake_and_flash_animation);
         editText.startAnimation(flash);
     }
+
     @Override
     public void endGame() {
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
-        showWinnerDialog(username, playerBoard.getGrid());
-        addToLeaderboard(username, points);
+        if(end) {
+            startActivity(new Intent(MultiPlayerGame.this,
+                    MainActivity.class));
+        }
+        else {
+            showWinnerDialog(Player1, playerBoard.getGrid());
+        }
 
     }
+    private void turnOffEdit(EditText editText) {
 
+        editText.setFocusable(false);
+        editText.setFocusableInTouchMode(false);
+        editText.setClickable(false);
+        int semiTransparentRed = Color.argb(128, 255, 0, 0);
+        ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentRed, PorterDuff.Mode.SRC_ATOP);
+        editText.getBackground().mutate().setColorFilter(colorFilter);
+        animateFlash(editText);
+    }
 
+    private void showLoserDialog(String loser) {
+        Log.d("LOSER", "Calling ENDGAME LOSER");
+        end = true;
+        pointView.setText("YOU LOSE- LPoints: " + points);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(r1c1.getWindowToken(), 0);
+        r1c1.clearFocus();
+        turnOffEdit(r1c1);
+        turnOffEdit(r1c2);
+        turnOffEdit(r1c3);
+        turnOffEdit(r2c1);
+        turnOffEdit(r2c2);
+        turnOffEdit(r2c3);
+        turnOffEdit(r3c1);
+        turnOffEdit(r3c2);
+        turnOffEdit(r3c3);
+
+    }
     private void showWinnerDialog(String winner, String[][] winnerBoard) {
         // Create and show the custom dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.end_game_popup, null);
+        View dialogView = inflater.inflate(R.layout.end_game_multi_popup, null);
         builder.setView(dialogView);
 
         // Set Winner Text
         TextView winnerText = dialogView.findViewById(R.id.winnerText);
         winnerText.setText("Player " + winner + " wins");  // Change 'Player X' dynamically based on game result
 
-        // Set Time Remaining Text
-        TextView timeRemainingText = dialogView.findViewById(R.id.timeRemainingText);
-        timeRemainingText.setText("Time Remaining: " + timerTextView.getText().toString());
-
-        TextView pointsText = dialogView.findViewById(R.id.pointsTextView);
-        pointsText.setText("Points: " + String.valueOf(points));
 
         // Populate the winner's board grid
         int[] cellIds = {
@@ -373,7 +332,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         TextView cell6 = dialogView.findViewById(R.id.Row3);
         cell6.setText(row3.getText());
 
-
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
@@ -385,20 +343,8 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 // Restart your game here
                 correctGuesses = 0;
                 alertDialog.dismiss();
-                startActivity(new Intent(SinglePlayerGame.this,
+                startActivity(new Intent(MultiPlayerGame.this,
                         MainActivity.class));
-            }
-        });
-
-        Button showScore = dialogView.findViewById(R.id.showScoreButton);
-        showScore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Restart your game here
-                correctGuesses = 0;
-                alertDialog.dismiss();
-                startActivity(new Intent(SinglePlayerGame.this,
-                        LeaderboardActivity.class));
             }
         });
     }
@@ -418,7 +364,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     public void onResponse(String response) {
                         // Parse the response to a List of Maps to represent the JSON objects
                         categories = parseCategories(response);
-                        Log.d("Categories", response);
                         // Use the fetched categories to set up the game
                         setUpGameBoard(categories);
                     }
@@ -452,11 +397,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         return categoryList;
     }
     private void setUpGameBoard(List<Map<String, String>> categories) {
-        if (categories == null || categories.size() < 6) {
-            Log.e("setUpGameBoard", "Categories have not been loaded properly.");
-            showErrorDialog();
-            return;
-        }
         // Assuming you have a layout or a way to set categories to your game board
         row1.setText(categories.get(0).get("text"));
         row2.setText(categories.get(1).get("text"));
@@ -471,6 +411,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         startGame();
     }
 
+    private void callEnd() {
+        showLoserDialog(Player1);
+    }
     private void showErrorDialog() {
         // Show an error dialog to the user
         new AlertDialog.Builder(this)
@@ -482,7 +425,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     }
     private void startGame() {
         if (categoriesLoaded) {
-            Timer(); // Start the timer
             setPoints(); // Set initial points
         }
     }
@@ -497,7 +439,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     String[] parts = tag.split(",");
                     final int row = Integer.parseInt(parts[0]);
                     final int column = Integer.parseInt(parts[1]);
-                    Log.d("Row, Column", String.valueOf(row) + String.valueOf(column));
                     String check1 = "";
                     String check2 = "";
                     final String userAnswer = editText.getText().toString().trim();
@@ -516,27 +457,30 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     }else if (column == 3){
                         check2 = categories.get(5).get("keyword");
                     }
-                    Log.d("keywords", check1 + check2);
+
                     // Make the backend call and pass the callback
                     checkIfArtistAndSongContains(userAnswer, check1, check2, new AnswerCheckCallback() {
                         @Override
                         public void onResult(boolean isCorrect) {
+                            //change to isCorrect
                             if (isCorrect) {
-                                updatePlayerBoard(editText, userAnswer);
-                                changeBoxColor(editText, true);
-                                editText.setEnabled(false);  // Disable the EditText
-                                correctGuesses++; // Increment the counter for correct answers
-                                points = points + 15;
-                                setPoints();
+                                Log.d("EIND", String.valueOf(end));
+                                if(end) {
+                                    startActivity(new Intent(MultiPlayerGame.this,
+                                            MainActivity.class));
+                                }
+                                else {
+                                    updatePlayerBoard(editText, userAnswer);
+                                    changeBoxColor(editText, true);
+                                    editText.setEnabled(false);  // Disable the EditText
+                                    correctGuesses++; // Increment the counter for correct answers
+                                }
                                 if(correctGuesses == TOTAL_EDIT_TEXTS) {
-                                    points = points + seconds;
-                                    setPoints();
+                                    WebSocketManager.getInstance().disconnectWebSocket();
                                     endGame();  // End the game if all answers are correct
                                 }
                             } else {
                                 changeBoxColor(editText, false);
-                                points = points - 5;
-                                setPoints();
                             }
                         }
                     });
@@ -545,6 +489,74 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onWebSocketOpen(ServerHandshake handshakedata) {
+
+    }
+    //changes the colors of the o1-09 squares to reflect what the opponent has answered correctly
+    private void changeOppColor(int view) {
+        String textViewID = "o" + (view + 1); // Add 1 to match your 0-8 input
+
+        int textViewResID = getResources().getIdentifier(textViewID, "id", getPackageName());
+
+        // Check if the resource was found
+        if (textViewResID != 0) {
+            TextView textView = findViewById(textViewResID);
+
+            int semiTransparentGreen = Color.argb(128, 0, 255, 0);
+            ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentGreen, PorterDuff.Mode.SRC_ATOP);
+            textView.getBackground().mutate().setColorFilter(colorFilter);
+        }
+        if(view == 8) {
+            callEnd();
+        }
+    }
+    @Override
+    public void onWebSocketMessage(String message) {
+        Log.d("RECIEVED", message);
+
+        try {
+            // Parse the JSON string
+            JSONObject jsonObject = new JSONObject(message);
+            Log.d("GAMIE",jsonObject.toString());
+            // Extract the "game" object
+            JSONArray gameS = jsonObject.getJSONArray("game");
+            //creates a string representation of the board to be changed
+            String boardGrid = gameS.toString();
+            Log.d("ARRIQ",boardGrid.toString());
+            //[[1,1,1],[1,1,0],[0,0,0]]
+            boardGrid = boardGrid.replace("[", "").replace("]", "");
+            Log.d("ARRCL",boardGrid);
+            //1,1,1,1,1,0,0,0,0
+
+            String[] boardValues = boardGrid.split(",");
+            int winTally = 0;
+            for (int i =0; i < boardValues.length; i++) {
+                if(Integer.parseInt(boardValues[i]) == 1) {
+                    changeOppColor(i);
+
+                }
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    @Override
+    public void onWebSocketClose(int code, String reason, boolean remote) {
+
+    }
+
+    @Override
+    public void onWebSocketError(Exception ex) {
+
     }
 
     // Define a callback interface for response handling
@@ -573,7 +585,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         // Assuming 'userAnswer' contains the name to be checked
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + userAnswer + "/artist/" + check1 + "/songs/" + check2;
         // Create a StringRequest for the network call
-        Log.d("URL",url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -668,40 +679,4 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         // Assuming 'queue' is an instance of RequestQueue
         queue.add(stringRequest);
     }
-    private void addToLeaderboard(String username, int score) {
-        // URL of the API to add a new player
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + username + "/" + score;
-
-        try {
-            JSONObject requestBody = new JSONObject();
-            requestBody.put("name", username);
-            requestBody.put("highScore", score);
-
-            JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url,
-                    requestBody,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            // Handle the response from the server (if needed)
-                            // Create a new PlayerData object and add it to your leaderboardData list
-
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    }
-            );
-
-            // Add the request to the Volley request queue
-            Volley.newRequestQueue(this).add(request);
-        } catch (JSONException e) {
-
-        }
-    }
-
 }

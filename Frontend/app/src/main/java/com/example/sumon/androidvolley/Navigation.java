@@ -68,6 +68,9 @@ public class Navigation {
                     case R.id.btnSettings:
                         activity.startActivity(new Intent(activity, ShopActivity.class));
                         break;
+                    case R.id.btnAdmin:
+                        activity.startActivity(new Intent(activity, AdminActivity.class));
+                        break;
 
 
                     default:
