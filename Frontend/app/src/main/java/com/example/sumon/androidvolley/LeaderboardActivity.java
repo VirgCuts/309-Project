@@ -99,15 +99,24 @@ public class LeaderboardActivity extends AppCompatActivity {
                     }
                 }).attach();
 
-        // Handle item click on the ListView
         leaderboardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedItemPosition = position;
-                inputEditText.setText(leaderboardData.get(position).getUsername());
+
+
+                // Find the TextViews where you want to display the rank and score.
+                TextView playerRankTextView = findViewById(R.id.playerRankTextView);
+                TextView playerScoreTextView = findViewById(R.id.playerScoreTextView);
+
+                // Get the selected player data.
+                PlayerData selectedPlayer = leaderboardData.get(position);
+
+                // Update the TextViews with the selected player's rank and score.
+                playerRankTextView.setText(String.format("%d", position + 1));
+                playerScoreTextView.setText(String.format("%d", selectedPlayer.getScore()));
             }
         });
-
         // Retrieve the current leaderboard data from the API using Volley
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
