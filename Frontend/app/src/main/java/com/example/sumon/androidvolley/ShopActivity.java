@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -30,10 +31,10 @@ import java.util.regex.Pattern;
 
 public class ShopActivity extends AppCompatActivity {
     private Navigation navigationHelper;
-    private Button orange, purple, lightblue, yellow, magenta, green, white;
+    private Button orange, purple, lightblue, yellow, magenta, green, white, refresh;
     private TextView balance;
     private int bal = 10000;
-    private String User = "Carter",selected;
+    private String User = "Carter",selected, purchased = "false, false, false, false, false, false";
 
 
     @Override
@@ -51,6 +52,8 @@ public class ShopActivity extends AppCompatActivity {
         magenta = findViewById(R.id.magenta);
         green = findViewById(R.id.green);
         white = findViewById(R.id.white);
+        refresh = findViewById(R.id.refresh);
+        getPurchased();
         selected = getSelectColor();
         orange.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +97,13 @@ public class ShopActivity extends AppCompatActivity {
                 buyColor(white, 0, "none");
             }
         });
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateButtons();
+            }
+        });
+        updateButtons();
     }
     public void purchasedButtons(Array colorArr) {
         //orange,purple,lightblue,yellow,magenta,green
@@ -114,25 +124,23 @@ public class ShopActivity extends AppCompatActivity {
     public void getPurchased() {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/inventory/"+User;
 
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
-                url,
-                null,
-                new Response.Listener<JSONObject>() {
+        // StringRequest for fetching a string response from the given URL
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("GETPUR",response.toString());
+                    public void onResponse(String response) {
+                        Log.d("GETPUR", response);
+                        purchased = response;
 
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("GETURERR",error.toString());
-                    }
-                }
-        );
-        Volley.newRequestQueue(this).add(request);
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("GETURERR",error.toString());
+            }
+        });
+
+        Volley.newRequestQueue(this).add(stringRequest);
     }
     //sends color to backend to notify that color is now owned by user
     public void setPurchased(String color) {
@@ -234,18 +242,59 @@ public class ShopActivity extends AppCompatActivity {
         }
     }
     public void buyColor(Button button, int cost, String color) {
+
         if(checkPoints(cost)) {
             changeBuyToSelect(button, color);
-            //addColorToUser(color);
             setSelectColor(color);
             getPurchased();
             setPurchased(color);
-            if(button.getText().toString().equals("SELECT")) {
-
-            }
+            updateButtons();
         }
 
+    }
 
+    public void updateButtons() {
+        String[] splitPur = purchased.split(",");
+        Log.d("SPLITBOARD", splitPur[0]+ splitPur[1] + splitPur[2] + splitPur[3] + splitPur[4]+ splitPur[5]);
+
+        if(splitPur[0].equals("true")) {
+            setBought("orange");
+        }
+        if (splitPur[1].equals(" true")) {
+            setBought("purple");
+        }
+        if (splitPur[2].equals(" true")) {
+            setBought("lightblue");
+        }
+        if (splitPur[3].equals(" true")) {
+            setBought("yellow");
+        }
+        if (splitPur[4].equals(" true")) {
+            setBought("magenta");
+        }
+        if (splitPur[5].equals(" true")) {
+            setBought("green");
+        }
+    }
+    public void setBought(String purchased) {
+            if(purchased.equals("orange")) {
+                orange.setText("Select");
+            }
+            if(purchased.equals("purple")) {
+                purple.setText("Select");
+            }
+             if(purchased.equals("lightblue")) {
+                lightblue.setText("Select");
+            }
+             if(purchased.equals("yellow")) {
+                yellow.setText("Select");
+            }
+             if(purchased.equals("magenta")) {
+                magenta.setText("Select");
+            }
+             if(purchased.equals("green")) {
+                green.setText("Select");
+            }
     }
     public void changeBuyToSelect(Button button, String color) {
         View view = findViewById(R.id.shop);

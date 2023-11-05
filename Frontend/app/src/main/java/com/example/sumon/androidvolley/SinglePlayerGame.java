@@ -217,6 +217,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setBackColor(r3c2, color);
         setBackColor(r3c3, color);
     }
+    public void changeOneColor(EditText editText, String color) {
+        setBackColor(editText, color);
+    }
 
     @Override
     public void Timer() {
