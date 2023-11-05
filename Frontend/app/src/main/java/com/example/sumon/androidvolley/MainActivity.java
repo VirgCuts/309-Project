@@ -24,7 +24,9 @@ public class MainActivity extends AppCompatActivity {
         navigationHelper = new Navigation(this);
         navigationHelper.setupNavigation();
         // Removed the first run check and prompt
-        String username = getUsername(this);
+        if (getUsername(this) == null) {
+            promptUsername();
+        }
     }
 
     @Override
