@@ -20,7 +20,11 @@ public class User implements Comparator<User>, Comparable<User> {
     private String name;
     private String password;
     private int highScore;
+    private int highScoreMonthly;
+    private int highScoreWeekly;
     private int highScoreTime;
+    private int highScoreTimeMonthly;
+    private int highScoreTimeWeekly;
     private boolean canChat;
     private int banStrikes;
 
@@ -39,7 +43,11 @@ public class User implements Comparator<User>, Comparable<User> {
         this.name = name;
         this.password = password;
         this.highScore = 0;
-        this.highScoreTime = 240;
+        this.highScoreTime = 0;
+        this.highScoreMonthly = 0;
+        this.highScoreTimeMonthly = 0;
+        this.highScoreWeekly = 0;
+        this.highScoreTimeWeekly = 0;
         this.board = new Board();
         this.canChat = true;
         this.banStrikes = 0;
@@ -49,7 +57,11 @@ public class User implements Comparator<User>, Comparable<User> {
         this.name = name;
         this.password = "";
         this.highScore = highScore;
-        this.highScoreTime = 240;
+        this.highScoreTime = 0;
+        this.highScoreMonthly = 0;
+        this.highScoreTimeMonthly = 0;
+        this.highScoreWeekly = 0;
+        this.highScoreTimeWeekly = 0;
         this.board = new Board();
         this.canChat = true;
         this.banStrikes = 0;
@@ -102,6 +114,21 @@ public class User implements Comparator<User>, Comparable<User> {
 
     public void setHighScoreTime(int highScoreTime){
         this.highScoreTime = highScoreTime;
+    }
+    public int getHighScoreTimeMontly(){
+        return highScoreMonthly;
+    }
+
+    public void setHighScoreTimeMonthly(int highScoreTimeMonthly){
+        this.highScoreTimeMonthly = highScoreTimeMonthly;
+    }
+
+    public int getHighScoreTimeWeekly(){
+        return highScoreWeekly;
+    }
+
+    public void setHighScoreTimeWeekly(int highScoreTimeWeekly){
+        this.highScoreTimeWeekly = highScoreTimeWeekly;
     }
 
     public boolean getCanChat(){

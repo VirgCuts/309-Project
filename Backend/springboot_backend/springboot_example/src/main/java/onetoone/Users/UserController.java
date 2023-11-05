@@ -61,7 +61,8 @@ public class UserController {
         User user = userRepository.findByName(name);
         if (user == null)
             return null;
-        user.setHighScore(score);
+        if (user.getHighScore() < score)
+            user.setHighScore(score);
         userRepository.save(user);
         return userRepository.findByName(name);
     }
