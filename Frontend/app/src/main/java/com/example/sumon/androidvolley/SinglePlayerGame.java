@@ -62,7 +62,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
 
-    private String Player1 = "Carter";
+    private String Player1 = "Carter", selected="white";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +109,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setEditTextListener(r3c3);
         playerBoard = new PlayerBoard();
 
-        getBackground(Player1);
+        getSelectColor();
 
         endGameButton = findViewById(R.id.endGameButton);
         endGameButton.setOnClickListener(new View.OnClickListener() {
@@ -121,28 +121,57 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         timerTextView = findViewById(R.id.timer);
     }
     //calls to backend to see if player has a selected background gets string of color
-    public void getBackground(String player) {
-        //assigned by get listener
-        String colorVal = "";
-
-        if(colorVal == "orange") {
+    public void getBackground(String color) {
+        Log.d("BCKCOL",color);
+        if(color.equals("orange")) {
             changeBoardColor("orange");
         }
-        else if(colorVal == "purple") {
+        else if(color.equals("purple")) {
             changeBoardColor("purple");
         }
-        else if(colorVal == "lightblue") {
+        else if(color.equals("lightblue")) {
             changeBoardColor("lightblue");
         }
-        else if(colorVal == "yellow") {
+        else if(color.equals("yellow")) {
             changeBoardColor("yellow");
         }
-        else if(colorVal == "magenta") {
+        else if(color.equals("magenta")) {
             changeBoardColor("magenta");
         }
-        else if(colorVal == "green") {
+        else if(color.equals("green")) {
             changeBoardColor("green");
         }
+    }
+    public void getSelectColor() {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+Player1;
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("SINGLEGET",response.toString());
+                        String value = response.toString();
+                        String[] splitValue = value.split(":");
+                        value = splitValue[1];
+                        value = value.replace("}", "");
+                        value = value.replace("\"", "");
+                        Log.d("GET", value);
+                        getBackground(value);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("ERRGET",error.toString());
+
+                    }
+                }
+        );
+        Volley.newRequestQueue(this).add(request);
     }
     public void setBackColor(EditText editText, String color) {
         if(color == "orange") {
