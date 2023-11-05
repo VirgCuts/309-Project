@@ -39,6 +39,8 @@ public class StudyActivity extends AppCompatActivity {
     private TextView random,displayCorrect,numCorrect,numIncorrect, streak;
     private String currentArtist;
     private int numSongs;
+    private TextView songList;
+
     private Navigation navigationHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class StudyActivity extends AppCompatActivity {
 
 //        Button btnBack = findViewById(R.id.btnBack);
         Button getRandomButton = findViewById(R.id.button);
+        Button showAnswers = findViewById(R.id.showAllAnswers);
 
         msgResponse = findViewById(R.id.songGuess);
         random = findViewById(R.id.artistName);
@@ -57,6 +60,7 @@ public class StudyActivity extends AppCompatActivity {
         numCorrect = findViewById(R.id.numCorrect);
         numIncorrect = findViewById(R.id.numIncorrect);
         streak = findViewById(R.id.streak);
+        songList = findViewById(R.id.songList);
 
 
         msgResponse.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -85,6 +89,14 @@ public class StudyActivity extends AppCompatActivity {
                 retrieveRandomArtist(); displayCorrect.setText("");
             }
         });
+        showAnswers.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                showAllAnswers(currentArtist);
+            }
+        });
+
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -141,6 +153,44 @@ public class StudyActivity extends AppCompatActivity {
         // Add the request to the Volley request queue
         Volley.newRequestQueue(this).add(request);
     }
+
+    private void showAllAnswers(String name) {
+
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + name + "/songs/string/study";
+
+
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Handle the response from the server
+                        // Parse the JSON array to populate the leaderboardData list
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject artistJson = response;
+                                String list = artistJson.getString("list");
+                                songList.setText("The artists' songs are: " + list);
+                                Log.d("List", list);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println(error.getMessage());
+//                        showToast(error.getMessage());
+                    }
+                }
+        );
+        Volley.newRequestQueue(this).add(request);
+    }
+
     private void updateIncorrect() {
         String[] splitTxt = numIncorrect.getText().toString().split(":");
         int var = Integer.parseInt(splitTxt[1].trim());
