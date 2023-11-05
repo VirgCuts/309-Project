@@ -23,4 +23,8 @@ public class InventoryController {
     }
 
     @PutMapping(path = "/inventory/{name}/{color}")
+    String addColorToInventory(@PathVariable String name, @PathVariable String color)
+    {
+        return "filler";
+    }
 }
