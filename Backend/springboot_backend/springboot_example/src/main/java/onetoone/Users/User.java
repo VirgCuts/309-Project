@@ -2,6 +2,7 @@ package onetoone.Users;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import onetoone.Inventory.Inventory;
 import onetoone.Reports.Report;
 import onetoone.Songs.Song;
 
@@ -24,8 +25,13 @@ public class User implements Comparator<User>, Comparable<User> {
     private int highScore;
     private boolean canChat;
     private int banStrikes;
+    private String selectedColor;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Report> reports;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "inventory_id")
+    private Inventory inventory;
 
     @Transient
     public Board board;
@@ -45,6 +51,8 @@ public class User implements Comparator<User>, Comparable<User> {
         this.board = new Board();
         this.canChat = true;
         this.banStrikes = 0;
+        inventory = new Inventory();
+        this.selectedColor = "white";
     }
 
     public User(String name, int highScore) {
@@ -54,6 +62,8 @@ public class User implements Comparator<User>, Comparable<User> {
         this.board = new Board();
         this.canChat = true;
         this.banStrikes = 0;
+        inventory = new Inventory();
+        this.selectedColor = "white";
     }
 
     public User() {
@@ -109,11 +119,19 @@ public class User implements Comparator<User>, Comparable<User> {
 
     public void setBanStrikes(int banStrikes) { this.banStrikes = banStrikes; }
 
+    public String getSelectedColor() { return this.selectedColor; }
+
+    public void setSelectedColor(String selectedColor) { this.selectedColor = selectedColor; }
+
     public List<Report> getReports() { return this.reports; }
 
     public void setReports(List<Report> reports) { this.reports = reports; }
 
     public void addReport(Report report) {this.reports.add(report); }
+
+    public Inventory getInventory() { return this.inventory; }
+    public void setInventory(Inventory inventory) { this.inventory = inventory; }
+
 
     @Override
     public int compareTo(User o) {

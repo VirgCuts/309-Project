@@ -233,7 +233,7 @@ public class ArtistController {
         for (int i = 0; i < songList.size() - 1; i++) {
             returner = returner + songList.get(i).getSongName() + ", ";
         }
-        returner = returner + songList.get(songList.size() - 1);
+        returner = returner + songList.get(songList.size() - 1).getSongName();
         return "{\"list\":\"" + returner + "\"}";
     }
 }
