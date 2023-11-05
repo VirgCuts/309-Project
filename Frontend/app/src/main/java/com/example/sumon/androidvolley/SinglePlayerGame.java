@@ -314,6 +314,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     public void onResponse(String response) {
                         // Parse the response to a List of Maps to represent the JSON objects
                         categories = parseCategories(response);
+                        Log.d("Categories", response);
                         // Use the fetched categories to set up the game
                         setUpGameBoard(categories);
                     }
@@ -347,6 +348,11 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         return categoryList;
     }
     private void setUpGameBoard(List<Map<String, String>> categories) {
+        if (categories == null || categories.size() < 6) {
+            Log.e("setUpGameBoard", "Categories have not been loaded properly.");
+            showErrorDialog();
+            return;
+        }
         // Assuming you have a layout or a way to set categories to your game board
         row1.setText(categories.get(0).get("text"));
         row2.setText(categories.get(1).get("text"));
