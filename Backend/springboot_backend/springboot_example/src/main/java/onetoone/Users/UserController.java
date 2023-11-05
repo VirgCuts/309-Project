@@ -80,12 +80,7 @@ public class UserController {
         userRepository.deleteByName(name);
         return success;
     }
-
-    
-
-
     //end of leaderboard mappings
-
 
     @DeleteMapping(path = "/users/{id}")
     String deleteUser(@PathVariable int id)
