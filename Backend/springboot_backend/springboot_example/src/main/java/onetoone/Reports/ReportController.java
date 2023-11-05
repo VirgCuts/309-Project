@@ -48,7 +48,14 @@ public class ReportController {
             return failure;
         Report report = new Report(username, reportedUser, reportedMessage, reportInfo);
         user.addReport(report);
+        report.setReportedUser(user);
         userRepository.save(user);
         return success;
+    }
+
+    @GetMapping(path = "/report/{username}")
+    List<Report> testing(@PathVariable String username){
+        User user = userRepository.findByName(username);
+        return user.getReports();
     }
 }
