@@ -196,7 +196,19 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     private void sendBoardState(PlayerBoard board) {
         try {
             // sends the edit text message
-            Log.d("SENDBOARD",board.toString());
+
+            String boardState = "{" +
+                    "  \"name1\": \""+ Player1 + "\"," +
+                    "  \"name2\": \""+ Player2 + "\"," +
+                    "  \"board\": {" +
+                    "    \"game\": [" +
+                    board.toString() +
+                    "    ]," +
+                    "    \"won\": false," +
+                    "    \"score\": 0" +
+                    "  }" +
+                    "}";
+            Log.d("SENDBOARD",boardState);
             WebSocketManager.getInstance().sendMessage(board.toString());
         } catch (Exception e) {
             Log.d("ExceptionSendMessage:", e.getMessage().toString());
@@ -453,13 +465,13 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     @Override
     public void onWebSocketMessage(String message) {
         Log.d("RECIEVED", message);
-        String[] boardValues = message.split(",");
-
-        for (int i =0; i < boardValues.length; i++) {
-            if(Integer.parseInt(boardValues[i]) == 1) {
-                changeOppColor(i);
-            }
-        }
+//        String[] boardValues = message.split(",");
+//
+//        for (int i =0; i < boardValues.length; i++) {
+//            if(Integer.parseInt(boardValues[i]) == 1) {
+//                changeOppColor(i);
+//            }
+//        }
 
     }
 

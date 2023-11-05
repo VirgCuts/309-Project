@@ -14,9 +14,21 @@ public class PlayerBoard {
         // Initialize the grid with empty strings
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                grid[i][j] = "0,";
+                if(j == 0) {
+                    grid[i][j] = "[0,";
+                }
+                else if(i== 2 && j == 2) {
+                    grid[i][j] = "0]";
+                }
+                else if(j == 2) {
+                    grid[i][j] = "0],";
+                }
+                else {
+                    grid[i][j] = "0,";
+                }
             }
         }
+
         col = new String[3][4];
         row = new String[3][4];
     }
@@ -51,9 +63,21 @@ public class PlayerBoard {
      * @param col - The column of the desired position.
      * @param value - The new value to set.
      */
+
     public void edit(int row, int col, String value) {
         if (isValidPosition(row, col)) {
-            grid[row][col] = "1,";
+            if(col == 0) {
+                grid[row][col] = "[1,";
+            }
+            else if(row == 2 && col == 2) {
+                grid[row][col] = "1]";
+            }
+            else if(col == 2) {
+                grid[row][col] = "1],";
+            }
+            else {
+                grid[row][col] = "1,";
+            }
         } else {
             // Handle invalid positions (e.g., throw an exception or print an error)
             System.out.println("Invalid position!");
