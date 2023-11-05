@@ -1,7 +1,11 @@
 package com.example.sumon.androidvolley;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +20,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.Request;
@@ -24,6 +32,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sumon.androidvolley.PlayerData;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,12 +53,14 @@ public class LeaderboardActivity extends AppCompatActivity {
     private Button updateButton;
     private Button deleteButton;
     private Button addButton;
-
+    TabLayout tabLayout;
+    ViewPager2 viewPager;
     private List<PlayerData> leaderboardData;
     private CustomAdapter adapter;
     private int selectedItemPosition = -1;
-
     private Navigation navigationHelper;
+    private static final String PREFS_NAME = "LeaderboardPrefs";
+    private static final String USERNAME_KEY = "username";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,15 +71,33 @@ public class LeaderboardActivity extends AppCompatActivity {
         navigationHelper.setupNavigation();
 
         leaderboardListView = findViewById(R.id.leaderboardListView);
-        inputEditText = findViewById(R.id.inputEditText);
-        updateButton = findViewById(R.id.updateButton);
-        deleteButton = findViewById(R.id.deleteButton);
-        addButton = findViewById(R.id.addButton);
-        inputEditTextScore = findViewById(R.id.inputEditTextScore);
+        tabLayout = findViewById(R.id.scoresTabLayout);
+        viewPager = findViewById(R.id.leaderboardViewPager);
 
         leaderboardData = new ArrayList<>();
         adapter = new CustomAdapter(leaderboardData);
         leaderboardListView.setAdapter(adapter);
+        // Set up the ViewPager2 with the adapter
+        viewPager.setAdapter(new ScreenSlidePagerAdapter(this));
+
+        // Set up the TabLayoutMediator to link the TabLayout and ViewPager2
+        new TabLayoutMediator(tabLayout, viewPager,
+                new TabLayoutMediator.TabConfigurationStrategy() {
+                    @Override
+                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                        switch (position) {
+                            case 0:
+                                tab.setText("All-time");
+                                break;
+                            case 1:
+                                tab.setText("Monthly");
+                                break;
+                            case 2:
+                                tab.setText("Weekly");
+                                break;
+                        }
+                    }
+                }).attach();
 
         // Handle item click on the ListView
         leaderboardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,65 +109,62 @@ public class LeaderboardActivity extends AppCompatActivity {
         });
 
         // Retrieve the current leaderboard data from the API using Volley
-        retrieveLeaderboardData();
-
-        // Update button click listener
-        updateButton.setOnClickListener(new View.OnClickListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View v) {
-                if (selectedItemPosition != -1) {
-                    String username = leaderboardData.get(selectedItemPosition).getUsername();
-                    int newScore = Integer.parseInt(inputEditTextScore.getText().toString().trim());
-
-                    // Create a Volley request to update the score for the selected username
-                    updateScore(username, newScore);
-                    finish();
-                    startActivity(getIntent());
-                    showToast("Successfully Updated!");
-                } else {
-                    showToast("Select an item to update.");
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        retrieveLeaderboardData("");
+                        break;
+                    case 1:
+                        retrieveLeaderboardData("");
+                        break;
+                    case 2:
+                        retrieveLeaderboardData("");
+                        break;
                 }
             }
-        });
 
-        // Delete button click listener
-        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (selectedItemPosition != -1) {
-                    String usernameToDelete = leaderboardData.get(selectedItemPosition).getUsername();
+            public void onTabUnselected(TabLayout.Tab tab) {
+                // Handle tab unselect
+            }
 
-                    // Create a Volley request to delete the selected username
-                    deletePlayer(usernameToDelete);
-                    finish();
-                    startActivity(getIntent());
-                    showToast("Successfully Deleted!");
-                } else {
-                    showToast("Select an item to delete.");
-                }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                // Handle tab reselect if necessary
             }
         });
+        retrieveLeaderboardData("");
 
-        // Add button click listener
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String username = inputEditText.getText().toString().trim();
-                String scoreText = inputEditTextScore.getText().toString().trim();
-
-                if (!username.isEmpty() && isValidScore(scoreText)) {
-                    int score = Integer.parseInt(scoreText);
-                    // Create a Volley request to add the new player data
-                    addPlayer(username, score);
-                    finish();
-                    startActivity(getIntent());
-                    showToast("Successfully Added!");
-                } else {
-                    showToast("Enter a valid username and score.");
-                }
-            }
-        });
     }
+
+    private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
+        public ScreenSlidePagerAdapter(FragmentActivity fa) {
+            super(fa);
+        }
+
+        @Override
+        public Fragment createFragment(int position) {
+            // Return a NEW fragment instance in createFragment(int)
+            switch (position) {
+                case 0:
+                    return new AllTimeFragment();
+                case 1:
+                    return new MonthlyFragment(); // Replace with your monthly fragment
+                case 2:
+                    return new WeeklyFragment(); // Replace with your weekly fragment
+                default:
+                    return null; // This should never happen. Consider throwing an exception
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 3; // number of tabs
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -154,9 +181,23 @@ public class LeaderboardActivity extends AppCompatActivity {
     /**
      * Retrieve leaderboard data from the API using Volley.
      */
-    private void retrieveLeaderboardData() {
-
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard";
+    private void retrieveLeaderboardData(String leaderboardType) {
+        String baseUrl = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard";
+        String url = "";
+        switch (leaderboardType) {
+            case "allTime":
+                url = baseUrl + "/allTime";
+                break;
+            case "monthly":
+                url = baseUrl + "/monthly";
+                break;
+            case "weekly":
+                url = baseUrl + "/weekly";
+                break;
+            default:
+                url = baseUrl; // Default case can be handled as you see fit
+                break;
+        }
 
         JsonArrayRequest request = new JsonArrayRequest(
                 Request.Method.GET,
@@ -194,152 +235,12 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     /**
-     * Update a player's score using Volley.
-     *
-     * @param username The username of the player to update.
-     * @param newScore The new score to set for the player.
-     */
-    private void updateScore(String username, int newScore) {
-
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + username + "/" + newScore;
-
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.PUT,
-                url,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Handle the response from the server (if needed)
-                        // Update the data in your leaderboardData list and notify the adapter
-                        for (PlayerData player : leaderboardData) {
-                            if (player.getUsername().equals(username)) {
-                                player.setScore(newScore);
-                                break;
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                        clearInput();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        showToast("Error updating score: " + error.getMessage());
-                    }
-                }
-        );
-
-        // Add the request to the Volley request queue
-        Volley.newRequestQueue(this).add(request);
-    }
-
-    /**
-     * Delete a player using Volley.
-     *
-     * @param usernameToDelete The username of the player to delete.
-     */
-    private void deletePlayer(String usernameToDelete) {
-
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + usernameToDelete;
-
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.DELETE,
-                url,
-                null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // Handle the response from the server (if needed)
-                        // Remove the player from your leaderboardData list and notify the adapter
-                        for (int i = 0; i < leaderboardData.size(); i++) {
-                            if (leaderboardData.get(i).getUsername().equals(usernameToDelete)) {
-                                leaderboardData.remove(i);
-                                break;
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                        clearInput();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        showToast("Error deleting player: " + error.getMessage());
-                    }
-                }
-        );
-
-        // Add the request to the Volley request queue
-        Volley.newRequestQueue(this).add(request);
-    }
-
-    /**
      * Display a Toast message.
      *
      * @param message The message to display.
      */
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Add a new player using Volley.
-     *
-     * @param username The username of the new player.
-     * @param score The score of the new player.
-     */
-    private void addPlayer(String username, int score) {
-        // URL of the API to add a new player
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + username + "/" + score;
-
-        try {
-            JSONObject requestBody = new JSONObject();
-            requestBody.put("name", username);
-            requestBody.put("highScore", score);
-
-            JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,
-                    url,
-                    requestBody,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            // Handle the response from the server (if needed)
-                            // Create a new PlayerData object and add it to your leaderboardData list
-                            leaderboardData.add(new PlayerData(username, score));
-                            adapter.notifyDataSetChanged();
-                            clearInput();
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            showToast("Error adding player: " + error.getMessage());
-                        }
-                    }
-            );
-
-            // Add the request to the Volley request queue
-            Volley.newRequestQueue(this).add(request);
-        } catch (JSONException e) {
-            showToast("Error creating JSON request: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Check if the entered score is a valid positive integer.
-     *
-     * @param scoreText The text representing the score.
-     * @return True if the score is valid; otherwise, false.
-     */
-    private boolean isValidScore(String scoreText) {
-        try {
-            int score = Integer.parseInt(scoreText);
-            return score >= 0;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 
     /**
@@ -373,4 +274,5 @@ public class LeaderboardActivity extends AppCompatActivity {
             return convertView;
         }
     }
+
 }

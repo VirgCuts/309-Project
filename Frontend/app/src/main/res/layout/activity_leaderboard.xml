@@ -13,6 +13,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
     android:foregroundTint="#F1EEEE">
 
@@ -20,7 +21,7 @@
     <RelativeLayout
         android:id="@+id/leaderBoardTop"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="300dp"
         android:background="#12AFA6">
 
 
@@ -112,11 +113,36 @@
             android:textSize="24sp"
             android:textStyle="bold" />
     </RelativeLayout>
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/scoresTabLayout"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/leaderBoardTop"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:tabIndicatorColor="@color/colorAccent"
+        app:tabTextColor="@color/light_gray"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabMode="fixed">
+
+        <com.google.android.material.tabs.TabItem
+            android:text="All-time"  android:layout_height="wrap_content" android:layout_width="wrap_content"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:text="Monthly" android:layout_height="wrap_content" android:layout_width="wrap_content"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:text="Weekly" android:layout_height="wrap_content" android:layout_width="wrap_content"/>
+    </com.google.android.material.tabs.TabLayout>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/leaderboardViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/scoresTabLayout"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/leaderBoardTop"
+        android:layout_below="@id/scoresTabLayout"
         android:background="@color/greyWithTransparency"
         android:fadingEdge="horizontal|vertical|none"
         android:orientation="horizontal"
@@ -159,60 +185,9 @@
         android:layout_width="match_parent"
         android:layout_height="316dp"
         android:layout_below="@id/leaderboardListHeader"
-        android:layout_above="@id/inputEditText"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="2dp" />
+        android:dividerHeight="2dp"></ListView>
 
-    <!-- Button Layout -->
-    <LinearLayout
-        android:id="@+id/buttonLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <!-- Update Button -->
-        <Button
-            android:id="@+id/updateButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Update" />
-
-        <!-- Delete Button -->
-        <Button
-            android:id="@+id/deleteButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Delete" />
-
-        <!-- Add Button -->
-        <Button
-            android:id="@+id/addButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Add" />
-    </LinearLayout>
-
-    <!-- EditText for Input -->
-    <EditText
-        android:id="@+id/inputEditText"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_above="@+id/buttonLayout"
-        android:hint="Enter Username..." />
-
-    <EditText
-        android:id="@+id/inputEditTextScore"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_above="@+id/buttonLayout"
-        android:layout_toRightOf="@id/inputEditText"
-        android:hint="Enter Score..."
-        android:inputType="number" />
 </RelativeLayout>
 
 <com.google.android.material.navigation.NavigationView
