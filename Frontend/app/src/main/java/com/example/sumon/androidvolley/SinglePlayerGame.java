@@ -183,38 +183,32 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         Volley.newRequestQueue(this).add(request);
     }
     public void setBackColor(EditText editText, String color) {
-        if(color == "orange") {
-            int boardColor = getResources().getColor(R.color.boardColorO);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-
+        int colorValue = 0;
+        switch (color) {
+            case "orange":
+                colorValue = getResources().getColor(R.color.boardColorO);
+                break;
+            case "purple":
+                colorValue = getResources().getColor(R.color.boardColorP);
+                break;
+            case "lightblue":
+                colorValue = getResources().getColor(R.color.boardColorLB);
+                break;
+            case "yellow":
+                colorValue = getResources().getColor(R.color.boardColorY);
+                break;
+            case "magenta":
+                colorValue = getResources().getColor(R.color.boardColorM);
+                break;
+            case "green":
+                colorValue = getResources().getColor(R.color.boardColorG);
+                break;
         }
-        else if (color == "purple") {
-            int boardColor = getResources().getColor(R.color.boardColorP);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-        }
-        else if (color =="lightblue") {
-            int boardColor = getResources().getColor(R.color.boardColorLB);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-        }
-        else if (color == "yellow") {
-            int boardColor = getResources().getColor(R.color.boardColorY);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-        }
-        else if (color == "magenta") {
-            int boardColor = getResources().getColor(R.color.boardColorM);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-        }
-        else if (color == "green") {
-            int boardColor = getResources().getColor(R.color.boardColorG);
-            ColorFilter colorFilter = new PorterDuffColorFilter(boardColor, PorterDuff.Mode.SRC_ATOP);
-            editText.getBackground().setColorFilter(colorFilter);
-        }
+        int semiTransparentColor = Color.argb(128, Color.red(colorValue), Color.green(colorValue), Color.blue(colorValue));
+        ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentColor, PorterDuff.Mode.SRC_ATOP);
+        editText.getBackground().mutate().setColorFilter(colorFilter);
     }
+
     public void changeBoardColor(String color) {
         setBackColor(r1c1, color);
         setBackColor(r1c2, color);
