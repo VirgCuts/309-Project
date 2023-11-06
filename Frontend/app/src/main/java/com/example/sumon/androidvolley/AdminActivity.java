@@ -29,7 +29,11 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.List;
-
+/**
+ * Activity class that handles administration actions such as displaying reports
+ * and showing the ban count for a specific user. It uses the Volley library
+ * for network requests to a specified base URL.
+ */
 public class AdminActivity extends AppCompatActivity {
 
     private EditText etUsernameForReport, username_ban;
@@ -81,7 +85,11 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * Fetches the ban count for a given user by sending a GET request.
+     *
+     * @param username The username whose ban count is to be retrieved.
+     */
     private void getBanCountForUser(String username) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -103,7 +111,9 @@ public class AdminActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Fetches all reports from the server by sending a GET request.
+     */
     private void getAllReports() {
         String url = baseUrl + "/reports";
 
@@ -119,7 +129,11 @@ public class AdminActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         Volley.newRequestQueue(this).add(stringRequest);
     }
-
+    /**
+     * Fetches reports specific to a user from the server by sending a GET request.
+     *
+     * @param reportedUsername The username for which the reports need to be fetched.
+     */
     private void getUsersReports(String reportedUsername) {
         String url = baseUrl + "/reports/" + reportedUsername;
 
@@ -136,6 +150,11 @@ public class AdminActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         Volley.newRequestQueue(this).add(stringRequest);
     }
+    /**
+     * Parses the JSON response containing reports and displays them in the UI.
+     *
+     * @param jsonReports The JSON string containing an array of reports.
+     */
     private void displayReports(String jsonReports) {
         try {
             // Convert the JSON response into a JSONArray

@@ -10,32 +10,35 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
-
+/**
+ * Navigation helper class used to add a navigation drawer to an activity.
+ * This class is designed to work with activities that extend {@link AppCompatActivity}.
+ * <p>
+ * To use this helper class, create an instance of {@code Navigation} and call {@code setupNavigation()}
+ * in your activity's onCreate method. Then override {@code onOptionsItemSelected} to delegate the
+ * selection handling to the {@code Navigation} instance.
+ * <p>
+ * Your activity's layout XML should include a {@link DrawerLayout} and a {@link NavigationView}.
+ * Refer to the activity_main.xml for an example structure.
+ */
 public class Navigation {
     private AppCompatActivity activity;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
-    /*
-    General Navigation Bar class essential to add a navbar to any class,
-    @REQ Class Extends AppCompatActivity to function, to add to a class simply add these lines of code in respective places, use MainActivity for example
-
-     private Navigation navigationHelper;
-
-    navigationHelper = new Navigation(this);
-        navigationHelper.setupNavigation();
-
-           @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
-    }
-    also need to add XML structures look to activity main for an example of what needs to be added,
-    basically surround code in a drawer layout and add a NavigationView to the bottom of any xml document
+    /**
+     * Constructor for the Navigation helper class.
+     *
+     * @param activity The activity in which the navigation is to be setup. This activity must extend {@link AppCompatActivity}.
      */
     public Navigation(AppCompatActivity activity) {
         this.activity = activity;
     }
-
+    /**
+     * Sets up the navigation drawer and the toggle switch.
+     * This method initializes the {@link NavigationView}, the {@link DrawerLayout}, and the {@link ActionBarDrawerToggle}.
+     * It also handles the navigation item click events.
+     */
     public void setupNavigation() {
         NavigationView navigationView = activity.findViewById(R.id.nav_view);
         drawerLayout = activity.findViewById(R.id.my_drawer_layout);
@@ -81,7 +84,12 @@ public class Navigation {
             }
         });
     }
-
+    /**
+     * Handles the action bar's home/up button clicks.
+     *
+     * @param item The menu item that was selected.
+     * @return boolean Return true if the navigation drawer toggle handled the event; otherwise, return false.
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle navbar open clicks
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
