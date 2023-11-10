@@ -9,17 +9,25 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.java_websocket.handshake.ServerHandshake;
-
+/**
+ * GameWebSockets is an AppCompatActivity that manages WebSocket connections
+ * for a multiplayer game. It handles sending and receiving messages through
+ * WebSockets and updates the UI based on the game state.
+ */
 public class GameWebSockets extends AppCompatActivity implements WebSocketListener{
-
+    // Base URL for WebSocket connection
     private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/multiplayer/";
-
+    // UI Elements
     private Button connectBtn, sendBtn;
     private EditText usernameEtx;
     private TextView msgTv;
-
+    // Player names and board state
     private String Player1 = "Carter", Player2 = "Conor", boardState;
-
+    /**
+     * Initializes the activity. Sets up the UI components and event listeners.
+     * @param savedInstanceState If the activity is being re-initialized after being previously shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +65,12 @@ public class GameWebSockets extends AppCompatActivity implements WebSocketListen
             }
         });
     }
+    /**
+     * Converts the board state to a String format for sending via WebSocket.
+     * @param user First player's name.
+     * @param user2 Second player's name.
+     * @return String representation of the board state.
+     */
     private String boardToString(String user, String user2) {
         return "{" +
                 "  \"name1\": \""+ user + "\"," +
@@ -72,7 +86,10 @@ public class GameWebSockets extends AppCompatActivity implements WebSocketListen
                 "  }" +
                 "}";
     }
-    //receive board state here
+    /**
+     * Callback for receiving messages from the WebSocket.
+     * @param message The message received from the WebSocket.
+     */
     @Override
     public void onWebSocketMessage(String message) {
 
@@ -81,7 +98,12 @@ public class GameWebSockets extends AppCompatActivity implements WebSocketListen
             msgTv.setText(s + "Got a Message: \n"+message);
         });
     }
-
+    /**
+     * Callback for WebSocket closure.
+     * @param code The closure code.
+     * @param reason The reason for the closure.
+     * @param remote Flag indicating if the closure was initiated by the remote host.
+     */
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {
         String closedBy = remote ? "server" : "local";
@@ -90,13 +112,21 @@ public class GameWebSockets extends AppCompatActivity implements WebSocketListen
             msgTv.setText(s + "---\nconnection closed by " + closedBy + "\nreason: " + reason);
         });
     }
-
+    /**
+     * Callback for WebSocket connection opening.
+     * @param handshakedata The handshake data from the server.
+     */
     @Override
     public void onWebSocketOpen(ServerHandshake handshakedata) {}
-
+    /**
+     * Callback for WebSocket errors.
+     * @param ex The exception that occurred.
+     */
     @Override
     public void onWebSocketError(Exception ex) {}
-
+    /**
+     * Ends the current WebSocket connection.
+     */
     private void endWebsocket() {
         WebSocketManager.getInstance().disconnectWebSocket();
     }

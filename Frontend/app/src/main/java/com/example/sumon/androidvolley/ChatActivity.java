@@ -28,7 +28,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.java_websocket.handshake.ServerHandshake;
-
+/**
+ * ChatActivity provides the user interface and logic for a chat application.
+ * It handles WebSocket connections for real-time messaging, sending and receiving messages,
+ * and displaying chat history. This activity also includes UI elements for connecting,
+ * sending messages, and displaying chat messages.
+ */
 public class ChatActivity extends AppCompatActivity implements WebSocketListener{
 
 
@@ -50,7 +55,11 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
     public static final String EXTRA_USERNAME = "EXTRA_USERNAME";
     public static final String EXTRA_MESSAGE_CONTENT = "EXTRA_MESSAGE_CONTENT";
-
+    /**
+     * Initializes the activity. This method sets up the UI components and event listeners.
+     * @param savedInstanceState If the activity is being re-initialized after being shut down,
+     *                           this Bundle contains the most recent data provided by onSaveInstanceState.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,11 +110,19 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         });
 
     }
+    /**
+     * Handles options item selected events.
+     * @param item The menu item that was selected.
+     * @return boolean Returns true if the event was handled, false otherwise.
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
-
+    /**
+     * Adds a message to the chat view.
+     * @param message The message text to be added.
+     */
     private void addMessageToView(String message) {
         TextView messageView = new TextView(this);
         messageView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -143,6 +160,10 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         });
         messagesContainer.addView(messageView); // Add the TextView to your LinearLayout
     }
+    /**
+     * Displays a popup menu for the given view.
+     * @param anchorView The view for which the popup menu is to be shown.
+     */
     private void showPopup(View anchorView) {
         PopupMenu popupMenu = new PopupMenu(this, anchorView);
         popupMenu.getMenu().add("Like message");
@@ -163,6 +184,10 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
         popupMenu.show();
     }
+    /**
+     * Callback for receiving messages from the WebSocket.
+     * @param message The message received from the WebSocket.
+     */
     @Override
     public void onWebSocketMessage(String message) {
         runOnUiThread(() -> {
@@ -185,7 +210,12 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
             }
         });
     }
-
+    /**
+     * Callback for WebSocket closure.
+     * @param code The closure code.
+     * @param reason The reason for the closure.
+     * @param remote Flag indicating if the closure was initiated by the remote host.
+     */
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {
         String closedBy = remote ? "server" : "local";
@@ -194,7 +224,10 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
             msgTv.setText(s + "---\nconnection closed by " + closedBy + "\nreason: " + reason);
         });
     }
-    // Method to parse and display chat history
+    /**
+     * Parses and displays chat history.
+     * @param history The chat history in String format.
+     */
     private void parseAndDisplayHistory(String history) {
         // Split the history into individual messages
         String[] messages = history.split("\n");
@@ -206,12 +239,17 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         scrollToBottom();
     }
 
-    // Scroll to the bottom of the messages container
+    /**
+     * Scrolls the chat view to the bottom.
+     */
     private void scrollToBottom() {
         ScrollView scrollView = findViewById(R.id.chat_scrollview); // Replace with your ScrollView ID if different
         scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
     }
-
+    /**
+     * Callback for WebSocket connection opening.
+     * @param handshakedata The handshake data from the server.
+     */
     @Override
     public void onWebSocketOpen(ServerHandshake handshakedata) {
         runOnUiThread(() -> {
@@ -219,7 +257,10 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
             // as soon as the WebSocket connection is established.
         });
     }
-
+    /**
+     * Callback for WebSocket errors.
+     * @param ex The exception that occurred.
+     */
     @Override
     public void onWebSocketError(Exception ex) {}
 

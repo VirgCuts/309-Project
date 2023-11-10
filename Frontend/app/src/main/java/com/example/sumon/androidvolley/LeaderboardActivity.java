@@ -43,7 +43,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents the Leaderboard Activity.
+ * LeaderboardActivity is an AppCompatActivity that displays a leaderboard in a ListView.
+ * It manages different tabs for all-time, monthly, and weekly leaderboards.
+ * This class also handles the retrieval and display of leaderboard data using Volley.
  */
 public class LeaderboardActivity extends AppCompatActivity {
 
@@ -61,7 +63,12 @@ public class LeaderboardActivity extends AppCompatActivity {
     private Navigation navigationHelper;
     private static final String PREFS_NAME = "LeaderboardPrefs";
     private static final String USERNAME_KEY = "username";
-
+    /**
+     * Called when the activity is starting. This method initializes the UI components,
+     * sets up navigation, and configures the TabLayout and ViewPager for leaderboard tabs.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,7 +154,9 @@ public class LeaderboardActivity extends AppCompatActivity {
         retrieveLeaderboardData("");
 
     }
-
+    /**
+     * Inner class for managing the fragments for the ViewPager2.
+     */
     private class ScreenSlidePagerAdapter extends FragmentStateAdapter {
         public ScreenSlidePagerAdapter(FragmentActivity fa) {
             super(fa);
@@ -174,7 +183,12 @@ public class LeaderboardActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Handles item selections in the options menu.
+     * @param item The MenuItem that was selected.
+     * @return boolean Return false to allow normal menu processing to proceed,
+     *                 true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
@@ -188,7 +202,8 @@ public class LeaderboardActivity extends AppCompatActivity {
     }
 
     /**
-     * Retrieve leaderboard data from the API using Volley.
+     * Retrieves leaderboard data from the API using Volley based on the leaderboard type.
+     * @param leaderboardType The type of leaderboard to retrieve (e.g., "allTime", "monthly", "weekly").
      */
     private void retrieveLeaderboardData(String leaderboardType) {
         String baseUrl = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard";
@@ -256,10 +271,20 @@ public class LeaderboardActivity extends AppCompatActivity {
      * Custom adapter to display player data in the ListView.
      */
     private class CustomAdapter extends ArrayAdapter<PlayerData> {
+        /**
+         * Constructor for CustomAdapter.
+         * @param data The list of PlayerData objects to be displayed.
+         */
         CustomAdapter(List<PlayerData> data) {
             super(LeaderboardActivity.this, R.layout.list_item_layout, data);
         }
-
+        /**
+         * Gets a View that displays the data at the specified position in the data set.
+         * @param position The position of the item within the adapter's data set of the item whose view we want.
+         * @param convertView The old view to reuse, if possible.
+         * @param parent The parent that this view will eventually be attached to.
+         * @return A View corresponding to the data at the specified position.
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {

@@ -32,7 +32,10 @@ import com.example.sumon.androidvolley.utils.Const;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+/**
+ * ArtistActivity is an AppCompatActivity that handles the functionality related to artists,
+ * including searching, adding, updating, and deleting artists and songs using network requests.
+ */
 public class ArtistActivity extends AppCompatActivity {
 
     private final String TAG = ArtistActivity.class.getSimpleName();
@@ -44,7 +47,11 @@ public class ArtistActivity extends AppCompatActivity {
     private EditText deleteNum, orgnArtist, newArtist, artistName, numPlat, numGrammies,song,songGenre;
 
     private Navigation navigationHelper;
-
+    /**
+     * Called when the activity is starting. Initializes UI components and sets up event listeners.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           this Bundle contains the data it most recently supplied in onSaveInstanceState.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,13 +134,23 @@ public class ArtistActivity extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * Handles item selections in the options menu.
+     * @param item The MenuItem that was selected.
+     * @return boolean Return false to allow normal menu processing to proceed,
+     *                 true to consume it here.
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
-    //Checks edit text and compares it to the users in the data returns true of false depending on inclusion.
+    /**
+     * Searches for an artist in the provided JSON string and returns the song associated with that artist.
+     * @param jsonString The JSON string containing artist data.
+     * @param artistToSearch The artist name to search for.
+     * @return A String indicating the result of the search.
+     */
     private String searchArtistInJson(String jsonString, String artistToSearch) {
         try {
             JSONArray jsonArray = new JSONArray(jsonString);
@@ -157,7 +174,9 @@ public class ArtistActivity extends AppCompatActivity {
         }
         return "Song not found for " + artistToSearch;
     }
-
+    /**
+     * Retrieves a random artist from the server.
+     */
     private void retrieveRandomArtist() {
 
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/random";
@@ -200,7 +219,14 @@ public class ArtistActivity extends AppCompatActivity {
         // Add the request to the Volley request queue
         Volley.newRequestQueue(this).add(request);
     }
-
+    /**
+     * Adds an artist and song to the database.
+     * @param artistName The name of the artist.
+     * @param numPlatinums The number of platinum records by the artist.
+     * @param numGrammys The number of Grammy awards won by the artist.
+     * @param songName The name of the song.
+     * @param songGenre The genre of the song.
+     */
     private void addArtistToDB(String artistName, int numPlatinums, int numGrammys, String songName, String songGenre) {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists"; // Replace with your API endpoint URL
 
@@ -246,6 +272,11 @@ public class ArtistActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(request);
     }
+    /**
+     * Updates the name of an existing artist in the database.
+     * @param currentArtist The current name of the artist.
+     * @param newArtistName The new name to update the artist to.
+     */
     private void updateArtistInDB(String currentArtist, String newArtistName) {
         // Create a JSONObject to send the old and new artist names
         JSONObject artistData = new JSONObject();
@@ -286,7 +317,10 @@ public class ArtistActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
-
+    /**
+     * Deletes an artist from the database based on their ID.
+     * @param idNum The ID number of the artist to delete.
+     */
     private void deleteArtistInDB(String idNum){
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + idNum; // Include the artist ID in the URL
 
@@ -311,24 +345,31 @@ public class ArtistActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(request);
     }
-
+    /**
+     * Displays a Toast message.
+     * @param message The message to display.
+     */
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-
+    /**
+     * Shows a progress dialog.
+     */
     private void showProgressDialog() {
         if (!pDialog.isShowing())
             pDialog.show();
     }
-
+    /**
+     * Hides the progress dialog.
+     */
     private void hideProgressDialog() {
         if (pDialog.isShowing())
             pDialog.hide();
     }
 
     /**
-     * Making json object request
-     * */
+     * Makes a string request to retrieve artist data.
+     */
     private void makeStringReq() {
         showProgressDialog();
         StringRequest strReq = new StringRequest(Method.GET, "http://coms-309-022.class.las.iastate.edu:8080/artists/", new Response.Listener<String>() {
