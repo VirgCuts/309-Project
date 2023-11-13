@@ -173,13 +173,6 @@
             android:text="Unselect Colors"
             android:textSize="18sp" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/refresh"
-        android:layout_width="379dp"
-        android:layout_height="59dp"
-        android:background="@drawable/button_background"
-        android:text="Refresh Page" />
 </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
