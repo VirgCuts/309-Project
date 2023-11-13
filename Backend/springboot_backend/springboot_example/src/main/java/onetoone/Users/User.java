@@ -8,6 +8,7 @@ import onetoone.Songs.Song;
 
 import javax.persistence.*;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,9 +26,9 @@ public class User implements Comparator<User>, Comparable<User> {
     private int highScore;
     private int highScoreMonthly;
     private int highScoreWeekly;
-    private int highScoreTime;
-    private int highScoreTimeMonthly;
-    private int highScoreTimeWeekly;
+    private Date highScoreTime;
+    private int highScoreTimeMonthly; //might not need
+    private int highScoreTimeWeekly; //might not need
     private boolean canChat;
     private int banStrikes;
     private String selectedColor;
@@ -53,7 +54,7 @@ public class User implements Comparator<User>, Comparable<User> {
         this.name = name;
         this.password = password;
         this.highScore = 0;
-        this.highScoreTime = 0;
+        this.highScoreTime = new Date();
         this.highScoreMonthly = 0;
         this.highScoreTimeMonthly = 0;
         this.highScoreWeekly = 0;
@@ -69,7 +70,7 @@ public class User implements Comparator<User>, Comparable<User> {
         this.name = name;
         this.password = "";
         this.highScore = highScore;
-        this.highScoreTime = 0;
+        this.highScoreTime = new Date();
         this.highScoreMonthly = 0;
         this.highScoreTimeMonthly = 0;
         this.highScoreWeekly = 0;
@@ -122,11 +123,11 @@ public class User implements Comparator<User>, Comparable<User> {
         this.highScore = highScore;
     }
 
-    public int getHighScoreTime(){
-        return highScore;
+    public Date getHighScoreTime(){
+        return highScoreTime;
     }
 
-    public void setHighScoreTime(int highScoreTime){
+    public void setHighScoreTime(Date highScoreTime){
         this.highScoreTime = highScoreTime;
     }
     public int getHighScoreTimeMontly(){
@@ -145,18 +146,18 @@ public class User implements Comparator<User>, Comparable<User> {
         this.highScoreTimeWeekly = highScoreTimeWeekly;
     }
 
-    public void setAllHighScores(int highScore, int highScoreTime) {
+    public void setAllHighScores(int highScore) {
         if (this.highScore < highScore){
             this.highScore = highScore;
-            this.highScoreTime = highScoreTime;
+            this.highScoreTime = new Date();
         }
         if (this.highScoreMonthly < highScore) {
             this.highScoreMonthly = highScore;
-            this.highScoreTimeMonthly = highScoreTime;
+            //this.highScoreTimeMonthly = highScoreTime;
         }
         if (this.highScoreWeekly < highScore) {
             this.highScoreWeekly = highScore;
-            this.highScoreTimeWeekly = highScoreTime;
+            //this.highScoreTimeWeekly = highScoreTime;
         }
     }
 

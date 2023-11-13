@@ -18,6 +18,7 @@ import onetoone.Artists.Artist;
 import onetoone.Artists.ArtistRepository;
 import onetoone.Users.User;
 import onetoone.Users.UserRepository;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 
 @SpringBootApplication
 @EnableJpaRepositories
+@EnableScheduling
 class Main {
 
     public static void main(String[] args) {
