@@ -9,7 +9,7 @@ android-build:
    - Carter_tag                   # <-- change to your runner's tag
   before_script:                    # change 'Frontend' to where you have 'gradlew'
     - export GRADLE_USER_HOME=`pwd`/.gradle
-    - chmod +x ./Frontend/gradlew
+    - chmod +x ./km_203/Frontend/gradlew
   script:
     - cd Frontend                   # change 'Frontend' to where you have 'gradlew' (do not add / in the beginning)
     - ./gradlew build
@@ -21,8 +21,8 @@ android-test:
     - Carter_tag                  # <-- change to your runner's tag
    before_script:                   # change 'Frontend' to where you have 'gradlew'
      - export GRADLE_USER_HOME=`pwd`/.gradle
-     - chmod +x ./Frontend/gradlew
+     - chmod +x ./km_203/Frontend/gradlew
    script:
-     - cd Frontend                  # change 'Frontend' to where you have 'gradlew' (do not add / in the beginning)
+     - cd km_203/Frontend                 # change 'Frontend' to where you have 'gradlew' (do not add / in the beginning)
      - ./gradlew test
 
