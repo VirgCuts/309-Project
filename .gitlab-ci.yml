@@ -9,9 +9,9 @@ android-build:
    - keenan_tag                   # <-- change to your runner's tag
   before_script:                    
     - export GRADLE_USER_HOME=`pwd`/.gradle
-    - chmod +x ./Frontend/gradlew
+    - chmod +x /Users/keenanjacobs/Desktop/School-Related-Stuff/ComS309/km_203/Frontend
   script:
-    - cd Frontend                   
+    - cd /Users/keenanjacobs/Desktop/School-Related-Stuff/ComS309/km_203/Frontend                   
     - ./gradlew build
 
 android-test:
@@ -21,7 +21,7 @@ android-test:
     - keenan_tag                  # <-- change to your runner's tag
    before_script:                  
      - export GRADLE_USER_HOME=`pwd`/.gradle
-     - chmod +x ./Frontend/gradlew
+     - chmod +x /Users/keenanjacobs/Desktop/School-Related-Stuff/ComS309/km_203/Frontend
    script:
      - cd /Frontend                
      - ./gradlew test
