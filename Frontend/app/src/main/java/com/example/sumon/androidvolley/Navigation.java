@@ -21,7 +21,7 @@ import com.google.android.material.navigation.NavigationView;
  * Your activity's layout XML should include a {@link DrawerLayout} and a {@link NavigationView}.
  * Refer to the activity_main.xml for an example structure.
  */
-public class Navigation {
+public class Navigation extends AppCompatActivity {
     private AppCompatActivity activity;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
