@@ -25,7 +25,10 @@ public class Navigation extends AppCompatActivity {
     private AppCompatActivity activity;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-
+    public Navigation() {
+        super();
+        // other initialization code
+    }
     /**
      * Constructor for the Navigation helper class.
      *
