@@ -23,5 +23,5 @@ android-test:
      - export GRADLE_USER_HOME=`pwd`/.gradle
      - chmod +x ./Frontend
    script:
-     - cd /Frontend                
+     - cd Frontend                
      - ./gradlew test
