@@ -34,7 +34,7 @@ public class User implements Comparator<User>, Comparable<User> {
     private List<Report> reports;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "inventory_id")
+    @JoinColumn(name = "inventory_id", referencedColumnName = "id")
     private Inventory inventory;
 
     @Transient
@@ -77,6 +77,7 @@ public class User implements Comparator<User>, Comparable<User> {
     }
 
     public User() {
+        this.highScoreTime = new Date();
     }
 
     // =============================== Getters and Setters for each field ================================== //
