@@ -50,6 +50,8 @@ public class Report {
         this.reportedMessage = reportedMessage;
     }
 
+    public Long getId() { return this.id; }
+    public void setId(Long id) { this.id = id; }
     public String getUsername() {
         return username;
     }
@@ -66,6 +68,8 @@ public class Report {
         this.reportedUsername = reportedUsername;
     }
 
+    public String getReportedMessage() { return this.reportedMessage; }
+    public void setReportedMessage(String message) { this.reportedMessage = message; }
     public String getContent() {
         return content;
     }
