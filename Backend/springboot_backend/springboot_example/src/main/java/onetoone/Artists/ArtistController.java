@@ -3,6 +3,8 @@ package onetoone.Artists;
 import java.util.List;
 import java.util.Random;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +21,11 @@ import onetoone.Albums.AlbumRepository;
 
 /**
  * 
- * @author Vivek Bengre
+ * @author Conor O'Shea
  * 
- */ 
+ */
 
+@Api(value = "ArtistController", description = "REST APIs for artist controller, created by Conor O'Shea")
 @RestController
 public class ArtistController {
 
@@ -38,27 +41,32 @@ public class ArtistController {
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
+    @ApiOperation(value = "Get all Artists in the database", response = Iterable.class, tags = "artist-controller")
     @GetMapping(path = "/artists")
     List<Artist> getAllArtists(){
         return artistRepository.findAll();
     }
 
+    @ApiOperation(value = "Get Artists by id in the database", response = Artist.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{id}")
     Artist getArtistById( @PathVariable int id){
         return artistRepository.findById(id);
     }
 
+    @ApiOperation(value = "Get all Songs by an Artist in the database", response = Iterable.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{id}/songs")
     List<Song> getArtistSongs( @PathVariable int id) {
         Artist artist = artistRepository.findById(id);
         return artist.getSongs();
     }
 
+    @ApiOperation(value = "Get all Artists by name in the database", response = Artist.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{name}/study")
     Artist getArtistByName( @PathVariable String name) {
         return artistRepository.findByName(name);
     }
 
+    @ApiOperation(value = "Get a random Artist from the database", response = Iterable.class, tags = "artist-controller")
     @GetMapping(path = "/artists/random")
     Artist getRandomArtist() {
         Random rand = new Random();
@@ -66,12 +74,14 @@ public class ArtistController {
         return artistRepository.findById(randomNum);
     }
 
+    @ApiOperation(value = "Check if an Artist's name contains a string", response = Boolean.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{name}/name/{check}")
     boolean getArtistNameContains( @PathVariable String name, @PathVariable String check) {
         Artist artist = artistRepository.findByName(name);
         return artist.getName().contains(check);
     }
 
+    @ApiOperation(value = "Check if an Artist has a song featuring another specified Artist", response = Boolean.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{id}/features/{feature}")
     boolean getArtistFeatureCheck( @PathVariable int id, @PathVariable String feature) {
         Artist artist = artistRepository.findById(id);
@@ -84,6 +94,7 @@ public class ArtistController {
         return false;
     }
 
+    @ApiOperation(value = "CHeck if two artists have any song together", response = Boolean.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{id}/artists2/{id2}")
     boolean getArtistHaveSongTogether( @PathVariable int id, @PathVariable int id2) {
         Artist artist1 = artistRepository.findById(id);
@@ -106,6 +117,7 @@ public class ArtistController {
         return returner;
     }
 
+    @ApiOperation(value = "Create an Artist and add it to the database", response = String.class, tags = "artist-controller")
     @PostMapping(path = "/artists")
     String createArtist(@RequestBody Artist artist){
         if (artist == null)
@@ -114,6 +126,7 @@ public class ArtistController {
         return success;
     }
 
+    @ApiOperation(value = "Update an Artist in the database", response = Artist.class, tags = "artist-controller")
     @PutMapping("/artists/{id}")
     Artist updateArtist(@PathVariable int id, @RequestBody Artist request){
         Artist artist = artistRepository.findById(id);
@@ -121,8 +134,9 @@ public class ArtistController {
             return null;
         artistRepository.save(request);
         return artistRepository.findById(id);
-    }   
-    
+    }
+
+    @ApiOperation(value = "Assign a Song to an Artist in the database", response = String.class, tags = "artist-controller")
     @PutMapping("/artists/{artistId}/songs/{songId}")
     String assignSongToArtist(@PathVariable int artistId,@PathVariable int songId){
         Artist artist = artistRepository.findById(artistId);
@@ -135,6 +149,7 @@ public class ArtistController {
         return success;
     }
 
+    @ApiOperation(value = "Assign an Album to an Artist in the database", response = String.class, tags = "artist-controller")
     @PutMapping("/artists/{artistId}/albums/{albumId}")
     String assignAlbumToArtist(@PathVariable int artistId,@PathVariable int albumId){
         Artist artist = artistRepository.findById(artistId);
@@ -147,6 +162,7 @@ public class ArtistController {
         return success;
     }
 
+    @ApiOperation(value = "Delete an Artist from the database", response = String.class, tags = "artist-controller")
     @DeleteMapping(path = "/artists/{id}")
     String deleteArtist(@PathVariable int id){
         artistRepository.deleteById(id);
@@ -154,12 +170,14 @@ public class ArtistController {
     }
 
     // for the game directly
+    @ApiOperation(value = "Check if an Artist name contains a given string for the game", response = Boolean.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{name}/game/{check}")
     boolean checkIfArtistContains(@PathVariable String name, @PathVariable String check){
         Artist artist = artistRepository.findByName(name);
         return artist.getName().contains(check);
     }
 
+    @ApiOperation(value = "Check if a song by an artist contains a given string", response = Boolean.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{name}/songs/{songId}/game/{check}")
     boolean checkIfSongContains(@PathVariable String name, @PathVariable int songId,
                                 @PathVariable String check){
@@ -173,6 +191,7 @@ public class ArtistController {
         return false;
     }
 
+    @ApiOperation(value = "Check if an Artist and a Song contain strings for the game", response = String.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{name}/artist/{check1}/songs/{check2}")
     String checkIfSongAndArtistContains(@PathVariable String name, @PathVariable String check1,
                                         @PathVariable String check2){
@@ -190,6 +209,7 @@ public class ArtistController {
         return failure;
     }
 
+    @ApiOperation(value = "Return categories to be used by the game", response = String.class, tags = "artist-controller")
     @GetMapping(path = "/artists/categories")
     String[] getCategories(){
         String[] jsonArray = {
@@ -206,6 +226,7 @@ public class ArtistController {
     }
 
     // for study
+    @ApiOperation(value = "Check if an Artist has a song by song name", response = String.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{name}/songs/{songName}")
     String getArtistHasSong( @PathVariable String name, @PathVariable String songName) {
         Artist artist = artistRepository.findByName(name);
@@ -218,6 +239,7 @@ public class ArtistController {
         return failure;
     }
 
+    @ApiOperation(value = "Check how many songs an Artist has in the database", response = String.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{name}/songs/study")
     String getArtistSongNumber( @PathVariable String name) {
         Artist artist = artistRepository.findByName(name);
@@ -225,6 +247,7 @@ public class ArtistController {
         return "{\"numSongs\":\"" + returner + "\"}";
     }
 
+    @ApiOperation(value = "Get the song list of an Artist in the database", response = String.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{name}/songs/string/study")
     String getArtistSongsStringForm( @PathVariable String name) {
         Artist artist = artistRepository.findByName(name);

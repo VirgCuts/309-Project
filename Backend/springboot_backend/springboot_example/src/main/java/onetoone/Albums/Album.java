@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.annotations.ApiModelProperty;
 import onetoone.Artists.Artist;
 
 /**
@@ -21,7 +22,9 @@ public class Album {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @ApiModelProperty(notes = "Name of the Album",name="albumName",required=true,value="test name")
     private String albumName;
+    @ApiModelProperty(notes = "Genre of the Album",name="genre",required=true,value="test genre")
     private String genre;
 
     /*
