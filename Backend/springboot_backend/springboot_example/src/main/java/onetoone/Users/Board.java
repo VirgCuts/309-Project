@@ -3,12 +3,15 @@ package onetoone.Users;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiModelProperty;
 
 public class Board {
     private static final int gameSize = 3;
+    @ApiModelProperty(notes = "Whether the user has won or not", name="won")
     private boolean won;
+    @ApiModelProperty(notes = "2D array of the game board", name="game")
     private int[][] game;
-
+    @ApiModelProperty(notes = "Number of board spots filled correctly", name="score")
     private int score;
 
     public Board() {
