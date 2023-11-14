@@ -8,6 +8,7 @@ import onetoone.Songs.Song;
 
 import javax.persistence.*;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,9 +26,7 @@ public class User implements Comparator<User>, Comparable<User> {
     private int highScore;
     private int highScoreMonthly;
     private int highScoreWeekly;
-    private int highScoreTime;
-    private int highScoreTimeMonthly;
-    private int highScoreTimeWeekly;
+    private Date highScoreTime;
     private boolean canChat;
     private int banStrikes;
     private String selectedColor;
@@ -35,7 +34,7 @@ public class User implements Comparator<User>, Comparable<User> {
     private List<Report> reports;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "inventory_id")
+    @JoinColumn(name = "inventory_id", referencedColumnName = "id")
     private Inventory inventory;
 
     @Transient
@@ -53,11 +52,9 @@ public class User implements Comparator<User>, Comparable<User> {
         this.name = name;
         this.password = password;
         this.highScore = 0;
-        this.highScoreTime = 0;
+        this.highScoreTime = new Date();
         this.highScoreMonthly = 0;
-        this.highScoreTimeMonthly = 0;
         this.highScoreWeekly = 0;
-        this.highScoreTimeWeekly = 0;
         this.board = new Board();
         this.canChat = true;
         this.banStrikes = 0;
@@ -69,11 +66,9 @@ public class User implements Comparator<User>, Comparable<User> {
         this.name = name;
         this.password = "";
         this.highScore = highScore;
-        this.highScoreTime = 0;
-        this.highScoreMonthly = 0;
-        this.highScoreTimeMonthly = 0;
-        this.highScoreWeekly = 0;
-        this.highScoreTimeWeekly = 0;
+        this.highScoreTime = new Date();
+        this.highScoreMonthly = highScore;
+        this.highScoreWeekly = highScore;
         this.board = new Board();
         this.canChat = true;
         this.banStrikes = 0;
@@ -82,6 +77,7 @@ public class User implements Comparator<User>, Comparable<User> {
     }
 
     public User() {
+        this.highScoreTime = new Date();
     }
 
     // =============================== Getters and Setters for each field ================================== //
@@ -122,52 +118,42 @@ public class User implements Comparator<User>, Comparable<User> {
         this.highScore = highScore;
     }
 
-    public int getHighScoreTime(){
-        return highScore;
+    public Date getHighScoreTime(){
+        return highScoreTime;
     }
 
-    public void setHighScoreTime(int highScoreTime){
+    public void setHighScoreTime(Date highScoreTime){
         this.highScoreTime = highScoreTime;
     }
-    public int getHighScoreTimeMontly(){
+    public int getHighScoreMontly(){
         return highScoreMonthly;
     }
 
-    public void setHighScoreTimeMonthly(int highScoreTimeMonthly){
-        this.highScoreTimeMonthly = highScoreTimeMonthly;
-    }
 
-    public int getHighScoreTimeWeekly(){
+    public int getHighScoreWeekly(){
         return highScoreWeekly;
     }
 
-    public void setHighScoreTimeWeekly(int highScoreTimeWeekly){
-        this.highScoreTimeWeekly = highScoreTimeWeekly;
-    }
 
-    public void setAllHighScores(int highScore, int highScoreTime) {
+    public void setAllHighScores(int highScore) {
         if (this.highScore < highScore){
             this.highScore = highScore;
-            this.highScoreTime = highScoreTime;
+            this.highScoreTime = new Date();
         }
         if (this.highScoreMonthly < highScore) {
             this.highScoreMonthly = highScore;
-            this.highScoreTimeMonthly = highScoreTime;
         }
         if (this.highScoreWeekly < highScore) {
             this.highScoreWeekly = highScore;
-            this.highScoreTimeWeekly = highScoreTime;
         }
     }
 
     public void resetWeeklyScore() {
         this.highScoreWeekly = 0;
-        this.highScoreTimeWeekly = 0;
     }
 
     public void resetMonthlyScore() {
         this.highScoreMonthly = 0;
-        this.highScoreTimeMonthly = 0;
     }
 
     public boolean getCanChat(){
