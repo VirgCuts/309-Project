@@ -52,10 +52,4 @@ public class ReportController {
         userRepository.save(user);
         return success;
     }
-
-    @GetMapping(path = "/report/{username}")
-    List<Report> testing(@PathVariable String username){
-        User user = userRepository.findByName(username);
-        return user.getReports();
-    }
 }
