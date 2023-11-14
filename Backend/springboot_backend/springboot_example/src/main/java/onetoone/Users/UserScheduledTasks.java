@@ -13,7 +13,7 @@ public class UserScheduledTasks {
     @Autowired
     UserRepository userRepository;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 3600000)
     public void hourlyUpdate() {
         for (User user: userRepository.findAll()) {
             Date now = new Date();
