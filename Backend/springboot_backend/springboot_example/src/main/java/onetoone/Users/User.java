@@ -27,8 +27,6 @@ public class User implements Comparator<User>, Comparable<User> {
     private int highScoreMonthly;
     private int highScoreWeekly;
     private Date highScoreTime;
-    private int highScoreTimeMonthly; //might not need
-    private int highScoreTimeWeekly; //might not need
     private boolean canChat;
     private int banStrikes;
     private String selectedColor;
@@ -56,9 +54,7 @@ public class User implements Comparator<User>, Comparable<User> {
         this.highScore = 0;
         this.highScoreTime = new Date();
         this.highScoreMonthly = 0;
-        this.highScoreTimeMonthly = 0;
         this.highScoreWeekly = 0;
-        this.highScoreTimeWeekly = 0;
         this.board = new Board();
         this.canChat = true;
         this.banStrikes = 0;
@@ -71,10 +67,8 @@ public class User implements Comparator<User>, Comparable<User> {
         this.password = "";
         this.highScore = highScore;
         this.highScoreTime = new Date();
-        this.highScoreMonthly = 0;
-        this.highScoreTimeMonthly = 0;
-        this.highScoreWeekly = 0;
-        this.highScoreTimeWeekly = 0;
+        this.highScoreMonthly = highScore;
+        this.highScoreWeekly = highScore;
         this.board = new Board();
         this.canChat = true;
         this.banStrikes = 0;
@@ -130,21 +124,15 @@ public class User implements Comparator<User>, Comparable<User> {
     public void setHighScoreTime(Date highScoreTime){
         this.highScoreTime = highScoreTime;
     }
-    public int getHighScoreTimeMontly(){
+    public int getHighScoreMontly(){
         return highScoreMonthly;
     }
 
-    public void setHighScoreTimeMonthly(int highScoreTimeMonthly){
-        this.highScoreTimeMonthly = highScoreTimeMonthly;
-    }
 
-    public int getHighScoreTimeWeekly(){
+    public int getHighScoreWeekly(){
         return highScoreWeekly;
     }
 
-    public void setHighScoreTimeWeekly(int highScoreTimeWeekly){
-        this.highScoreTimeWeekly = highScoreTimeWeekly;
-    }
 
     public void setAllHighScores(int highScore) {
         if (this.highScore < highScore){
@@ -153,22 +141,18 @@ public class User implements Comparator<User>, Comparable<User> {
         }
         if (this.highScoreMonthly < highScore) {
             this.highScoreMonthly = highScore;
-            //this.highScoreTimeMonthly = highScoreTime;
         }
         if (this.highScoreWeekly < highScore) {
             this.highScoreWeekly = highScore;
-            //this.highScoreTimeWeekly = highScoreTime;
         }
     }
 
     public void resetWeeklyScore() {
         this.highScoreWeekly = 0;
-        this.highScoreTimeWeekly = 0;
     }
 
     public void resetMonthlyScore() {
         this.highScoreMonthly = 0;
-        this.highScoreTimeMonthly = 0;
     }
 
     public boolean getCanChat(){

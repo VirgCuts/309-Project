@@ -51,7 +51,7 @@ class Main {
     @Bean
     CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository, AlbumRepository albumRepository, MessageRepository messageRepository, ReportRepository reportRepository, InventoryRepository inventoryRepository) {
         return args -> {
-            userRepository.deleteAllInBatch();
+            userRepository.deleteAll();
             Album album1 = new Album("Graduation", "Rap");
             albumRepository.save(album1);
             User user1 = new User("Sam", 1000);
