@@ -44,7 +44,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * Represents the single-player game activity where a player interacts with the game board,
+ * answers questions, and competes against the timer to earn points.
+ *
+ * This class implements both the GameViewInterface and GameControllerInterface
+ * interfaces, providing methods for handling UI updates and game logic.
+ */
 public class SinglePlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface {
     private TextView timerTextView;
     private Button endGameButton;
@@ -70,6 +76,10 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
     private String Player1 = "Carter", selected="white";
 
+    /**
+     * Initializes the activity, sets up the UI elements, and fetches categories from the backend.
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         queue = Volley.newRequestQueue(this);
@@ -130,6 +140,11 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         timerTextView = findViewById(R.id.timer);
     }
     //calls to backend to see if player has a selected background gets string of color
+    /**
+     * Calls the backend to retrieve the background color for the player and updates the board accordingly.
+     *
+     * @param color The string representation of the selected background color.
+     */
     public void getBackground(String color) {
         Log.d("BCKCOL",color);
         if(color.equals("orange")) {
@@ -151,6 +166,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             changeBoardColor("green");
         }
     }
+    /**
+     * Calls the backend to get the selected background color for the player.
+     */
     public void getSelectColor() {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+Player1;
 
@@ -182,6 +200,12 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         );
         Volley.newRequestQueue(this).add(request);
     }
+    /**
+     * Sets the background color of the given EditText based on the specified color.
+     *
+     * @param editText The EditText to set the background color for.
+     * @param color    The string representation of the selected background color.
+     */
     public void setBackColor(EditText editText, String color) {
         int colorValue = 0;
         switch (color) {
@@ -208,7 +232,11 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentColor, PorterDuff.Mode.SRC_ATOP);
         editText.getBackground().mutate().setColorFilter(colorFilter);
     }
-
+    /**
+     * Changes the background color of the entire board based on the specified color.
+     *
+     * @param color The string representation of the selected background color.
+     */
     public void changeBoardColor(String color) {
         setBackColor(r1c1, color);
         setBackColor(r1c2, color);
@@ -220,10 +248,19 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setBackColor(r3c2, color);
         setBackColor(r3c3, color);
     }
+    /**
+     * Changes the background color of a single EditText based on the specified color.
+     *
+     * @param editText The EditText to change the background color for.
+     * @param color    The string representation of the selected background color.
+     */
     public void changeOneColor(EditText editText, String color) {
         setBackColor(editText, color);
     }
 
+    /**
+     * Implements the countdown timer for the game, updating the UI and handling the end of the game.
+     */
     @Override
     public void Timer() {
         handler.post(new Runnable() {
@@ -250,7 +287,12 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             }
         });
     }
-
+    /**
+     * Retrieves the username from SharedPreferences.
+     *
+     * @param context The context used to access SharedPreferences.
+     * @return The username stored in SharedPreferences.
+     */
     public String getUsername(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         String username = prefs.getString(USERNAME_KEY, null); // Return null if not found
@@ -260,6 +302,12 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
         return username;
     }
+    /**
+     * Updates the player's board with the provided answer at the specified row and column.
+     *
+     * @param editText The EditText containing the answer.
+     * @param answer   The answer to be updated on the player's board.
+     */
     private void updatePlayerBoard(EditText editText, String answer) {
         // Get the tag from the EditText, which contains the row and column information
         String tag = (String) editText.getTag();
@@ -282,15 +330,29 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         }
     }
 
+    /**
+     * Sets the text of the given TextView with the specified text.
+     *
+     * @param textView The TextView to set the text for.
+     * @param text     The text to be set on the TextView.
+     */
     @Override
     public void setBoxText(TextView textView, String text) {
         textView.setText(text);
     }
-
+    /**
+     * Sets the points in the UI by updating the Points TextView.
+     */
     public void setPoints() {
         TextView pointView = findViewById(R.id.Points);
         pointView.setText("Points: "+ points);
     }
+    /**
+     * Changes the background color of the provided EditText based on whether the answer is correct.
+     *
+     * @param editText   The EditText to change the color of.
+     * @param isCorrect  True if the answer is correct, false otherwise.
+     */
     @Override
     public void changeBoxColor(EditText editText, boolean isCorrect) {
         if (isCorrect) {
@@ -311,10 +373,18 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             }, 280);// Set a delay to revert the color
         }
     }
+    /**
+     * Animates a flash effect on the provided EditText.
+     *
+     * @param editText The EditText to apply the flash animation to.
+     */
     private void animateFlash(EditText editText) {
         Animation flash = AnimationUtils.loadAnimation(this, R.anim.shake_and_flash_animation);
         editText.startAnimation(flash);
     }
+    /**
+     * Ends the game by stopping the timer, showing the winner dialog, and updating the leaderboard.
+     */
     @Override
     public void endGame() {
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
@@ -323,7 +393,12 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
     }
 
-
+    /**
+     * Shows a custom dialog displaying the winner, time remaining, points, and the final game board.
+     *
+     * @param winner      The username of the winner.
+     * @param winnerBoard The final game board of the winner.
+     */
     private void showWinnerDialog(String winner, String[][] winnerBoard) {
         // Create and show the custom dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -396,12 +471,19 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             }
         });
     }
+
+    /**
+     * Called when the activity is being destroyed.
+     * Removes any pending callbacks and messages from the handler to prevent memory leaks.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null); // Remove any callbacks and messages from the handler
     }
-    //Backend Support
+    /**
+     * Fetches categories from the backend server and sets up the game board.
+     */
     private void fetchCategories() {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/categories"; // Replace with your actual backend server URL
 
@@ -426,6 +508,12 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
         queue.add(stringRequest); // Add the request to the RequestQueue
     }
+    /**
+     * Parses the JSON response into a List of Maps representing categories.
+     *
+     * @param jsonResponse The JSON response from the server.
+     * @return A List of Maps containing category information.
+     */
     private List<Map<String, String>> parseCategories(String jsonResponse) {
         List<Map<String, String>> categoryList = new ArrayList<>();
         try {
@@ -445,6 +533,11 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         }
         return categoryList;
     }
+    /**
+     * Sets up the game board with the provided categories.
+     *
+     * @param categories A List of Maps containing category information.
+     */
     private void setUpGameBoard(List<Map<String, String>> categories) {
         if (categories == null || categories.size() < 6) {
             Log.e("setUpGameBoard", "Categories have not been loaded properly.");
@@ -464,7 +557,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         categoriesLoaded = true;
         startGame();
     }
-
+    /**
+     * Displays an error dialog to the user when categories cannot be fetched.
+     */
     private void showErrorDialog() {
         // Show an error dialog to the user
         new AlertDialog.Builder(this)
@@ -474,13 +569,21 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+    /**
+     * Starts the game by initializing the timer and setting initial points.
+     */
     private void startGame() {
         if (categoriesLoaded) {
             Timer(); // Start the timer
             setPoints(); // Set initial points
         }
     }
-    // Update the setEditTextListener to use the new checkAnswer method with a callback
+    /**
+     * Sets an Listener for the given EditText.
+     * Handles user input, checks answers, and updates the game state accordingly.
+     *
+     * @param editText The EditText to set the listener for.
+     */
     private void setEditTextListener(final EditText editText) {
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -542,6 +645,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     }
 
     // Define a callback interface for response handling
+
     interface AnswerCheckCallback {
         void onResult(boolean isCorrect);
     }
@@ -563,6 +667,14 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     public void checkAnswer(String subject, String subject2, String check, String check2, int col, int row){
 
     }
+    /**
+     * Checks if the provided artist and song information matches certain criteria.
+     *
+     * @param userAnswer The user-provided answer.
+     * @param check1     The first check parameter.
+     * @param check2     The second check parameter.
+     * @param callback   The callback to handle the result.
+     */
     private void checkIfArtistAndSongContains(String userAnswer, String check1, String check2, AnswerCheckCallback callback){
         // Assuming 'userAnswer' contains the name to be checked
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + userAnswer + "/artist/" + check1 + "/songs/" + check2;
@@ -598,6 +710,13 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         // Assuming 'queue' is an instance of RequestQueue
         queue.add(stringRequest);
     }
+    /**
+     * Checks if the artist with the given ID has a specified feature.
+     *
+     * @param artistId   The ID of the artist to check.
+     * @param feature    The feature to check for.
+     * @param callback   The callback to handle the result.
+     */
     private void checkArtistFeature(int artistId, String feature, AnswerCheckCallback callback ) { //Artist id will be changed
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artistId + "/features/" + feature; //Artist id will be changed
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -630,6 +749,13 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         // Assuming 'queue' is an instance of RequestQueue
         queue.add(stringRequest);
     }
+    /**
+     * Checks if two artists have a song together based on their IDs.
+     *
+     * @param artistId1  The ID of the first artist.
+     * @param artistId2  The ID of the second artist.
+     * @param callback   The callback to handle the result.
+     */
     private void checkIfArtistsHaveSongTogether(int artistId1, int artistId2, AnswerCheckCallback callback) { //Artist id will be changed
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artistId1 + "/artists2/" + artistId2; //Artist id will be changed
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -662,6 +788,12 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         // Assuming 'queue' is an instance of RequestQueue
         queue.add(stringRequest);
     }
+    /**
+     * Adds a player's score to the leaderboard.
+     *
+     * @param username The username of the player.
+     * @param score    The score to be added to the leaderboard.
+     */
     private void addToLeaderboard(String username, int score) {
         // URL of the API to add a new player
         String url = "http://coms-309-022.class.las.iastate.edu:8080/leaderboard/" + username + "/" + score;
@@ -697,5 +829,4 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
         }
     }
-
 }

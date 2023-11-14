@@ -45,7 +45,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * Represents the multiplayer game activity where two players interact with a game board,
+ * answer questions, and compete against each other.
+ *
+ * This class implements both the GameViewInterface and GameControllerInterface
+ * and WebSocketListener interfaces, providing methods for handling UI updates, game logic,
+ * and WebSocket communication.
+ */
 public class MultiPlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface,WebSocketListener {
     private TextView timerTextView;
     private Button endGameButton;
@@ -144,7 +151,10 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         });
     }
 
-
+    /**
+     * Not used in Multiplayer but implemented in case,
+     * Implements the countdown timer for the game, updating the UI and handling the end of the game.
+     */
     @Override
     public void Timer() {
         handler.post(new Runnable() {
@@ -171,6 +181,13 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             }
         });
     }
+    /**
+     * Updates the player board with the given answer at the specified row and column.
+     * Also sends the updated board state to the opponent.
+     *
+     * @param editText The EditText containing the user's answer.
+     * @param answer   The user's answer.
+     */
     private void updatePlayerBoard(EditText editText, String answer) {
         // Get the tag from the EditText, which contains the row and column information
         String tag = (String) editText.getTag();
@@ -197,6 +214,11 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             Log.e("updatePlayerBoard", "Tag on EditText does not contain both row and column information: " + tag);
         }
     }
+    /**
+     * Sends the current game board state to the opponent via WebSocket.
+     *
+     * @param board The current game board state.
+     */
     private void sendBoardState(sendBoard board) {
         try {
             // sends the edit text message
@@ -218,17 +240,31 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             Log.d("ExceptionSendMessage:", e.getMessage().toString());
         }
     }
+    /**
+     * Sets the text of the given TextView with the specified text.
+     *
+     * @param textView The TextView to set the text for.
+     * @param text     The text to be set on the TextView.
+     */
     @Override
     public void setBoxText(TextView textView, String text) {
         textView.setText(text);
     }
-
+    /**
+     * Holdover from Singleplayer, would update points if implemented
+     */
     public void setPoints() {
             TextView pointView = findViewById(R.id.Points);
             pointView.setText("Points: "+ points);
 
 
     }
+    /**
+     * Changes the background color of the provided EditText based on whether the answer is correct.
+     *
+     * @param editText   The EditText to change the color of.
+     * @param isCorrect  True if the answer is correct, false otherwise.
+     */
     @Override
     public void changeBoxColor(EditText editText, boolean isCorrect) {
         if (isCorrect) {
@@ -249,11 +285,18 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             }, 280);// Set a delay to revert the color
         }
     }
+    /**
+     * Animates a flash effect on the provided EditText.
+     *
+     * @param editText The EditText to apply the flash animation to.
+     */
     private void animateFlash(EditText editText) {
         Animation flash = AnimationUtils.loadAnimation(this, R.anim.shake_and_flash_animation);
         editText.startAnimation(flash);
     }
-
+    /**
+     * Ends the game by displaying the winner or loser dialog and navigating to the main activity.
+     */
     @Override
     public void endGame() {
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
@@ -266,6 +309,12 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         }
 
     }
+    /**
+     * Disables user interaction with the given EditText, changes its background color to a semi-transparent red,
+     * and applies a flash animation to visually indicate the disabling. Used in endGmae
+     *
+     * @param editText The EditText to be disabled.
+     */
     private void turnOffEdit(EditText editText) {
 
         editText.setFocusable(false);
@@ -277,6 +326,11 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         animateFlash(editText);
     }
 
+    /**
+     * Shows a loser dialog indicating that the player has lost the game.
+     *
+     * @param loser The name of the losing player.
+     */
     private void showLoserDialog(String loser) {
         Log.d("LOSER", "Calling ENDGAME LOSER");
         end = true;
@@ -295,6 +349,12 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         turnOffEdit(r3c3);
 
     }
+    /**
+     * Shows a custom dialog displaying the winner, time remaining, points, and the final game board.
+     *
+     * @param winner      The username of the winner.
+     * @param winnerBoard The final game board of the winner.
+     */
     private void showWinnerDialog(String winner, String[][] winnerBoard) {
         // Create and show the custom dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -348,12 +408,19 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             }
         });
     }
+    /**
+     * Called when the activity is being destroyed.
+     * Removes any pending callbacks and messages from the handler to prevent memory leaks.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null); // Remove any callbacks and messages from the handler
     }
     //Backend Support
+    /**
+     * Fetches categories from the backend server and sets up the game board.
+     */
     private void fetchCategories() {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/categories"; // Replace with your actual backend server URL
 
@@ -377,6 +444,12 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
 
         queue.add(stringRequest); // Add the request to the RequestQueue
     }
+    /**
+     * Parses the JSON response into a List of Maps representing categories.
+     *
+     * @param jsonResponse The JSON response from the server.
+     * @return A List of Maps containing category information.
+     */
     private List<Map<String, String>> parseCategories(String jsonResponse) {
         List<Map<String, String>> categoryList = new ArrayList<>();
         try {
@@ -396,6 +469,11 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         }
         return categoryList;
     }
+    /**
+     * Sets up the game board with the provided categories.
+     *
+     * @param categories A List of Maps containing category information.
+     */
     private void setUpGameBoard(List<Map<String, String>> categories) {
         // Assuming you have a layout or a way to set categories to your game board
         row1.setText(categories.get(0).get("text"));
@@ -410,10 +488,15 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         categoriesLoaded = true;
         startGame();
     }
-
+    /**
+     * Calls the method to end the game when the opponent has won.
+     */
     private void callEnd() {
         showLoserDialog(Player1);
     }
+    /**
+     * Displays an error dialog to the user when categories cannot be fetched.
+     */
     private void showErrorDialog() {
         // Show an error dialog to the user
         new AlertDialog.Builder(this)
@@ -423,12 +506,21 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+    /**
+     * Starts the game by initializing the timer and setting initial points.
+     */
     private void startGame() {
         if (categoriesLoaded) {
             setPoints(); // Set initial points
         }
     }
     // Update the setEditTextListener to use the new checkAnswer method with a callback
+    /**
+     * Sets an Listener for the given EditText.
+     * Handles user input, checks answers, and updates the game state accordingly.
+     *
+     * @param editText The EditText to set the listener for.
+     */
     private void setEditTextListener(final EditText editText) {
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -490,12 +582,20 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             }
         });
     }
-
+    /**
+     * Sets the listener for the WebSocket open event.
+     * Required to implement
+     */
     @Override
     public void onWebSocketOpen(ServerHandshake handshakedata) {
 
     }
     //changes the colors of the o1-09 squares to reflect what the opponent has answered correctly
+    /**
+     * Changes the colors of the o1-o9 squares to reflect what the opponent has answered correctly.
+     *
+     * @param view The index of the square to change color (0-8).
+     */
     private void changeOppColor(int view) {
         String textViewID = "o" + (view + 1); // Add 1 to match your 0-8 input
 
@@ -513,6 +613,11 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             callEnd();
         }
     }
+    /**
+     * Handles the incoming WebSocket message.
+     *
+     * @param message The WebSocket message received from the opponent.
+     */
     @Override
     public void onWebSocketMessage(String message) {
         Log.d("RECIEVED", message);
@@ -548,12 +653,22 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
 
     }
 
-
+    /**
+     * Handles the WebSocket close event.
+     *
+     * @param code   The close code.
+     * @param reason The reason for the close.
+     * @param remote True if the close was initiated by the remote party.
+     */
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {
 
     }
-
+    /**
+     * Handles WebSocket errors.
+     *
+     * @param ex The exception representing the WebSocket error.
+     */
     @Override
     public void onWebSocketError(Exception ex) {
 
@@ -581,6 +696,14 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     public void checkAnswer(String subject, String subject2, String check, String check2, int col, int row){
 
     }
+    /**
+     * Checks if the provided artist and song information matches certain criteria.
+     *
+     * @param userAnswer The user-provided answer.
+     * @param check1     The first check parameter.
+     * @param check2     The second check parameter.
+     * @param callback   The callback to handle the result.
+     */
     private void checkIfArtistAndSongContains(String userAnswer, String check1, String check2, AnswerCheckCallback callback){
         // Assuming 'userAnswer' contains the name to be checked
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + userAnswer + "/artist/" + check1 + "/songs/" + check2;
@@ -615,6 +738,13 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         // Assuming 'queue' is an instance of RequestQueue
         queue.add(stringRequest);
     }
+    /**
+     * Checks if the artist with the given ID has a specified feature.
+     *
+     * @param artistId   The ID of the artist to check.
+     * @param feature    The feature to check for.
+     * @param callback   The callback to handle the result.
+     */
     private void checkArtistFeature(int artistId, String feature, AnswerCheckCallback callback ) { //Artist id will be changed
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artistId + "/features/" + feature; //Artist id will be changed
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -647,6 +777,13 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         // Assuming 'queue' is an instance of RequestQueue
         queue.add(stringRequest);
     }
+    /**
+     * Checks if two artists have a song together based on their IDs.
+     *
+     * @param artistId1  The ID of the first artist.
+     * @param artistId2  The ID of the second artist.
+     * @param callback   The callback to handle the result.
+     */
     private void checkIfArtistsHaveSongTogether(int artistId1, int artistId2, AnswerCheckCallback callback) { //Artist id will be changed
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artistId1 + "/artists2/" + artistId2; //Artist id will be changed
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,

@@ -24,6 +24,11 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+/**
+ * The ShopActivity class represents the main activity for the shopping functionality
+ * in the Android application. Users can buy and select colors for their points.
+ *
+ */
 public class ShopActivity extends AppCompatActivity {
     private Navigation navigationHelper;
     private Button orange, purple, lightblue, yellow, magenta, green, white;
@@ -31,6 +36,12 @@ public class ShopActivity extends AppCompatActivity {
     private int bal = 10000;
     private String User = "Carter", selected, purchased = "false, false, false, false, false, false";
 
+    /**
+     * Called when the activity is starting. This is where most initialization
+     * should go: calling setContentView(int) to inflate the activity's UI,
+     * initializing views, setting up navigation, and initializing button click listeners.
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +72,9 @@ public class ShopActivity extends AppCompatActivity {
             }
         }, delayMillis);
     }
-
+    /**
+     * Initializes the UI views such as buttons and text views.
+     */
     private void initializeViews() {
         orange = findViewById(R.id.orange);
         purple = findViewById(R.id.purple);
@@ -72,11 +85,23 @@ public class ShopActivity extends AppCompatActivity {
         white = findViewById(R.id.white);
         balance = findViewById(R.id.balance);
     }
-
+    /**
+     * Sets the click listener for the specified button, allowing users to buy a color.
+     *
+     * @param button The button to set the click listener for.
+     * @param cost   The cost associated with buying the color.
+     * @param color  The color being purchased.
+     */
     private void setButtonClickListener(Button button, int cost, String color) {
         button.setOnClickListener(v -> buyColor(button, cost, color));
     }
-
+    /**
+     * Handles the color purchase when a button is clicked.
+     *
+     * @param button The button clicked.
+     * @param cost   The cost of the color.
+     * @param color  The color being purchased.
+     */
     private void buyColor(Button button, int cost, String color) {
         toastSelected(color);
         setSelectColor(color);
@@ -84,6 +109,9 @@ public class ShopActivity extends AppCompatActivity {
         setPurchased(color);
 
     }
+    /**
+     * Retrieves the list of purchased colors for the user from the server.
+     */
     public void getPurchased() {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/inventory/"+User;
 
@@ -104,6 +132,11 @@ public class ShopActivity extends AppCompatActivity {
         });
         Volley.newRequestQueue(this).add(stringRequest);
     }
+    /**
+     * Sets the purchased status for a specific color on the server.
+     *
+     * @param color The color for which the purchased status is being set.
+     */
     public void setPurchased(String color) {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/inventory/"+User+"/" + color;
         JsonObjectRequest request = new JsonObjectRequest(
@@ -126,6 +159,9 @@ public class ShopActivity extends AppCompatActivity {
         );
         Volley.newRequestQueue(this).add(request);
     }
+    /**
+     * Retrieves the currently selected color for the user from the server.
+     */
     public void getSelectColor() {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+User;
 
@@ -157,6 +193,12 @@ public class ShopActivity extends AppCompatActivity {
         );
         Volley.newRequestQueue(this).add(request);
     }
+    /**
+     * Checks whether the user has enough points to make a purchase.
+     *
+     * @param neededPts The points required for the purchase.
+     * @return true if the user has enough points,false otherwise.
+     */
     public boolean checkPoints(int neededPts) {
         if(bal < neededPts) {
             //throw some kinda indicator
@@ -167,6 +209,11 @@ public class ShopActivity extends AppCompatActivity {
             return true;
         }
     }
+    /**
+     * Sets the selected color for the user on the server.
+     *
+     * @param color The color to set as the selected color.
+     */
     public void setSelectColor(String color) {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+User+"/" + color;
         JsonObjectRequest request = new JsonObjectRequest(
@@ -190,6 +237,9 @@ public class ShopActivity extends AppCompatActivity {
         );
         Volley.newRequestQueue(this).add(request);
     }
+    /**
+     * Updates the state of buttons based on the purchased colors.
+     */
     private void updateButtons() {
         String[] splitPur = purchased.split(",");
         Log.d("UPDATE", Arrays.toString(splitPur));
@@ -201,24 +251,46 @@ public class ShopActivity extends AppCompatActivity {
         setBoughtIfTrue(splitPur[4], magenta, "magenta");
         setBoughtIfTrue(splitPur[5], green, "green");
     }
+    /**
+     * Retrieves and sets the user's balance from the server.
+     */
     public void setBalance() {
         balance = findViewById(R.id.balance);
         balance.setText("Balance: " + getBalance(User));
     }
+    /**
+     *Supposed to get balance, not implemented currently
+     */
     public int getBalance(String user) {
         //value should be saved to bal at end
         return bal;
     }
+    /**
+     * Sets the text of a button to "Select" if the corresponding color has been purchased.
+     *
+     * @param value  The purchased status as a string.
+     * @param button The button to set if purchased.
+     * @param color  The color associated with the button.
+     */
     private void setBoughtIfTrue(String value, Button button, String color) {
         if (Boolean.parseBoolean(value.trim())) {
             setBought(button, color);
         }
     }
-
+    /**
+     * Sets a button as "Select" to indicate it has been purchased.
+     *
+     * @param button The button to set as purchased.
+     * @param color  The color associated with the button.
+     */
     private void setBought(Button button, String color) {
         button.setText("Select");
     }
-
+    /**
+     * Displays a Snackbar with the selected color information.
+     *
+     * @param color The selected color.
+     */
     private void toastSelected(String color) {
         View view = findViewById(R.id.shop);
         Snackbar snackbar = Snackbar.make(view, "Your Current Color is - " + color, Snackbar.LENGTH_INDEFINITE);
