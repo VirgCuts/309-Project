@@ -2,6 +2,7 @@ package onetoone.Artists;
 
 import javax.persistence.*;
 
+import io.swagger.annotations.ApiModelProperty;
 import onetoone.Songs.Song;
 import onetoone.Albums.Album;
 
@@ -11,7 +12,7 @@ import java.util.List;
 
 /**
  * 
- * @author Vivek Bengre
+ * @author Conor O'Shea
  * 
  */ 
 
@@ -26,9 +27,12 @@ public class Artist implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ApiModelProperty(notes = "Name of the Artist",name="name",required=true,value="test name")
     private String name;
 
+    @ApiModelProperty(notes = "Number of Platinums for the Artist",name="numPlatinums",required=true,value="test numPlatinums")
     private int numPlatinums;
+    @ApiModelProperty(notes = "Number of Grammys for the Artist",name="numGrammys",required=true,value="test numGrammys")
     private int numGrammys;
 
 

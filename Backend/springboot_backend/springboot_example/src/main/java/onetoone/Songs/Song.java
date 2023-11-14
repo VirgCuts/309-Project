@@ -4,11 +4,12 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.swagger.annotations.ApiModelProperty;
 import onetoone.Artists.Artist;
 
 /**
  * 
- * @author Vivek Bengre
+ * @author Conor O'Shea
  */ 
 
 @Entity
@@ -21,8 +22,12 @@ public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ApiModelProperty(notes = "Name of the Song",name="songName",required=true,value="test name")
     private String songName;
+    @ApiModelProperty(notes = "Genre of the Song",name="genre",required=true,value="test genre")
     private String genre;
+    @ApiModelProperty(notes = "Features on the Song",name="feature",required=true,value="test feature")
     private String feature;
 
     /*
