@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.Request.Method;
@@ -32,7 +33,10 @@ import com.example.sumon.androidvolley.utils.Const;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+/**
+ * Class used for the study activity to test the user against data in the database
+ *
+ */
 public class StudyActivity extends AppCompatActivity {
     private final String TAG = StudyActivity.class.getSimpleName();
     private EditText msgResponse;
@@ -43,6 +47,10 @@ public class StudyActivity extends AppCompatActivity {
 
     private Navigation navigationHelper;
     @Override
+    /**
+     * Intializes Buttons and listeners
+     *
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.study_db);
@@ -98,10 +106,14 @@ public class StudyActivity extends AppCompatActivity {
         });
 
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
+    /**
+     * Retrieves a random artist from the server and updates the UI with the artist's information.
+     */
     private void retrieveRandomArtist() {
 
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/random";
@@ -153,7 +165,11 @@ public class StudyActivity extends AppCompatActivity {
         // Add the request to the Volley request queue
         Volley.newRequestQueue(this).add(request);
     }
-
+    /**
+     * Shows all the answers (songs) for a given artist.
+     *
+     * @param name The name of the artist.
+     */
     private void showAllAnswers(String name) {
 
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + name + "/songs/string/study";
@@ -191,6 +207,9 @@ public class StudyActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
+    /**
+     * Increases Incorrect answer tally on screen
+     */
     private void updateIncorrect() {
         String[] splitTxt = numIncorrect.getText().toString().split(":");
         int var = Integer.parseInt(splitTxt[1].trim());
@@ -202,6 +221,9 @@ public class StudyActivity extends AppCompatActivity {
         //resets the editText
         msgResponse.setText("");
     }
+    /**
+     * Increases Correct answer tally on screen
+     */
     private void updateCorrect() {
         String[] splitTxt = numCorrect.getText().toString().split(":");
         int var = Integer.parseInt(splitTxt[1].trim());
@@ -221,6 +243,13 @@ public class StudyActivity extends AppCompatActivity {
         retrieveRandomArtist();
 
     }
+    /**
+     * Checks if a given song by a specific artist is correct by making a request to the server.
+     *
+     * @param artist The name of the artist.
+     * @param song   The name of the song to be checked.
+     * @return True if the song is correct, false otherwise.
+     */
     private boolean checkArtistSong(String artist, String song) {
 
         String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artist + "/songs/" + song;

@@ -5,10 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.sumon.androidvolley.R;
 
+
+/**
+ * Currently Not implemented, will display weekly leaderboard.
+ */
 public class WeeklyFragment extends Fragment {
 
     // Constructor

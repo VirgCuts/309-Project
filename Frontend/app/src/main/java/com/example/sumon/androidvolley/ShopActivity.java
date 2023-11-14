@@ -1,6 +1,7 @@
 package com.example.sumon.androidvolley;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,37 +15,67 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+/**
+ * The ShopActivity class represents the main activity for the shopping functionality
+ * in the Android application. Users can buy and select colors for their points.
+ *
+ */
 public class ShopActivity extends AppCompatActivity {
     private Navigation navigationHelper;
-    private Button orange, purple, lightblue, yellow, magenta, green, white, refresh;
+    private Button orange, purple, lightblue, yellow, magenta, green, white;
     private TextView balance;
     private int bal = 10000;
-    private String User = "Carter",selected, purchased = "false, false, false, false, false, false";
+    private String User = "Carter", selected, purchased = "false, false, false, false, false, false";
 
-
+    /**
+     * Called when the activity is starting. This is where most initialization
+     * should go: calling setContentView(int) to inflate the activity's UI,
+     * initializing views, setting up navigation, and initializing button click listeners.
+     *
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
+
+        initializeViews();
+        setBalance();
         navigationHelper = new Navigation(this);
         navigationHelper.setupNavigation();
 
-        setBalance();
+        setButtonClickListener(orange, 100, "orange");
+        setButtonClickListener(purple, 300, "purple");
+        setButtonClickListener(lightblue, 500, "lightblue");
+        setButtonClickListener(yellow, 600, "yellow");
+        setButtonClickListener(magenta, 900, "magenta");
+        setButtonClickListener(green, 1000, "green");
+        setButtonClickListener(white, 0, "none");
+
+        getSelectColor();
+        getPurchased();
+        long delayMillis = 500;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateButtons();
+                toastSelected(selected);
+            }
+        }, delayMillis);
+    }
+    /**
+     * Initializes the UI views such as buttons and text views.
+     */
+    private void initializeViews() {
         orange = findViewById(R.id.orange);
         purple = findViewById(R.id.purple);
         lightblue = findViewById(R.id.lightblue);
@@ -52,75 +83,35 @@ public class ShopActivity extends AppCompatActivity {
         magenta = findViewById(R.id.magenta);
         green = findViewById(R.id.green);
         white = findViewById(R.id.white);
-        refresh = findViewById(R.id.refresh);
+        balance = findViewById(R.id.balance);
+    }
+    /**
+     * Sets the click listener for the specified button, allowing users to buy a color.
+     *
+     * @param button The button to set the click listener for.
+     * @param cost   The cost associated with buying the color.
+     * @param color  The color being purchased.
+     */
+    private void setButtonClickListener(Button button, int cost, String color) {
+        button.setOnClickListener(v -> buyColor(button, cost, color));
+    }
+    /**
+     * Handles the color purchase when a button is clicked.
+     *
+     * @param button The button clicked.
+     * @param cost   The cost of the color.
+     * @param color  The color being purchased.
+     */
+    private void buyColor(Button button, int cost, String color) {
+        toastSelected(color);
+        setSelectColor(color);
         getPurchased();
-        selected = getSelectColor();
-        orange.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buyColor(orange, 100, "orange");
-            }
-        });
-        purple.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buyColor(purple, 300, "purple");
-            }
-        });
-        lightblue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buyColor(lightblue, 500, "lightblue");
-            }
-        });
-        yellow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buyColor(yellow, 600, "yellow");
-            }
-        });
-        magenta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buyColor(magenta, 900, "magenta");
-            }
-        });
-        green.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buyColor(green, 1000, "green");
-            }
-        });
-        white.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buyColor(white, 0, "none");
-            }
-        });
-        refresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateButtons();
-            }
-        });
-        updateButtons();
-    }
-    public void purchasedButtons(Array colorArr) {
-        //orange,purple,lightblue,yellow,magenta,green
-        String input = "false, false, true, true, false, false";
-        String[] substrings = input.split(",");
-        boolean[] booleanArray = new boolean[substrings.length];
+        setPurchased(color);
 
-        for (int i = 0; i < substrings.length; i++) {
-            booleanArray[i] = Boolean.parseBoolean(substrings[i].trim());
-        }
-
-        // Print the boolean array to verify the result
-        for (boolean value : booleanArray) {
-            Log.d("VAL",Boolean.toString(value));
-        }
     }
-    //runs on startup to see if a color has been priorly purchased
+    /**
+     * Retrieves the list of purchased colors for the user from the server.
+     */
     public void getPurchased() {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/inventory/"+User;
 
@@ -139,10 +130,13 @@ public class ShopActivity extends AppCompatActivity {
                 Log.d("GETURERR",error.toString());
             }
         });
-
         Volley.newRequestQueue(this).add(stringRequest);
     }
-    //sends color to backend to notify that color is now owned by user
+    /**
+     * Sets the purchased status for a specific color on the server.
+     *
+     * @param color The color for which the purchased status is being set.
+     */
     public void setPurchased(String color) {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/inventory/"+User+"/" + color;
         JsonObjectRequest request = new JsonObjectRequest(
@@ -165,10 +159,11 @@ public class ShopActivity extends AppCompatActivity {
         );
         Volley.newRequestQueue(this).add(request);
     }
-    //sends selected color to backend to notify that it is now the selected color
-    public String getSelectColor() {
-        final String[] value = {"white"};
-      String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+User;
+    /**
+     * Retrieves the currently selected color for the user from the server.
+     */
+    public void getSelectColor() {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+User;
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -178,11 +173,13 @@ public class ShopActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("SINGLEGET",response.toString());
-                        value[0] = response.toString();
-                        String[] splitValue = value[0].split(":");
-                        value[0] = splitValue[1];
-                        value[0] = value[0].replace("}", "");
-                        Log.d("GET", value[0]);
+                        String value = response.toString();
+                        String[] splitValue = value.split(":");
+                        value = splitValue[1];
+                        value = value.replace("}", "");
+                        value = value.replace("\"", "");
+                        Log.d("GET", value);
+                        selected = value;
 
                     }
                 },
@@ -195,8 +192,28 @@ public class ShopActivity extends AppCompatActivity {
                 }
         );
         Volley.newRequestQueue(this).add(request);
-        return value[0];
     }
+    /**
+     * Checks whether the user has enough points to make a purchase.
+     *
+     * @param neededPts The points required for the purchase.
+     * @return true if the user has enough points,false otherwise.
+     */
+    public boolean checkPoints(int neededPts) {
+        if(bal < neededPts) {
+            //throw some kinda indicator
+            return false;
+        }
+        else {
+
+            return true;
+        }
+    }
+    /**
+     * Sets the selected color for the user on the server.
+     *
+     * @param color The color to set as the selected color.
+     */
     public void setSelectColor(String color) {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+User+"/" + color;
         JsonObjectRequest request = new JsonObjectRequest(
@@ -220,88 +237,65 @@ public class ShopActivity extends AppCompatActivity {
         );
         Volley.newRequestQueue(this).add(request);
     }
-    //calls to backend to get the point balance associated with user
-    //sends user to backend need to get back string with a point val to Intparse
-    public int getBalance(String user) {
+    /**
+     * Updates the state of buttons based on the purchased colors.
+     */
+    private void updateButtons() {
+        String[] splitPur = purchased.split(",");
+        Log.d("UPDATE", Arrays.toString(splitPur));
 
-        //value should be saved to bal at end
-        return bal;
+        setBoughtIfTrue(splitPur[0], orange, "orange");
+        setBoughtIfTrue(splitPur[1], purple, "purple");
+        setBoughtIfTrue(splitPur[2], lightblue, "lightblue");
+        setBoughtIfTrue(splitPur[3], yellow, "yellow");
+        setBoughtIfTrue(splitPur[4], magenta, "magenta");
+        setBoughtIfTrue(splitPur[5], green, "green");
     }
+    /**
+     * Retrieves and sets the user's balance from the server.
+     */
     public void setBalance() {
         balance = findViewById(R.id.balance);
         balance.setText("Balance: " + getBalance(User));
     }
-    public boolean checkPoints(int neededPts) {
-        if(bal < neededPts) {
-            //throw some kinda indicator
-            return false;
-        }
-        else {
-
-            return true;
+    /**
+     *Supposed to get balance, not implemented currently
+     */
+    public int getBalance(String user) {
+        //value should be saved to bal at end
+        return bal;
+    }
+    /**
+     * Sets the text of a button to "Select" if the corresponding color has been purchased.
+     *
+     * @param value  The purchased status as a string.
+     * @param button The button to set if purchased.
+     * @param color  The color associated with the button.
+     */
+    private void setBoughtIfTrue(String value, Button button, String color) {
+        if (Boolean.parseBoolean(value.trim())) {
+            setBought(button, color);
         }
     }
-    public void buyColor(Button button, int cost, String color) {
-        if(checkPoints(cost)) {
-            changeBuyToSelect(button, color);
-            //addColorToUser(color);
-            setSelectColor(color);
-            getPurchased();
-            setPurchased(color);
-            updateButtons();
-        }
-
+    /**
+     * Sets a button as "Select" to indicate it has been purchased.
+     *
+     * @param button The button to set as purchased.
+     * @param color  The color associated with the button.
+     */
+    private void setBought(Button button, String color) {
+        button.setText("Select");
     }
-
-    public void updateButtons() {
-        String[] splitPur = purchased.split(",");
-        Log.d("SPLITBOARD", splitPur[0]+ splitPur[1] + splitPur[2] + splitPur[3] + splitPur[4]+ splitPur[5]);
-
-        if(splitPur[0].equals("true")) {
-            setBought("orange");
-        }
-        if (splitPur[1].equals(" true")) {
-            setBought("purple");
-        }
-        if (splitPur[2].equals(" true")) {
-            setBought("lightblue");
-        }
-        if (splitPur[3].equals(" true")) {
-            setBought("yellow");
-        }
-        if (splitPur[4].equals(" true")) {
-            setBought("magenta");
-        }
-        if (splitPur[5].equals(" true")) {
-            setBought("green");
-        }
-    }
-    public void setBought(String purchased) {
-            if(purchased.equals("orange")) {
-                orange.setText("Select");
-            }
-            if(purchased.equals("purple")) {
-                purple.setText("Select");
-            }
-             if(purchased.equals("lightblue")) {
-                lightblue.setText("Select");
-            }
-             if(purchased.equals("yellow")) {
-                yellow.setText("Select");
-            }
-             if(purchased.equals("magenta")) {
-                magenta.setText("Select");
-            }
-             if(purchased.equals("green")) {
-                green.setText("Select");
-            }
-    }
-    public void changeBuyToSelect(Button button, String color) {
+    /**
+     * Displays a Snackbar with the selected color information.
+     *
+     * @param color The selected color.
+     */
+    private void toastSelected(String color) {
         View view = findViewById(R.id.shop);
         Snackbar snackbar = Snackbar.make(view, "Your Current Color is - " + color, Snackbar.LENGTH_INDEFINITE);
         snackbar.show();
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);

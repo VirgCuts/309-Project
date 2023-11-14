@@ -22,13 +22,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The ReportUserActivity class represents an activity for reporting users in the Android application.
+ * Users can report specific messages from a chat, providing additional details in a report.
+ * This activity allows users to send reports, and the reports are sent to a server for further processing.
+ *
+ */
 public class ReportUserActivity extends AppCompatActivity {
 
     private EditText etReportBody;
     private Button btnSendReport;
     private Navigation navigationHelper;
     private static final String BASE_URL = "http://coms-309-022.class.las.iastate.edu:8080";
-
+    /**
+     * Called when the activity is starting. This is where most initialization
+     * should go: calling setContentView(int) to inflate the activity's UI,
+     * initializing views, setting up navigation, and initializing button click listeners.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +69,13 @@ public class ReportUserActivity extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * Sends a report to the server with the provided details.
+     *
+     * @param username                The username of the reported user.
+     * @param reportedMessageContent The content of the reported message.
+     * @param reportContent           The details of the report.
+     */
     private void sendReport(String username, String reportedMessageContent, String reportContent) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -111,6 +127,12 @@ public class ReportUserActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
+    /**
+     * Handles options menu selection.
+     *
+     * @param item The selected menu item.
+     * @return true if menu handled else false
+     */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
