@@ -2,6 +2,7 @@ package onetoone.Users;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiModelProperty;
 import onetoone.Inventory.Inventory;
 import onetoone.Reports.Report;
 import onetoone.Songs.Song;
@@ -18,25 +19,38 @@ public class User implements Comparator<User>, Comparable<User> {
      * The annotation @ID marks the field below as the primary key for the table created by springboot
      * The @GeneratedValue generates a value if not already present, The strategy in this case is to start from 1 and increment for each table
      */
+    @ApiModelProperty(notes = "Id provided for database", name="id", required = true)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @ApiModelProperty(notes = "Name/Username of the User", name="name", required = true)
     private String name;
+    @ApiModelProperty(notes = "Password of the User", name="password", required = true)
     private String password;
+    @ApiModelProperty(notes = "High score of the User", name="highScore")
     private int highScore;
+    @ApiModelProperty(notes = "This months high score of the User", name="highScoreMonthly")
     private int highScoreMonthly;
+    @ApiModelProperty(notes = "This weeks high score of the User", name="highScoreWeekly")
     private int highScoreWeekly;
+    @ApiModelProperty(notes = "This weeks high score of the User", name="highScoreWeekly")
     private Date highScoreTime;
+    @ApiModelProperty(notes = "Boolean value of users ability to chat", name="canChat")
     private boolean canChat;
+    @ApiModelProperty(notes = "Number of ban strikes user currently has", name="banStrikes")
     private int banStrikes;
+    @ApiModelProperty(notes = "User's currently selected color", name="selectedColor")
     private String selectedColor;
+    @ApiModelProperty(notes = "Reports made about user", name="reports")
     @OneToMany(cascade = CascadeType.ALL)
     private List<Report> reports;
 
+    @ApiModelProperty(notes = "Inventory belonging to user", name="inventory")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "inventory_id", referencedColumnName = "id")
     private Inventory inventory;
 
+    @ApiModelProperty(notes = "Board used during game", name="board")
     @Transient
     public Board board;
 
