@@ -9,7 +9,7 @@ import onetoone.Artists.Artist;
 
 /**
  * 
- * @author Vivek Bengre
+ * @author Conor O'Shea
  */ 
 
 @Entity
