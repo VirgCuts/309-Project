@@ -38,10 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         navigationHelper = new Navigation(this);
         navigationHelper.setupNavigation();
-        // Removed the first run check and prompt
-        if (getUsername(this) == null) {
-            promptUsername();
-        }
+        promptUsername();
+
     }
     /**
      * This hook is called whenever an item in your options menu is selected.

@@ -594,10 +594,13 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     String[] parts = tag.split(",");
                     final int row = Integer.parseInt(parts[0]);
                     final int column = Integer.parseInt(parts[1]);
-                    Log.d("Row, Column", String.valueOf(row) + String.valueOf(column));
                     String check1 = "";
                     String check2 = "";
                     final String userAnswer = editText.getText().toString().trim();
+                    checkAnswer(userAnswer, row, column);//Doesn't do anything yet
+
+                    //------------From here---------------
+
                     if(row == 1){
                         check1 = categories.get(0).get("keyword");
                     } else if (row == 2) {
@@ -637,6 +640,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                             }
                         }
                     });
+
+                    //------To here will eventually be deleted---------
+
                     return true;
                 }
                 return false;
@@ -650,22 +656,31 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         void onResult(boolean isCorrect);
     }
     // Modified checkAnswer method with network call
-    public void checkAnswer(String subject, String check, int col, int row) {
-        if (subject == "Artist"){
-            if(check == "with"){
-
-            } else if (check == "features") {
+    public void checkAnswer(String userAnswer, int row, int col) {
+        String colSubject = categories.get(2 + col).get("subject");
+        String rowSubject = categories.get(row).get("subject");
+        String colCheck = categories.get(2 + col).get("check");
+        String rowCheck = categories.get(row).get("check");
+        String colKeyword = categories.get(2 + col).get("keyword");
+        String rowKeyword = categories.get(row).get("keyword");
+        if (rowSubject == "Artist"){
+            switch(rowCheck){
+                case "featuring":
+                    //Backend has yet to fix check
+                    //check feature
+                    break;
+                case "on":
+                    //Backend has yet to fix check
+                    //perform check
+                    break;
+                case "with":
+                    //get keyword
+                    //perform check
+                    break;
+                default:
 
             }
         }
-        if(subject == "Artist"){
-            if(check == "features"){
-
-            }
-        }
-    }
-    public void checkAnswer(String subject, String subject2, String check, String check2, int col, int row){
-
     }
     /**
      * Checks if the provided artist and song information matches certain criteria.
