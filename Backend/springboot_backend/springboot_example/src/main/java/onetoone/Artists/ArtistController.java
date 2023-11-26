@@ -95,13 +95,13 @@ public class ArtistController {
     }
 
     @ApiOperation(value = "CHeck if two artists have any song together", response = Boolean.class, tags = "artist-controller")
-    @GetMapping(path = "/artists/{id}/artists2/{id2}")
-    boolean getArtistHaveSongTogether( @PathVariable int id, @PathVariable int id2) {
-        Artist artist1 = artistRepository.findById(id);
-        String artist1name = artist1.getName();
+    @GetMapping(path = "/artists/{name1}/artists2/{name2}")
+    boolean getArtistHaveSongTogether( @PathVariable String name1 @PathVariable String name2) {
+        String artist1name = artistRepository.findByName(name1);
+        Artist artist1 = artistRepository.findById(artistRepository.findByName(name1).getId());
+        String artist2name = artistRepository.findByName(name2);
+        Artist artist2 = artistRepository.findById(artistRepository.findByName(name2).getId());
         List<Song> songList1 = artist1.getSongs();
-        Artist artist2 = artistRepository.findById(id2);
-        String artist2name = artist2.getName();
         List<Song> songList2 = artist2.getSongs();
         boolean returner = false;
         for (int i = 0; i < songList1.size(); i++) {
