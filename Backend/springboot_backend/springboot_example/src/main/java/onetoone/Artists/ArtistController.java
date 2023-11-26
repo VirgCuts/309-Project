@@ -212,15 +212,99 @@ public class ArtistController {
     @ApiOperation(value = "Return categories to be used by the game", response = String.class, tags = "artist-controller")
     @GetMapping(path = "/artists/categories")
     String[] getCategories(){
-        String[] jsonArray = {
-                "{\"text\":\"Artist with 'lil' in their name\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"lil\"}",
-                "{\"text\":\"Artist with 'ill' in their name\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"ill\"}",
-                "{\"text\":\"Artist with 'x' in their name\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"x\"}",
-                "{\"text\":\"Song with 'her' in their name\",\"subject\":\"Song\",\"check\":\"with\",\"keyword\":\"her\"}",
-                "{\"text\":\"Song with 'men' in their name\",\"subject\":\"Song\",\"check\":\"with\",\"keyword\":\"men\"}",
-                "{\"text\":\"Song with 'hip hop' in their name\",\"subject\":\"Song\",\"check\":\"with\",\"keyword\":\"hip hop\"}"
-        };
+        String[] jsonArray = new String[6];
+        Random random = new Random();
+        int selector1 = random.nextInt(3);
+        if (selector1 == 0) {
+            int selector2 = random.nextInt(3);
+            if (selector2 == 0) {
+                jsonArray[0] = "{\"text\":\"Artist with a Song featuring Teezo Touchdown\",\"subject\":\"Artist\",\"check\":\"featuring\",\"keyword\":\"Teezo Touchdown\"}";
+                jsonArray[1] = "{\"text\":\"Artist that has a Song with Travis Scott\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Travis Scott\"}";
+                jsonArray[2] = "{\"text\":\"Artist that has a Song with Playboi Carti\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Playboi Carti\"}";
 
+                jsonArray[3] = "{\"text\":\"Artist that has a Song with Kanye West\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Kanye West\"}";
+                jsonArray[4] = "{\"text\":\"Artist that has a Song with Yeat\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Yeat\"}";
+                jsonArray[5] = "{\"text\":\"Artist that has a Song with 21 Savage\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"21 Savage\"}";
+            }
+            else if (selector2 == 1) {
+                jsonArray[2] = "{\"text\":\"Artist with a Song featuring Teezo Touchdown\",\"subject\":\"Artist\",\"check\":\"featuring\",\"keyword\":\"Teezo Touchdown\"}";
+                jsonArray[1] = "{\"text\":\"Artist that has a Song with Travis Scott\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Travis Scott\"}";
+                jsonArray[0] = "{\"text\":\"Artist that has a Song with Playboi Carti\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Playboi Carti\"}";
+
+                jsonArray[4] = "{\"text\":\"Artist that has a Song with Kanye West\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Kanye West\"}";
+                jsonArray[5] = "{\"text\":\"Artist that has a Song with Yeat\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Yeat\"}";
+                jsonArray[3] = "{\"text\":\"Artist that has a Song with 21 Savage\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"21 Savage\"}";
+            }
+            else {
+                jsonArray[0] = "{\"text\":\"Artist with a Song featuring Teezo Touchdown\",\"subject\":\"Artist\",\"check\":\"featuring\",\"keyword\":\"Teezo Touchdown\"}";
+                jsonArray[2] = "{\"text\":\"Artist that has a Song with Travis Scott\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Travis Scott\"}";
+                jsonArray[1] = "{\"text\":\"Artist that has a Song with Playboi Carti\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Playboi Carti\"}";
+
+                jsonArray[5] = "{\"text\":\"Artist that has a Song with Kanye West\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Kanye West\"}";
+                jsonArray[4] = "{\"text\":\"Artist that has a Song with Yeat\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Yeat\"}";
+                jsonArray[3] = "{\"text\":\"Artist that has a Song with 21 Savage\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"21 Savage\"}";
+            }
+        }
+        else if (selector1 == 1) {
+            int selector2 = random.nextInt(3);
+            if (selector2 == 0) {
+                jsonArray[0] = "{\"text\":\"Artist that has a Song with Tyler The Creator\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Tyler The Creator\"}";
+                jsonArray[1] = "{\"text\":\"Artist that has a Song on HEROES & VILLAINS\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"HEROES & VILLAINS\"}";
+                jsonArray[2] = "{\"text\":\"Artist that has a Song on UTOPIA\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"UTOPIA\"}";
+
+                jsonArray[3] = "{\"text\":\"Artist that has a Song with Swae Lee\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Swae Lee\"}";
+                jsonArray[4] = "{\"text\":\"Artist that has a Song with Playboi Carti\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Playboi Carti\"}";
+                jsonArray[5] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+            }
+            else if (selector2 == 1) {
+                jsonArray[2] = "{\"text\":\"Artist that has a Song with Tyler The Creator\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Tyler The Creator\"}";
+                jsonArray[0] = "{\"text\":\"Artist that has a Song on HEROES & VILLAINS\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"HEROES & VILLAINS\"}";
+                jsonArray[1] = "{\"text\":\"Artist that has a Song on UTOPIA\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"UTOPIA\"}";
+
+                jsonArray[3] = "{\"text\":\"Artist that has a Song with Swae Lee\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Swae Lee\"}";
+                jsonArray[5] = "{\"text\":\"Artist that has a Song with Playboi Carti\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Playboi Carti\"}";
+                jsonArray[4] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+            }
+            else {
+                jsonArray[1] = "{\"text\":\"Artist that has a Song with Tyler The Creator\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Tyler The Creator\"}";
+                jsonArray[0] = "{\"text\":\"Artist that has a Song on HEROES & VILLAINS\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"HEROES & VILLAINS\"}";
+                jsonArray[2] = "{\"text\":\"Artist that has a Song on UTOPIA\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"UTOPIA\"}";
+
+                jsonArray[5] = "{\"text\":\"Artist that has a Song with Swae Lee\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Swae Lee\"}";
+                jsonArray[4] = "{\"text\":\"Artist that has a Song with Playboi Carti\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Playboi Carti\"}";
+                jsonArray[3] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+            }
+        }
+        else {
+            int selector2 = random.nextInt(3);
+            if (selector2 == 0) {
+                jsonArray[0] = "{\"text\":\"Artist that has a Song on UTOPIA\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"UTOPIA\"}";
+                jsonArray[1] = "{\"text\":\"Artist that has a Song with Drake\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Drake\"}";
+                jsonArray[2] = "{\"text\":\"Artist that has a Song with 21 Savage\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"21 Savage\"}";
+
+                jsonArray[3] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+                jsonArray[4] = "{\"text\":\"Artist that has a Song with Metro Boomin\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Metro Boomin\"}";
+                jsonArray[5] = "{\"text\":\"Artist that has a Song with Lil Uzi Vert\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Lil Uzi Vert\"}";
+            }
+            else if (selector2 == 1) {
+                jsonArray[0] = "{\"text\":\"Artist that has a Song on UTOPIA\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"UTOPIA\"}";
+                jsonArray[2] = "{\"text\":\"Artist that has a Song with Drake\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Drake\"}";
+                jsonArray[1] = "{\"text\":\"Artist that has a Song with 21 Savage\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"21 Savage\"}";
+
+                jsonArray[5] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+                jsonArray[4] = "{\"text\":\"Artist that has a Song with Metro Boomin\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Metro Boomin\"}";
+                jsonArray[3] = "{\"text\":\"Artist that has a Song with Lil Uzi Vert\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Lil Uzi Vert\"}";
+            }
+            else {
+                jsonArray[2] = "{\"text\":\"Artist that has a Song on UTOPIA\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"UTOPIA\"}";
+                jsonArray[1] = "{\"text\":\"Artist that has a Song with Drake\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Drake\"}";
+                jsonArray[0] = "{\"text\":\"Artist that has a Song with 21 Savage\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"21 Savage\"}";
+
+                jsonArray[4] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+                jsonArray[3] = "{\"text\":\"Artist that has a Song with Metro Boomin\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Metro Boomin\"}";
+                jsonArray[5] = "{\"text\":\"Artist that has a Song with Lil Uzi Vert\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Lil Uzi Vert\"}";
+            }
+        }
         return jsonArray;
 
     }
