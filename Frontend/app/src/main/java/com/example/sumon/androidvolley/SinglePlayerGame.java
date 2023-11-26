@@ -596,7 +596,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     final int column = Integer.parseInt(parts[1]);
                     final String userAnswer = editText.getText().toString().trim();
                     checkAnswer(editText, userAnswer, row, column);
-
+                    Log.d("This","This line has been reached");
                     return true;
                 }
                 return false;
@@ -642,6 +642,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     @Override
                     public void onResult(boolean colIsCorrect, EditText editText) {
                         if (rowIsCorrect && colIsCorrect) {
+                            Log.d("YES","yes");
                             updatePlayerBoard(editText, userAnswer);
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
@@ -655,6 +656,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                             }
                         } else {
                             // Update the UI for incorrect answer
+                            Log.d("NO","no");
                             changeBoxColor(editText, false);
                             points -= 5;
                             setPoints();
@@ -672,25 +674,16 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
      * @param artist2  The ID of the second artist.
      * @param callback   The callback to handle the result.
      */
-    private void checkIfArtistsHaveSongTogether(String artist1, String artist2, AnswerCheckCallback callback, final EditText editText) { //Artist id will be changed
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artist1 + "/artists2/" + artist2; //Artist id will be changed
+    private void checkIfArtistsHaveSongTogether(String artist1, String artist2, AnswerCheckCallback callback, final EditText editText) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artist1 + "/artists2/" + artist2;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        try {
-                            // Convert the response string to a JSONObject
-                            JSONObject jsonObject = new JSONObject(response);
-                            // Extract the message value
-                            String resultMessage = jsonObject.optString("message", "failure");
-                            // Check if the message indicates a success
-                            boolean result = "success".equalsIgnoreCase(resultMessage);
-                            // Invoke the callback with the result
-                            callback.onResult(result, editText);
-                        } catch (JSONException e) {
-                            // If there's an error parsing the JSON, treat it as a failure
-
-                        }
+                        // The response is expected to be a boolean value in string form ("true" or "false")
+                        boolean result = "true".equalsIgnoreCase(response.trim());
+                        // Invoke the callback with the result
+                        callback.onResult(result, editText);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -701,9 +694,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         });
 
         // Add the request to your RequestQueue
-        // Assuming 'queue' is an instance of RequestQueue
         queue.add(stringRequest);
     }
+
     /**
      * Adds a player's score to the leaderboard.
      *
