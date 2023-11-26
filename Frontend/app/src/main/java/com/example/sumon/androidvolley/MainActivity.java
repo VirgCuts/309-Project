@@ -86,7 +86,12 @@ public class MainActivity extends AppCompatActivity {
             prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
             // Continue with any other actions you need to do with the username
         });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            String inputUsername = "Guest";
+            // Save the username
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
+        });
         builder.setNeutralButton("Add User", (dialogInterface, i) -> {
             // Handle adding a new user
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
