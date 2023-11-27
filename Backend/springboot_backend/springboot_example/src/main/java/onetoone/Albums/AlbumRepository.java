@@ -1,12 +1,11 @@
 package onetoone.Albums;
 
-import onetoone.Artists.Artist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
- * @author Vivek Bengre
+ * @author Conor O'Shea
  * 
  */ 
 
