@@ -10,43 +10,92 @@
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="128dp"
-            android:gravity="center"
-            android:text="Welcome to Immaculate Taste Lobby"
-            android:textSize="18sp" />
+        android:layout_height="match_parent">
 
         <Button
             android:id="@+id/singlePlayer"
             style="@style/CustomButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="SinglePlayer" />
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="112dp"
+            android:layout_marginEnd="1dp"
+            android:text="SinglePlayer"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/multiPlayer"
             style="@style/CustomButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Multiplayer" />
+            android:layout_width="279dp"
+            android:layout_height="53dp"
+            android:layout_marginTop="204dp"
+            android:layout_marginBottom="60dp"
+            android:text="Multiplayer"
+            app:layout_constraintBottom_toTopOf="@+id/btnStudy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.208"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btnStudy"
             style="@style/CustomButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Study" />
-    </LinearLayout>
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="29dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="240dp"
+            android:text="Study"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView4"
+            app:layout_constraintHorizontal_bias="0.201"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/multiPlayer" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="64dp"
+            android:layout_height="74dp"
+            android:layout_marginTop="84dp"
+            android:layout_marginEnd="33dp"
+            android:layout_marginBottom="23dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageView3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/singlePlayer"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_singleplayer" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="66dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="25dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageView4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:srcCompat="@drawable/ic_multiplayer" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="63dp"
+            android:layout_height="66dp"
+            android:layout_marginEnd="31dp"
+            android:layout_marginBottom="240dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnStudy"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            app:srcCompat="@drawable/ic_action_name" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <!-- This is the navigation view which draws and shows the navigation drawer. Include the menu created in the menu folder. -->
     <com.google.android.material.navigation.NavigationView
