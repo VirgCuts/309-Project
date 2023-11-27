@@ -125,7 +125,7 @@ public class ArtistController {
     @GetMapping(path = "/artists/{name}/on/{album}")
     String getArtistOnAlbum( @PathVariable String name, @PathVariable String album) {
         Artist artist = artistRepository.findByName(name);
-        Album album_object = albumRepository.findByName(album);
+        Album album_object = albumRepository.findByAlbumName(album);
         // Note from Conor: uncomment when Album is changed to be able to access songs
 //        List<Song> songList = album_object.getSongs();
         boolean returner = false;
