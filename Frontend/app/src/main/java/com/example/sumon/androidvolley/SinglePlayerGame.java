@@ -36,6 +36,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -612,7 +614,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     private void performCheck(String subject, String check, String keyword, String userAnswer, AnswerCheckCallback callback, EditText editText) {
         switch (check) {
             case "featuring":
-                // Call specific method for 'featuring' check
+                if (subject.equals("Artist")) {
+                    checkIfArtistFeaturing(userAnswer, keyword, callback, editText);
+                }
                 break;
             case "on":
                 // Call specific method for 'on' check
@@ -670,31 +674,102 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     /**
      * Checks if two artists have a song together based on their IDs.
      *
-     * @param artist1  The ID of the first artist.
-     * @param artist2  The ID of the second artist.
+     * @param artist1  The name of the first artist.
+     * @param artist2  The name of the second artist.
      * @param callback   The callback to handle the result.
      */
     private void checkIfArtistsHaveSongTogether(String artist1, String artist2, AnswerCheckCallback callback, final EditText editText) {
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artist1 + "/artists2/" + artist2;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // The response is expected to be a boolean value in string form ("true" or "false")
-                        boolean result = "true".equalsIgnoreCase(response.trim());
-                        // Invoke the callback with the result
-                        callback.onResult(result, editText);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // Handle error, maybe invoke the callback with 'false'
-                callback.onResult(false, editText);
-            }
-        });
+        try {
+            // Encode the artist names to handle spaces and special characters
+            String encodedArtist1 = URLEncoder.encode(artist1, "UTF-8");
+            String encodedArtist2 = URLEncoder.encode(artist2, "UTF-8");
 
-        // Add the request to your RequestQueue
-        queue.add(stringRequest);
+            // Update the URL to use names instead of IDs
+            String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + encodedArtist1 + "/with/" + encodedArtist2;
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                // Convert the response string to a JSONObject
+                                JSONObject jsonObject = new JSONObject(response);
+                                // Extract the message value
+                                String resultMessage = jsonObject.optString("message", "failure");
+                                // Check if the message indicates a success
+                                boolean result = "success".equalsIgnoreCase(resultMessage);
+                                // Invoke the callback with the result
+                                callback.onResult(result, editText);
+                            } catch (JSONException e) {
+                                // If there's an error parsing the JSON, treat it as a failure
+                                callback.onResult(false, editText);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // Handle error, maybe invoke the callback with 'false'
+                    callback.onResult(false, editText);
+                }
+            });
+
+            // Add the request to your RequestQueue
+            queue.add(stringRequest);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // Handle the exception or invoke the callback with 'false'
+            callback.onResult(false, editText);
+        }
+    }
+
+    /**
+     * Checks if two artists have a song together based on their IDs.
+     *
+     * @param artistName  The name of the first artist.
+     * @param featuredArtist  The name of the featured artist.
+     * @param callback   The callback to handle the result.
+     */
+    private void checkIfArtistFeaturing(String artistName, String featuredArtist, AnswerCheckCallback callback, final EditText editText) {
+        try {
+            // Encode the artist names to handle spaces and special characters
+            String encodedArtistName = URLEncoder.encode(artistName, "UTF-8");
+            String encodedFeaturedArtist = URLEncoder.encode(featuredArtist, "UTF-8");
+
+            // Construct the URL for the request
+            String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + encodedArtistName + "/featuring/" + encodedFeaturedArtist;
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                // Parse the JSON response
+                                JSONObject jsonObject = new JSONObject(response);
+                                // Extract the message value
+                                String resultMessage = jsonObject.optString("message", "failure");
+                                // Check if the message indicates a success
+                                boolean result = "success".equalsIgnoreCase(resultMessage);
+                                // Invoke the callback with the result
+                                callback.onResult(result, editText);
+                            } catch (JSONException e) {
+                                // Handle JSON parsing error
+                                callback.onResult(false, editText);
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // Handle network error
+                    callback.onResult(false, editText);
+                }
+            });
+
+            // Add the request to your RequestQueue
+            queue.add(stringRequest);
+        } catch (UnsupportedEncodingException e) {
+            // Handle encoding error
+            callback.onResult(false, editText);
+        }
     }
 
     /**
