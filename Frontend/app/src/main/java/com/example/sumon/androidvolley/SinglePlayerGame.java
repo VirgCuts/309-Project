@@ -74,7 +74,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
     private String username = "";
 
 
-    private String Player1 = "Carter", selected="white";
+    private String Player1 = "Carter";
 
     /**
      * Initializes the activity, sets up the UI elements, and fetches categories from the backend.
