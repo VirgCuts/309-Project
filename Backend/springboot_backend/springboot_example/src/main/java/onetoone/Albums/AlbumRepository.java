@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface AlbumRepository extends JpaRepository<Album, Long> {
     Album findById(int id);
 
-    Album findByName(String name);
+    Album findByName(String albumName);
 
     @Transactional
     void deleteById(int id);
