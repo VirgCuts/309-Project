@@ -126,20 +126,16 @@ public class ArtistController {
     String getArtistOnAlbum( @PathVariable String name, @PathVariable String album) {
         Artist artist = artistRepository.findByName(name);
         Album album_object = albumRepository.findByAlbumName(album);
-        // Note from Conor: uncomment when Album is changed to be able to access songs
-//        List<Song> songList = album_object.getSongs();
-        boolean returner = false;
-//        for (int i = 0; i < songList.size(); i++) {
-//            if (songList.get(i).getFeature().contains(name)) {
-//                returner =  true;
-//            }
-//        }
-        if (returner) {
+        List<Song> songList = album_object.getSongs();
+        if (songList.get(0).getArtist().getName().equals(name)) {
             return success;
         }
-        else {
-            return failure;
+        for (int i = 0; i < songList.size(); i++) {
+            if (songList.get(i).getFeature().contains(name)) {
+                return success;
+            }
         }
+        return failure;
     }
 
     @ApiOperation(value = "Create an Artist and add it to the database", response = String.class, tags = "artist-controller")
