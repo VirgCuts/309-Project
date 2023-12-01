@@ -174,18 +174,18 @@ public class ArtistController {
         return success;
     }
 
-    @ApiOperation(value = "Assign an Album to an Artist in the database", response = String.class, tags = "artist-controller")
-    @PutMapping("/artists/{artistId}/albums/{albumId}")
-    String assignAlbumToArtist(@PathVariable int artistId,@PathVariable int albumId){
-        Artist artist = artistRepository.findById(artistId);
-        Album album = albumRepository.findById(albumId);
-        if(artist == null || album == null)
-            return failure;
-        album.setArtist(artist);
-        artist.addAlbums(album);
-        artistRepository.save(artist);
-        return success;
-    }
+//    @ApiOperation(value = "Assign an Album to an Artist in the database", response = String.class, tags = "artist-controller")
+//    @PutMapping("/artists/{artistId}/albums/{albumId}")
+//    String assignAlbumToArtist(@PathVariable int artistId,@PathVariable int albumId){
+//        Artist artist = artistRepository.findById(artistId);
+//        Album album = albumRepository.findById(albumId);
+//        if(artist == null || album == null)
+//            return failure;
+//        album.setArtist(artist);
+//        artist.addAlbums(album);
+//        artistRepository.save(artist);
+//        return success;
+//    }
 
     @ApiOperation(value = "Delete an Artist from the database", response = String.class, tags = "artist-controller")
     @DeleteMapping(path = "/artists/{id}")
