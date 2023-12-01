@@ -6,6 +6,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModelProperty;
 import onetoone.Artists.Artist;
+import onetoone.Songs.Song;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -13,7 +18,7 @@ import onetoone.Artists.Artist;
  */ 
 
 @Entity
-public class Album {
+public class Album implements Serializable {
     
     /* 
      * The annotation @ID marks the field below as the primary key for the table created by springboot
@@ -31,20 +36,25 @@ public class Album {
      * @OneToOne creates a relation between the current entity/table(Laptop) with the entity/table defined below it(User)
      * @JsonIgnore is to assure that there is no infinite loop while returning either user/laptop objects (laptop->user->laptop->...)
      */
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "artist_id", referencedColumnName = "id"),
-            @JoinColumn(name = "artist_name", referencedColumnName = "name")
-    })
-    @JsonIgnore
-    private Artist artist;
+//    @ManyToOne
+//    @JoinColumns({
+//            @JoinColumn(name = "artist_id", referencedColumnName = "id"),
+//            @JoinColumn(name = "artist_name", referencedColumnName = "name")
+//    })
+//    @JsonIgnore
+//    private Artist artist;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Song> songs;
 
     public Album(String albumName, String genre) {
         this.albumName = albumName;
         this.genre = genre;
+        songs = new ArrayList<>();
     }
 
     public Album() {
+        songs = new ArrayList<>();
     }
 
     // =============================== Getters and Setters for each field ================================== //
@@ -73,12 +83,24 @@ public class Album {
         this.genre = genre;
     }
 
-    public Artist getArtist(){
-        return artist;
+//    public Artist getArtist(){
+//        return artist;
+//    }
+//
+//    public void setArtist(Artist artist){
+//        this.artist = artist;
+//    }
+
+    public List<Song> getSongs() {
+        return songs;
     }
 
-    public void setArtist(Artist artist){
-        this.artist = artist;
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
+    public void addSongs(Song song){
+        this.songs.add(song);
     }
 
 }

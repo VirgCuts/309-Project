@@ -5,6 +5,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModelProperty;
+import onetoone.Albums.Album;
 import onetoone.Artists.Artist;
 
 /**
@@ -43,6 +44,12 @@ public class Song {
     @JoinColumn(name = "artist_name", referencedColumnName = "name")
     @JsonIgnore
     private Artist artist;
+
+    @ManyToOne
+    @JoinColumn(name = "album_id", referencedColumnName = "id")
+    @JoinColumn(name = "album_name", referencedColumnName = "albumName")
+    @JsonIgnore
+    private Album album;
 
 
     public Song(String songName, String genre, String feature) {
@@ -94,6 +101,14 @@ public class Song {
 
     public void setArtist(Artist artist){
         this.artist = artist;
+    }
+
+    public Album getAlbum(){
+        return album;
+    }
+
+    public void setAlbum(Album album){
+        this.album = album;
     }
 
 }
