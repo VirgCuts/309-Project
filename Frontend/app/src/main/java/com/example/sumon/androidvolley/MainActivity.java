@@ -38,10 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
         navigationHelper = new Navigation(this);
         navigationHelper.setupNavigation();
-        // Removed the first run check and prompt
-        if (getUsername(this) == null) {
-            promptUsername();
-        }
+        promptUsername();
+
     }
     /**
      * This hook is called whenever an item in your options menu is selected.
@@ -86,13 +84,33 @@ public class MainActivity extends AppCompatActivity {
             prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
             // Continue with any other actions you need to do with the username
         });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-        builder.setNeutralButton("Add User", (dialogInterface, i) -> {
-            // Handle adding a new user
+        builder.setNegativeButton("Play as Guest", (dialog, which) -> {
+            String inputUsername = "Guest";
+            // Save the username
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            prefs.edit().remove(USERNAME_KEY).apply();
-            promptUsername(); // Consider this part carefully. This may lead to a recursive call.
+            prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
         });
         builder.show();
+    }
+
+    /**
+     * Retrieves the stored username from SharedPreferences.
+     *
+     * @return String Returns the stored username or "Guest" if it's not found.
+     */
+    public String getUsername() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return prefs.getString(USERNAME_KEY, "Guest"); // Return "Guest" if username isn't set
+    }
+    /**
+     * Sets the username in SharedPreferences.
+     *
+     * @param username The username to be set.
+     */
+    public void setUsername(String username) {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(USERNAME_KEY, username);
+        editor.apply();
     }
 }

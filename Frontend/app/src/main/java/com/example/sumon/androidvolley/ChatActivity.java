@@ -5,9 +5,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,6 +20,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.android.volley.Request;
@@ -28,6 +32,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.java_websocket.handshake.ServerHandshake;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * ChatActivity provides the user interface and logic for a chat application.
  * It handles WebSocket connections for real-time messaging, sending and receiving messages,
@@ -48,6 +56,9 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
     private TextView msgTv, tvBanCount;
 
     private Navigation navigationHelper;
+    private RecyclerView recyclerView;
+    private ChatAdapter chatAdapter;
+    private List<ChatMessage> chatMessages = new ArrayList<>();
 
     private LinearLayout messagesContainer;
 
@@ -69,12 +80,15 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         navigationHelper.setupNavigation();
 
         /* initialize UI elements */
-        messagesContainer = findViewById(R.id.chat_container);
         connectBtn = (Button) findViewById(R.id.connect_button);
         sendBtn = (Button) findViewById(R.id.send_button);
         usernameEtx = (EditText) findViewById(R.id.username_input);
         msgEtx = (EditText) findViewById(R.id.message_input);
-        msgTv = (TextView) findViewById(R.id.chatMessage);
+
+        recyclerView = findViewById(R.id.chat_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        chatAdapter = new ChatAdapter(chatMessages);
+        recyclerView.setAdapter(chatAdapter);
 
         /* connect button listener */
         connectBtn.setOnClickListener(view -> {
@@ -97,18 +111,6 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
             }
         });
 
-
-
-        messagesContainer.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                if (currentlyHighlighted != null) {
-                    currentlyHighlighted.setBackgroundResource(R.drawable.textview_border);
-                    currentlyHighlighted = null;
-                }
-            }
-            return false; // Return false to allow normal handling of the touch event
-        });
-
     }
     /**
      * Handles options item selected events.
@@ -124,66 +126,11 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
      * @param message The message text to be added.
      */
     private void addMessageToView(String message) {
-        TextView messageView = new TextView(this);
-        messageView.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        messageView.setText(message);
-        messageView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        messageView.setTextColor(Color.BLACK);
-        messageView.setBackgroundResource(R.drawable.textview_border);
-        // Add other styling to your messageView as needed
-        messageView.setOnHoverListener(new View.OnHoverListener() {
-            @Override
-            public boolean onHover(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_HOVER_ENTER:
-                        // Show the popup when the mouse enters the view
-                        showPopup(v);
-                        break;
-                    case MotionEvent.ACTION_HOVER_EXIT:
-                        // Optionally handle the mouse exiting the view
-                        break;
-                }
-                return true;
-            }
-        });
-        messageView.setOnLongClickListener(v -> {
-            if (currentlyHighlighted != null) {
-                currentlyHighlighted.setBackgroundResource(R.drawable.textview_border);
-            }
-            // Highlight the current view and update the reference
-            v.setBackgroundColor(Color.parseColor("#ADD8E6")); // Light blue color
-            currentlyHighlighted = (TextView) v;
-            showPopup(v); // Show the popup when the user long presses the TextView
-            return true; // Return true to indicate that the event has been consumed.
-        });
-        messagesContainer.addView(messageView); // Add the TextView to your LinearLayout
+        chatMessages.add(new ChatMessage(message));
+        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
+        scrollToBottom();
     }
-    /**
-     * Displays a popup menu for the given view.
-     * @param anchorView The view for which the popup menu is to be shown.
-     */
-    private void showPopup(View anchorView) {
-        PopupMenu popupMenu = new PopupMenu(this, anchorView);
-        popupMenu.getMenu().add("Like message");
-        popupMenu.getMenu().add("Report user");
 
-        popupMenu.setOnMenuItemClickListener(item -> {
-            String title = item.getTitle().toString();
-            if ("Report user".equals(title)) {
-                String messageContent = ((TextView) anchorView).getText().toString();
-                Intent intent = new Intent(this, ReportUserActivity.class);
-                // You can put extra data into the intent if needed, for example, the user ID to report
-                intent.putExtra(EXTRA_USERNAME, usernameEtx.getText().toString());
-                intent.putExtra(EXTRA_MESSAGE_CONTENT, messageContent);
-                startActivity(intent);
-            }
-            return true;
-        });
-
-        popupMenu.show();
-    }
     /**
      * Callback for receiving messages from the WebSocket.
      * @param message The message received from the WebSocket.
@@ -193,23 +140,14 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         runOnUiThread(() -> {
             // Check if the message contains the history
             if (message.startsWith("History\n")) {
-                // Extract the history part by removing "HISTORY\n" and parse it
                 String history = message.substring("History\n".length());
                 parseAndDisplayHistory(history);
-            }
-            else if(message.startsWith("Welcome to the chat")){
-                String s = msgTv.getText().toString();
-                msgTv.setText(s + message + "\n");
-            }
-            else if(message.startsWith("User: ")){
-                String s = msgTv.getText().toString();
-                msgTv.setText(s + message + "\n");
-            }else {
-                // It's a regular message
+            } else {
                 addMessageToView(message);
             }
         });
     }
+
     /**
      * Callback for WebSocket closure.
      * @param code The closure code.
@@ -220,8 +158,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
     public void onWebSocketClose(int code, String reason, boolean remote) {
         String closedBy = remote ? "server" : "local";
         runOnUiThread(() -> {
-            String s = msgTv.getText().toString();
-            msgTv.setText(s + "---\nconnection closed by " + closedBy + "\nreason: " + reason);
+            addMessageToView("---\nconnection closed by " + closedBy + "\nreason: " + reason);
         });
     }
     /**
@@ -229,13 +166,10 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
      * @param history The chat history in String format.
      */
     private void parseAndDisplayHistory(String history) {
-        // Split the history into individual messages
         String[] messages = history.split("\n");
         for (String msg : messages) {
-            // Add each message to the view
             addMessageToView(msg);
         }
-        // Scroll to the bottom of the chat to show the latest messages
         scrollToBottom();
     }
 
@@ -243,8 +177,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
      * Scrolls the chat view to the bottom.
      */
     private void scrollToBottom() {
-        ScrollView scrollView = findViewById(R.id.chat_scrollview); // Replace with your ScrollView ID if different
-        scrollView.post(() -> scrollView.fullScroll(View.FOCUS_DOWN));
+        recyclerView.scrollToPosition(chatMessages.size() - 1);
     }
     /**
      * Callback for WebSocket connection opening.
@@ -263,6 +196,105 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
      */
     @Override
     public void onWebSocketError(Exception ex) {}
+    public class ChatMessage {
+        private final String message;
+
+        public ChatMessage(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+    public class ChatViewHolder extends RecyclerView.ViewHolder {
+        public TextView messageTextView;
+        private View currentlyHighlighted;
+
+        public ChatViewHolder(View itemView) {
+            super(itemView);
+            messageTextView = itemView.findViewById(R.id.chatMessage);
+            setListeners();
+        }
+
+        private void setListeners() {
+            messageTextView.setOnHoverListener((v, event) -> {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_HOVER_ENTER:
+                        // Show the popup when the mouse enters the view
+                        showPopup(v);
+                        break;
+                    case MotionEvent.ACTION_HOVER_EXIT:
+                        // Optionally handle the mouse exiting the view
+                        break;
+                }
+                return true;
+            });
+
+            messageTextView.setOnLongClickListener(v -> {
+                if (currentlyHighlighted != null) {
+                    currentlyHighlighted.setBackgroundResource(R.drawable.textview_border);
+                }
+                // Highlight the current view and update the reference
+                v.setBackgroundColor(Color.parseColor("#ADD8E6")); // Light blue color
+                currentlyHighlighted = v;
+                showPopup(v); // Show the popup when the user long presses the TextView
+                return true; // Return true to indicate that the event has been consumed.
+            });
+        }
+
+        private void showPopup(View anchorView) {
+            PopupMenu popupMenu = new PopupMenu(anchorView.getContext(), anchorView);
+            popupMenu.getMenu().add("Like message");
+            popupMenu.getMenu().add("Report user");
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+                String title = item.getTitle().toString();
+                if ("Report user".equals(title)) {
+                    String messageContent = ((TextView) anchorView).getText().toString();
+                    Intent intent = new Intent(ChatActivity.this, ReportUserActivity.class);
+                    // You can put extra data into the intent if needed, for example, the user ID to report
+                    intent.putExtra(EXTRA_USERNAME, usernameEtx.getText().toString());
+                    intent.putExtra(EXTRA_MESSAGE_CONTENT, messageContent);
+                    ChatActivity.this.startActivity(intent);
+                }
+                return true;
+            });
+
+            popupMenu.show();
+        }
+
+    }
+
+    public class ChatAdapter extends RecyclerView.Adapter<ChatViewHolder> {
+        private final List<ChatMessage> chatMessages;
+
+        public ChatAdapter(List<ChatMessage> chatMessages) {
+            this.chatMessages = chatMessages;
+        }
+
+        @Override
+        public ChatViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_message_item, parent, false);
+            return new ChatViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ChatViewHolder holder, int position) {
+            ChatMessage message = chatMessages.get(position);
+            holder.messageTextView.setText(message.getMessage());
+            // Reset any special styling from previous uses of this holder
+            holder.messageTextView.setBackgroundResource(R.drawable.textview_border);
+            holder.messageTextView.setTextColor(Color.BLACK);
+            holder.messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        }
+
+        @Override
+        public int getItemCount() {
+            return chatMessages.size();
+        }
+    }
 
 }
+
 
