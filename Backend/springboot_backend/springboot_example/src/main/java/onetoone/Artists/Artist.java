@@ -50,16 +50,16 @@ public class Artist implements Serializable {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Song> songs;
 
-    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "album_id")
-    private List<Album> albums;
+//    @OneToMany(cascade = CascadeType.ALL)
+////    @JoinColumn(name = "album_id")
+//    private List<Album> albums;
 
     public Artist(String name, int numPlatinums, int numGrammys) {
         this.name = name;
         this.numPlatinums = numPlatinums;
         this.numGrammys = numGrammys;
         songs = new ArrayList<>();
-        albums = new ArrayList<>();
+//        albums = new ArrayList<>();
     }
 
     public Artist() {
@@ -120,16 +120,16 @@ public class Artist implements Serializable {
         this.songs.add(song);
     }
     
-    public List<Album> getAlbums() {
-    return albums;
-}
-
-    public void setAlbums(List<Album> albums) {
-        this.albums = albums;
-    }
-
-    public void addAlbums(Album album){
-        this.albums.add(album);
-    }
+//    public List<Album> getAlbums() {
+//    return albums;
+//}
+//
+//    public void setAlbums(List<Album> albums) {
+//        this.albums = albums;
+//    }
+//
+//    public void addAlbums(Album album){
+//        this.albums.add(album);
+//    }
     
 }

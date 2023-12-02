@@ -72,10 +72,10 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     //Used for the categories. Stored in a String[][] format.
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
-    private String Player1 = "Carter", Player2 = "Conor";
+    private String Player1 = "Carter", Player2 = "Carter";
     private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/multiplayer/";
     private boolean end = false;
-
+    private boolean concede = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,17 +140,128 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         setEditTextListener(r3c2);
         setEditTextListener(r3c3);
 
+        getSelectColor();
+
         playerBoard = new PlayerBoard();
         sendBoard = new sendBoard();
         endGameButton = findViewById(R.id.endGameButton);
         endGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                concede = true;
+                sendBoardState(sendBoard);
                 endGame();
             }
         });
     }
+    /**
+     * Calls the backend to retrieve the background color for the player and updates the board accordingly.
+     *
+     * @param color The string representation of the selected background color.
+     */
+    public void getBackground(String color) {
+        Log.d("BCKCOL",color);
+        if(color.equals("orange")) {
+            changeBoardColor("orange");
+        }
+        else if(color.equals("purple")) {
+            changeBoardColor("purple");
+        }
+        else if(color.equals("lightblue")) {
+            changeBoardColor("lightblue");
+        }
+        else if(color.equals("yellow")) {
+            changeBoardColor("yellow");
+        }
+        else if(color.equals("magenta")) {
+            changeBoardColor("magenta");
+        }
+        else if(color.equals("green")) {
+            changeBoardColor("green");
+        }
+    }
+    /**
+     * Calls the backend to get the selected background color for the player.
+     */
+    public void getSelectColor() {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+Player1;
 
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("SINGLEGET",response.toString());
+                        String value = response.toString();
+                        String[] splitValue = value.split(":");
+                        value = splitValue[1];
+                        value = value.replace("}", "");
+                        value = value.replace("\"", "");
+                        Log.d("GET", value);
+                        getBackground(value);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("ERRGET",error.toString());
+
+                    }
+                }
+        );
+        Volley.newRequestQueue(this).add(request);
+    }
+    /**
+     * Sets the background color of the given EditText based on the specified color.
+     *
+     * @param editText The EditText to set the background color for.
+     * @param color    The string representation of the selected background color.
+     */
+    public void setBackColor(EditText editText, String color) {
+        int colorValue = 0;
+        switch (color) {
+            case "orange":
+                colorValue = getResources().getColor(R.color.boardColorO);
+                break;
+            case "purple":
+                colorValue = getResources().getColor(R.color.boardColorP);
+                break;
+            case "lightblue":
+                colorValue = getResources().getColor(R.color.boardColorLB);
+                break;
+            case "yellow":
+                colorValue = getResources().getColor(R.color.boardColorY);
+                break;
+            case "magenta":
+                colorValue = getResources().getColor(R.color.boardColorM);
+                break;
+            case "green":
+                colorValue = getResources().getColor(R.color.boardColorG);
+                break;
+        }
+        int semiTransparentColor = Color.argb(128, Color.red(colorValue), Color.green(colorValue), Color.blue(colorValue));
+        ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentColor, PorterDuff.Mode.SRC_ATOP);
+        editText.getBackground().mutate().setColorFilter(colorFilter);
+    }
+    /**
+     * Changes the background color of the entire board based on the specified color.
+     *
+     * @param color The string representation of the selected background color.
+     */
+    public void changeBoardColor(String color) {
+        setBackColor(r1c1, color);
+        setBackColor(r1c2, color);
+        setBackColor(r1c3, color);
+        setBackColor(r2c1, color);
+        setBackColor(r2c2, color);
+        setBackColor(r2c3, color);
+        setBackColor(r3c1, color);
+        setBackColor(r3c2, color);
+        setBackColor(r3c3, color);
+    }
     /**
      * Not used in Multiplayer but implemented in case,
      * Implements the countdown timer for the game, updating the UI and handling the end of the game.
@@ -221,6 +332,11 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
      */
     private void sendBoardState(sendBoard board) {
         try {
+            String winBool = "false";
+            if(concede) {
+                winBool = "True";
+            }
+
             // sends the edit text message
 
             String boardState = "{" +
@@ -230,7 +346,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     "    \"game\": [" +
                     board.toString() +
                     "    ]," +
-                    "    \"won\": false," +
+                    "    \"won\": "+ winBool + "," +
                     "    \"score\": 0" +
                     "  }" +
                     "}";
@@ -364,9 +480,8 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
 
         // Set Winner Text
         TextView winnerText = dialogView.findViewById(R.id.winnerText);
-        winnerText.setText("Player " + winner + " wins");  // Change 'Player X' dynamically based on game result
-
-
+        if(!end) {winnerText.setText(winner + " forfeited!");  // Change 'Player X' dynamically based on game result
+        } else {       winnerText.setText(winner + " Wins!"); }
         // Populate the winner's board grid
         int[] cellIds = {
                 R.id.r1c1, R.id.r1c2, R.id.r1c3,
@@ -635,9 +750,12 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             boardGrid = boardGrid.replace("[", "").replace("]", "");
             Log.d("ARRCL",boardGrid);
             //1,1,1,1,1,0,0,0,0
-
+            Log.d("CONCEDED", String.valueOf(jsonObject.getBoolean("won")));
+            if(jsonObject.getBoolean("won")) {
+                endGame();
+            }
             String[] boardValues = boardGrid.split(",");
-            int winTally = 0;
+
             for (int i =0; i < boardValues.length; i++) {
                 if(Integer.parseInt(boardValues[i]) == 1) {
                     changeOppColor(i);

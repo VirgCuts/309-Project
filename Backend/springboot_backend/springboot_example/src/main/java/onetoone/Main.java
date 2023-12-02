@@ -27,7 +27,7 @@ import java.util.HashMap;
 
 /**
  * 
- * @author Vivek Bengre
+ * @author Conor O'Shea
  * 
  */ 
 
@@ -43,8 +43,9 @@ class Main {
     // Create 3 users with their machines
     /**
      * 
-     * @param artistRepository repository for the User entity
-     * @param songRepository repository for the Laptop entity
+     * @param artistRepository repository for the Artist entity
+     * @param songRepository repository for the Song entity
+     * @param albumRepository repository for the Album entity
      * Creates a commandLine runner to enter dummy data into the database
      * As mentioned in User.java just associating the Laptop object with the User will save it into the database because of the CascadeType
      */
@@ -52,8 +53,8 @@ class Main {
     CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository, AlbumRepository albumRepository, MessageRepository messageRepository, ReportRepository reportRepository, InventoryRepository inventoryRepository) {
         return args -> {
             userRepository.deleteAll();
-            Album album1 = new Album("Graduation", "Rap");
-            albumRepository.save(album1);
+//            Album album1 = new Album("Graduation", "Rap");
+//            albumRepository.save(album1);
             User user1 = new User("Sam", 1000);
             User user2 = new User("Keenan", 33);
             User user3 = new User("Conor", 49);
@@ -63,39 +64,73 @@ class Main {
             userRepository.save(user3);
             userRepository.save(user4);
             try {
-                BufferedReader reader = new BufferedReader(new FileReader("km203_song_db.csv"));
+//                BufferedReader reader = new BufferedReader(new FileReader("km203_song_db.csv"));
+                BufferedReader reader = new BufferedReader(new FileReader("cs309newsongdb.csv"));
                 HashMap<String, Artist> hash = new HashMap<>();
+                HashMap<String, Album> albumhash = new HashMap<>();
                 String[] categories = reader.readLine().split(",");
                 if (artistRepository.findById(1) == null) {
-                    for (int i = 0; i < 28370; i++) {
+                    for (int i = 0; i < 101; i++) {
                         String[] input = reader.readLine().split(",");
-                        String artist_name = input[1];
-                        String song_name = input[2];
-                        String genre = input[4];
-                        if (genre.equals("hip hop")) {
-                            Song song;
-                            if (song_name.contains("feat.")) {
-                                String full_song_name = song_name.split("feat.")[0].trim();
-                                String feature_name = song_name.split("feat.")[1].trim();
-                                song = new Song(full_song_name, genre, feature_name);
-                            } else {
-                                song = new Song(song_name, genre, "");
-                            }
-                            if (!hash.containsKey(artist_name)) {
-                                Artist artist = new Artist(artist_name, 0, 0);
-                                hash.put(artist_name, artist);
-                                artist.addSongs(song);
-                                song.setArtist(artist);
-                                artistRepository.save(artist);
-                                songRepository.save(song);
-                            } else {
-                                Artist getter = hash.get(artist_name);
-                                getter.addSongs(song);
-                                song.setArtist(getter);
-                                artistRepository.save(getter);
-                                songRepository.save(song);
-                            }
+                        String artist_name = input[0];
+                        String song_name = input[1];
+                        String genre = input[2];
+                        String features = "";
+                        String album_name = "";
+                        if (input.length == 5) {
+                            features = input[3];
+                            album_name = input[4];
                         }
+                        else {
+                            for (int j = 3; j < input.length - 1; j++) {
+                                features = features + "," + input[j];
+                            }
+                            features = features.substring(2, features.length() - 1);
+                            album_name = input[input.length - 1];
+                        }
+                        Song song = new Song(song_name, genre, features);
+
+                        if (!hash.containsKey(artist_name)) {
+                            Artist artist = new Artist(artist_name, 0, 0);
+                            hash.put(artist_name, artist);
+                            artistRepository.save(artist);
+
+                            Album album = new Album(album_name, genre);
+                            albumhash.put(album_name, album);
+                            albumRepository.save(album);
+
+                            artist.addSongs(song);
+                            song.setArtist(artist);
+
+                            album.addSongs(song);
+                            song.setAlbum(album);
+                        } else if (!albumhash.containsKey(album_name)) {
+                            Album album = new Album(album_name, genre);
+                            albumhash.put(album_name, album);
+                            albumRepository.save(album);
+
+                            Artist getter = hash.get(artist_name);
+                            getter.addSongs(song);
+
+                            getter.addSongs(song);
+                            song.setArtist(getter);
+
+                            album.addSongs(song);
+                            song.setAlbum(album);
+                        }
+                        else {
+                            Artist getter = hash.get(artist_name);
+                            getter.addSongs(song);
+                            song.setArtist(getter);
+
+                            Album getter2 = albumhash.get(album_name);
+                            getter2.addSongs(song);
+                            song.setAlbum(getter2);
+                        }
+
+                        songRepository.save(song);
+
+
                     }
 
                 }

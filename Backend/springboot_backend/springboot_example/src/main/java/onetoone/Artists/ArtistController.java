@@ -82,25 +82,25 @@ public class ArtistController {
     }
 
     @ApiOperation(value = "Check if an Artist has a song featuring another specified Artist", response = Boolean.class, tags = "artist-controller")
-    @GetMapping(path = "/artists/{id}/features/{feature}")
-    boolean getArtistFeatureCheck( @PathVariable int id, @PathVariable String feature) {
-        Artist artist = artistRepository.findById(id);
+    @GetMapping(path = "/artists/{name}/featuring/{feature}")
+    String getArtistFeatureCheck( @PathVariable String name, @PathVariable String feature) {
+        Artist artist = artistRepository.findByName(name);
         List<Song> songList = artist.getSongs();
         for (int i = 0; i < songList.size(); i++) {
             if (songList.get(i).getFeature().contains(feature)) {
-                return true;
+                return success;
             }
         }
-        return false;
+        return failure;
     }
 
     @ApiOperation(value = "CHeck if two artists have any song together", response = Boolean.class, tags = "artist-controller")
-    @GetMapping(path = "/artists/{id}/artists2/{id2}")
-    boolean getArtistHaveSongTogether( @PathVariable int id, @PathVariable int id2) {
-        Artist artist1 = artistRepository.findById(id);
+    @GetMapping(path = "/artists/{name1}/with/{name2}")
+    String getArtistHaveSongTogether( @PathVariable String name1, @PathVariable String name2) {
+        Artist artist1 = artistRepository.findByName(name1);
         String artist1name = artist1.getName();
         List<Song> songList1 = artist1.getSongs();
-        Artist artist2 = artistRepository.findById(id2);
+        Artist artist2 = artistRepository.findByName(name2);
         String artist2name = artist2.getName();
         List<Song> songList2 = artist2.getSongs();
         boolean returner = false;
@@ -114,7 +114,28 @@ public class ArtistController {
                 returner =  true;
             }
         }
-        return returner;
+        if (returner) {
+            return success;
+        }
+        else {
+            return failure;
+        }
+    }
+
+    @GetMapping(path = "/artists/{name}/on/{album}")
+    String getArtistOnAlbum( @PathVariable String name, @PathVariable String album) {
+        Artist artist = artistRepository.findByName(name);
+        Album album_object = albumRepository.findByAlbumName(album);
+        List<Song> songList = album_object.getSongs();
+        if (songList.get(0).getArtist().getName().equals(name)) {
+            return success;
+        }
+        for (int i = 0; i < songList.size(); i++) {
+            if (songList.get(i).getFeature().contains(name)) {
+                return success;
+            }
+        }
+        return failure;
     }
 
 
@@ -150,18 +171,18 @@ public class ArtistController {
         return success;
     }
 
-    @ApiOperation(value = "Assign an Album to an Artist in the database", response = String.class, tags = "artist-controller")
-    @PutMapping("/artists/{artistId}/albums/{albumId}")
-    String assignAlbumToArtist(@PathVariable int artistId,@PathVariable int albumId){
-        Artist artist = artistRepository.findById(artistId);
-        Album album = albumRepository.findById(albumId);
-        if(artist == null || album == null)
-            return failure;
-        album.setArtist(artist);
-        artist.addAlbums(album);
-        artistRepository.save(artist);
-        return success;
-    }
+//    @ApiOperation(value = "Assign an Album to an Artist in the database", response = String.class, tags = "artist-controller")
+//    @PutMapping("/artists/{artistId}/albums/{albumId}")
+//    String assignAlbumToArtist(@PathVariable int artistId,@PathVariable int albumId){
+//        Artist artist = artistRepository.findById(artistId);
+//        Album album = albumRepository.findById(albumId);
+//        if(artist == null || album == null)
+//            return failure;
+//        album.setArtist(artist);
+//        artist.addAlbums(album);
+//        artistRepository.save(artist);
+//        return success;
+//    }
 
     @ApiOperation(value = "Delete an Artist from the database", response = String.class, tags = "artist-controller")
     @DeleteMapping(path = "/artists/{id}")
