@@ -305,34 +305,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         return username;
     }
     /**
-     * Updates the player's board with the provided answer at the specified row and column.
-     *
-     * @param editText The EditText containing the answer.
-     * @param answer   The answer to be updated on the player's board.
-     */
-    private void updatePlayerBoard(EditText editText, String answer) {
-        // Get the tag from the EditText, which contains the row and column information
-        String tag = (String) editText.getTag();
-
-        // Split the tag to separate row and column values
-        String[] parts = tag.split(",");
-        if (parts.length == 2) {
-            try {
-                // Parse the row and column from the tag
-                int row = Integer.parseInt(parts[0]) - 1; // Subtract 1 if your row/column indices start at 1
-                int column = Integer.parseInt(parts[1]) - 1; // Subtract 1 if your row/column indices start at 1
-
-                // Update the playerBoard with the answer at the specified row and column
-                playerBoard.edit(row, column, answer);
-            } catch (NumberFormatException e) {
-                Log.e("updatePlayerBoard", "Invalid tag format for EditText: " + tag, e);
-            }
-        } else {
-            Log.e("updatePlayerBoard", "Tag on EditText does not contain both row and column information: " + tag);
-        }
-    }
-
-    /**
      * Sets the text of the given TextView with the specified text.
      *
      * @param textView The TextView to set the text for.
@@ -621,7 +593,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                 }
                 break;
             case "on":
-                // Call specific method for 'on' check
+                if (subject.equals("Artist")) {
+                    getArtistOnAlbum(userAnswer, keyword, callback, editText);
+                }
                 break;
             case "with":
                 if (subject.equals("Artist")) {
@@ -649,7 +623,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     public void onResult(boolean colIsCorrect, EditText editText) {
                         if (rowIsCorrect && colIsCorrect) {
                             Log.d("YES","yes");
-                            updatePlayerBoard(editText, userAnswer);
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
                             correctGuesses++;
@@ -710,8 +683,14 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // Handle error, maybe invoke the callback with 'false'
-                    callback.onResult(false, editText);
+                    if (error.networkResponse != null && error.networkResponse.statusCode == 500) {
+                        // Handle the 500 error as a wrong guess
+                        callback.onResult(false, editText);
+                    } else {
+                        error.printStackTrace();
+                        // Handle other errors
+                    }
+
                 }
             });
 
@@ -761,8 +740,13 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    // Handle network error
-                    callback.onResult(false, editText);
+                    if (error.networkResponse != null && error.networkResponse.statusCode == 500) {
+                        // Handle the 500 error as a wrong guess
+                        callback.onResult(false, editText);
+                    } else {
+                        error.printStackTrace();
+                        // Handle other errors
+                    }
                 }
             });
 
@@ -773,7 +757,62 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             callback.onResult(false, editText);
         }
     }
+    private void getArtistOnAlbum(String artistName, String albumName, AnswerCheckCallback callback, final EditText editText) {
+        try {
+            // Replace with your server URL
+            String encodedArtist1 = URLEncoder.encode(artistName, "UTF-8");
+            String encodedArtist2 = URLEncoder.encode(albumName, "UTF-8");
+            String baseUrl = "http://coms-309-022.class.las.iastate.edu:8080";
+            String endpoint = "/artists/" + artistName + "/on/" + albumName;
 
+            String url = baseUrl + endpoint;
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                // Parse the JSON response
+                                JSONObject jsonObject = new JSONObject(response);
+                                // Extract the message value
+                                String resultMessage = jsonObject.optString("message", "failure");
+                                // Check if the message indicates a success
+                                boolean result = "success".equalsIgnoreCase(resultMessage);
+                                // Invoke the callback with the result
+                                callback.onResult(result, editText);
+                            } catch (JSONException e) {
+                                callback.onResult(false, editText);
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.networkResponse != null && error.networkResponse.statusCode == 500) {
+                                // Handle the 500 error as a wrong guess
+                                callback.onResult(false, editText);
+                            } else {
+                                error.printStackTrace();
+                                // Handle other errors
+                            }
+
+                        }
+                    }
+            );
+            // Add the request to the RequestQueue
+            queue.add(stringRequest);
+        }catch(UnsupportedEncodingException e){
+            callback.onResult(false, editText);
+        }
+    }
+
+    private void handleResponse(String result) {
+        if ("success".equals(result)) {
+            // Handle success
+        } else {
+            // Handle failure
+        }
+    }
     /**
      * Adds a player's score to the leaderboard.
      *

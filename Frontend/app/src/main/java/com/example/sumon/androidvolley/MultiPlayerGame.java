@@ -293,39 +293,6 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         });
     }
     /**
-     * Updates the player board with the given answer at the specified row and column.
-     * Also sends the updated board state to the opponent.
-     *
-     * @param editText The EditText containing the user's answer.
-     * @param answer   The user's answer.
-     */
-    private void updatePlayerBoard(EditText editText, String answer) {
-        // Get the tag from the EditText, which contains the row and column information
-        String tag = (String) editText.getTag();
-
-        // Split the tag to separate row and column values
-        String[] parts = tag.split(",");
-        if (parts.length == 2) {
-            try {
-                // Parse the row and column from the tag
-                int row = Integer.parseInt(parts[0]) - 1; // Subtract 1 if your row/column indices start at 1
-                int column = Integer.parseInt(parts[1]) - 1; // Subtract 1 if your row/column indices start at 1
-
-                // Update the playerBoard with the answer at the specified row and column
-                playerBoard.edit(row, column, answer);
-                sendBoard.edit(row, column,answer);
-                points = points+100;
-                setPoints();
-                sendBoardState(sendBoard);
-
-            } catch (NumberFormatException e) {
-                Log.e("updatePlayerBoard", "Invalid tag format for EditText: " + tag, e);
-            }
-        } else {
-            Log.e("updatePlayerBoard", "Tag on EditText does not contain both row and column information: " + tag);
-        }
-    }
-    /**
      * Sends the current game board state to the opponent via WebSocket.
      *
      * @param board The current game board state.
@@ -677,7 +644,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                                             MainActivity.class));
                                 }
                                 else {
-                                    updatePlayerBoard(editText, userAnswer);
+
                                     changeBoxColor(editText, true);
                                     editText.setEnabled(false);  // Disable the EditText
                                     correctGuesses++; // Increment the counter for correct answers

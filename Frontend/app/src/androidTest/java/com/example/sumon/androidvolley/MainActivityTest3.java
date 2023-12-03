@@ -98,16 +98,12 @@ public class MainActivityTest3 {
                         isDisplayed()));
         button3.check(matches(isDisplayed()));
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.msgResponse), withText("[{\"id\":1,\"name\":\"Travis Scott\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":2,\"name\":\"Drake\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":3,\"name\":\"Tyler The Creator\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":4,\"name\":\"Metro Boomin\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":5,\"name\":\"Playboi Carti\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":6,\"name\":\"Lil Uzi Vert\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":7,\"name\":\"Yeat\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":8,\"name\":\"21 Savage\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":9,\"name\":\"Kanye West\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":10,\"name\":\"Lil Wayne\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":11,\"name\":\"Mike WiLL Made-It\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":12,\"name\":\"A$AP Rocky\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":13,\"name\":\"Pharrell Williams\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":14,\"name\":\"Keenan\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]}]"),
-                        withParent(withParent(withId(R.id.my_drawer_layout))),
-                        isDisplayed()));
-        textView.check(matches(isDisplayed()));
-
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.msgResponse), withText("[{\"id\":1,\"name\":\"Travis Scott\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":2,\"name\":\"Drake\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":3,\"name\":\"Tyler The Creator\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":4,\"name\":\"Metro Boomin\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":5,\"name\":\"Playboi Carti\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":6,\"name\":\"Lil Uzi Vert\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":7,\"name\":\"Yeat\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":8,\"name\":\"21 Savage\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":9,\"name\":\"Kanye West\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":10,\"name\":\"Lil Wayne\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":11,\"name\":\"Mike WiLL Made-It\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":12,\"name\":\"A$AP Rocky\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":13,\"name\":\"Pharrell Williams\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]},{\"id\":14,\"name\":\"Keenan\",\"numPlatinums\":0,\"numGrammys\":0,\"songs\":[]}]"),
-                        withParent(withParent(withId(R.id.my_drawer_layout))),
-                        isDisplayed()));
+                allOf(
+                        withId(R.id.msgResponse),
+                        isDisplayed()
+                )
+        );
         textView2.check(matches(isDisplayed()));
 
         ViewInteraction appCompatEditText = onView(

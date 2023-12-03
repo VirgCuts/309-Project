@@ -12,6 +12,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.Matchers.matchesPattern;
 
+import androidx.test.espresso.action.ViewActions;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 
@@ -24,7 +25,41 @@ public class SinglePlayerGameTest {
 
     @Rule
     public ActivityTestRule<SinglePlayerGame> activityRule = new ActivityTestRule<>(SinglePlayerGame.class);
+    @Test
+    public void testOnCreate() {
+        // Ensure that all the views are displayed
+        onView(withId(R.id.r1c1)).check(matches(isDisplayed()));
+        onView(withId(R.id.r1c2)).check(matches(isDisplayed()));
+        onView(withId(R.id.r1c3)).check(matches(isDisplayed()));
+        onView(withId(R.id.r2c1)).check(matches(isDisplayed()));
+        onView(withId(R.id.r2c2)).check(matches(isDisplayed()));
+        onView(withId(R.id.r2c3)).check(matches(isDisplayed()));
+        onView(withId(R.id.r3c1)).check(matches(isDisplayed()));
+        onView(withId(R.id.r3c2)).check(matches(isDisplayed()));
+        onView(withId(R.id.r3c3)).check(matches(isDisplayed()));
+        onView(withId(R.id.col1)).check(matches(isDisplayed()));
+        onView(withId(R.id.col2)).check(matches(isDisplayed()));
+        onView(withId(R.id.col3)).check(matches(isDisplayed()));
+        onView(withId(R.id.row1)).check(matches(isDisplayed()));
+        onView(withId(R.id.row2)).check(matches(isDisplayed()));
+        onView(withId(R.id.row3)).check(matches(isDisplayed()));
+        onView(withId(R.id.endGameButton)).check(matches(isDisplayed()));
+        onView(withId(R.id.timer)).check(matches(isDisplayed()));
 
+        // Test interactions with EditText views (assuming they are EditText views)
+        onView(withId(R.id.r1c1)).perform(ViewActions.replaceText("Test Text1"));
+        onView(withId(R.id.r1c2)).perform(ViewActions.replaceText("Test Text2"));
+        onView(withId(R.id.r1c3)).perform(ViewActions.replaceText("Test Text3"));
+        // Add similar interactions for other EditText views
+
+        // Check the text of EditText views
+        onView(withId(R.id.r1c1)).check(matches(withText("Test Text1")));
+        onView(withId(R.id.r1c2)).check(matches(withText("Test Text2")));
+        onView(withId(R.id.r1c3)).check(matches(withText("Test Text3")));
+        // Add similar checks for other EditText views
+
+        // Add more test cases as needed for your specific requirements
+    }
     @Test
     public void wrongAnswerTest() throws InterruptedException {
         Thread.sleep(500);

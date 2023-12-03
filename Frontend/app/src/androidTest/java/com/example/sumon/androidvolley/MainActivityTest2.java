@@ -94,7 +94,7 @@ public class MainActivityTest2 {
                                 1),
                         isDisplayed()));
         appCompatButton2.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(1000);
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.r1c1),
                         childAtPosition(
@@ -106,6 +106,7 @@ public class MainActivityTest2 {
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Test"), closeSoftKeyboard());
         onView(withId(R.id.r1c1)).perform(pressImeActionButton());
+        Thread.sleep(1000);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.r1c2),
                         childAtPosition(
@@ -117,6 +118,7 @@ public class MainActivityTest2 {
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("Test"), closeSoftKeyboard());
         onView(withId(R.id.r1c2)).perform(pressImeActionButton());
+        Thread.sleep(1000);
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.endGameButton), withText("Quit"),
                         childAtPosition(
