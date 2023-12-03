@@ -1,11 +1,16 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- ... your other style attributes -->
 
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <!-- Customize the navigation drawer toggle -->
+        <item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>
+    </style>
 
+    <style name="MyDrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <!-- Customize the drawer arrow icon -->
+        <item name="color">@color/boardColor</item>
+        <!-- You can also set other attributes here, like size, etc. -->
     </style>
     <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background</item>

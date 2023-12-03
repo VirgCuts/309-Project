@@ -6,6 +6,7 @@
     android:id="@+id/my_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/main_menu_background"
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 <LinearLayout
@@ -19,13 +20,15 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:text="Welcome to the Color Shop"
-        android:textSize="20sp"></TextView>
+        android:textSize="20sp"
+        android:textColor="#000000"></TextView>
     <TextView
         android:id="@+id/balance"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:gravity="center"
         android:text="Balance: "
+        android:textColor="#000000"
         android:textSize="20sp"></TextView>
 
     <LinearLayout
@@ -46,8 +49,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Orange -- Cost: 100"
-            android:textSize="18sp" />
+            android:text="Orange"
+            android:textSize="18sp"
+            android:textColor="#000000"/>
     </LinearLayout>
 
     <LinearLayout
@@ -67,8 +71,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Purple -- Cost: 300"
-            android:textSize="18sp" />
+            android:text="Purple"
+            android:textSize="18sp"
+            android:textColor="#000000"/>
     </LinearLayout>
 
     <LinearLayout
@@ -88,7 +93,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Light Blue -- Cost: 500"
+            android:text="Light Blue"
+            android:textColor="#000000"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -109,7 +115,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Yellow -- Cost: 600"
+            android:text="Yellow"
+            android:textColor="#000000"
             android:textSize="18sp" />
     </LinearLayout>
     <LinearLayout
@@ -129,7 +136,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Magenta -- Cost: 900"
+            android:text="Magenta"
+            android:textColor="#000000"
             android:textSize="18sp" />
     </LinearLayout>
     <LinearLayout
@@ -149,7 +157,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Green -- Cost: 1000"
+            android:text="Green"
+            android:textColor="#000000"
             android:textSize="18sp" />
     </LinearLayout>
 
@@ -171,6 +180,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="Unselect Colors"
+            android:textColor="#000000"
             android:textSize="18sp" />
     </LinearLayout>
 </LinearLayout>
