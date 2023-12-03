@@ -138,6 +138,7 @@ public class ArtistController {
         return failure;
     }
 
+
     @ApiOperation(value = "Create an Artist and add it to the database", response = String.class, tags = "artist-controller")
     @PostMapping(path = "/artists")
     String createArtist(@RequestBody Artist artist){
