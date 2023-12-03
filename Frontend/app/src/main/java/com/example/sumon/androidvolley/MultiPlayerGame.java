@@ -59,7 +59,6 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     private Handler handler = new Handler();
     private int seconds = 240;
     public int points = 0;
-
     private PlayerBoard playerBoard;
     private sendBoard sendBoard;
     private int correctGuesses = 0;
@@ -596,7 +595,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
      *
      * @param view The index of the square to change color (0-8).
      */
-    private void changeOppColor(int view) {
+    void changeOppColor(int view) {
         String textViewID = "o" + (view + 1); // Add 1 to match your 0-8 input
 
         int textViewResID = getResources().getIdentifier(textViewID, "id", getPackageName());
