@@ -48,31 +48,13 @@
 
 
     <!-- Chat Messages -->
-    <ScrollView
-        android:id="@+id/chat_scrollview"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_recyclerview"
         android:layout_width="match_parent"
-
         android:layout_height="0dp"
         android:layout_below="@+id/username"
-        android:layout_above="@+id/sendMessage">
-
-
-
-        <LinearLayout
-            android:id="@+id/chat_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/chatMessage"></TextView>
-
-            <!-- Chat messages will be added here dynamically -->
-        </LinearLayout>
-    </ScrollView>
+        android:layout_above="@+id/sendMessage"
+        android:padding="10dp" />
 
     <!-- Message Input Area -->
     <RelativeLayout

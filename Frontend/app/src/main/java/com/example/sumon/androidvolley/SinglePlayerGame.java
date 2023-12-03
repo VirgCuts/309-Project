@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -127,7 +128,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         setEditTextListener(r3c3);
         username = getUsername(this);
 
-        Log.d("Username", username);
         playerBoard = new PlayerBoard();
 
         getSelectColor();
@@ -590,7 +590,9 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                if ((event != null && event.getAction() == KeyEvent.ACTION_DOWN && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.KEYCODE_TAB))
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || actionId == EditorInfo.IME_ACTION_NEXT){
                     // Get the relevant tag data
                     String tag = (String) editText.getTag();
                     String[] parts = tag.split(",");
