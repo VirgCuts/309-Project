@@ -1,6 +1,7 @@
 package com.example.sumon.androidvolley;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -48,10 +49,12 @@ public class Navigation extends AppCompatActivity {
     public void setupNavigation() {
         NavigationView navigationView = activity.findViewById(R.id.nav_view);
         drawerLayout = activity.findViewById(R.id.my_drawer_layout);
+
         actionBarDrawerToggle = new ActionBarDrawerToggle(activity, drawerLayout, R.string.nav_open, R.string.nav_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

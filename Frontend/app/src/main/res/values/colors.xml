@@ -5,6 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="greyWithTransparency">#4D667279</color>
 
+    <color name="mainBackgroundColor">#3F51B5</color>
+
     <color name="backgroundColor">#12AFA6</color>
     <color name="buttonColor">#3F51B5</color>
     <color name="white">#FFFFFF</color>
@@ -20,7 +22,11 @@
     <color name="edit_text_original">#FFFFFF</color>
     <color name="light_gray">#B1B1B1</color>
     <color name="alternateButtonColor">#7135FF</color>
+    <color name="singlebuttoncolor">#B235FF</color>
+    <color name="multibuttoncolor">#FF35BC</color>
+    <color name="teambuttoncolor">#FF6E35</color>
     <color name="correctColor">#EA6500</color>
+
 
 
 </resources>
