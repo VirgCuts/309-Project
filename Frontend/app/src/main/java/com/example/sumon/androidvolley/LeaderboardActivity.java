@@ -193,13 +193,6 @@ public class LeaderboardActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
-    /**
-     * Clear the input fields and reset the selected item position.
-     */
-    private void clearInput() {
-        inputEditText.setText("");
-        selectedItemPosition = -1;
-    }
 
     /**
      * Retrieves leaderboard data from the API using Volley based on the leaderboard type.

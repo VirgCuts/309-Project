@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FAFAFA">
+
+    <TextView
+        android:id="@+id/tvReadyUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Users Ready: 0"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rounded_background2"
+    android:padding="10dp"
+    style="@style/CustomTextStyle" />
+
+    <TextView
+        android:id="@+id/tvSpectators"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Spectators: 0"
+        android:layout_below="@id/tvReadyUsers"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_background2"
+    android:padding="10dp"
+    style="@style/CustomTextStyle" />
+
+    <Button
+        android:id="@+id/btnReadyUp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvSpectators"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/alternate_button_background"
+        android:text="Ready Up"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnExit"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="Exit"
+
+        android:layout_marginTop="5dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/rounded_button"
+        android:textColor="#FFFFFF" />
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/btnReadyUp"
+    android:background="@drawable/rounded_background"
+    android:layout_marginTop="3dp">
+
+
+
+
+
+
+        <!-- Chat Messages -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+
+        android:padding="10dp" />
+
+        <!-- Message Input Area -->
+        <RelativeLayout
+
+            android:id="@+id/sendMessage"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <EditText
+                android:id="@+id/message_input"
+                android:layout_width="match_parent"
+
+                android:layout_height="50dp"
+                android:padding="10dp"
+                android:hint="Type a message"
+                android:background="@drawable/chat_message_input"
+
+                android:layout_toLeftOf="@+id/send_button"
+                android:layout_toStartOf="@+id/send_button" />
+
+
+
+            <Button
+                android:id="@+id/send_button"
+                android:layout_width="wrap_content"
+
+                android:layout_height="50dp"
+
+                android:text="Send"
+                android:background="@drawable/chat_send_button"
+                android:textColor="#fff"
+                android:padding="10dp"
+
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+</RelativeLayout>
+
+</RelativeLayout>

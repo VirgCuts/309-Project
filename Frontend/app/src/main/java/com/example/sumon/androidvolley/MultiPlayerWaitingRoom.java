@@ -6,174 +6,88 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-
 import android.widget.PopupMenu;
-import android.widget.ScrollView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * ChatActivity provides the user interface and logic for a chat application.
- * It handles WebSocket connections for real-time messaging, sending and receiving messages,
- * and displaying chat history. This activity also includes UI elements for connecting,
- * sending messages, and displaying chat messages.
- */
-public class ChatActivity extends AppCompatActivity implements WebSocketListener{
+public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSocketListener {
 
-
-
-
-    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/chat/";
-
-
-
-    private Button connectBtn, sendBtn, btnGetBanCount;
-    private EditText usernameEtx, msgEtx, userBan;
-    private TextView msgTv, tvBanCount;
-
-    private Navigation navigationHelper;
-    private RecyclerView recyclerView;
+    private Button btnReadyUp;
+    private TextView tvReadyUsers, tvSpectators;
+    private int readyUsers = 0; // This should be updated based on actual data
+    private int spectators = 0; // This should be updated based on actual data
+    private boolean isPlayerReady = false;
+    private RecyclerView chatRecyclerView;
     private ChatAdapter chatAdapter;
     private List<ChatMessage> chatMessages = new ArrayList<>();
-
-    private LinearLayout messagesContainer;
+    private EditText messageInput;
+    private Button sendButton;
+    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/chat/"; //This will need to be a new URL
 
     private boolean isWebSocketConnected;
 
-    private TextView currentlyHighlighted;
 
-    public static final String EXTRA_USERNAME = "EXTRA_USERNAME";
-    public static final String EXTRA_MESSAGE_CONTENT = "EXTRA_MESSAGE_CONTENT";
-    /**
-     * Initializes the activity. This method sets up the UI components and event listeners.
-     * @param savedInstanceState If the activity is being re-initialized after being shut down,
-     *                           this Bundle contains the most recent data provided by onSaveInstanceState.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chatroom_layout);
+        setContentView(R.layout.multiplayer_waiting_room);
+        chatMessages.add(new ChatMessage("Hey pal"));
+        btnReadyUp = findViewById(R.id.btnReadyUp);
+        tvReadyUsers = findViewById(R.id.tvReadyUsers);
+        tvSpectators = findViewById(R.id.tvSpectators);
+        // Initialize chat components
+        chatRecyclerView = findViewById(R.id.chat_recyclerview);
+        messageInput = findViewById(R.id.message_input);
+        sendButton = findViewById(R.id.send_button);
 
-        navigationHelper = new Navigation(this);
-        navigationHelper.setupNavigation();
-
-        /* initialize UI elements */
-        connectBtn = (Button) findViewById(R.id.connect_button);
-        sendBtn = (Button) findViewById(R.id.send_button);
-        usernameEtx = (EditText) findViewById(R.id.username_input);
-        msgEtx = (EditText) findViewById(R.id.message_input);
-
-        recyclerView = findViewById(R.id.chat_recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatAdapter = new ChatAdapter(chatMessages);
-        recyclerView.setAdapter(chatAdapter);
+        chatRecyclerView.setAdapter(chatAdapter);
 
-        /* connect button listener */
-        connectBtn.setOnClickListener(view -> {
-
-            String serverUrl = BASE_URL + usernameEtx.getText().toString();
-            Log.d("URL", "URL is " + serverUrl);
-            // Establish WebSocket connection and set listener
-            WebSocketManager.getInstance().connectWebSocket(serverUrl);
-            WebSocketManager.getInstance().setWebSocketListener(ChatActivity.this);
-            isWebSocketConnected = true;
-        });
-
-        /* send button listener */
-        sendBtn.setOnClickListener(v -> {
+        sendButton.setOnClickListener(v -> {
             try {
-
-                // send message
-                WebSocketManager.getInstance().sendMessage(msgEtx.getText().toString());
+                WebSocketManager.getInstance().sendMessage(messageInput.getText().toString());
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
             }
         });
 
-    }
-    /**
-     * Handles options item selected events.
-     * @param item The menu item that was selected.
-     * @return boolean Returns true if the event was handled, false otherwise.
-     */
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
-    }
-    /**
-     * Adds a message to the chat view.
-     * @param message The message text to be added.
-     */
-    private void addMessageToView(String message) {
-        chatMessages.add(new ChatMessage(message));
-        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
-        scrollToBottom();
-    }
-
-    /**
-     * Callback for receiving messages from the WebSocket.
-     * @param message The message received from the WebSocket.
-     */
-    @Override
-    public void onWebSocketMessage(String message) {
-        runOnUiThread(() -> {
-            // Check if the message contains the history
-            if (message.startsWith("History\n")) {
-                String history = message.substring("History\n".length());
-                parseAndDisplayHistory(history);
-            } else {
-                addMessageToView(message);
+        btnReadyUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the ready-up logic here
+                setPlayerReady();
             }
         });
-    }
-
-    /**
-     * Callback for WebSocket closure.
-     * @param code The closure code.
-     * @param reason The reason for the closure.
-     * @param remote Flag indicating if the closure was initiated by the remote host.
-     */
-    @Override
-    public void onWebSocketClose(int code, String reason, boolean remote) {
-        String closedBy = remote ? "server" : "local";
-        runOnUiThread(() -> {
-            addMessageToView("---\nconnection closed by " + closedBy + "\nreason: " + reason);
+        Button restartButton = findViewById(R.id.btnExit);
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WebSocketManager.getInstance().disconnectWebSocket();
+                WebSocketManager.getInstance().removeWebSocketListener();
+                startActivity(new Intent(MultiPlayerWaitingRoom.this,
+                        MultiPlayerLobbyActivity.class));
+            }
         });
-    }
-    /**
-     * Parses and displays chat history.
-     * @param history The chat history in String format.
-     */
-    private void parseAndDisplayHistory(String history) {
-        String[] messages = history.split("\n");
-        for (String msg : messages) {
-            addMessageToView(msg);
-        }
-        scrollToBottom();
+        String serverUrl = BASE_URL + "Keenan";//Will need to change once log-in system works
+        // Establish WebSocket connection and set listener
+        WebSocketManager.getInstance().connectWebSocket(serverUrl);
+        WebSocketManager.getInstance().setWebSocketListener(MultiPlayerWaitingRoom.this);
+        isWebSocketConnected = true;
+        // Update the UI with the current number of ready users and spectators
+        updateUI();
     }
     @Override
     protected void onPause() {
@@ -196,12 +110,69 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         }
     }
 
+    private void setPlayerReady() {
+        if (!isPlayerReady) {
+            // Toggle player's ready state
+            isPlayerReady = true;
+            readyUsers++; // Increment the count of ready users
+            updateUI();
 
-        /**
-         * Scrolls the chat view to the bottom.
-         */
+            // Change button appearance to indicate the player is ready and disable it
+            btnReadyUp.setBackgroundColor(Color.TRANSPARENT); // Set the button color to transparent
+            btnReadyUp.setTextColor(Color.BLACK); // Set the text color to black (or choose another visible color)
+            btnReadyUp.setText("Ready!"); // Change button text to "Ready"
+            btnReadyUp.setEnabled(false); // Disable the button
+        }
+    }
+
+
+    private void updateUI() {
+        // Update the number of ready users and spectators displayed in the TextViews
+        tvReadyUsers.setText(getString(R.string.ready_users, readyUsers));
+        tvSpectators.setText(getString(R.string.spectators, spectators));
+    }
+    /**
+     * Adds a message to the chat view.
+     * @param message The message text to be added.
+     */
+    private void addMessageToView(String message) {
+        chatMessages.add(new ChatMessage(message));
+        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
+        scrollToBottom();
+    }
+
+    /**
+     * Callback for receiving messages from the WebSocket.
+     * @param message The message received from the WebSocket.
+     */
+    @Override
+    public void onWebSocketMessage(String message) {
+        runOnUiThread(() -> {
+                addMessageToView(message);
+
+        });
+
+    }
+
+    /**
+     * Callback for WebSocket closure.
+     * @param code The closure code.
+     * @param reason The reason for the closure.
+     * @param remote Flag indicating if the closure was initiated by the remote host.
+     */
+    @Override
+    public void onWebSocketClose(int code, String reason, boolean remote) {
+        String closedBy = remote ? "server" : "local";
+        runOnUiThread(() -> {
+            addMessageToView("---\nconnection closed by " + closedBy + "\nreason: " + reason);
+        });
+    }
+
+    /**
+     * Scrolls the chat view to the bottom.
+     */
     private void scrollToBottom() {
-        recyclerView.scrollToPosition(chatMessages.size() - 1);
+        chatRecyclerView.scrollToPosition(chatMessages.size() - 1);
     }
     /**
      * Callback for WebSocket connection opening.
@@ -275,12 +246,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
             popupMenu.setOnMenuItemClickListener(item -> {
                 String title = item.getTitle().toString();
                 if ("Report user".equals(title)) {
-                    String messageContent = ((TextView) anchorView).getText().toString();
-                    Intent intent = new Intent(ChatActivity.this, ReportUserActivity.class);
-                    // You can put extra data into the intent if needed, for example, the user ID to report
-                    intent.putExtra(EXTRA_USERNAME, usernameEtx.getText().toString());
-                    intent.putExtra(EXTRA_MESSAGE_CONTENT, messageContent);
-                    ChatActivity.this.startActivity(intent);
+
                 }
                 return true;
             });
@@ -306,10 +272,12 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         @Override
         public void onBindViewHolder(ChatViewHolder holder, int position) {
             ChatMessage message = chatMessages.get(position);
+            Log.d("MESSAGE",message.getMessage());
             holder.messageTextView.setText(message.getMessage());
             // Reset any special styling from previous uses of this holder
             holder.messageTextView.setBackgroundResource(R.drawable.textview_border);
             holder.messageTextView.setTextColor(Color.BLACK);
+
             holder.messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         }
 
@@ -318,7 +286,4 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
             return chatMessages.size();
         }
     }
-
 }
-
-
