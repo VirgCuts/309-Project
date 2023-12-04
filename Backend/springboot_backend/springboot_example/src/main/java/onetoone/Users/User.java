@@ -90,8 +90,12 @@ public class User implements Comparator<User>, Comparable<User> {
         this.selectedColor = "white";
     }
 
-    public User() {
+    public User()
+    {
         this.highScoreTime = new Date();
+        this.board = new Board();
+        this.inventory = new Inventory();
+        this.selectedColor = "white";
     }
 
     // =============================== Getters and Setters for each field ================================== //
@@ -143,13 +147,16 @@ public class User implements Comparator<User>, Comparable<User> {
         return highScoreMonthly;
     }
 
+    public void setHighScoreMonthly(int highScore) { this.highScoreMonthly = highScore; }
 
     public int getHighScoreWeekly(){
         return highScoreWeekly;
     }
 
+    public void setHighScoreWeekly(int highScore) { this.highScoreWeekly = highScore; }
 
     public void setAllHighScores(int highScore) {
+        Date now = new Date();
         if (this.highScore < highScore){
             this.highScore = highScore;
             this.highScoreTime = new Date();
