@@ -72,7 +72,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
 
-    private String currentPlayer = "Jimothy", teammate = "Jame", opponent1 = "Johann", opponent2 = "Jam";
+    private String currentPlayer = "Carter", teammate = "Conor", opponent1 = "Sam", opponent2 = "Keenan";
     private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/team_multiplayer/";
     private boolean end = false;
     private int team = 0;
