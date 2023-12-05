@@ -1,0 +1,340 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > User</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">onetoone.Users</a>
+</div>
+
+<h1>Coverage Summary for Class: User (onetoone.Users)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">User</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.9%
+  </span>
+  <span class="absValue">
+    (34/37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.8%
+  </span>
+  <span class="absValue">
+    (67/73)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">User$HibernateProxy$SfB4DXdq</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    91.9%
+  </span>
+  <span class="absValue">
+    (34/37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.8%
+  </span>
+  <span class="absValue">
+    (67/73)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package onetoone.Users;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonProperty;
+&nbsp;import com.fasterxml.jackson.core.JsonProcessingException;
+&nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
+&nbsp;import io.swagger.annotations.ApiModelProperty;
+&nbsp;import onetoone.Inventory.Inventory;
+&nbsp;import onetoone.Reports.Report;
+&nbsp;import onetoone.Songs.Song;
+&nbsp;
+&nbsp;import javax.persistence.*;
+&nbsp;import java.util.Comparator;
+&nbsp;import java.util.Date;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Entity
+&nbsp;public class User implements Comparator&lt;User&gt;, Comparable&lt;User&gt; {
+&nbsp;
+&nbsp;    /*
+&nbsp;     * The annotation @ID marks the field below as the primary key for the table created by springboot
+&nbsp;     * The @GeneratedValue generates a value if not already present, The strategy in this case is to start from 1 and increment for each table
+&nbsp;     */
+&nbsp;    @ApiModelProperty(notes = &quot;Id provided for database&quot;, name=&quot;id&quot;, required = true)
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    private int id;
+&nbsp;    @ApiModelProperty(notes = &quot;Name/Username of the User&quot;, name=&quot;name&quot;, required = true)
+&nbsp;    private String name;
+&nbsp;    @ApiModelProperty(notes = &quot;Password of the User&quot;, name=&quot;password&quot;, required = true)
+&nbsp;    private String password;
+&nbsp;    @ApiModelProperty(notes = &quot;Email of the User&quot;, name=&quot;email&quot;, required = true)
+&nbsp;    private String email;
+&nbsp;    @ApiModelProperty(notes = &quot;Reset token for forgotten password&quot;, name=&quot;resetToken&quot;)
+&nbsp;    private String resetToken;
+&nbsp;    @ApiModelProperty(notes = &quot;High score of the User&quot;, name=&quot;highScore&quot;)
+&nbsp;    private int highScore;
+&nbsp;    @ApiModelProperty(notes = &quot;This months high score of the User&quot;, name=&quot;highScoreMonthly&quot;)
+&nbsp;    private int highScoreMonthly;
+&nbsp;    @ApiModelProperty(notes = &quot;This weeks high score of the User&quot;, name=&quot;highScoreWeekly&quot;)
+&nbsp;    private int highScoreWeekly;
+&nbsp;    @ApiModelProperty(notes = &quot;This weeks high score of the User&quot;, name=&quot;highScoreWeekly&quot;)
+&nbsp;    private Date highScoreTime;
+&nbsp;    @ApiModelProperty(notes = &quot;Boolean value of users ability to chat&quot;, name=&quot;canChat&quot;)
+&nbsp;    private boolean canChat;
+&nbsp;    @ApiModelProperty(notes = &quot;Number of ban strikes user currently has&quot;, name=&quot;banStrikes&quot;)
+&nbsp;    private int banStrikes;
+&nbsp;    @ApiModelProperty(notes = &quot;User&#39;s currently selected color&quot;, name=&quot;selectedColor&quot;)
+&nbsp;    private String selectedColor;
+&nbsp;    @ApiModelProperty(notes = &quot;Reports made about user&quot;, name=&quot;reports&quot;)
+&nbsp;    @OneToMany(cascade = CascadeType.ALL)
+&nbsp;    private List&lt;Report&gt; reports;
+&nbsp;
+&nbsp;    @ApiModelProperty(notes = &quot;Inventory belonging to user&quot;, name=&quot;inventory&quot;)
+&nbsp;    @OneToOne(cascade = CascadeType.ALL)
+&nbsp;    @JoinColumn(name = &quot;inventory_id&quot;, referencedColumnName = &quot;id&quot;)
+&nbsp;    private Inventory inventory;
+&nbsp;
+&nbsp;    @ApiModelProperty(notes = &quot;Board used during game&quot;, name=&quot;board&quot;)
+&nbsp;    @Transient
+&nbsp;    public Board board;
+&nbsp;
+&nbsp;
+&nbsp;    /*
+&nbsp;     * @OneToOne creates a relation between the current entity/table(Laptop) with the entity/table defined below it(User)
+&nbsp;     * cascade is responsible propagating all changes, even to children of the class Eg: changes made to laptop within a user object will be reflected
+<b class="fc">&nbsp;     * in the database (more info : https://www.baeldung.com/jpa-cascade-types)</b>
+<b class="fc">&nbsp;     * @JoinColumn defines the ownership of the foreign key i.e. the user table will have a field called laptop_id</b>
+<b class="fc">&nbsp;     */</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    public User(String name, String password, String email) {</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.password = password;</b>
+<b class="fc">&nbsp;        this.email = email;</b>
+<b class="fc">&nbsp;        this.highScore = 0;</b>
+<b class="fc">&nbsp;        this.highScoreTime = new Date();</b>
+<b class="fc">&nbsp;        this.highScoreMonthly = 0;</b>
+<b class="fc">&nbsp;        this.highScoreWeekly = 0;</b>
+&nbsp;        this.board = new Board();
+&nbsp;        this.canChat = true;
+<b class="fc">&nbsp;        this.banStrikes = 0;</b>
+<b class="fc">&nbsp;        inventory = new Inventory();</b>
+<b class="fc">&nbsp;        this.selectedColor = &quot;white&quot;;</b>
+<b class="fc">&nbsp;        this.resetToken = null;</b>
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    public User()</b>
+<b class="fc">&nbsp;    {</b>
+<b class="fc">&nbsp;        this.highScoreTime = new Date();</b>
+<b class="fc">&nbsp;        this.board = new Board();</b>
+<b class="fc">&nbsp;        this.inventory = new Inventory();</b>
+<b class="fc">&nbsp;        this.selectedColor = &quot;white&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // =============================== Getters and Setters for each field ================================== //
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    public int getId(){</b>
+<b class="fc">&nbsp;        return id;</b>
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+&nbsp;    public void setId(int id){
+&nbsp;        this.id = id;
+&nbsp;    }
+&nbsp;
+&nbsp;    public Board getBoard(){
+<b class="fc">&nbsp;        return board;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setBoard(Board board){
+<b class="fc">&nbsp;        this.board = board;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getName(){
+<b class="fc">&nbsp;        return name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setName(String name){
+<b class="fc">&nbsp;        this.name = name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getPassword() { return password; }
+<b class="fc">&nbsp;</b>
+&nbsp;    public void setPassword(String password) { this.password = password; }
+&nbsp;
+&nbsp;    public String getEmail() { return email; }
+<b class="fc">&nbsp;</b>
+&nbsp;    public void setEmail(String email) { this.email = email; }
+&nbsp;
+<b class="fc">&nbsp;    public String getResetToken() { return resetToken; }</b>
+&nbsp;
+<b class="fc">&nbsp;    public void setResetToken(String resetToken) { this.resetToken = resetToken; }</b>
+&nbsp;    public int getHighScore(){
+&nbsp;        return highScore;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void setHighScore(int highScore){
+&nbsp;        this.highScore = highScore;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public Date getHighScoreTime(){
+&nbsp;        return highScoreTime;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void setHighScoreTime(Date highScoreTime){
+&nbsp;        this.highScoreTime = highScoreTime;
+<b class="fc">&nbsp;    }</b>
+&nbsp;    public int getHighScoreMonthly(){
+&nbsp;        return highScoreMonthly;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void setHighScoreMonthly(int highScore) { this.highScoreMonthly = highScore; }
+<b class="fc">&nbsp;</b>
+&nbsp;    public int getHighScoreWeekly(){
+&nbsp;        return highScoreWeekly;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void setHighScoreWeekly(int highScore) { this.highScoreWeekly = highScore; }
+<b class="fc">&nbsp;</b>
+&nbsp;    public void setAllHighScores(int highScore) {
+&nbsp;        Date now = new Date();
+<b class="fc">&nbsp;        if (this.highScore &lt; highScore){</b>
+<b class="fc">&nbsp;            this.highScore = highScore;</b>
+<b class="fc">&nbsp;            this.highScoreTime = new Date();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;        if (this.highScoreMonthly &lt; highScore) {
+<b class="fc">&nbsp;            this.highScoreMonthly = highScore;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;        if (this.highScoreWeekly &lt; highScore) {
+<b class="fc">&nbsp;            this.highScoreWeekly = highScore;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void resetWeeklyScore() {
+&nbsp;        this.highScoreWeekly = 0;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void resetMonthlyScore() {
+&nbsp;        this.highScoreMonthly = 0;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public boolean getCanChat(){
+&nbsp;        return canChat;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void setCanChat(boolean canChat){
+&nbsp;        this.canChat = canChat;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public int getBanStrikes() { return this.banStrikes; }
+<b class="fc">&nbsp;</b>
+&nbsp;    public void setBanStrikes(int banStrikes) { this.banStrikes = banStrikes; }
+<b class="fc">&nbsp;</b>
+&nbsp;    public String getSelectedColor() { return this.selectedColor; }
+<b class="fc">&nbsp;</b>
+&nbsp;    public void setSelectedColor(String selectedColor) { this.selectedColor = selectedColor; }
+<b class="fc">&nbsp;</b>
+&nbsp;    public List&lt;Report&gt; getReports() { return this.reports; }
+<b class="fc">&nbsp;</b>
+&nbsp;    public void setReports(List&lt;Report&gt; reports) { this.reports = reports; }
+<b class="fc">&nbsp;</b>
+&nbsp;    public void addReport(Report report) {this.reports.add(report); }
+<b class="fc">&nbsp;</b>
+&nbsp;    public Inventory getInventory() { return this.inventory; }
+<b class="fc">&nbsp;    public void setInventory(Inventory inventory) { this.inventory = inventory; }</b>
+<b class="fc">&nbsp;</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int compareTo(User o) {
+&nbsp;        return o.highScore - this.highScore;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int compare(User o1, User o2) {
+&nbsp;        return o2.highScore - o1.highScore;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public boolean hasWon() { return this.board.getWon(); }
+<b class="nc">&nbsp;</b>
+&nbsp;    public String boardToString() {
+&nbsp;        try {
+&nbsp;            ObjectMapper mapper = new ObjectMapper();
+<b class="nc">&nbsp;            return mapper.writeValueAsString(this.board);</b>
+<b class="nc">&nbsp;        } catch (JsonProcessingException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-05 17:18</div>
+</div>
+</body>
+</html>

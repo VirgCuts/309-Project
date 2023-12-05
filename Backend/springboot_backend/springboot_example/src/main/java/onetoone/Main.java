@@ -18,6 +18,8 @@ import onetoone.Artists.Artist;
 import onetoone.Artists.ArtistRepository;
 import onetoone.Users.User;
 import onetoone.Users.UserRepository;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.BufferedReader;
@@ -40,6 +42,11 @@ class Main {
         SpringApplication.run(Main.class, args);
     }
 
+    @Bean
+    public JavaMailSender javaMailSender() {
+        return new JavaMailSenderImpl();
+    }
+
     // Create 3 users with their machines
     /**
      * 
@@ -55,10 +62,10 @@ class Main {
             userRepository.deleteAll();
 //            Album album1 = new Album("Graduation", "Rap");
 //            albumRepository.save(album1);
-            User user1 = new User("Sam", 1000);
-            User user2 = new User("Keenan", 33);
-            User user3 = new User("Conor", 49);
-            User user4 = new User("Carter", 36);
+            User user1 = new User("Sam", "password", "sdl21@iastate.edu");
+            User user2 = new User("Keenan", "password", "kcjacobs@iastate.edu");
+            User user3 = new User("Conor", "password", "coshea@iastate.edu");
+            User user4 = new User("Carter", "password", "cvcuts@iastate.edu");
             userRepository.save(user1);
             userRepository.save(user2);
             userRepository.save(user3);

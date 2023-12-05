@@ -1,0 +1,272 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > UserController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">onetoone.Users</a>
+</div>
+
+<h1>Coverage Summary for Class: UserController (onetoone.Users)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.5%
+  </span>
+  <span class="absValue">
+    (46/52)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package onetoone.Users;
+&nbsp;
+&nbsp;import io.swagger.annotations.Api;
+&nbsp;import io.swagger.annotations.ApiOperation;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.mail.javamail.JavaMailSender;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;import org.springframework.web.servlet.ModelAndView;
+&nbsp;import org.springframework.mail.SimpleMailMessage;
+&nbsp;import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+&nbsp;
+&nbsp;import javax.servlet.http.HttpServletRequest;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;/**
+&nbsp; *
+&nbsp; * @author Sam Lickteig
+&nbsp; *
+<b class="fc">&nbsp; */</b>
+&nbsp;
+<b class="fc">&nbsp;@Api(value = &quot;UserController&quot;, description = &quot;REST APIs related to User Entity, created by Sam Lickteig&quot;)</b>
+<b class="fc">&nbsp;@RestController</b>
+&nbsp;public class UserController {
+&nbsp;
+&nbsp;    private String success = &quot;{\&quot;message\&quot;:\&quot;success\&quot;}&quot;;
+&nbsp;    private String failure = &quot;{\&quot;message\&quot;:\&quot;failure\&quot;}&quot;;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    UserRepository userRepository;
+&nbsp;    
+<b class="fc">&nbsp;    @Autowired</b>
+&nbsp;    private JavaMailSender mailSender;
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Get all users&quot;)
+&nbsp;    @GetMapping(path = &quot;/users&quot;)
+&nbsp;    List&lt;User&gt; getAllUsers()
+&nbsp;    {
+<b class="fc">&nbsp;        return userRepository.findAll();</b>
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    @ApiOperation(value = &quot;Add user with provided name&quot;)</b>
+&nbsp;    @PostMapping(path = &quot;/users/{name}&quot;)
+&nbsp;    String addSingleUser(@PathVariable String name)
+&nbsp;    {
+&nbsp;        User user = new User();
+&nbsp;        user.setName(name);
+&nbsp;        userRepository.save(user);
+<b class="fc">&nbsp;        return success;</b>
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+&nbsp;    @ApiOperation(value = &quot;Register user with provided name, password, and email&quot;)
+&nbsp;    @PostMapping(path = &quot;/users/{name}/{password}/{email}&quot;)
+&nbsp;    String createAccount(@PathVariable String name, @PathVariable String password, @PathVariable String email)
+&nbsp;    {
+&nbsp;        User user = new User(name, password, email);
+&nbsp;        userRepository.save(user);
+&nbsp;        return success;
+<b class="fc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    @ApiOperation(value = &quot;Check if username and password are correct&quot;)</b>
+&nbsp;    @GetMapping(path = &quot;/users/{name}/{password}&quot;)
+&nbsp;    boolean login(@PathVariable String name, @PathVariable String password)
+&nbsp;    {
+&nbsp;        User user = userRepository.findByName(name);
+&nbsp;        if (user == null)
+&nbsp;            return false;
+<b class="fc">&nbsp;        return user.getPassword().equals(password);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //mappings made for current and/or original leaderboard design
+&nbsp;    @ApiOperation(value = &quot;Get all users and sort by high score&quot;)
+&nbsp;    @GetMapping(path = &quot;/leaderboard&quot;)
+&nbsp;    List&lt;User&gt; getLeaderboard()
+<b class="fc">&nbsp;    {</b>
+<b class="fc">&nbsp;        List&lt;User&gt; test = userRepository.findAll();</b>
+<b class="fc">&nbsp;        test.sort(User::compareTo);</b>
+&nbsp;        return test;
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Find individual user information for leaderboard&quot;)
+&nbsp;    @GetMapping(path = &quot;/leaderboard/{name}&quot;)
+&nbsp;    User getUserLeaderboardInfo(@PathVariable String name)
+<b class="fc">&nbsp;    {</b>
+<b class="fc">&nbsp;        return userRepository.findByName(name);</b>
+<b class="nc">&nbsp;    }</b>
+<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    @ApiOperation(value = &quot;Update user score with provided name&quot;)</b>
+<b class="fc">&nbsp;    @PutMapping(path = &quot;/leaderboard/{name}/{score}&quot;)</b>
+&nbsp;    User putUserLeaderboard(@PathVariable String name, @PathVariable int score)
+&nbsp;    {
+&nbsp;        User user = userRepository.findByName(name);
+&nbsp;        if (user == null)
+&nbsp;            return null;
+&nbsp;        user.setAllHighScores(score);
+<b class="fc">&nbsp;        userRepository.save(user);</b>
+<b class="fc">&nbsp;        return userRepository.findByName(name);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Delete user with provided name&quot;)
+&nbsp;    @DeleteMapping(path = &quot;/leaderboard/{name}&quot;)
+&nbsp;    String deleteUser(@PathVariable String name)
+&nbsp;    {
+&nbsp;        userRepository.deleteByName(name);
+&nbsp;        return success;
+&nbsp;    }
+&nbsp;    //end of leaderboard mappings
+&nbsp;
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Update user so that they are unbanned from chat&quot;)
+&nbsp;    @PutMapping(path = &quot;/canChat/{name}/true&quot;)
+&nbsp;    String unbanUserFromChat(@PathVariable String name)
+<b class="fc">&nbsp;    {</b>
+<b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
+<b class="nc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;            return failure;</b>
+<b class="fc">&nbsp;        user.setCanChat(true);</b>
+<b class="fc">&nbsp;        userRepository.save(user);</b>
+&nbsp;        return success;
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Update user so that they are banned from chat&quot;)
+&nbsp;    @PutMapping(path = &quot;/canChat/{name}/false&quot;)
+&nbsp;    String banUserFromChat(@PathVariable String name)
+<b class="fc">&nbsp;    {</b>
+<b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
+<b class="nc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;            return failure;</b>
+<b class="fc">&nbsp;        user.setCanChat(false);</b>
+<b class="fc">&nbsp;        userRepository.save(user);</b>
+&nbsp;        return success;
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Get amount of ban strikes user has&quot;)
+&nbsp;    @GetMapping(path = &quot;/banStrikes/{name}&quot;)
+&nbsp;    int getBanStrikeCountForUser(@PathVariable String name)
+<b class="fc">&nbsp;    {</b>
+<b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
+<b class="nc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;            return 0;</b>
+&nbsp;        return user.getBanStrikes();
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /*
+&nbsp;    Mapping for color related requests
+&nbsp;     */
+&nbsp;    @ApiOperation(value = &quot;Get user&#39;s selected color for game&quot;)
+&nbsp;    @GetMapping(path = &quot;/gameColor/{name}&quot;)
+&nbsp;    String getSelectedColor(@PathVariable String name)
+<b class="fc">&nbsp;    {</b>
+<b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
+<b class="nc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;            return failure;</b>
+&nbsp;        return &quot;{\&quot;color\&quot;:\&quot;&quot; + user.getSelectedColor() + &quot;\&quot;}&quot;;
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Update user&#39;s selected color for game&quot;)
+&nbsp;    @PutMapping(path = &quot;/gameColor/{name}/{color}&quot;)
+&nbsp;    String setSelectedColor(@PathVariable String name, @PathVariable String color)
+<b class="fc">&nbsp;    {</b>
+<b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
+<b class="nc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;            return failure;</b>
+<b class="fc">&nbsp;        user.setSelectedColor(color);</b>
+<b class="fc">&nbsp;        userRepository.save(user);</b>
+&nbsp;        return success;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-05 17:18</div>
+</div>
+</body>
+</html>
