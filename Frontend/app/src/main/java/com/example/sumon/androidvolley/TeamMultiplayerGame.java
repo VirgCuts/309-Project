@@ -71,9 +71,8 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     //Used for the categories. Stored in a String[][] format.
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
-    private String Player1 = "Carter", Player2 = "Carter",Player3 = "Carter",Player4 = "Carter";
 
-    private String currentPlayer = "Carter", teammate = "", opponent1 = "", opponent2 = "";
+    private String currentPlayer = "Jimothy", teammate = "Jame", opponent1 = "Johann", opponent2 = "Jam";
     private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/team_multiplayer/";
     private boolean end = false;
     private int team = 0;
@@ -594,7 +593,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     @Override
     public void onWebSocketOpen(ServerHandshake handshakedata) {
         Log.d("CONNECTED", "User Connected");
-        
+
     }
     /**
      * Handles the WebSocket close event.
@@ -638,7 +637,6 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     @Override
     public void onWebSocketMessage(String message) {
         Log.d("RECIEVED", message);
-
         try {
             // Parse the JSON string
             JSONObject jsonObject = new JSONObject(message);
@@ -647,8 +645,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             JSONArray gameS = jsonObject.getJSONArray("game");
             //creates a string representation of the board to be changed
             JSONArray gameTeam = jsonObject.getJSONArray("score");
-            String gameT = gameTeam.toString();
-            Log.d("TEAM", gameT.toString());
+            Log.d("TEAM",gameTeam.toString());
             String boardGrid = gameS.toString();
             Log.d("ARRIQ",boardGrid.toString());
             //[[1,1,1],[1,1,0],[0,0,0]]
@@ -660,12 +657,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             int winTally = 0;
             for (int i =0; i < boardValues.length; i++) {
                 if(Integer.parseInt(boardValues[i]) == 1) {
-//                    if(Player3 || Player4) {
-//
-//                    }
-//                    else {
-//
-//                    }
+
                     changeOppColor(i);
 
                 }
