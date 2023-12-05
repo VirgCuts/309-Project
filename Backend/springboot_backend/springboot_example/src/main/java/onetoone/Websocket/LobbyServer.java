@@ -31,42 +31,41 @@ import org.springframework.stereotype.Component;
  * The server provides functionality for broadcasting messages to all connected
  * users and sending messages to specific users.
  */
-@ServerEndpoint("/chat/{username}")
+@ServerEndpoint("/lobby/{lobbyNumber}/{username}")
 @Component
-public class ChatServer {
+public class LobbyServer {
 
     // Store all socket session and their corresponding username
     // Two maps for the ease of retrieval by key
     private static Map < Session, String > sessionUsernameMap = new Hashtable < > ();
     private static Map < String, Session > usernameSessionMap = new Hashtable < > ();
+    private static Map < String, Integer > usernameLobbyMap = new Hashtable<>();
+    private static Map < Integer, Integer > lobbyPopulation = new Hashtable<>() {{
+        put(1, 0); put(2, 0); put(3, 0); put(4, 0); put(5, 0);
+        put(6, 0); put(7, 0); put(8, 0); put(9, 0); put(10, 0);
+    }};
+
+    private static Map < String, Boolean > userReady = new Hashtable<>();
 
     // server side logger
-    private final Logger logger = LoggerFactory.getLogger(ChatServer.class);
+    private final Logger logger = LoggerFactory.getLogger(LobbyServer.class);
 
     //user database
     private static UserRepository userRepository;
-    private static MessageRepository messageRepository;
 
 
     @Autowired
-    public void setUserRepository(UserRepository usrRepo, MessageRepository msgRepo) {
+    public void setUserRepository(UserRepository usrRepo) {
         userRepository = usrRepo;  // we are setting the static variable
-        messageRepository = msgRepo;
     }
 
-    //banned words
     private final List<String> bannedWords = Arrays.asList("test", "testing");
-    /**
-     * This method is called when a new WebSocket connection is established.
-     *
-     * @param session represents the WebSocket session for the connected user.
-     * @param username username specified in path parameter.
-     */
+
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username) throws IOException {
+    public void onOpen(Session session, @PathParam("lobbyNumber") int lobbyNumber, @PathParam("username") String username) throws IOException {
 
         // server side log
-        logger.info("[onOpen] " + username);
+        logger.info("[LobbyonOpen] "+ lobbyNumber + username);
 
         User existingUser = userRepository.findByName(username);
 
@@ -77,26 +76,27 @@ public class ChatServer {
         } else if (existingUser == null) {
             session.getBasicRemote().sendText("Username doesn't exist within database");
             session.close();
-        } else {
+        } else if (lobbyPopulation.get(lobbyNumber) > 1) {
+            session.getBasicRemote().sendText("Lobby is full.");
+            session.close();
+        } else{
             // map current session with username
             sessionUsernameMap.put(session, username);
-
             // map current username with session
             usernameSessionMap.put(username, session);
 
-            sendMessageToPArticularUser(username, getChatHistory());
+            usernameLobbyMap.put(username, lobbyNumber);
+
+            lobbyPopulation.replace(lobbyNumber, lobbyPopulation.get(lobbyNumber) + 1);
+
+            userReady.put(username, false);
 
             if (existingUser.getCanChat()){
-                // send to the user joining in
-                sendMessageToPArticularUser(username, "Welcome to the chat, " + username);
-
-                // send to everyone in the chat
-                broadcast("User: " + username + " has joined the chat");
+                // send to everyone in the lobby
+                sendMessageToLobby(username, "User: " + username + " has joined the lobby");
             } else {
-                sendMessageToPArticularUser(username, "Welcome back, " + username + ". You are still banned though. :)");
-
-                // send to everyone in the chat
-                broadcast("User: " + username + " has joined the chat, but can't say anything because they've been bad.");
+                // send to everyone in the lobby
+                sendMessageToLobby(username, "User: " + username + " has joined the lobby, but can't say anything because they've been bad.");
             }
         }
     }
@@ -117,36 +117,18 @@ public class ChatServer {
         // server side log
         logger.info("[onMessage] " + username + ": " + message);
 
-        if (user.getCanChat()) {
-            // Direct message to a user using the format "@username <message>"
-            if (message.startsWith("@")) {
-
-                // split by space
-                String[] split_msg = message.split("\\s+");
-
-                // Combine the rest of message
-                StringBuilder actualMessageBuilder = new StringBuilder();
-                for (int i = 1; i < split_msg.length; i++) {
-                    actualMessageBuilder.append(split_msg[i]).append(" ");
-                }
-                String destUserName = split_msg[0].substring(1);    //@username and get rid of @
-                String actualMessage = actualMessageBuilder.toString();
-
-                boolean containsBannedWord = messageCheck(actualMessage, username);
-
-                if (!containsBannedWord) {
-                    sendMessageToPArticularUser(destUserName, "[DM from " + username + "]: " + actualMessage);
-                    sendMessageToPArticularUser(username, "[DM from " + username + "]: " + actualMessage);
-                }
-            } else { // Message to whole chat
-                boolean containsBannedWord = messageCheck(message, username);
-                if (!containsBannedWord) {
-                    broadcast(username + ": " + message);
-                    messageRepository.save(new Message(username, message));
-                }
+        if (message.equals("@ready")) {
+            userReady.replace(username, true);
+            lobbyReadyCheck(username);
+        } else if (message.equals("@unready")) {
+            userReady.replace(username, false);
+        } else if (user.getCanChat()) {
+            boolean containsBannedWord = messageCheck(message, username);
+            if (!containsBannedWord) {
+                sendMessageToLobby(username,username + ": " + message);
             }
         } else {
-            sendMessageToPArticularUser(username, "[DM from server]: sorry buddy, you've been banned, no messaging for you.");
+            sendMessageToParticularUser(username, "[DM from server]: sorry buddy, you've been banned, no messaging for you.");
         }
     }
 
@@ -160,6 +142,7 @@ public class ChatServer {
 
         // get the username from session-username mapping
         String username = sessionUsernameMap.get(session);
+        int lobby = usernameLobbyMap.get(username);
 
         // server side log
         logger.info("[onClose] " + username);
@@ -167,9 +150,13 @@ public class ChatServer {
         // remove user from memory mappings
         sessionUsernameMap.remove(session);
         usernameSessionMap.remove(username);
+        lobbyPopulation.replace(lobby, lobbyPopulation.get(lobby) - 1);
+        if (lobbyPopulation.get(lobby) < 0)
+            lobbyPopulation.replace(lobby, 0);
+        usernameLobbyMap.remove(username);
 
         // send the message to chat
-        broadcast(username + " disconnected");
+        sendMessageToLobby(username, username + " disconnected");
     }
 
     /**
@@ -188,13 +175,32 @@ public class ChatServer {
         logger.info("[onError]" + username + ": " + throwable.getMessage());
     }
 
-    /**
-     * Sends a message to a specific user in the chat (DM).
-     *
-     * @param username The username of the recipient.
-     * @param message  The message to be sent.
-     */
-    private void sendMessageToPArticularUser(String username, String message) {
+    private void lobbyReadyCheck(String username) {
+        int[] count = new int[1];
+        int lobbyNumber = usernameLobbyMap.get(username);
+        usernameLobbyMap.forEach((name, lobby) -> {
+            if (lobby == lobbyNumber && userReady.get(name)) {
+                count[0]++;
+            }
+        });
+        if (count[0] == 2)
+            sendMessageToLobby(username, "Start game");
+    }
+
+    private void sendMessageToLobby(String username, String message) {
+        try {
+            int lobbyNumber = usernameLobbyMap.get(username);
+            usernameLobbyMap.forEach((name, lobby) -> {
+                if (lobby == lobbyNumber) {
+                    sendMessageToParticularUser(name, message);
+                }
+            });
+        } catch (Exception e) {
+            logger.info("[Lobby Exception, not in lobby for message] " + e.getMessage());
+        }
+    }
+
+    private void sendMessageToParticularUser(String username, String message) {
         try {
             usernameSessionMap.get(username).getBasicRemote().sendText(message);
         } catch (IOException e) {
@@ -202,28 +208,13 @@ public class ChatServer {
         }
     }
 
-    /**
-     * Broadcasts a message to all users in the chat.
-     *
-     * @param message The message to be broadcasted to all users.
-     */
-    private void broadcast(String message) {
-        sessionUsernameMap.forEach((session, username) -> {
-            try {
-                session.getBasicRemote().sendText(message);
-            } catch (IOException e) {
-                logger.info("[Broadcast Exception] " + e.getMessage());
-            }
-        });
-    }
-
     private boolean messageCheck(String message, String sender) {
         for (String bannedWord : bannedWords) {
             if (message.contains(bannedWord)) {
                 User user = userRepository.findByName(sender);
-                sendMessageToPArticularUser(sender, "Please refrain from using that language. You have received one strike on your account.");
+                sendMessageToParticularUser(sender, "Please refrain from using that language. You have received one strike on your account.");
                 user.setBanStrikes(user.getBanStrikes() + 1);
-                sendMessageToPArticularUser(sender, "Current strikes: " + user.getBanStrikes() + "/3");
+                sendMessageToParticularUser(sender, "Current strikes: " + user.getBanStrikes() + "/3");
                 if (user.getBanStrikes() >= 3) {
                     user.setCanChat(false);
                 }
@@ -233,19 +224,4 @@ public class ChatServer {
         }
         return false;
     }
-
-    private String getChatHistory() {
-        List<Message> messages = messageRepository.findAll();
-
-        // convert the list to a string
-        StringBuilder sb = new StringBuilder();
-        sb.append("History\n");
-        if(messages != null && messages.size() != 0) {
-            for (Message message : messages) {
-                sb.append(message.getUserName() + ": " + message.getContent() + "\n");
-            }
-        }
-        return sb.toString();
-    }
-
 }
