@@ -97,13 +97,13 @@ public class UserController {
     }
     //end of leaderboard mappings
 
-    @ApiOperation(value = "Delete user by database id")
-    @DeleteMapping(path = "/users/{id}")
-    String deleteUser(@PathVariable int id)
-    {
-        userRepository.deleteById(id);
-        return success;
-    }
+//    @ApiOperation(value = "Delete user by database id")
+//    @DeleteMapping(path = "/users/{id}")
+//    String deleteUser(@PathVariable int id)
+//    {
+//        userRepository.deleteById(id);
+//        return success;
+//    }
 
     @ApiOperation(value = "Update user so that they are unbanned from chat")
     @PutMapping(path = "/canChat/{name}/true")

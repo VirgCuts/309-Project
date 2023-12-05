@@ -79,7 +79,7 @@ public class UserTest {
         user.setHighScoreWeekly(highscore);
         assertEquals(user.getHighScoreWeekly(), highscore);
         user.setHighScoreMonthly(highscore);
-        assertEquals(user.getHighScoreMontly(), highscore);
+        assertEquals(user.getHighScoreMonthly(), highscore);
 
         user.setHighScoreTime(date);
         assertEquals(user.getHighScoreTime(), date);
@@ -102,11 +102,11 @@ public class UserTest {
         user.setAllHighScores(highscore);
         assertEquals(user.getHighScore(), highestscore);
         assertEquals(user.getHighScoreWeekly(), highscore);
-        assertEquals(user.getHighScoreMontly(), highestscore);
+        assertEquals(user.getHighScoreMonthly(), highestscore);
         user.resetMonthlyScore();
         user.setAllHighScores(higherscore);
         assertEquals(user.getHighScore(), highestscore);
         assertEquals(user.getHighScoreWeekly(), higherscore);
-        assertEquals(user.getHighScoreMontly(), higherscore);
+        assertEquals(user.getHighScoreMonthly(), higherscore);
     }
 }

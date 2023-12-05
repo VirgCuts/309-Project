@@ -1,5 +1,6 @@
 package onetoone.Users;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiModelProperty;
@@ -143,7 +144,7 @@ public class User implements Comparator<User>, Comparable<User> {
     public void setHighScoreTime(Date highScoreTime){
         this.highScoreTime = highScoreTime;
     }
-    public int getHighScoreMontly(){
+    public int getHighScoreMonthly(){
         return highScoreMonthly;
     }
 
