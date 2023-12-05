@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_drawer_layout"
+    android:layout_width="match_parent"
+    android:background="@drawable/background_login"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    tools:ignore="HardcodedText">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <TextView
+            android:id="@+id/appNameTextView"
+            android:layout_width="436dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="Sign In"
+            android:textColor="#C8000000"
+            android:textSize="40sp"
+            android:inputType="text"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/username_input"
+            android:layout_width="367dp"
+            android:layout_height="57dp"
+            android:background="#30ffffff"
+            android:ems="10"
+            android:hint="Username"
+            android:textColor="#FFFFFF" />
+
+        <EditText
+            android:id="@+id/password_input"
+            android:layout_width="366dp"
+            android:layout_height="58dp"
+            android:background="#30ffffff"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="178dp"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/button_background"
+            android:text="Login" />
+
+
+        <Button
+            android:id="@+id/forgotPW"
+            android:layout_width="148dp"
+            android:layout_height="wrap_content"
+            android:background="@color/Transparent"
+            android:text="Forgot Password?"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/createAcct"
+            android:layout_width="350dp"
+            android:layout_height="31dp"
+            android:layout_marginTop="100dp"
+            android:background="@color/Transparent"
+            android:text="Create a Account"
+            android:textColor="#FFFFFF" />
+
+        <!--    <ImageView-->
+        <!--    android:id="@+id/logoImageView"-->
+        <!--    android:layout_width="100dp"-->
+        <!--    android:layout_height="100dp"-->
+        <!--    android:src="@drawable/music_logo"-->
+        <!--    android:layout_gravity="center"-->
+        <!--    android:layout_marginBottom="32dp"/>-->
+
+
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/navigation_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

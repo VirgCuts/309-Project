@@ -2,16 +2,25 @@ package com.example.sumon.androidvolley;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * MainActivity is the entry point for the application.
@@ -23,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "LeaderboardPrefs";
     private static final String USERNAME_KEY = "username";
     private static final String PASSWORD_KEY = "password";
+    private static EditText usernameText, passwordText;
+    private static Button login, forgotPW, createAcct;
+
     /**
      * Called when the activity is starting.
      * This is where most initialization should go: calling setContentView(int)
@@ -37,11 +49,45 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_menu_layout);
-        navigationHelper = new Navigation(this);
-        navigationHelper.setupNavigation();
-        showLoginDialog();
+        setContentView(R.layout.login);
 
+        usernameText = findViewById(R.id.username_input);
+        passwordText = findViewById(R.id.password_input);
+        login = findViewById(R.id.login);
+        forgotPW = findViewById(R.id.forgotPW);
+        createAcct = findViewById(R.id.createAcct);
+
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isValidPassword(passwordText.getText().toString()) && isValidUsername(usernameText.getText().toString())) {
+                    prefs.edit().putString(USERNAME_KEY, usernameText.getText().toString()).apply();
+                    prefs.edit().putString(PASSWORD_KEY, passwordText.getText().toString()).apply();
+                    startActivity(new Intent(MainActivity.this,
+                            LobbyActivity.class));
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Please enter a Correct Username and Password (must contain letters and numbers pw > 8",Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+        forgotPW.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                forgotPWDialog();
+            }
+        });
+
+        createAcct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,
+                        CreateAccount.class));
+            }
+        });
     }
     /**
      * This hook is called whenever an item in your options menu is selected.
@@ -55,14 +101,34 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
+    private void forgotPWDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Email");
+
+        final EditText inputField = new EditText(this);
+        inputField.setInputType(InputType.TYPE_CLASS_TEXT);
+        inputField.setHint("Enter Email Associated with Account");
+        builder.setView(inputField);
+
+        builder.setPositiveButton("Enter", (dialog, which) -> {
+            String email = inputField.getText().toString();
+            if(isEmailValid(email)) {
+                //SEND EMAIL TO BACKEND HEREC
+            }
+            else {
+                Toast.makeText(MainActivity.this,"Error: Not a valid email",Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+        builder.show();
+    }
     private void showLoginDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Login");
-
         // Set up the layout for the dialog
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-
         // Add an EditText for the username
         final EditText usernameEditText = new EditText(this);
         usernameEditText.setHint("Username");
@@ -70,12 +136,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Add an EditText for the password
         final EditText passwordEditText = new EditText(this);
-        passwordEditText.setHint("Password");
+        passwordEditText.setHint("Password (Longer than 8 only letters and numbers)");
         layout.addView(passwordEditText);
 
         builder.setView(layout);
 
-        // Set up the positive button (Login)
         builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -83,34 +148,29 @@ public class MainActivity extends AppCompatActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
-                // You can perform login validation here
-                // For simplicity, just display a toast with the entered credentials
-                // Replace this with your actual login logic
-                String message = "Username: " + username + "\nPassword: " + password;
-                // Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                // Save the username
+                SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                if (!isValidPassword(password)) {
+                    // Show an error message for invalid password
+                    Toast.makeText(MainActivity.this, "Invalid password. Please try again.", Toast.LENGTH_SHORT).show();
+                    // Don't close the dialog
+                }
+
+                // Continue with the login process
+                prefs.edit().putString(USERNAME_KEY, username).apply();
+                prefs.edit().putString(PASSWORD_KEY, password).apply();
             }
         });
-
         // Set up the negative button (Cancel)
         builder.setNegativeButton("Play as Guest", (dialog, which) -> {
             String inputUsername = "Guest";
-
             // Save the username
-            saveCredentials(inputUsername, null);
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
+            prefs.edit().putString(PASSWORD_KEY, "null").apply();
         });
-
         // Create and show the dialog
         builder.create().show();
-    }
-    /**
-     * Retrieves the stored username from SharedPreferences.
-     *
-     * @param context The context used to access the SharedPreferences.
-     * @return String Returns the stored username or null if it's not found.
-     */
-    private String getUsername(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(USERNAME_KEY, null); // Return null if username isn't set
     }
 
     /**
@@ -120,40 +180,27 @@ public class MainActivity extends AppCompatActivity {
      */
     private void promptUsername() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Login");
+        builder.setTitle("Enter Username");
 
-        final EditText inputUsernameField = new EditText(this);
-        final EditText inputPasswordField = new EditText(this);
-
-        inputUsernameField.setInputType(InputType.TYPE_CLASS_TEXT);
-        inputPasswordField.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
-        inputUsernameField.setHint("Username");
-        inputPasswordField.setHint("Password");
-
-        builder.setView(inputUsernameField);
-        builder.setView(inputPasswordField);
+        final EditText inputField = new EditText(this);
+        inputField.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(inputField);
 
         builder.setPositiveButton("OK", (dialog, which) -> {
-            String inputUsername = inputUsernameField.getText().toString();
-            String inputPassword = inputPasswordField.getText().toString();
-
-            // Save the username and password
-            saveCredentials(inputUsername, inputPassword);
-
+            String inputUsername = inputField.getText().toString();
+            // Save the username
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
             // Continue with any other actions you need to do with the username
         });
-
         builder.setNegativeButton("Play as Guest", (dialog, which) -> {
             String inputUsername = "Guest";
-
             // Save the username
-            saveCredentials(inputUsername, null);
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
         });
-
         builder.show();
     }
-
     /**
      * Saves the username and password in SharedPreferences.
      *
@@ -189,5 +236,51 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(USERNAME_KEY, username);
         editor.apply();
+    }
+    public String getPassword() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return prefs.getString(PASSWORD_KEY, "null"); // Return "null" if password isn't set
+    }
+
+    public void setPassword(String password) {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PASSWORD_KEY, password);
+        editor.apply();
+    }
+    public static boolean isValidPassword(String password) {
+        // Minimum length requirement
+        int minLength = 8;
+
+        // Check if the password meets the minimum length
+        if (password.trim().length() < minLength) {
+            return false;
+        }
+
+        // Check if the password contains both letters and numbers using regular expressions
+        Pattern pattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d).+$");
+        Matcher matcher = pattern.matcher(password);
+
+        return matcher.matches();
+    }
+    public static boolean isValidUsername(String username) {
+        // Check if the password contains both letters and numbers using regular expressions
+        if(username.trim().length() != 0) {
+            return true;
+        }
+        return false;
+    }
+    public static boolean isEmailValid(String email) {
+        // Define a simple pattern for a valid email address
+        String emailPattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        // Compile the pattern
+        Pattern pattern = Pattern.compile(emailPattern);
+
+        // Create a matcher with the provided email
+        Matcher matcher = pattern.matcher(email);
+
+        // Check if the email matches the pattern
+        return matcher.matches();
     }
 }
