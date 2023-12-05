@@ -53,16 +53,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
-    /**
-     * Retrieves the stored username from SharedPreferences.
-     *
-     * @param context The context used to access the SharedPreferences.
-     * @return String Returns the stored username or null if it's not found.
-     */
-    private String getUsername(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(USERNAME_KEY, null); // Return null if username isn't set
-    }
 
     /**
      * Prompts the user to enter a username. This is typically called when a username

@@ -1,6 +1,8 @@
 package com.example.sumon.androidvolley;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,8 +36,8 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
     private List<ChatMessage> chatMessages = new ArrayList<>();
     private EditText messageInput;
     private Button sendButton;
-    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/chat/"; //This will need to be a new URL
-
+    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/lobby/2/"; //This will need to be a new URL
+    private String username = "";
     private boolean isWebSocketConnected;
 
 
@@ -43,7 +45,6 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.multiplayer_waiting_room);
-        chatMessages.add(new ChatMessage("Hey pal"));
         btnReadyUp = findViewById(R.id.btnReadyUp);
         tvReadyUsers = findViewById(R.id.tvReadyUsers);
         tvSpectators = findViewById(R.id.tvSpectators);
@@ -55,6 +56,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatAdapter = new ChatAdapter(chatMessages);
         chatRecyclerView.setAdapter(chatAdapter);
+
 
         sendButton.setOnClickListener(v -> {
             try {
@@ -77,11 +79,12 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
             public void onClick(View v) {
                 WebSocketManager.getInstance().disconnectWebSocket();
                 WebSocketManager.getInstance().removeWebSocketListener();
+                sendUnreadyMessage();
                 startActivity(new Intent(MultiPlayerWaitingRoom.this,
                         MultiPlayerLobbyActivity.class));
             }
         });
-        String serverUrl = BASE_URL + "Keenan";//Will need to change once log-in system works
+        String serverUrl = BASE_URL + username;//Will need to change once log-in system works
         // Establish WebSocket connection and set listener
         WebSocketManager.getInstance().connectWebSocket(serverUrl);
         WebSocketManager.getInstance().setWebSocketListener(MultiPlayerWaitingRoom.this);
@@ -89,11 +92,14 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         // Update the UI with the current number of ready users and spectators
         updateUI();
     }
+
+
     @Override
     protected void onPause() {
         super.onPause();
         // Disconnect WebSocket when the activity is no longer in the foreground
         if (isWebSocketConnected) {
+            sendUnreadyMessage();
             WebSocketManager.getInstance().disconnectWebSocket();
             WebSocketManager.getInstance().removeWebSocketListener();
             isWebSocketConnected = false;
@@ -104,6 +110,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         super.onDestroy();
         // Additional check in onDestroy in case the activity is destroyed without onPause being called
         if (isWebSocketConnected) {
+            sendUnreadyMessage();
             WebSocketManager.getInstance().disconnectWebSocket();
             WebSocketManager.getInstance().removeWebSocketListener();
             isWebSocketConnected = false;
@@ -122,6 +129,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
             btnReadyUp.setTextColor(Color.BLACK); // Set the text color to black (or choose another visible color)
             btnReadyUp.setText("Ready!"); // Change button text to "Ready"
             btnReadyUp.setEnabled(false); // Disable the button
+            sendReadyMessage();
         }
     }
 
@@ -140,6 +148,23 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         chatAdapter.notifyItemInserted(chatMessages.size() - 1);
         scrollToBottom();
     }
+    private void sendReadyMessage() {
+        try {
+            // Send @ready message to the server via WebSocket
+            WebSocketManager.getInstance().sendMessage("@ready");
+        } catch (Exception e) {
+            Log.e("WebSocket", "Error sending ready message", e);
+        }
+    }
+
+    private void sendUnreadyMessage() {
+        try {
+            // Send @ready message to the server via WebSocket
+            WebSocketManager.getInstance().sendMessage("@unready");
+        } catch (Exception e) {
+            Log.e("WebSocket", "Error sending ready message", e);
+        }
+    }
 
     /**
      * Callback for receiving messages from the WebSocket.
@@ -148,8 +173,21 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
     @Override
     public void onWebSocketMessage(String message) {
         runOnUiThread(() -> {
+            Log.d("WebMessage",message);
+            // Check if the message indicates another player's readiness
+            if (message.equals("@ready")) {
+                // Increment the count of ready users
+                readyUsers++;
+                updateUI();
+            } else if (message.equals("@unready")) {
+                // Increment the count of ready users
+                readyUsers--;
+                updateUI();
+            }
+            else {
+                // Handle other messages (e.g., adding them to the chat view)
                 addMessageToView(message);
-
+            }
         });
 
     }
@@ -164,8 +202,17 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
     public void onWebSocketClose(int code, String reason, boolean remote) {
         String closedBy = remote ? "server" : "local";
         runOnUiThread(() -> {
-            addMessageToView("---\nconnection closed by " + closedBy + "\nreason: " + reason);
+            if (reason != null && reason.contains("Invalid status code received: 404")) {
+                // Redirect to the lobby with an error message
+                Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerLobbyActivity.class);
+                intent.putExtra("ERROR_MESSAGE", "Connection failed: Please go back to the main menu and enter a valid username");
+                startActivity(intent);
+                finish();
+            }else{
+                addMessageToView("---\nconnection closed by " + closedBy + "\nreason: " + reason);
+            }
         });
+
     }
 
     /**
@@ -190,7 +237,18 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
      * @param ex The exception that occurred.
      */
     @Override
-    public void onWebSocketError(Exception ex) {}
+    public void onWebSocketError(Exception ex) {
+        runOnUiThread(() -> {
+            // Log the error for debugging purposes
+            Log.e("WebSocketError", "Error in WebSocket connection: " + ex.getMessage());
+
+            // Handle the error and navigate back to the lobby with an error message
+            Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerLobbyActivity.class);
+            intent.putExtra("ERROR_MESSAGE", "Connection error: " + ex.getMessage());
+            startActivity(intent);
+            finish();
+        });
+    }
     public class ChatMessage {
         private final String message;
 

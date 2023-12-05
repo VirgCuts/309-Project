@@ -1,8 +1,11 @@
 package com.example.sumon.androidvolley;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -20,6 +23,9 @@ public class MultiPlayerLobbyActivity extends AppCompatActivity implements Lobby
     private Navigation navigationHelper;
     private LobbyAdapter lobbyAdapter;
     private List<Lobby> lobbies; // This should be populated with actual lobby data
+    private static final String PREFS_NAME = "LeaderboardPrefs";
+    private static final String USERNAME_KEY = "username";
+    private String username = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,38 @@ public class MultiPlayerLobbyActivity extends AppCompatActivity implements Lobby
         lobbyAdapter = new LobbyAdapter(lobbies, this);
         rvLobbies.setAdapter(lobbyAdapter);
 
+        username = getUsername(this);
+        handleIncomingErrorMessage();
+
+    }
+    private void handleIncomingErrorMessage() {
+        String errorMessage = getIntent().getStringExtra("ERROR_MESSAGE");
+        if (errorMessage != null && !errorMessage.isEmpty()) {
+            // Create and show an AlertDialog with the error message
+            new AlertDialog.Builder(this)
+                    .setTitle("Error") // You can set the title as needed
+                    .setMessage(errorMessage)
+                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss(); // Close the dialog
+                            // Optionally, you can add more actions here, like navigating back
+                        }
+                    })
+                    .show();
+
+            // Clear the error message to prevent it from showing again
+            getIntent().removeExtra("ERROR_MESSAGE");
+        }
+    }
+    public String getUsername(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String username = prefs.getString(USERNAME_KEY, null); // Return null if not found
+
+        // Debugging log
+        Log.d("SharedPreferences", "Retrieving username: " + username);
+
+        return username;
     }
 
     public void onItemClick(Lobby lobby) {
@@ -60,6 +98,7 @@ public class MultiPlayerLobbyActivity extends AppCompatActivity implements Lobby
             // Proceed if lobby is not full and game is not in progress
             Intent intent = new Intent(MultiPlayerLobbyActivity.this, MultiPlayerWaitingRoom.class);
             intent.putExtra("LOBBY_NAME", lobby.getName());
+            intent.putExtra("USERNAME", username);
             startActivity(intent);
         }
     }
