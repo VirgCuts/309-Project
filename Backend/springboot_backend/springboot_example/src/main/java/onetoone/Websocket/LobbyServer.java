@@ -45,6 +45,8 @@ public class LobbyServer {
         put(6, 0); put(7, 0); put(8, 0); put(9, 0); put(10, 0);
     }};
 
+    private static Map < String, Boolean > userReady = new Hashtable<>();
+
     // server side logger
     private final Logger logger = LoggerFactory.getLogger(LobbyServer.class);
 
@@ -87,6 +89,8 @@ public class LobbyServer {
 
             lobbyPopulation.replace(lobbyNumber, lobbyPopulation.get(lobbyNumber) + 1);
 
+            userReady.put(username, false);
+
             if (existingUser.getCanChat()){
                 // send to everyone in the lobby
                 sendMessageToLobby(username, "User: " + username + " has joined the lobby");
@@ -113,7 +117,12 @@ public class LobbyServer {
         // server side log
         logger.info("[onMessage] " + username + ": " + message);
 
-        if (user.getCanChat()) {
+        if (message.equals("@ready")) {
+            userReady.replace(username, true);
+            lobbyReadyCheck(username);
+        } else if (message.equals("@unready")) {
+            userReady.replace(username, false);
+        } else if (user.getCanChat()) {
             boolean containsBannedWord = messageCheck(message, username);
             if (!containsBannedWord) {
                 sendMessageToLobby(username,username + ": " + message);
@@ -166,6 +175,18 @@ public class LobbyServer {
         logger.info("[onError]" + username + ": " + throwable.getMessage());
     }
 
+    private void lobbyReadyCheck(String username) {
+        int[] count = new int[1];
+        int lobbyNumber = usernameLobbyMap.get(username);
+        usernameLobbyMap.forEach((name, lobby) -> {
+            if (lobby == lobbyNumber && userReady.get(name)) {
+                count[0]++;
+            }
+        });
+        if (count[0] == 2)
+            sendMessageToLobby(username, "Start game");
+    }
+
     private void sendMessageToLobby(String username, String message) {
         try {
             int lobbyNumber = usernameLobbyMap.get(username);
@@ -203,5 +224,4 @@ public class LobbyServer {
         }
         return false;
     }
-
 }
