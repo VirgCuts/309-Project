@@ -12,7 +12,6 @@ public class sendBoard {
     private final int BOARD_SIZE = 3;
     private String[][] griddle;
     private String[][] col;
-
     private String[][] row;
 
     /**
@@ -159,7 +158,6 @@ public class sendBoard {
     }
     /**
      * Generates a string representation of the board's grid.
-     *
      * @return A string representation of the board's grid.
      */
     @Override
@@ -174,6 +172,4 @@ public class sendBoard {
         }
         return sb.toString();
     }
-
 }
-

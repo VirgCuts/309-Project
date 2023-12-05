@@ -71,10 +71,9 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     //Used for the categories. Stored in a String[][] format.
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
-    private String Player1 = "Carter", Player2 = "Conor";
+    private String Player1 = "Carter", Player2 = "Carter";
     private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/multiplayer/";
     private boolean end = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -554,6 +553,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                         @Override
                         public void onResult(boolean isCorrect) {
                             //change to isCorrect
+                            isCorrect = true;
                             if (isCorrect) {
                                 Log.d("EIND", String.valueOf(end));
                                 if(end) {
