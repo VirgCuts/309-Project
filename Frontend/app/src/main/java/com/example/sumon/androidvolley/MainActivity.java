@@ -8,6 +8,7 @@ import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Navigation navigationHelper;
     private static final String PREFS_NAME = "LeaderboardPrefs";
     private static final String USERNAME_KEY = "username";
+    private static final String PASSWORD_KEY = "password";
     /**
      * Called when the activity is starting.
      * This is where most initialization should go: calling setContentView(int)
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_menu_layout);
         navigationHelper = new Navigation(this);
         navigationHelper.setupNavigation();
-        promptUsername();
+        showLoginDialog();
 
     }
     /**
@@ -52,6 +54,53 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+    private void showLoginDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Login");
+
+        // Set up the layout for the dialog
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        // Add an EditText for the username
+        final EditText usernameEditText = new EditText(this);
+        usernameEditText.setHint("Username");
+        layout.addView(usernameEditText);
+
+        // Add an EditText for the password
+        final EditText passwordEditText = new EditText(this);
+        passwordEditText.setHint("Password");
+        layout.addView(passwordEditText);
+
+        builder.setView(layout);
+
+        // Set up the positive button (Login)
+        builder.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Retrieve the entered username and password
+                String username = usernameEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+
+                // You can perform login validation here
+                // For simplicity, just display a toast with the entered credentials
+                // Replace this with your actual login logic
+                String message = "Username: " + username + "\nPassword: " + password;
+                // Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Set up the negative button (Cancel)
+        builder.setNegativeButton("Play as Guest", (dialog, which) -> {
+            String inputUsername = "Guest";
+
+            // Save the username
+            saveCredentials(inputUsername, null);
+        });
+
+        // Create and show the dialog
+        builder.create().show();
     }
     /**
      * Retrieves the stored username from SharedPreferences.
@@ -71,26 +120,54 @@ public class MainActivity extends AppCompatActivity {
      */
     private void promptUsername() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Username");
+        builder.setTitle("Login");
 
-        final EditText inputField = new EditText(this);
-        inputField.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(inputField);
+        final EditText inputUsernameField = new EditText(this);
+        final EditText inputPasswordField = new EditText(this);
+
+        inputUsernameField.setInputType(InputType.TYPE_CLASS_TEXT);
+        inputPasswordField.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        inputUsernameField.setHint("Username");
+        inputPasswordField.setHint("Password");
+
+        builder.setView(inputUsernameField);
+        builder.setView(inputPasswordField);
 
         builder.setPositiveButton("OK", (dialog, which) -> {
-            String inputUsername = inputField.getText().toString();
-            // Save the username
-            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
+            String inputUsername = inputUsernameField.getText().toString();
+            String inputPassword = inputPasswordField.getText().toString();
+
+            // Save the username and password
+            saveCredentials(inputUsername, inputPassword);
+
             // Continue with any other actions you need to do with the username
         });
+
         builder.setNegativeButton("Play as Guest", (dialog, which) -> {
             String inputUsername = "Guest";
+
             // Save the username
-            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
+            saveCredentials(inputUsername, null);
         });
+
         builder.show();
+    }
+
+    /**
+     * Saves the username and password in SharedPreferences.
+     *
+     * @param username The username to be set.
+     * @param password The password to be set.
+     */
+    private void saveCredentials(String username, String password) {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putString(USERNAME_KEY, username);
+        editor.putString(PASSWORD_KEY, password);
+
+        editor.apply();
     }
 
     /**
