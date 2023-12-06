@@ -18,9 +18,7 @@ package com.example.sumon.androidvolley;public class Lobby {
     public int getCurrentUserCount() {
         return currentUserCount;
     }
-    public void setCurrentUserCount(int n) {
-        currentUserCount = n;
-    }
+
 
     public int getMaxUserCount() {
         return maxUserCount;
@@ -30,15 +28,4 @@ package com.example.sumon.androidvolley;public class Lobby {
         return isGameInProgress;
     }
 
-    public String getUserCountText() {
-        return currentUserCount + "/" + maxUserCount;
-    }
-    public boolean checkForGameReady(){
-        if(currentUserCount >= maxUserCount){
-            isGameInProgress = true;
-            return true;
-        }else{
-            return false;
-        }
-    }
 }

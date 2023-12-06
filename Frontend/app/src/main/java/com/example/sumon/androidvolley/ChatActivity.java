@@ -51,20 +51,17 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
 
 
-    private Button connectBtn, sendBtn, btnGetBanCount;
-    private EditText usernameEtx, msgEtx, userBan;
-    private TextView msgTv, tvBanCount;
+    private Button connectBtn, sendBtn;
+    private EditText usernameEtx, msgEtx;
 
     private Navigation navigationHelper;
     private RecyclerView recyclerView;
     private ChatAdapter chatAdapter;
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
-    private LinearLayout messagesContainer;
 
     private boolean isWebSocketConnected;
 
-    private TextView currentlyHighlighted;
 
     public static final String EXTRA_USERNAME = "EXTRA_USERNAME";
     public static final String EXTRA_MESSAGE_CONTENT = "EXTRA_MESSAGE_CONTENT";
