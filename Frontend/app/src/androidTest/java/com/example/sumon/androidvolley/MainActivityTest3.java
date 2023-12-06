@@ -39,7 +39,7 @@ public class MainActivityTest3 {
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest3() {
+    public void mainActivityTest3() throws InterruptedException {
         ViewInteraction editText = onView(
                 allOf(childAtPosition(
                                 allOf(withId(android.R.id.custom),
