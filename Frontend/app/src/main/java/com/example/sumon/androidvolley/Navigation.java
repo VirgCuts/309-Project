@@ -37,11 +37,8 @@ public class Navigation extends AppCompatActivity {
     private static final String PREFS_NAME = "LeaderboardPrefs";
     private static final String USERNAME_KEY = "username";
     private Context context;
-
-    private static final String PREFS_NAME = "LeaderboardPrefs";
-    private static final String USERNAME_KEY = "username";
     private static final String PASSWORD_KEY = "password";
-    private Context context;
+
     /**
      * Default constructor for the Navigation helper class.
      */
