@@ -1,8 +1,12 @@
 package com.example.sumon.androidvolley;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -27,10 +31,15 @@ public class Navigation extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
+    private static final String PREFS_NAME = "LeaderboardPrefs";
+    private static final String USERNAME_KEY = "username";
+    private static final String PASSWORD_KEY = "password";
+    private Context context;
     /**
      * Default constructor for the Navigation helper class.
      */
-    public Navigation() {
+    public Navigation(Context context) {
+        this.context = context;
         // Initialize any default values or perform other setup here if needed.
     }
     /**
@@ -55,15 +64,16 @@ public class Navigation extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Menu menu = navigationView.getMenu();
+        MenuItem curUserMenuItem = menu.findItem(R.id.curUser);
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        curUserMenuItem.setTitle("User: " + prefs.getString(USERNAME_KEY,null));
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 // Handle navigation view item clicks here.
                 switch (item.getItemId()) {
-                    case R.id.home:
-                        activity.startActivity(new Intent(activity, MainActivity.class));
-                        break;
                     case R.id.btnleaderboard:
                         activity.startActivity(new Intent(activity, LeaderboardActivity.class));
                         break;
@@ -82,6 +92,13 @@ public class Navigation extends AppCompatActivity {
                         break;
                     case R.id.btnAdmin:
                         activity.startActivity(new Intent(activity, AdminActivity.class));
+                        break;
+                    case R.id.logout:
+                        SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                        prefs.edit().putString(USERNAME_KEY, "").apply();
+                        prefs.edit().putString(PASSWORD_KEY, "").apply();
+
+                        activity.startActivity(new Intent(activity, MainActivity.class));
                         break;
 
 

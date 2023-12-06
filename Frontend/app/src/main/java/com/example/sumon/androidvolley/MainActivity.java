@@ -19,6 +19,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PASSWORD_KEY = "password";
     private static EditText usernameText, passwordText;
     private static Button login, forgotPW, createAcct;
+
 
     /**
      * Called when the activity is starting.
@@ -58,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
         createAcct = findViewById(R.id.createAcct);
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        if(!prefs.getString(USERNAME_KEY,null).isEmpty()) {
+            startActivity(new Intent(MainActivity.this,
+                    LobbyActivity.class));
+        }
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,22 +77,29 @@ public class MainActivity extends AppCompatActivity {
                 String password = passwordText.getText().toString();
 
                 if(isValidPassword(password) && isValidUsername(username)) {
+                    inDatabase(username,password, new DatabaseCallback() {
+                        @Override
+                        public void onResult(boolean isUser) {
+                            // Handle the result here
+                            Log.d("ISUSER", Boolean.toString(isUser));
 
-                    if(inDatabase(username, password)) {
-                        prefs.edit().putString(USERNAME_KEY, usernameText.getText().toString()).apply();
-                        prefs.edit().putString(PASSWORD_KEY, passwordText.getText().toString()).apply();
-                        startActivity(new Intent(MainActivity.this,
-                                LobbyActivity.class));
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, "User does not exist",Toast.LENGTH_SHORT).show();
-                    }
+                            // Now you can use the boolean result as needed
+                            if(isUser) {
+                                prefs.edit().putString(USERNAME_KEY, usernameText.getText().toString()).apply();
+                                prefs.edit().putString(PASSWORD_KEY, passwordText.getText().toString()).apply();
+                                startActivity(new Intent(MainActivity.this,
+                                        LobbyActivity.class));
+                            }
+                            else {
+                                Toast.makeText(MainActivity.this, "User does not exist",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
                 }
                 else {
                     Toast.makeText(MainActivity.this, "Please enter a Correct Username and Password (must contain letters and numbers pw > 8",Toast.LENGTH_SHORT).show();
-
                 }
-
             }
         });
         forgotPW.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +117,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public boolean inDatabase(String username, String password) {
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/";
-        //makes call to backend to check if in database returns boolean depending
-        return true;
+    public boolean inDatabase(String username, String password,DatabaseCallback callback) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/users/"+username+"/"+password;
+        boolean isUser = false;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("boolean", response);
+                        boolean isUser = Boolean.parseBoolean(response);
+                        callback.onResult(isUser);
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("GETURERR",error.toString());
+                callback.onResult(false); // Handle error case
+            }
+        });
+        Volley.newRequestQueue(this).add(stringRequest);
+        Log.d("ISUSER",Boolean.toString(isUser));
+        return isUser;
     }
+    interface DatabaseCallback {
+        void onResult(boolean isUser);
+    }
+
     /**
      * This hook is called whenever an item in your options menu is selected.
      * It delegates the call to the navigation helper or handles it by default behavior.
@@ -141,6 +182,22 @@ public class MainActivity extends AppCompatActivity {
     }
     private void sendEmail(String email) {
         String url = "http://coms-309-022.class.las.iastate.edu:8080/";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("RESPONSE",response);
+                        Toast.makeText(MainActivity.this, "Password Request Sent",Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("GETURERR", error.toString());
+            }
+        });
+
+        Volley.newRequestQueue(this).add(stringRequest);
     }
     private void showLoginDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -281,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
         Matcher matcher = pattern.matcher(password);
 
         return matcher.matches();
+
     }
     public static boolean isValidUsername(String username) {
         // Check if the password contains both letters and numbers using regular expressions

@@ -62,6 +62,7 @@
             android:id="@+id/forgotPW"
             android:layout_width="148dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="120dp"
             android:background="@color/Transparent"
             android:text="Forgot Password?"
             android:textColor="#FFFFFF" />
@@ -70,7 +71,7 @@
             android:id="@+id/createAcct"
             android:layout_width="350dp"
             android:layout_height="31dp"
-            android:layout_marginTop="100dp"
+
             android:background="@color/Transparent"
             android:text="Create a Account"
             android:textColor="#FFFFFF" />

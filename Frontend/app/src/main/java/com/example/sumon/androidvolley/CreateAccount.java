@@ -1,25 +1,25 @@
 package com.example.sumon.androidvolley;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.nio.charset.StandardCharsets;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,15 +65,22 @@ public class CreateAccount extends AppCompatActivity {
                 String username = usernameText.getText().toString();
                 String email = emailText.getText().toString();
                 if(isValidPassword(passwordText.getText().toString()) && isEmailValid(emailText.getText().toString()) && isValidUsername(usernameText.getText().toString())) {
-
-                    setUserBackend(username, password,email);
-
-                    prefs.edit().putString(USERNAME_KEY, username).apply();
-                    prefs.edit().putString(PASSWORD_KEY, password).apply();
-                    Toast.makeText(CreateAccount.this, "Account Created",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(CreateAccount.this,
-                            LobbyActivity.class));
-                }
+                                setUserBackend(username, password, email, new databaseCallback() {
+                                    @Override
+                                    public void onResult(boolean isUser) {
+                                        if(!isUser) {
+                                            prefs.edit().putString(USERNAME_KEY, username).apply();
+                                            prefs.edit().putString(PASSWORD_KEY, password).apply();
+                                            Toast.makeText(CreateAccount.this, "Account Created", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(CreateAccount.this,
+                                                    LobbyActivity.class));
+                                        }
+                                        else {
+                                            Toast.makeText(CreateAccount.this, "User already exists", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
                 else if (!isValidPassword(password)) {
                     Toast.makeText(CreateAccount.this, "Please enter a valid password (Length 8 one letter and number)",Toast.LENGTH_SHORT).show();
                 }
@@ -93,36 +100,92 @@ public class CreateAccount extends AppCompatActivity {
             }
         });
     }
-
     public static boolean isValidPassword(String password) {
-        // Minimum length requirement
         int minLength = 8;
-
-        // Check if the password meets the minimum length
         if (password.trim().length() < minLength) {
             return false;
         }
-
         // Check if the password contains both letters and numbers using regular expressions
         Pattern pattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d).+$");
         Matcher matcher = pattern.matcher(password);
 
         return matcher.matches();
     }
-    public static boolean isValidUsername(String username) {
-        // Check if the username is not null and not empty after trimming leading/trailing spaces
+    public static boolean isValidUsername(String username) {return username != null && !username.trim().isEmpty();}
 
-        //check if username is in database
-        if(inUserDatabase(username));
+    public interface databaseCallback {
+        void onResult(boolean isUser);
+    }
+    public boolean setUserBackend(String username, String password, String email, databaseCallback callback) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/users/"+username+"/"+password+"/"+email;
+        boolean isUser = false;
+        // Create a JSON object to hold the parameters
+        JSONObject jsonParams = new JSONObject();
+        try {
+            jsonParams.put("username", username);
+            jsonParams.put("password", password);
+            jsonParams.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        return username != null && !username.trim().isEmpty();
+        JsonObjectRequest request = new JsonObjectRequest(
+                Request.Method.POST,  // Use POST instead of PUT for creating a new resource
+                url,
+                jsonParams,  // Pass the JSON object as the request body
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("POST", response.toString());
+                        if(response.toString().equals("{\"message\":\"failure\"}")) {
+                            boolean isUser = true;
+                            callback.onResult(isUser);
+                            Log.d("RESULT",Boolean.toString(isUser));
+                        }
+                        else {
+                            boolean isUser = false;
+                            callback.onResult(isUser);
+                            Log.d("RESULT",Boolean.toString(isUser));
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("SETPURERR", error.toString());
+                        callback.onResult(false); // Handle error case
+                    }
+                }
+        );
+        // Add the request to the Volley queue
+        Volley.newRequestQueue(this).add(request);
+        Log.d("setUserBackend", String.valueOf(isUser));
+        return isUser;
+    }
+    public boolean inDatabase(String username, String password, MainActivity.DatabaseCallback callback) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/users/"+username+"/"+password;
+        boolean isUser = false;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("boolean", response);
+                        boolean isUser = Boolean.parseBoolean(response);
+                        callback.onResult(isUser);
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("GETURERR",error.toString());
+                callback.onResult(false); // Handle error case
+            }
+        });
+        Volley.newRequestQueue(this).add(stringRequest);
+        Log.d("ISUSER",Boolean.toString(isUser));
+        return isUser;
     }
 
-    public static boolean inUserDatabase(String username) {
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/";
-
-        return false;
-    }
     public static boolean isEmailValid(String email) {
         // Define a simple pattern for a valid email address
         String emailPattern = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
@@ -145,7 +208,6 @@ public class CreateAccount extends AppCompatActivity {
         return false;
     }
 
-    public static void setUserBackend(String username, String password, String email) {
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/";
-    }
+
+
 }

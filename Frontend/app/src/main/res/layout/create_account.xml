@@ -71,7 +71,7 @@
             android:id="@+id/have_account"
             android:layout_width="209dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="120dp"
             android:background="@color/Transparent"
             android:text="Already have an Account?"
             android:textColor="#FFFFFF" />
