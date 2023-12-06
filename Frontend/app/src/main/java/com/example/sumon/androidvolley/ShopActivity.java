@@ -48,7 +48,7 @@ public class ShopActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shop);
 
         initializeViews();
-        setBalance();
+        //setBalance();
         navigationHelper = new Navigation(this);
         navigationHelper.setupNavigation();
 

@@ -31,6 +31,7 @@
         <activity android:name=".SettingsActivity"></activity>
         <activity android:name=".GameWebSockets"></activity>
         <activity android:name=".Navigation"></activity>
+        <activity android:name=".CreateAccount"></activity>
         <activity android:name=".SinglePlayerGame"
             android:exported="true"></activity>
         <activity android:name=".MultiPlayerGame"
