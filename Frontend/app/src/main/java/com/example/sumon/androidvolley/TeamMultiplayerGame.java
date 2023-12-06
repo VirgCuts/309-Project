@@ -638,8 +638,12 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     public void onWebSocketMessage(String message) {
         Log.d("RECIEVED", message);
         try {
+            String jsonTeamState = message.substring(0,1);
+            Log.d("TEAMSTATE",jsonTeamState);
             // Parse the JSON string
-            JSONObject jsonObject = new JSONObject(message);
+            Log.d("SUBSTRING",message.substring(1, message.length()));
+            JSONObject jsonObject = new JSONObject(message.substring(2,message.length()));
+//            JSONObject jsonObject = new JSONObject(message);
             Log.d("GAMIE",jsonObject.toString());
             // Extract the "game" object
             JSONArray gameS = jsonObject.getJSONArray("game");
