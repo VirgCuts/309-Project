@@ -25,6 +25,7 @@ public class MultiPlayerGameTest {
 
     @Test
     public void testMultiplayerGame() throws InterruptedException {
+        Thread.sleep(50);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.r1c1),
                         isDisplayed()));
@@ -110,10 +111,6 @@ public class MultiPlayerGameTest {
                         isDisplayed()));
         appCompatButton4.perform(click());
         Thread.sleep(200);
-        // Your test code here
-        MultiPlayerGame multiplayerGameActivity = activityRule.getActivity();
-
-        // Access methods or fields in MultiPlayerGame activity as needed
 
     }
 }
