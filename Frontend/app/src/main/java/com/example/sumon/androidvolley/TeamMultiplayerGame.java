@@ -644,8 +644,8 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             // Extract the "game" object
             JSONArray gameS = jsonObject.getJSONArray("game");
             //creates a string representation of the board to be changed
-            JSONArray gameTeam = jsonObject.getJSONArray("score");
-            Log.d("TEAM",gameTeam.toString());
+            int gameTeam = jsonObject.getInt("score");
+            Log.d("TEAM",Integer.toString(gameTeam));
             String boardGrid = gameS.toString();
             Log.d("ARRIQ",boardGrid.toString());
             //[[1,1,1],[1,1,0],[0,0,0]]
