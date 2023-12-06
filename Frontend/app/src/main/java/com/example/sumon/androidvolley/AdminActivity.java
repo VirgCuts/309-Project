@@ -1,5 +1,6 @@
 package com.example.sumon.androidvolley;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
@@ -10,6 +11,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,7 +37,7 @@ import java.util.List;
  * for network requests to a specified base URL.
  */
 public class AdminActivity extends AppCompatActivity {
-
+    private Navigation navigationHelper;
     private EditText etUsernameForReport, username_ban;
     private LinearLayout containerReports;
     private TextView tvBanCount;
@@ -46,6 +48,10 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reports_activity);
 
+        navigationHelper = new Navigation(this);
+        navigationHelper.setupNavigation();
+
+
         Button btnGetAllReports = findViewById(R.id.btnGetAllReports);
         Button btnGetUsersReports = findViewById(R.id.btnGetUsersReports);
         etUsernameForReport = findViewById(R.id.etUsernameForReport);
@@ -53,6 +59,7 @@ public class AdminActivity extends AppCompatActivity {
         Button BtnBanCount = findViewById(R.id.ban_count);
         tvBanCount = findViewById(R.id.tvBanCount);
         username_ban = findViewById(R.id.username_inputban);
+
 
         btnGetAllReports.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +91,10 @@ public class AdminActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
     /**
      * Fetches the ban count for a given user by sending a GET request.

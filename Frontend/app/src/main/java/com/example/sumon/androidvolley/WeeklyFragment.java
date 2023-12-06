@@ -63,7 +63,7 @@ public class WeeklyFragment extends Fragment {
 
         ListView leaderboardListView = view.findViewById(R.id.leaderboardListViewWeekly);
         allTimeLeaderboardData = new ArrayList<>();
-        adapter = new AllTimeLeaderboardAdapter(getActivity(), allTimeLeaderboardData);
+        adapter = new WeeklyLeaderboardAdapter(getActivity(), allTimeLeaderboardData);
         leaderboardListView.setAdapter(adapter);
 
         // Retrieve the leaderboard data (e.g., from an API)
@@ -98,6 +98,7 @@ public class WeeklyFragment extends Fragment {
                                 int highScore = playerJson.getInt("highScore");
                                 int highmScore = playerJson.getInt("highScoreMonthly");
                                 int highwScore = playerJson.getInt("highScoreWeekly");
+
                                 // Add to leaderboard data list
                                 allTimeLeaderboardData.add(new PlayerData(username, highScore, highmScore, highwScore));
                             } catch (JSONException e) {
@@ -127,9 +128,9 @@ public class WeeklyFragment extends Fragment {
     }
 
 
-    public class AllTimeLeaderboardAdapter extends ArrayAdapter<PlayerData> {
+    public class WeeklyLeaderboardAdapter extends ArrayAdapter<PlayerData> {
         // Constructor
-        AllTimeLeaderboardAdapter(Context context, List<PlayerData> data) {
+        WeeklyLeaderboardAdapter(Context context, List<PlayerData> data) {
             super(context, R.layout.list_item_layout, data);
         }
 
@@ -138,7 +139,7 @@ public class WeeklyFragment extends Fragment {
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_layout, parent, false);
             }
-
+            Log.d("Check1","Yes");
             TextView playerNameTextView = convertView.findViewById(R.id.playerUsernameTextView);
             TextView highScoreTextView = convertView.findViewById(R.id.scoreTextView);
             TextView playerRankView = convertView.findViewById(R.id.playerRank);

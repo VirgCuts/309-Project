@@ -5,14 +5,11 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,33 +29,31 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest6 {
+public class LogoutTest {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest6() {
-        ViewInteraction editText = onView(
-                allOf(childAtPosition(
-                                allOf(withId(android.R.id.custom),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.FrameLayout")),
-                                                0)),
-                                0),
+    public void logoutTest() throws InterruptedException {
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.username_input),
+
                         isDisplayed()));
-        editText.perform(replaceText("Keenan"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("Carter"), closeSoftKeyboard());
+        Thread.sleep(50);
+        ViewInteraction appCompatEditText2 = onView(
+                allOf(withId(R.id.password_input),
 
+                        isDisplayed()));
+        appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
+        Thread.sleep(100);
         ViewInteraction appCompatButton = onView(
-                allOf(withId(android.R.id.button1), withText("OK"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.ScrollView")),
-                                        0),
-                                3)));
-        appCompatButton.perform(scrollTo(), click());
-
+                allOf(withId(R.id.login),
+                        isDisplayed()));
+        appCompatButton.perform(click());
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -66,12 +61,50 @@ public class MainActivityTest6 {
                                         childAtPosition(
                                                 withId(androidx.appcompat.R.id.action_bar_container),
                                                 0)),
-                                2),
+                                1),
                         isDisplayed()));
         appCompatImageButton.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView = onView(
-                allOf(withId(R.id.btnAdmin),
+                allOf(withId(R.id.curUser),
+                        isDisplayed()));
+        navigationMenuItemView.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatImageButton2 = onView(
+                allOf(withContentDescription("Open"),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton2.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatImageButton3 = onView(
+                allOf(withContentDescription("Close"),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton3.perform(click());
+        Thread.sleep(500);
+        ViewInteraction appCompatImageButton4 = onView(
+                allOf(withContentDescription("Open"),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton4.perform(click());
+        Thread.sleep(500);
+        ViewInteraction navigationMenuItemView2 = onView(
+                allOf(withId(R.id.logout),
                         childAtPosition(
                                 allOf(withId(com.google.android.material.R.id.design_navigation_view),
                                         childAtPosition(
@@ -79,7 +112,7 @@ public class MainActivityTest6 {
                                                 0)),
                                 6),
                         isDisplayed()));
-        navigationMenuItemView.perform(click());
+        navigationMenuItemView2.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

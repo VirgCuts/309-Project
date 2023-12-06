@@ -64,7 +64,7 @@ public class MonthlyFragment extends Fragment {
 
         ListView leaderboardListView = view.findViewById(R.id.leaderboardListViewMonthly);
         allTimeLeaderboardData = new ArrayList<>();
-        adapter = new AllTimeLeaderboardAdapter(getActivity(), allTimeLeaderboardData);
+        adapter = new MonthlyLeaderboardAdapter(getActivity(), allTimeLeaderboardData);
         leaderboardListView.setAdapter(adapter);
 
         // Retrieve the leaderboard data (e.g., from an API)
@@ -99,9 +99,8 @@ public class MonthlyFragment extends Fragment {
                                 String username = playerJson.getString("name");
                                 int highScore = playerJson.getInt("highScore");
                                 int highmScore = playerJson.getInt("highScoreMonthly");
-                                int highwScore = playerJson.getInt("highScoreWeekly");
                                 // Add to leaderboard data list
-                                allTimeLeaderboardData.add(new PlayerData(username, highScore, highmScore, highwScore));
+                                allTimeLeaderboardData.add(new PlayerData(username, highScore, highmScore, 0));
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -129,9 +128,9 @@ public class MonthlyFragment extends Fragment {
     }
 
 
-    public class AllTimeLeaderboardAdapter extends ArrayAdapter<PlayerData> {
+    public class MonthlyLeaderboardAdapter extends ArrayAdapter<PlayerData> {
         // Constructor
-        AllTimeLeaderboardAdapter(Context context, List<PlayerData> data) {
+        MonthlyLeaderboardAdapter(Context context, List<PlayerData> data) {
             super(context, R.layout.list_item_layout, data);
         }
 
