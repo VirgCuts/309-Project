@@ -119,9 +119,11 @@ public class LobbyServer {
 
         if (message.equals("@ready")) {
             userReady.replace(username, true);
+            sendMessageToLobby(username, "@ready");
             lobbyReadyCheck(username);
         } else if (message.equals("@unready")) {
             userReady.replace(username, false);
+            sendMessageToLobby(username, "@unready");
         } else if (user.getCanChat()) {
             boolean containsBannedWord = messageCheck(message, username);
             if (!containsBannedWord) {
