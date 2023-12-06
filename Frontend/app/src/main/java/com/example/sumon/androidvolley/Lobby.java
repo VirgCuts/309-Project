@@ -1,18 +1,18 @@
 package com.example.sumon.androidvolley;public class Lobby {
-    private String name;
+    private int num;
     private int currentUserCount;
     private int maxUserCount;
     private boolean isGameInProgress;
 
-    public Lobby(String name, int currentUserCount, int maxUserCount, boolean isGameInProgress) {
-        this.name = name;
+    public Lobby(int num, int currentUserCount, int maxUserCount, boolean isGameInProgress) {
+        this.num = num;
         this.currentUserCount = currentUserCount;
         this.maxUserCount = maxUserCount;
         this.isGameInProgress = isGameInProgress;
     }
 
-    public String getName() {
-        return name;
+    public int getNum() {
+        return num;
     }
 
     public int getCurrentUserCount() {

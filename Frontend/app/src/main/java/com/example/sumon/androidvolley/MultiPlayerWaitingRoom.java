@@ -38,6 +38,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
     private Button sendButton;
     private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/lobby/2/"; //This will need to be a new URL
     private String username = "";
+    private int lobbyNum;
     private boolean isWebSocketConnected;
 
 
@@ -55,6 +56,15 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatAdapter = new ChatAdapter(chatMessages);
         chatRecyclerView.setAdapter(chatAdapter);
+        Intent intent = getIntent();
+        if (intent != null) {
+            lobbyNum = intent.getIntExtra("LOBBY_NAME",0);
+            username = intent.getStringExtra("USERNAME");
+
+            // Use these values as needed in your activity
+            // For example, displaying them or using them in WebSocket connection
+        }
+
 
 
         sendButton.setOnClickListener(v -> {

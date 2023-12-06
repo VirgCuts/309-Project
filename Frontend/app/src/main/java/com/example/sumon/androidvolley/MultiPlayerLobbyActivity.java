@@ -38,16 +38,16 @@ public class MultiPlayerLobbyActivity extends AppCompatActivity implements Lobby
         navigationHelper.setupNavigation();
         // Initialize your lobby list here
         lobbies = new ArrayList<>();
-        lobbies.add(new Lobby("Lobby 1", 0, 2, false));
-        lobbies.add(new Lobby("Lobby 2", 0, 2, false));
-        lobbies.add(new Lobby("Lobby 3", 0, 2, false));
-        lobbies.add(new Lobby("Lobby 4", 0, 2, false));
-        lobbies.add(new Lobby("Lobby 5", 0, 2, false));
-        lobbies.add(new Lobby("Lobby 6", 0, 2, false));
-        lobbies.add(new Lobby("Lobby 7", 0, 2, false));
-        lobbies.add(new Lobby("Lobby 8", 0, 2, false));
-        lobbies.add(new Lobby("Lobby 9", 0, 2, false));
-        lobbies.add(new Lobby("Lobby 10", 0, 2, false));
+        lobbies.add(new Lobby(1, 0, 2, false));
+        lobbies.add(new Lobby(2, 0, 2, false));
+        lobbies.add(new Lobby(3, 0, 2, false));
+        lobbies.add(new Lobby(4, 0, 2, false));
+        lobbies.add(new Lobby(5, 0, 2, false));
+        lobbies.add(new Lobby(6, 0, 2, false));
+        lobbies.add(new Lobby(7, 0, 2, false));
+        lobbies.add(new Lobby(8, 0, 2, false));
+        lobbies.add(new Lobby(9, 0, 2, false));
+        lobbies.add(new Lobby(10, 0, 2, false));
 
 
         lobbyAdapter = new LobbyAdapter(lobbies, this);
@@ -97,7 +97,7 @@ public class MultiPlayerLobbyActivity extends AppCompatActivity implements Lobby
         } else {
             // Proceed if lobby is not full and game is not in progress
             Intent intent = new Intent(MultiPlayerLobbyActivity.this, MultiPlayerWaitingRoom.class);
-            intent.putExtra("LOBBY_NAME", lobby.getName());
+            intent.putExtra("LOBBY_NAME", lobby.getNum());
             intent.putExtra("USERNAME", username);
             startActivity(intent);
         }
