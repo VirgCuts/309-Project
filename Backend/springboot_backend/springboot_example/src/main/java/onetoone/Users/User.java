@@ -1,5 +1,6 @@
 package onetoone.Users;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiModelProperty;
@@ -27,14 +28,16 @@ public class User implements Comparator<User>, Comparable<User> {
     private String name;
     @ApiModelProperty(notes = "Password of the User", name="password", required = true)
     private String password;
+    @ApiModelProperty(notes = "Email of the User", name="email", required = true)
+    private String email;
+    @ApiModelProperty(notes = "Reset token for forgotten password", name="resetToken")
+    private String resetToken;
     @ApiModelProperty(notes = "High score of the User", name="highScore")
     private int highScore;
     @ApiModelProperty(notes = "This months high score of the User", name="highScoreMonthly")
     private int highScoreMonthly;
     @ApiModelProperty(notes = "This weeks high score of the User", name="highScoreWeekly")
     private int highScoreWeekly;
-    @ApiModelProperty(notes = "This weeks high score of the User", name="highScoreWeekly")
-    private Date highScoreTime;
     @ApiModelProperty(notes = "Boolean value of users ability to chat", name="canChat")
     private boolean canChat;
     @ApiModelProperty(notes = "Number of ban strikes user currently has", name="banStrikes")
@@ -62,11 +65,11 @@ public class User implements Comparator<User>, Comparable<User> {
      * @JoinColumn defines the ownership of the foreign key i.e. the user table will have a field called laptop_id
      */
 
-    public User(String name, String password) {
+    public User(String name, String password, String email) {
         this.name = name;
         this.password = password;
+        this.email = email;
         this.highScore = 0;
-        this.highScoreTime = new Date();
         this.highScoreMonthly = 0;
         this.highScoreWeekly = 0;
         this.board = new Board();
@@ -74,24 +77,14 @@ public class User implements Comparator<User>, Comparable<User> {
         this.banStrikes = 0;
         inventory = new Inventory();
         this.selectedColor = "white";
+        this.resetToken = null;
     }
 
-    public User(String name, int highScore) {
-        this.name = name;
-        this.password = "";
-        this.highScore = highScore;
-        this.highScoreTime = new Date();
-        this.highScoreMonthly = highScore;
-        this.highScoreWeekly = highScore;
+    public User()
+    {
         this.board = new Board();
-        this.canChat = true;
-        this.banStrikes = 0;
-        inventory = new Inventory();
+        this.inventory = new Inventory();
         this.selectedColor = "white";
-    }
-
-    public User() {
-        this.highScoreTime = new Date();
     }
 
     // =============================== Getters and Setters for each field ================================== //
@@ -124,6 +117,13 @@ public class User implements Comparator<User>, Comparable<User> {
 
     public void setPassword(String password) { this.password = password; }
 
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public String getResetToken() { return resetToken; }
+
+    public void setResetToken(String resetToken) { this.resetToken = resetToken; }
     public int getHighScore(){
         return highScore;
     }
@@ -132,27 +132,22 @@ public class User implements Comparator<User>, Comparable<User> {
         this.highScore = highScore;
     }
 
-    public Date getHighScoreTime(){
-        return highScoreTime;
-    }
-
-    public void setHighScoreTime(Date highScoreTime){
-        this.highScoreTime = highScoreTime;
-    }
-    public int getHighScoreMontly(){
+    public int getHighScoreMonthly(){
         return highScoreMonthly;
     }
 
+    public void setHighScoreMonthly(int highScore) { this.highScoreMonthly = highScore; }
 
     public int getHighScoreWeekly(){
         return highScoreWeekly;
     }
 
+    public void setHighScoreWeekly(int highScore) { this.highScoreWeekly = highScore; }
 
     public void setAllHighScores(int highScore) {
+        Date now = new Date();
         if (this.highScore < highScore){
             this.highScore = highScore;
-            this.highScoreTime = new Date();
         }
         if (this.highScoreMonthly < highScore) {
             this.highScoreMonthly = highScore;

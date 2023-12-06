@@ -6,11 +6,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/my_drawer_layout"
     android:layout_width="match_parent"
+    android:background="@drawable/lobby_background"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     tools:ignore="HardcodedText">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -36,20 +37,84 @@
 
         <Button
             android:id="@+id/multiPlayer"
-            style="@style/CustomButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Multiplayer" />
+            style="@style/MultiPlayerButtonStyle"
+            android:layout_width="279dp"
+            android:layout_height="48dp"
+            android:text="Multiplayer"
+            app:layout_constraintBottom_toTopOf="@+id/imageView5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+        <Button
+            android:id="@+id/teamMultiplayer"
+            style="@style/TeamMultiPlayerButtonStyle"
+            android:layout_width="279dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="30dp"
+            android:text="Team Versus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="78dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/singlePlayer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnStudy"
+            app:srcCompat="@drawable/ic_singleplayer" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="87dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/multiPlayer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/singlePlayer"
+            app:srcCompat="@drawable/ic_multiplayer" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="84dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="41dp"
+            app:layout_constraintBottom_toTopOf="@+id/btnStudy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_action_name" />
 
         <Button
             android:id="@+id/btnStudy"
-            style="@style/CustomButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Study" />
-    </LinearLayout>
+            style="@style/AlternateButtonStyle"
+            android:layout_width="279dp"
+            android:layout_height="48dp"
+            android:text="Study"
+            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="87dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/teamMultiplayer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/multiPlayer"
+            app:srcCompat="@drawable/ic_team_multiplayer" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <!-- This is the navigation view which draws and shows the navigation drawer. Include the menu created in the menu folder. -->
     <com.google.android.material.navigation.NavigationView

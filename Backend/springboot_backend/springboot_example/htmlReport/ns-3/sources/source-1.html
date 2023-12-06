@@ -1,0 +1,225 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Artist</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">onetoone.Artists</a>
+</div>
+
+<h1>Coverage Summary for Class: Artist (onetoone.Artists)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Artist</td>
+<td class="coverageStat">
+  <span class="percent">
+    7.7%
+  </span>
+  <span class="absValue">
+    (1/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11.1%
+  </span>
+  <span class="absValue">
+    (2/18)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Artist$HibernateProxy$309u0e86</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    7.7%
+  </span>
+  <span class="absValue">
+    (1/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11.1%
+  </span>
+  <span class="absValue">
+    (2/18)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package onetoone.Artists;
+&nbsp;
+&nbsp;import javax.persistence.*;
+&nbsp;
+&nbsp;import io.swagger.annotations.ApiModelProperty;
+&nbsp;import onetoone.Songs.Song;
+&nbsp;import onetoone.Albums.Album;
+&nbsp;
+&nbsp;import java.io.Serializable;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * 
+&nbsp; * @author Conor O&#39;Shea
+&nbsp; * 
+&nbsp; */ 
+&nbsp;
+&nbsp;@Entity
+&nbsp;public class Artist implements Serializable {
+&nbsp;
+&nbsp;     /* 
+&nbsp;     * The annotation @ID marks the field below as the primary key for the table created by springboot
+&nbsp;     * The @GeneratedValue generates a value if not already present, The strategy in this case is to start from 1 and increment for each table
+&nbsp;     */
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    private int id;
+&nbsp;
+&nbsp;    @ApiModelProperty(notes = &quot;Name of the Artist&quot;,name=&quot;name&quot;,required=true,value=&quot;test name&quot;)
+&nbsp;    private String name;
+&nbsp;
+&nbsp;    @ApiModelProperty(notes = &quot;Number of Platinums for the Artist&quot;,name=&quot;numPlatinums&quot;,required=true,value=&quot;test numPlatinums&quot;)
+&nbsp;    private int numPlatinums;
+&nbsp;    @ApiModelProperty(notes = &quot;Number of Grammys for the Artist&quot;,name=&quot;numGrammys&quot;,required=true,value=&quot;test numGrammys&quot;)
+&nbsp;    private int numGrammys;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    /*
+&nbsp;     * @OneToOne creates a relation between the current entity/table(Laptop) with the entity/table defined below it(User)
+&nbsp;     * cascade is responsible propagating all changes, even to children of the class Eg: changes made to laptop within a user object will be reflected
+&nbsp;     * in the database (more info : https://www.baeldung.com/jpa-cascade-types)
+&nbsp;     * @JoinColumn defines the ownership of the foreign key i.e. the user table will have a field called laptop_id
+&nbsp;     */
+&nbsp;
+&nbsp;    @OneToMany(cascade = CascadeType.ALL)
+&nbsp;    private List&lt;Song&gt; songs;
+&nbsp;
+&nbsp;//    @OneToMany(cascade = CascadeType.ALL)
+&nbsp;////    @JoinColumn(name = &quot;album_id&quot;)
+&nbsp;//    private List&lt;Album&gt; albums;
+&nbsp;
+&nbsp;    public Artist(String name, int numPlatinums, int numGrammys) {
+&nbsp;        this.name = name;
+&nbsp;        this.numPlatinums = numPlatinums;
+<b class="nc">&nbsp;        this.numGrammys = numGrammys;</b>
+<b class="nc">&nbsp;        songs = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    public Artist() {</b>
+&nbsp;        songs = new ArrayList&lt;&gt;();
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    // =============================== Getters and Setters for each field ================================== //</b>
+<b class="fc">&nbsp;</b>
+&nbsp;    public int getId(){
+&nbsp;        return id;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setId(int id){
+<b class="nc">&nbsp;        this.id = id;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getName(){
+<b class="nc">&nbsp;        return name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setName(String name){
+<b class="nc">&nbsp;        this.name = name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getNumPlatinums(){
+<b class="nc">&nbsp;        return numPlatinums;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setNumPlatinums(int numPlatinums){
+<b class="nc">&nbsp;        this.numPlatinums = numPlatinums;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getNumGrammys(){
+<b class="nc">&nbsp;        return numGrammys;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setNumGrammys(int numGrammys){
+<b class="nc">&nbsp;        this.numGrammys = numGrammys;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Song&gt; getSongs() {
+<b class="nc">&nbsp;        return songs;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setSongs(List&lt;Song&gt; songs) {
+&nbsp;        this.songs = songs;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void addSongs(Song song){
+&nbsp;        this.songs.add(song);
+&nbsp;    }
+&nbsp;    
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-05 17:18</div>
+</div>
+</body>
+</html>

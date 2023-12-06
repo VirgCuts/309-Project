@@ -1,0 +1,177 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Inventory</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">onetoone.Inventory</a>
+</div>
+
+<h1>Coverage Summary for Class: Inventory (onetoone.Inventory)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Inventory</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (16/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (22/24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Inventory$HibernateProxy$qzovVzJu</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    88.9%
+  </span>
+  <span class="absValue">
+    (16/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (22/24)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package onetoone.Inventory;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonIgnore;
+&nbsp;import io.swagger.annotations.ApiModelProperty;
+&nbsp;import onetoone.Users.User;
+&nbsp;
+&nbsp;import javax.persistence.*;
+&nbsp;
+&nbsp;@Entity
+&nbsp;public class Inventory {
+&nbsp;    @ApiModelProperty(notes = &quot;Id provided for database&quot;, name=&quot;id&quot;, required = true)
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    private int id;
+&nbsp;    @ApiModelProperty(notes = &quot;Whether or not the user has purchased the orange color&quot;, name=&quot;orange&quot;)
+&nbsp;    private boolean orange;
+&nbsp;    @ApiModelProperty(notes = &quot;Whether or not the user has purchased the purple color&quot;, name=&quot;purple&quot;)
+&nbsp;    private boolean purple;
+&nbsp;    @ApiModelProperty(notes = &quot;Whether or not the user has purchased the light blue color&quot;, name=&quot;lightblue&quot;)
+&nbsp;    private boolean lightblue;
+&nbsp;    @ApiModelProperty(notes = &quot;Whether or not the user has purchased the yellow color&quot;, name=&quot;yellow&quot;)
+&nbsp;    private boolean yellow;
+&nbsp;    @ApiModelProperty(notes = &quot;Whether or not the user has purchased the magenta color&quot;, name=&quot;magenta&quot;)
+&nbsp;    private boolean magenta;
+&nbsp;    @ApiModelProperty(notes = &quot;Whether or not the user has purchased the green color&quot;, name=&quot;green&quot;)
+&nbsp;    private boolean green;
+&nbsp;
+&nbsp;    @ApiModelProperty(notes = &quot;User of this inventory&quot;, name=&quot;user&quot;)
+&nbsp;    @OneToOne
+&nbsp;    @JsonIgnore
+&nbsp;    private User user;
+&nbsp;
+<b class="fc">&nbsp;    public Inventory() {</b>
+<b class="fc">&nbsp;        orange = false;</b>
+<b class="fc">&nbsp;        purple = false;</b>
+<b class="fc">&nbsp;        lightblue = false;</b>
+<b class="fc">&nbsp;        yellow = false;</b>
+<b class="fc">&nbsp;        magenta = false;</b>
+<b class="fc">&nbsp;        green = false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String inventoryToString() {
+<b class="fc">&nbsp;        return &quot;&quot; + this.orange + &quot;, &quot; + this.purple + &quot;, &quot; + this.lightblue + &quot;, &quot; + this.yellow + &quot;, &quot; + this.magenta + &quot;, &quot; + this.green;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public int getId() { return this.id; }</b>
+<b class="fc">&nbsp;    public void setId(int id) { this.id = id; }</b>
+<b class="nc">&nbsp;    public User getUser() { return this.user; }</b>
+<b class="nc">&nbsp;    public void setUser(User user) { this.user = user;}</b>
+<b class="fc">&nbsp;    public boolean getOrange() { return this.orange; }</b>
+<b class="fc">&nbsp;    public void setOrange(boolean orange) {this.orange = orange; }</b>
+<b class="fc">&nbsp;    public boolean getPurple() { return this.purple; }</b>
+<b class="fc">&nbsp;    public void setPurple(boolean purple) {this.purple = purple; }</b>
+<b class="fc">&nbsp;    public boolean getLightblue() { return this.lightblue; }</b>
+<b class="fc">&nbsp;    public void setLightblue(boolean lightblue) {this.lightblue = lightblue; }</b>
+<b class="fc">&nbsp;    public boolean getYellow() { return this.yellow; }</b>
+<b class="fc">&nbsp;    public void setYellow(boolean yellow) {this.yellow = yellow; }</b>
+<b class="fc">&nbsp;    public boolean getMagenta() { return this.magenta; }</b>
+<b class="fc">&nbsp;    public void setMagenta(boolean magenta) {this.magenta = magenta; }</b>
+<b class="fc">&nbsp;    public boolean getGreen() { return this.green; }</b>
+<b class="fc">&nbsp;    public void setGreen(boolean green) {this.green = green; }</b>
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-05 17:18</div>
+</div>
+</body>
+</html>

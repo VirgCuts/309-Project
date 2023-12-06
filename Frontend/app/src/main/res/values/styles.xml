@@ -1,11 +1,16 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- ... your other style attributes -->
 
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <!-- Customize the navigation drawer toggle -->
+        <item name="drawerArrowStyle">@style/MyDrawerArrowToggle</item>
+    </style>
 
+    <style name="MyDrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <!-- Customize the drawer arrow icon -->
+        <item name="color">@color/boardColor</item>
+        <!-- You can also set other attributes here, like size, etc. -->
     </style>
     <style name="CustomButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background</item>
@@ -21,6 +26,43 @@
     </style>
     <style name="AlternateButtonStyle" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/alternate_button_background</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:stateListAnimator">@animator/lift_on_touch</item>
+    </style>
+    <style name="SinglePlayerButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/gmd_singleplayer_background</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:stateListAnimator">@animator/lift_on_touch</item>
+    </style>
+    <style name="MultiPlayerButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/gmd_multiplayer_background</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:stateListAnimator">@animator/lift_on_touch</item>
+    </style>
+    <style name="TeamMultiPlayerButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/gmd_teammultiplayer_background</item>
+        <item name="android:radius">8dp</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">20sp</item>
         <item name="android:paddingStart">16dp</item>

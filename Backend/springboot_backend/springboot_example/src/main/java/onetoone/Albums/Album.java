@@ -83,14 +83,6 @@ public class Album implements Serializable {
         this.genre = genre;
     }
 
-//    public Artist getArtist(){
-//        return artist;
-//    }
-//
-//    public void setArtist(Artist artist){
-//        this.artist = artist;
-//    }
-
     public List<Song> getSongs() {
         return songs;
     }

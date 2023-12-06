@@ -13,15 +13,29 @@ public class UserScheduledTasks {
     @Autowired
     UserRepository userRepository;
 
-    @Scheduled(fixedDelay = 3600000)
-    public void hourlyUpdate() {
-        for (User user: userRepository.findAll()) {
-            Date now = new Date();
-            if (now.getTime() - user.getHighScoreTime().getTime() > 604800000)
-                user.resetWeeklyScore();
-            if (now.getTime() - user.getHighScoreTime().getTime() > 2628000000L)
-                user.resetMonthlyScore();
-            userRepository.save(user);
+//    @Scheduled(fixedDelay = 3600000)
+//    public void hourlyUpdate() {
+//        for (User user: userRepository.findAll()) {
+//            Date now = new Date();
+//            if (now.getTime() - user.getHighScoreTime().getTime() > 604800000)
+//                user.resetWeeklyScore();
+//            if (now.getTime() - user.getHighScoreTime().getTime() > 2628000000L)
+//                user.resetMonthlyScore();
+//            userRepository.save(user);
+//        }
+//    }
+
+    @Scheduled(fixedDelay = 604800000)
+    public void weeklyUpdate(){
+        for (User user: userRepository.findAll()){
+            user.resetWeeklyScore();
+        }
+    }
+
+    @Scheduled(fixedDelay = 2628000000L)
+    public void monthlyUpdate(){
+        for (User user: userRepository.findAll()){
+            user.resetMonthlyScore();
         }
     }
 }
