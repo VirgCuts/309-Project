@@ -37,6 +37,7 @@ public class StudyTest {
 
     @Test
     public void studyTest() throws InterruptedException {
+        Thread.sleep(200);
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.username_input),
                         isDisplayed()));

@@ -54,7 +54,7 @@ public class SinglePlayerTest {
                 allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(200);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
