@@ -35,10 +35,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu_layout);
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        prefs.edit().putString(USERNAME_KEY, "").apply();
 
-        navigationHelper = new Navigation(this);
-        navigationHelper.setupNavigation();
+
         promptUsername();
+
+
 
     }
     /**
@@ -72,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
             // Save the username
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
+            navigationHelper = new Navigation(this); // 'this' refers to MainActivity which is a Context
+            navigationHelper.setupNavigation();
             // Continue with any other actions you need to do with the username
         });
         builder.setNegativeButton("Play as Guest", (dialog, which) -> {
@@ -79,8 +84,11 @@ public class MainActivity extends AppCompatActivity {
             // Save the username
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
+            navigationHelper = new Navigation(this); // 'this' refers to MainActivity which is a Context
+            navigationHelper.setupNavigation();
         });
         builder.show();
+
     }
 
     /**

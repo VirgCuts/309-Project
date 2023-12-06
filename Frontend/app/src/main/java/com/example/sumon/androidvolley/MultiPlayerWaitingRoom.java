@@ -36,7 +36,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
     private List<ChatMessage> chatMessages = new ArrayList<>();
     private EditText messageInput;
     private Button sendButton;
-    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/lobby/2/"; //This will need to be a new URL
+    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/lobby";
     private String username = "";
     private int lobbyNum;
     private boolean isWebSocketConnected;
@@ -60,9 +60,6 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         if (intent != null) {
             lobbyNum = intent.getIntExtra("LOBBY_NAME",0);
             username = intent.getStringExtra("USERNAME");
-
-            // Use these values as needed in your activity
-            // For example, displaying them or using them in WebSocket connection
         }
 
 
@@ -93,8 +90,9 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
                         MultiPlayerLobbyActivity.class));
             }
         });
-        String serverUrl = BASE_URL + username;//Will need to change once log-in system works
+        String serverUrl = BASE_URL + "/" + lobbyNum + "/" + username;//Will need to change once log-in system works
         // Establish WebSocket connection and set listener
+        Log.d("URL",serverUrl);
         WebSocketManager.getInstance().connectWebSocket(serverUrl);
         WebSocketManager.getInstance().setWebSocketListener(MultiPlayerWaitingRoom.this);
         isWebSocketConnected = true;
@@ -196,6 +194,9 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
             } else if(message.equals("Lobby is full.")){
                 Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerLobbyActivity.class);
                 intent.putExtra("ERROR_MESSAGE", "Lobby is full, sorry");
+                WebSocketManager.getInstance().disconnectWebSocket();
+                WebSocketManager.getInstance().removeWebSocketListener();
+                isWebSocketConnected = false;
                 startActivity(intent);
                 finish();
             }
@@ -225,7 +226,10 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
             if (reason != null && reason.contains("Invalid status code received: 404")) {
                 // Redirect to the lobby with an error message
                 Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerLobbyActivity.class);
-                intent.putExtra("ERROR_MESSAGE", "Connection failed: Please go back to the main menu and enter a valid username");
+                intent.putExtra("ERROR_MESSAGE", "Connection failed: Please go back to the main menu and enter a valid username (404)");
+                WebSocketManager.getInstance().disconnectWebSocket();
+                WebSocketManager.getInstance().removeWebSocketListener();
+                isWebSocketConnected = false;
                 startActivity(intent);
                 finish();
             }else{
@@ -265,6 +269,9 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
             // Handle the error and navigate back to the lobby with an error message
             Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerLobbyActivity.class);
             intent.putExtra("ERROR_MESSAGE", "Connection error: " + ex.getMessage());
+            WebSocketManager.getInstance().disconnectWebSocket();
+            WebSocketManager.getInstance().removeWebSocketListener();
+            isWebSocketConnected = false;
             startActivity(intent);
             finish();
         });
