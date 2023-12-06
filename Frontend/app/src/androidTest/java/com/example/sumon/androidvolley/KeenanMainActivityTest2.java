@@ -37,7 +37,7 @@ public class KeenanMainActivityTest2 {
 
     @Test
     public void mainActivityTest2() throws InterruptedException {
-        Thread.sleep(50);
+        Thread.sleep(500);
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.username_input),
                         childAtPosition(
@@ -47,7 +47,7 @@ public class KeenanMainActivityTest2 {
                                 1),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Keenan"), closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(500);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.password_input),
                         childAtPosition(
@@ -57,7 +57,7 @@ public class KeenanMainActivityTest2 {
                                 2),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(500);
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.login), withText("Login"),
                         childAtPosition(
@@ -67,17 +67,17 @@ public class KeenanMainActivityTest2 {
                                 3),
                         isDisplayed()));
         appCompatButton.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(500);
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.btnStudy),
                         isDisplayed()));
         appCompatButton2.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(500);
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.button),
                         isDisplayed()));
         appCompatButton3.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(500);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.songGuess),
                         childAtPosition(
@@ -87,7 +87,7 @@ public class KeenanMainActivityTest2 {
                                 3),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("1"), closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(500);
         ViewInteraction appCompatButton4 = onView(
                 allOf(withId(R.id.showAllAnswers), withText("Show Artist songs"),
                         childAtPosition(

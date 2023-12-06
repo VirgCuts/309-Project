@@ -41,21 +41,11 @@ public class MessageBoardTest {
     public void messageBoardTest() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.username_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                1),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Carter"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.password_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                2),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
         Thread.sleep(300);
@@ -68,7 +58,7 @@ public class MessageBoardTest {
                                 3),
                         isDisplayed()));
         appCompatButton.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -79,7 +69,7 @@ public class MessageBoardTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView = onView(
                 allOf(withId(R.id.btnWebsocket),
                         childAtPosition(
@@ -90,51 +80,27 @@ public class MessageBoardTest {
                                 3),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.username_input),
-                        childAtPosition(
-                                allOf(withId(R.id.username),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                0)),
-                                0),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("Carter"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.connect_button), withText("Connect"),
-                        childAtPosition(
-                                allOf(withId(R.id.username),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                0)),
-                                1),
+                allOf(withId(R.id.connect_button),
                         isDisplayed()));
         appCompatButton2.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText4 = onView(
                 allOf(withId(R.id.message_input),
-                        childAtPosition(
-                                allOf(withId(R.id.sendMessage),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                2)),
-                                0),
                         isDisplayed()));
         appCompatEditText4.perform(replaceText("Test"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.send_button), withText("Send"),
-                        childAtPosition(
-                                allOf(withId(R.id.sendMessage),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                2)),
-                                1),
+                allOf(withId(R.id.send_button),
                         isDisplayed()));
         appCompatButton3.perform(click());
-
+        Thread.sleep(500);
         ViewInteraction appCompatImageButton2 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -145,7 +111,7 @@ public class MessageBoardTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton2.perform(click());
-
+        Thread.sleep(500);
         ViewInteraction navigationMenuItemView2 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

@@ -42,34 +42,19 @@ public class SinglePlayerTest {
     public void singlePlayerTest() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.username_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                1),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Carter"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.password_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                2),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
         Thread.sleep(300);
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.login), withText("Login"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                3),
+                allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -80,7 +65,7 @@ public class SinglePlayerTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton2 = onView(
                 allOf(withContentDescription("Close"),
                         childAtPosition(
@@ -91,202 +76,97 @@ public class SinglePlayerTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton2.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.singlePlayer), withText("SinglePlayer"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                0),
+                allOf(withId(R.id.singlePlayer),
                         isDisplayed()));
         appCompatButton2.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.r1c1),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                4),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("Cart''"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.r1c1), withText("Cart''"),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                4),
+                allOf(withId(R.id.r1c1),
                         isDisplayed()));
         appCompatEditText4.perform(pressImeActionButton());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText5 = onView(
                 allOf(withId(R.id.r2c2),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                9),
                         isDisplayed()));
         appCompatEditText5.perform(replaceText("Banger"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText6 = onView(
-                allOf(withId(R.id.r2c2), withText("Banger"),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                9),
+                allOf(withId(R.id.r2c2),
                         isDisplayed()));
         appCompatEditText6.perform(pressImeActionButton());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText7 = onView(
                 allOf(withId(R.id.r1c2),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                5),
                         isDisplayed()));
         appCompatEditText7.perform(replaceText("wallls"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText8 = onView(
-                allOf(withId(R.id.r1c2), withText("wallls"),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                5),
+                allOf(withId(R.id.r1c2),
                         isDisplayed()));
         appCompatEditText8.perform(pressImeActionButton());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText9 = onView(
                 allOf(withId(R.id.r1c3),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                6),
                         isDisplayed()));
         appCompatEditText9.perform(replaceText("carkes"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText10 = onView(
-                allOf(withId(R.id.r1c3), withText("carkes"),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                6),
+                allOf(withId(R.id.r1c3),
                         isDisplayed()));
         appCompatEditText10.perform(pressImeActionButton());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText11 = onView(
                 allOf(withId(R.id.r2c3),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                10),
                         isDisplayed()));
         appCompatEditText11.perform(replaceText("wallp"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText12 = onView(
-                allOf(withId(R.id.r2c3), withText("wallp"),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                10),
+                allOf(withId(R.id.r2c3),
                         isDisplayed()));
         appCompatEditText12.perform(pressImeActionButton());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText13 = onView(
                 allOf(withId(R.id.r2c1),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                8),
                         isDisplayed()));
         appCompatEditText13.perform(replaceText("wallny"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText14 = onView(
-                allOf(withId(R.id.r2c1), withText("wallny"),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                8),
+                allOf(withId(R.id.r2c1),
                         isDisplayed()));
         appCompatEditText14.perform(pressImeActionButton());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText15 = onView(
                 allOf(withId(R.id.r3c1),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                12),
                         isDisplayed()));
         appCompatEditText15.perform(replaceText("cary\n"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText16 = onView(
                 allOf(withId(R.id.r3c2),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                13),
                         isDisplayed()));
         appCompatEditText16.perform(replaceText("barry"), closeSoftKeyboard());
-
+        Thread.sleep(200);
         ViewInteraction appCompatEditText17 = onView(
                 allOf(withId(R.id.r3c3),
-                        childAtPosition(
-                                allOf(withId(R.id.gridLayout),
-                                        childAtPosition(
-                                                withClassName(is("android.widget.RelativeLayout")),
-                                                1)),
-                                14),
                         isDisplayed()));
         appCompatEditText17.perform(replaceText("wally"), closeSoftKeyboard());
-
+        Thread.sleep(200);
         ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.endGameButton), withText("Quit"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
+                allOf(withId(R.id.endGameButton),
                         isDisplayed()));
         appCompatButton3.perform(click());
-
+        Thread.sleep(200);
         ViewInteraction appCompatButton4 = onView(
-                allOf(withId(R.id.showScoreButton), withText("Show Score"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.RelativeLayout")),
-                                        4),
-                                1),
+                allOf(withId(R.id.showScoreButton),
                         isDisplayed()));
         appCompatButton4.perform(click());
-
+        Thread.sleep(200);
         ViewInteraction appCompatImageButton3 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -297,47 +177,48 @@ public class SinglePlayerTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton3.perform(click());
-
+        Thread.sleep(200);
         ViewInteraction navigationMenuItemView = onView(
                 allOf(withId(R.id.btnLobby),
+                        isDisplayed()));
+        navigationMenuItemView.perform(click());
+        Thread.sleep(200);
+        ViewInteraction appCompatButton5 = onView(
+                allOf(withId(R.id.singlePlayer),
+                        isDisplayed()));
+        appCompatButton5.perform(click());
+        Thread.sleep(200);
+        ViewInteraction appCompatButton6 = onView(
+                allOf(withId(R.id.endGameButton),
+                        isDisplayed()));
+        appCompatButton6.perform(click());
+        Thread.sleep(200);
+        ViewInteraction appCompatButton7 = onView(
+                allOf(withId(R.id.restartButton),
+                        isDisplayed()));
+        appCompatButton7.perform(click());
+        Thread.sleep(500);
+        ViewInteraction appCompatImageButton10 = onView(
+                allOf(withContentDescription("Open"),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton10.perform(click());
+        Thread.sleep(500);
+        ViewInteraction navigationMenuItemView10 = onView(
+                allOf(withId(R.id.logout),
                         childAtPosition(
                                 allOf(withId(com.google.android.material.R.id.design_navigation_view),
                                         childAtPosition(
                                                 withId(R.id.nav_view),
                                                 0)),
-                                4),
+                                6),
                         isDisplayed()));
-        navigationMenuItemView.perform(click());
-
-        ViewInteraction appCompatButton5 = onView(
-                allOf(withId(R.id.singlePlayer), withText("SinglePlayer"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatButton5.perform(click());
-
-        ViewInteraction appCompatButton6 = onView(
-                allOf(withId(R.id.endGameButton), withText("Quit"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatButton6.perform(click());
-
-        ViewInteraction appCompatButton7 = onView(
-                allOf(withId(R.id.restartButton), withText("Restart"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("android.widget.RelativeLayout")),
-                                        4),
-                                0),
-                        isDisplayed()));
-        appCompatButton7.perform(click());
+        navigationMenuItemView10.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

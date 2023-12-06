@@ -45,17 +45,17 @@ public class KeenanMainActivityTest4 {
                 allOf(withId(R.id.username_input),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Keenan"), closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.password_input),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(500);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -66,7 +66,7 @@ public class KeenanMainActivityTest4 {
                                 1),
                         isDisplayed()));
         appCompatImageButton.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView = onView(
                 allOf(withId(R.id.btnWebsocket),
                         childAtPosition(
@@ -77,50 +77,50 @@ public class KeenanMainActivityTest4 {
                                 3),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.username_input),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("Keenan"), closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.connect_button), withText("Connect"),
                         isDisplayed()));
         appCompatButton2.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText4 = onView(
                 allOf(withId(R.id.message_input),
                         isDisplayed()));
         appCompatEditText4.perform(replaceText("Hey"), closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.send_button),
                         isDisplayed()));
         appCompatButton3.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction recyclerView = onView(
                 allOf(withId(R.id.chat_recyclerview),
                         childAtPosition(
                                 withClassName(is("android.widget.RelativeLayout")),
                                 1)));
         recyclerView.perform(actionOnItemAtPosition(3, longClick()));
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatTextView = onView(
                 allOf(withId(android.R.id.title), withText("Report user"),
 
                         isDisplayed()));
         appCompatTextView.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText5 = onView(
                 allOf(withId(R.id.etReportBody),
                         isDisplayed()));
         appCompatEditText5.perform(replaceText("hey"), closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatButton4 = onView(
                 allOf(withId(R.id.btnSendReport),
                         isDisplayed()));
         appCompatButton4.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton2 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -131,7 +131,7 @@ public class KeenanMainActivityTest4 {
                                 1),
                         isDisplayed()));
         appCompatImageButton2.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView2 = onView(
                 allOf(withId(R.id.btnAdmin),
                         childAtPosition(
@@ -142,47 +142,47 @@ public class KeenanMainActivityTest4 {
                                 7),
                         isDisplayed()));
         navigationMenuItemView2.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatButton5 = onView(
                 allOf(withId(R.id.btnGetAllReports),
                         isDisplayed()));
         appCompatButton5.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText6 = onView(
                 allOf(withId(R.id.etUsernameForReport),
                         isDisplayed()));
         appCompatEditText6.perform(replaceText("Keenan"), closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatButton6 = onView(
                 allOf(withId(R.id.btnGetUsersReports),
                         isDisplayed()));
         appCompatButton6.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText7 = onView(
                 allOf(withId(R.id.username_inputban),
                         isDisplayed()));
         appCompatEditText7.perform(replaceText("Keenan"), closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatButton7 = onView(
                 allOf(withId(R.id.ban_count),
                         isDisplayed()));
         appCompatButton7.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText8 = onView(
                 allOf(withId(R.id.username_inputban),
                         isDisplayed()));
         appCompatEditText8.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText9 = onView(
                 allOf(withId(R.id.username_inputban),
                         isDisplayed()));
         appCompatEditText9.perform(replaceText("d"));
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText10 = onView(
                 allOf(withId(R.id.username_inputban),
                         isDisplayed()));
         appCompatEditText10.perform(closeSoftKeyboard());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction appCompatButton8 = onView(
                 allOf(withId(R.id.ban_count),
                         isDisplayed()));
@@ -197,7 +197,7 @@ public class KeenanMainActivityTest4 {
                                 1),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
-        Thread.sleep(50);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView4 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

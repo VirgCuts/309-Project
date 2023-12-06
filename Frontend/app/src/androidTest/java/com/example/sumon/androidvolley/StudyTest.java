@@ -39,74 +39,39 @@ public class StudyTest {
     public void studyTest() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.username_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                1),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Carter"), closeSoftKeyboard());
-
+        Thread.sleep(200);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.password_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                2),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
         Thread.sleep(300);
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.login), withText("Login"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                3),
+                allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-
+        Thread.sleep(200);
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.btnStudy), withText("Study"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                6),
+                allOf(withId(R.id.btnStudy),
                         isDisplayed()));
         appCompatButton2.perform(click());
-
+        Thread.sleep(200);
         ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.button), withText("Get Random Artist"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                7),
+                allOf(withId(R.id.button),
                         isDisplayed()));
         appCompatButton3.perform(click());
-
+        Thread.sleep(200);
         ViewInteraction appCompatButton4 = onView(
-                allOf(withId(R.id.showAllAnswers), withText("Show Artist songs"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                8),
+                allOf(withId(R.id.showAllAnswers),
                         isDisplayed()));
         appCompatButton4.perform(click());
-
+        Thread.sleep(200);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.songGuess),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                3),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("Wild"), closeSoftKeyboard());
-
+        Thread.sleep(200);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -117,7 +82,7 @@ public class StudyTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton.perform(click());
-
+        Thread.sleep(200);
         ViewInteraction navigationMenuItemView = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

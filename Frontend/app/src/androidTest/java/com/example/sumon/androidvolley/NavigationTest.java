@@ -40,34 +40,19 @@ public class NavigationTest {
     public void navigationTest() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.username_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                1),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Carter"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.password_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                2),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
         Thread.sleep(100);
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.login), withText("Login"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                3),
+                allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -78,7 +63,7 @@ public class NavigationTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView = onView(
                 allOf(withId(R.id.btnleaderboard),
                         childAtPosition(
@@ -89,7 +74,7 @@ public class NavigationTest {
                                 2),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton2 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -100,7 +85,7 @@ public class NavigationTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton2.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView2 = onView(
                 allOf(withId(R.id.btnWebsocket),
                         childAtPosition(
@@ -111,7 +96,7 @@ public class NavigationTest {
                                 3),
                         isDisplayed()));
         navigationMenuItemView2.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton3 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -122,7 +107,7 @@ public class NavigationTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton3.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView3 = onView(
                 allOf(withId(R.id.btnLobby),
                         childAtPosition(
@@ -133,7 +118,7 @@ public class NavigationTest {
                                 4),
                         isDisplayed()));
         navigationMenuItemView3.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton4 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -144,7 +129,7 @@ public class NavigationTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView4 = onView(
                 allOf(withId(R.id.btnSettings),
                         childAtPosition(
@@ -155,7 +140,7 @@ public class NavigationTest {
                                 5),
                         isDisplayed()));
         navigationMenuItemView4.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton5 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -166,7 +151,7 @@ public class NavigationTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton5.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView5 = onView(
                 allOf(withId(R.id.btnSettings),
                         childAtPosition(
@@ -177,7 +162,7 @@ public class NavigationTest {
                                 5),
                         isDisplayed()));
         navigationMenuItemView5.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton6 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -188,7 +173,7 @@ public class NavigationTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton6.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView6 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(
@@ -199,24 +184,14 @@ public class NavigationTest {
                                 6),
                         isDisplayed()));
         navigationMenuItemView6.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.username_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                1),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("Carter"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText4 = onView(
                 allOf(withId(R.id.password_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                2),
                         isDisplayed()));
         appCompatEditText4.perform(replaceText("password1"), closeSoftKeyboard());
         Thread.sleep(300);
@@ -229,7 +204,7 @@ public class NavigationTest {
                                 3),
                         isDisplayed()));
         appCompatButton2.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton7 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -240,7 +215,7 @@ public class NavigationTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton7.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView7 = onView(
                 allOf(withId(R.id.btnAdmin),
                         childAtPosition(
@@ -251,9 +226,9 @@ public class NavigationTest {
                                 7),
                         isDisplayed()));
         navigationMenuItemView7.perform(click());
-
+        Thread.sleep(50);
         pressBack();
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton8 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -264,7 +239,7 @@ public class NavigationTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton8.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView8 = onView(
                 allOf(withId(R.id.btnArtists),
                         childAtPosition(
@@ -275,8 +250,30 @@ public class NavigationTest {
                                 8),
                         isDisplayed()));
         navigationMenuItemView8.perform(click());
-
+        Thread.sleep(50);
         pressBack();
+        Thread.sleep(500);
+        ViewInteraction appCompatImageButton10 = onView(
+                allOf(withContentDescription("Open"),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton10.perform(click());
+        Thread.sleep(500);
+        ViewInteraction navigationMenuItemView10 = onView(
+                allOf(withId(R.id.logout),
+                        childAtPosition(
+                                allOf(withId(com.google.android.material.R.id.design_navigation_view),
+                                        childAtPosition(
+                                                withId(R.id.nav_view),
+                                                0)),
+                                6),
+                        isDisplayed()));
+        navigationMenuItemView10.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

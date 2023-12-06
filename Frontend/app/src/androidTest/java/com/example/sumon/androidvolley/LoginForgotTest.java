@@ -8,6 +8,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -38,7 +39,7 @@ public class LoginForgotTest {
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void loginForgotTest() {
+    public void loginForgotTest() throws InterruptedException {
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.forgotPW), withText("Forgot Password?"),
                         childAtPosition(
@@ -107,6 +108,28 @@ public class LoginForgotTest {
                                 3),
                         isDisplayed()));
         appCompatButton3.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatImageButton4 = onView(
+                allOf(withContentDescription("Open"),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton4.perform(click());
+        Thread.sleep(50);
+        ViewInteraction navigationMenuItemView4 = onView(
+                allOf(withId(R.id.logout),
+                        childAtPosition(
+                                allOf(withId(com.google.android.material.R.id.design_navigation_view),
+                                        childAtPosition(
+                                                withId(R.id.nav_view),
+                                                0)),
+                                6),
+                        isDisplayed()));
+        navigationMenuItemView4.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

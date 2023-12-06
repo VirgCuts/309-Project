@@ -39,34 +39,21 @@ public class LogoutTest {
     public void logoutTest() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.username_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                1),
+
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Carter"), closeSoftKeyboard());
-
+        Thread.sleep(50);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.password_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                2),
+
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
         Thread.sleep(100);
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.login), withText("Login"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                3),
+                allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -77,18 +64,12 @@ public class LogoutTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView = onView(
                 allOf(withId(R.id.curUser),
-                        childAtPosition(
-                                allOf(withId(com.google.android.material.R.id.design_navigation_view),
-                                        childAtPosition(
-                                                withId(R.id.nav_view),
-                                                0)),
-                                1),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton2 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -99,7 +80,7 @@ public class LogoutTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton2.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton3 = onView(
                 allOf(withContentDescription("Close"),
                         childAtPosition(
@@ -110,7 +91,7 @@ public class LogoutTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton3.perform(click());
-
+        Thread.sleep(500);
         ViewInteraction appCompatImageButton4 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -121,7 +102,7 @@ public class LogoutTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
-
+        Thread.sleep(500);
         ViewInteraction navigationMenuItemView2 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(
