@@ -119,6 +119,7 @@ public class CreateAccount extends AppCompatActivity {
     }
 
     public static boolean inUserDatabase(String username) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/";
 
         return false;
     }
@@ -139,11 +140,12 @@ public class CreateAccount extends AppCompatActivity {
     }
 
     public static boolean inEmailDatabase(String email) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/";
 
         return false;
     }
 
     public static void setUserBackend(String username, String password, String email) {
-
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/";
     }
 }

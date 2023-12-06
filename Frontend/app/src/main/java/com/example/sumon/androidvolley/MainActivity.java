@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public boolean inDatabase(String username, String password) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/";
         //makes call to backend to check if in database returns boolean depending
         return true;
     }
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
     private void sendEmail(String email) {
-        
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/";
     }
     private void showLoginDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
