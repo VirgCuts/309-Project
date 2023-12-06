@@ -22,11 +22,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONObject;
+
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  * MainActivity is the entry point for the application.
@@ -65,9 +79,9 @@ public class MainActivity extends AppCompatActivity {
         createAcct = findViewById(R.id.createAcct);
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        if(!prefs.getString(USERNAME_KEY,null).isEmpty()) {
-            startActivity(new Intent(MainActivity.this,
-                    LobbyActivity.class));
+        String user = prefs.getString(USERNAME_KEY,null);
+        if (user != null && !user.isEmpty()) {
+            startActivity(new Intent(MainActivity.this, LobbyActivity.class));
         }
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -181,22 +195,64 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
     private void sendEmail(String email) {
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/";
+        try {
+            Log.d("EmailCall","Should be sending email");
+            String stringSenderEmail = "immaculatetaste595@gmail.com";
+            String stringReceiverEmail = email;
+            String stringPasswordSenderEmail = "oxxz bglo dhmm xedx";
 
+            Properties properties=new Properties();
+            properties.put("mail.smtp.auth", "true");
+            properties.put("mail.smtp.starttls.enable", "true");
+            properties.put("mail.smtp.host", "smtp.gmail.com");
+            properties.put("mail.smtp.port", "587");
+            Session session=Session.getInstance(properties, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(stringSenderEmail, stringPasswordSenderEmail);
+                }
+            });
+
+            MimeMessage mimeMessage = new MimeMessage(session);
+            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(stringReceiverEmail));
+
+            mimeMessage.setSubject("DO NOT REPLY: Immaculate Music Password");
+            mimeMessage.setText("Send Password Here");
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Transport.send(mimeMessage);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+
+        } catch (AddressException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+    private void getPassword(String email) {
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/users/"+email;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("RESPONSE",response);
-                        Toast.makeText(MainActivity.this, "Password Request Sent",Toast.LENGTH_SHORT).show();
+                        Log.d("PWREQ", response);
+
                     }
+
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("GETURERR", error.toString());
+                Log.d("PWERR",error.toString());
             }
         });
-
         Volley.newRequestQueue(this).add(stringRequest);
     }
     private void showLoginDialog() {
@@ -277,21 +333,7 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.show();
     }
-    /**
-     * Saves the username and password in SharedPreferences.
-     *
-     * @param username The username to be set.
-     * @param password The password to be set.
-     */
-    private void saveCredentials(String username, String password) {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
 
-        editor.putString(USERNAME_KEY, username);
-        editor.putString(PASSWORD_KEY, password);
-
-        editor.apply();
-    }
 
     /**
      * Retrieves the stored username from SharedPreferences.
@@ -313,17 +355,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(USERNAME_KEY, username);
         editor.apply();
     }
-    public String getPassword() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        return prefs.getString(PASSWORD_KEY, "null"); // Return "null" if password isn't set
-    }
 
-    public void setPassword(String password) {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(PASSWORD_KEY, password);
-        editor.apply();
-    }
     public static boolean isValidPassword(String password) {
         // Minimum length requirement
         int minLength = 8;
