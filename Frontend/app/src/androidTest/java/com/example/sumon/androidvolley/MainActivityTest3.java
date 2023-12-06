@@ -4,15 +4,12 @@ package com.example.sumon.androidvolley;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
@@ -42,7 +39,8 @@ public class MainActivityTest3 {
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest3() {
+    public void mainActivityTest3() throws InterruptedException {
+        Thread.sleep(50);
         ViewInteraction appCompatButton = onView(
                 allOf(withId(android.R.id.button2), withText("Play as Guest"),
                         childAtPosition(
@@ -73,54 +71,130 @@ public class MainActivityTest3 {
                                 3),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
+        Thread.sleep(1000);
+        ViewInteraction appCompatEditText = onView(withId(R.id.searchText));
+        appCompatEditText.perform(replaceText("keenan"), closeSoftKeyboard());
 
-        ViewInteraction viewGroup = onView(
-                allOf(withParent(allOf(withId(R.id.my_drawer_layout),
-                                withParent(withId(android.R.id.content)))),
-                        isDisplayed()));
-        viewGroup.check(matches(isDisplayed()));
-
-        ViewInteraction button = onView(
-                allOf(withId(R.id.btnBack), withText("BACK"),
-                        withParent(withParent(withId(R.id.my_drawer_layout))),
-                        isDisplayed()));
-        button.check(matches(isDisplayed()));
-
-        ViewInteraction button2 = onView(
-                allOf(withId(R.id.deleteArtist), withText("DELETE ARTIST"),
-                        withParent(withParent(withId(R.id.my_drawer_layout))),
-                        isDisplayed()));
-        button2.check(matches(isDisplayed()));
-
-        ViewInteraction button3 = onView(
-                allOf(withId(R.id.addArtist), withText("ADD ARTIST"),
-                        withParent(withParent(withId(R.id.my_drawer_layout))),
-                        isDisplayed()));
-        button3.check(matches(isDisplayed()));
-
-        ViewInteraction textView2 = onView(
-                allOf(
-                        withId(R.id.msgResponse),
-                        isDisplayed()
-                )
-        );
-        textView2.check(matches(isDisplayed()));
-
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.searchText),
+        ViewInteraction appCompatEditText3 = onView(
+                allOf(withId(R.id.artistName),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.my_drawer_layout),
                                         0),
+                                5),
+                        isDisplayed()));
+        appCompatEditText3.perform(replaceText("Keenan"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText4 = onView(
+                allOf(withId(R.id.numPlat),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.my_drawer_layout),
+                                        0),
+                                6),
+                        isDisplayed()));
+        appCompatEditText4.perform(replaceText("0"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText5 = onView(
+                allOf(withId(R.id.numGrammies),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.my_drawer_layout),
+                                        0),
+                                7),
+                        isDisplayed()));
+        appCompatEditText5.perform(replaceText("0"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText6 = onView(
+                allOf(withId(R.id.numGrammies), withText("0"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.my_drawer_layout),
+                                        0),
+                                7),
+                        isDisplayed()));
+        appCompatEditText6.perform(click());
+
+        ViewInteraction appCompatEditText7 = onView(
+                allOf(withId(R.id.song),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.my_drawer_layout),
+                                        0),
+                                8),
+                        isDisplayed()));
+        appCompatEditText7.perform(replaceText("0"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText8 = onView(
+                allOf(withId(R.id.songGenre),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.my_drawer_layout),
+                                        0),
+                                9),
+                        isDisplayed()));
+        appCompatEditText8.perform(replaceText("hip hop"), closeSoftKeyboard());
+
+        ViewInteraction appCompatButton3 = onView(
+                allOf(withId(R.id.addArtist), withText("Add Artist"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.my_drawer_layout),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatButton3.perform(click());
+
+        ViewInteraction appCompatButton4 = onView(
+                allOf(withId(R.id.btnBack), withText("Back"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.my_drawer_layout),
+                                        0),
+                                1),
+                        isDisplayed()));
+        appCompatButton4.perform(click());
+
+        ViewInteraction appCompatButton5 = onView(
+                allOf(withId(android.R.id.button2), withText("Play as Guest"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                2)));
+        appCompatButton5.perform(scrollTo(), click());
+
+        ViewInteraction appCompatImageButton2 = onView(
+                allOf(withContentDescription("Open"),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton2.perform(click());
+
+        ViewInteraction navigationMenuItemView2 = onView(
+                allOf(withId(R.id.btnArtists),
+                        childAtPosition(
+                                allOf(withId(com.google.android.material.R.id.design_navigation_view),
+                                        childAtPosition(
+                                                withId(R.id.nav_view),
+                                                0)),
                                 3),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("Artist"), closeSoftKeyboard());
-        onView(withId(R.id.searchText)).perform(pressImeActionButton());
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.boolText), withText("Song not found for Artist"),
-                        withParent(withParent(withId(R.id.my_drawer_layout))),
+        navigationMenuItemView2.perform(click());
+        Thread.sleep(1000);
+        ViewInteraction appCompatEditText9 = onView(
+                allOf(withId(R.id.deleteNum),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.my_drawer_layout),
+                                        0),
+                                4),
                         isDisplayed()));
-        textView3.check(matches(withText("Song not found for Artist")));
+        appCompatEditText9.perform(replaceText("396"), closeSoftKeyboard());
     }
 
     private static Matcher<View> childAtPosition(
