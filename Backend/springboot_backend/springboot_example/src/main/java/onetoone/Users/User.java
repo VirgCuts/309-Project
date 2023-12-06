@@ -38,8 +38,6 @@ public class User implements Comparator<User>, Comparable<User> {
     private int highScoreMonthly;
     @ApiModelProperty(notes = "This weeks high score of the User", name="highScoreWeekly")
     private int highScoreWeekly;
-    @ApiModelProperty(notes = "This weeks high score of the User", name="highScoreWeekly")
-    private Date highScoreTime;
     @ApiModelProperty(notes = "Boolean value of users ability to chat", name="canChat")
     private boolean canChat;
     @ApiModelProperty(notes = "Number of ban strikes user currently has", name="banStrikes")
@@ -72,7 +70,6 @@ public class User implements Comparator<User>, Comparable<User> {
         this.password = password;
         this.email = email;
         this.highScore = 0;
-        this.highScoreTime = new Date();
         this.highScoreMonthly = 0;
         this.highScoreWeekly = 0;
         this.board = new Board();
@@ -85,7 +82,6 @@ public class User implements Comparator<User>, Comparable<User> {
 
     public User()
     {
-        this.highScoreTime = new Date();
         this.board = new Board();
         this.inventory = new Inventory();
         this.selectedColor = "white";
@@ -136,13 +132,6 @@ public class User implements Comparator<User>, Comparable<User> {
         this.highScore = highScore;
     }
 
-    public Date getHighScoreTime(){
-        return highScoreTime;
-    }
-
-    public void setHighScoreTime(Date highScoreTime){
-        this.highScoreTime = highScoreTime;
-    }
     public int getHighScoreMonthly(){
         return highScoreMonthly;
     }
@@ -159,7 +148,6 @@ public class User implements Comparator<User>, Comparable<User> {
         Date now = new Date();
         if (this.highScore < highScore){
             this.highScore = highScore;
-            this.highScoreTime = new Date();
         }
         if (this.highScoreMonthly < highScore) {
             this.highScoreMonthly = highScore;

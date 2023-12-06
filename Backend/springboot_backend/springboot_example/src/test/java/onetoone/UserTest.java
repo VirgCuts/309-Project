@@ -81,17 +81,10 @@ public class UserTest {
         user.setHighScoreMonthly(highscore);
         assertEquals(user.getHighScoreMonthly(), highscore);
 
-        user.setHighScoreTime(date);
-        assertEquals(user.getHighScoreTime(), date);
-
         user.setBanStrikes(banStrikes);
         assertEquals(user.getBanStrikes(), banStrikes);
         user.setCanChat(canChat);
         assertEquals(user.getCanChat(), canChat);
-
-        //testing empty constructor, only non-null value should be highscoretime
-        User user2 = new User();
-        assertNotNull(user2.getHighScoreTime());
     }
 
     @Test
