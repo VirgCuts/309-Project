@@ -193,22 +193,7 @@ public class ShopActivity extends AppCompatActivity {
         );
         Volley.newRequestQueue(this).add(request);
     }
-    /**
-     * Checks whether the user has enough points to make a purchase.
-     *
-     * @param neededPts The points required for the purchase.
-     * @return true if the user has enough points,false otherwise.
-     */
-    public boolean checkPoints(int neededPts) {
-        if(bal < neededPts) {
-            //throw some kinda indicator
-            return false;
-        }
-        else {
 
-            return true;
-        }
-    }
     /**
      * Sets the selected color for the user on the server.
      *
@@ -251,20 +236,7 @@ public class ShopActivity extends AppCompatActivity {
         setBoughtIfTrue(splitPur[4], magenta, "magenta");
         setBoughtIfTrue(splitPur[5], green, "green");
     }
-    /**
-     * Retrieves and sets the user's balance from the server.
-     */
-    public void setBalance() {
-        balance = findViewById(R.id.balance);
-        balance.setText("Balance: " + getBalance(User));
-    }
-    /**
-     *Supposed to get balance, not implemented currently
-     */
-    public int getBalance(String user) {
-        //value should be saved to bal at end
-        return bal;
-    }
+
     /**
      * Sets the text of a button to "Select" if the corresponding color has been purchased.
      *

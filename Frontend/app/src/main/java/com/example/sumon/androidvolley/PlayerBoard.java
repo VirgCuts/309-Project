@@ -28,20 +28,20 @@ public class PlayerBoard {
         col = new String[3][4];
         row = new String[3][4];
     }
-    /**
-     * Copy constructor for the PlayerBoard class.
-     * Creates a new sendBoard object by copying the grid values from an existing PlayerBoard object.
-     *
-     * @param original The PlayerBoard object to copy the grid values from.
-     */
-    public PlayerBoard(PlayerBoard original) {
-        this.grid = new String[BOARD_SIZE][BOARD_SIZE];
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                this.grid[i][j] = original.grid[i][j];
-            }
-        }
-    }
+//    /**
+//     * Copy constructor for the PlayerBoard class.
+//     * Creates a new sendBoard object by copying the grid values from an existing PlayerBoard object.
+//     *
+//     * @param original The PlayerBoard object to copy the grid values from.
+//     */
+//    public PlayerBoard(PlayerBoard original) {
+//        this.grid = new String[BOARD_SIZE][BOARD_SIZE];
+//        for (int i = 0; i < BOARD_SIZE; i++) {
+//            for (int j = 0; j < BOARD_SIZE; j++) {
+//                this.grid[i][j] = original.grid[i][j];
+//            }
+//        }
+//    }
 
     /**
      * Returns the value at a specific position in the grid.
@@ -57,71 +57,71 @@ public class PlayerBoard {
         return null; // Or throw an exception
     }
 
-    /**
-     * Edits the value at a specific position in the grid.
-     *
-     * @param row - The row of the desired position.
-     * @param col - The column of the desired position.
-     * @param value - The new value to set.
-     */
-    public void edit(int row, int col, String value) {
-        if (isValidPosition(row, col)) {
-            grid[row][col] = value;
-        } else {
-            // Handle invalid positions (e.g., throw an exception or print an error)
-            System.out.println("Invalid position!");
-        }
-    }
-    /**
-     * Edits a column with the specified values.
-     *
-     * @param c       The column index to edit.
-     * @param text    The text value for the column.
-     * @param subject The subject value for the column.
-     * @param check   The check value for the column.
-     * @param keyword The keyword value for the column.
-     */
-    public void editCol(int c, String text, String subject, String check, String keyword) {
-        col[c][0] = text;
-        col[c][1] = subject;
-        col[c][2] = check;
-        col[c][3] = keyword;
-    }
-    /**
-     * Edits a row with the specified values.
-     *
-     * @param c       The row index to edit.
-     * @param text    The text value for the row.
-     * @param subject The subject value for the row.
-     * @param check   The check value for the row.
-     * @param keyword The keyword value for the row.
-     */
-    public void editRow(int c, String text, String subject, String check, String keyword) {
-        row[c][0] = text;
-        row[c][1] = subject;
-        row[c][2] = check;
-        row[c][3] = keyword;
-    }
-    /**
-     * Retrieves a value from a specific column at a given check index.
-     *
-     * @param co    The column index.
-     * @param check The check index.
-     * @return The value at the specified column and check index.
-     */
-    public String getCol(int co, int check) {
-        return col[co][check];
-    }
-    /**
-     * Retrieves a value from a specific row at a given check index.
-     *
-     * @param ro    The row index.
-     * @param check The check index.
-     * @return The value at the specified row and check index.
-     */
-    public String getRow(int ro, int check) {
-        return row[ro][check];
-    }
+//    /**
+//     * Edits the value at a specific position in the grid.
+//     *
+//     * @param row - The row of the desired position.
+//     * @param col - The column of the desired position.
+//     * @param value - The new value to set.
+//     */
+//    public void edit(int row, int col, String value) {
+//        if (isValidPosition(row, col)) {
+//            grid[row][col] = value;
+//        } else {
+//            // Handle invalid positions (e.g., throw an exception or print an error)
+//            System.out.println("Invalid position!");
+//        }
+//    }
+//    /**
+//     * Edits a column with the specified values.
+//     *
+//     * @param c       The column index to edit.
+//     * @param text    The text value for the column.
+//     * @param subject The subject value for the column.
+//     * @param check   The check value for the column.
+//     * @param keyword The keyword value for the column.
+//     */
+//    public void editCol(int c, String text, String subject, String check, String keyword) {
+//        col[c][0] = text;
+//        col[c][1] = subject;
+//        col[c][2] = check;
+//        col[c][3] = keyword;
+//    }
+//    /**
+//     * Edits a row with the specified values.
+//     *
+//     * @param c       The row index to edit.
+//     * @param text    The text value for the row.
+//     * @param subject The subject value for the row.
+//     * @param check   The check value for the row.
+//     * @param keyword The keyword value for the row.
+//     */
+//    public void editRow(int c, String text, String subject, String check, String keyword) {
+//        row[c][0] = text;
+//        row[c][1] = subject;
+//        row[c][2] = check;
+//        row[c][3] = keyword;
+//    }
+//    /**
+//     * Retrieves a value from a specific column at a given check index.
+//     *
+//     * @param co    The column index.
+//     * @param check The check index.
+//     * @return The value at the specified column and check index.
+//     */
+//    public String getCol(int co, int check) {
+//        return col[co][check];
+//    }
+//    /**
+//     * Retrieves a value from a specific row at a given check index.
+//     *
+//     * @param ro    The row index.
+//     * @param check The check index.
+//     * @return The value at the specified row and check index.
+//     */
+//    public String getRow(int ro, int check) {
+//        return row[ro][check];
+//    }
 
 
     /**

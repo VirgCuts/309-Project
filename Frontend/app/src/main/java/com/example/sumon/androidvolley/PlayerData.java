@@ -52,21 +52,21 @@ public class PlayerData {
     }
 
 
-    /**
-     * Sets the score of the player.
-     *
-     * @param score The new score to set.
-     */
-    public void setHighScore(int score) {
-        this.highScore = score;
-    }
-
-    public void setMonthlyScore(int score) {
-        this.highScoreMonthly = score;
-    }
-    public void setWeeklyScore(int score) {
-        this.highScoreWeekly = score;
-    }
+//    /**
+//     * Sets the score of the player.
+//     *
+//     * @param score The new score to set.
+//     */
+//    public void setHighScore(int score) {
+//        this.highScore = score;
+//    }
+//
+//    public void setMonthlyScore(int score) {
+//        this.highScoreMonthly = score;
+//    }
+//    public void setWeeklyScore(int score) {
+//        this.highScoreWeekly = score;
+//    }
 
 
 

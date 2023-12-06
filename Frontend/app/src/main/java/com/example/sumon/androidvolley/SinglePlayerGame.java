@@ -256,9 +256,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
      * @param editText The EditText to change the background color for.
      * @param color    The string representation of the selected background color.
      */
-    public void changeOneColor(EditText editText, String color) {
-        setBackColor(editText, color);
-    }
 
     /**
      * Implements the countdown timer for the game, updating the UI and handling the end of the game.
@@ -806,13 +803,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         }
     }
 
-    private void handleResponse(String result) {
-        if ("success".equals(result)) {
-            // Handle success
-        } else {
-            // Handle failure
-        }
-    }
     /**
      * Adds a player's score to the leaderboard.
      *

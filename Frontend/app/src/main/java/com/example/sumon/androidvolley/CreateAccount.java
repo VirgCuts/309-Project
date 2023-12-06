@@ -162,29 +162,6 @@ public class CreateAccount extends AppCompatActivity {
         Log.d("setUserBackend", String.valueOf(isUser));
         return isUser;
     }
-    public boolean inDatabase(String username, String password, MainActivity.DatabaseCallback callback) {
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/users/"+username+"/"+password;
-        boolean isUser = false;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("boolean", response);
-                        boolean isUser = Boolean.parseBoolean(response);
-                        callback.onResult(isUser);
-                    }
-
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("GETURERR",error.toString());
-                callback.onResult(false); // Handle error case
-            }
-        });
-        Volley.newRequestQueue(this).add(stringRequest);
-        Log.d("ISUSER",Boolean.toString(isUser));
-        return isUser;
-    }
 
     public static boolean isEmailValid(String email) {
         // Define a simple pattern for a valid email address
