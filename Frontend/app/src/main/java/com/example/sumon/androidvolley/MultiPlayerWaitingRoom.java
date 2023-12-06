@@ -203,6 +203,11 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
                 // Handle other messages (e.g., adding them to the chat view)
                 addMessageToView(message);
             }
+            if(message.equals("Start Game")){
+                Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerGame.class);
+                intent.putExtra("PLAYER", username);
+                startActivity(intent);
+            }
         });
 
     }
