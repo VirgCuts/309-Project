@@ -6,10 +6,12 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,28 +31,23 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class KeenanMainActivityTest {
+public class KeenanMainActivityTest5 {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest() throws InterruptedException {
+    public void keenanMainActivityTest5() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.username_input),
                         isDisplayed()));
-        appCompatEditText.perform(click());
+        appCompatEditText.perform(replaceText("Keenan"), closeSoftKeyboard());
         Thread.sleep(50);
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.username_input),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("Keenan"), closeSoftKeyboard());
-        Thread.sleep(50);
-        ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.password_input),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("password1"), closeSoftKeyboard());
+        appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
         Thread.sleep(50);
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.login),
@@ -69,35 +66,110 @@ public class KeenanMainActivityTest {
         appCompatImageButton.perform(click());
         Thread.sleep(50);
         ViewInteraction navigationMenuItemView = onView(
-                allOf(withId(R.id.btnleaderboard),
+                allOf(withId(R.id.btnSettings),
                         childAtPosition(
                                 allOf(withId(com.google.android.material.R.id.design_navigation_view),
                                         childAtPosition(
                                                 withId(R.id.nav_view),
                                                 0)),
-                                2),
+                                5),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
         Thread.sleep(50);
-        ViewInteraction tabView = onView(
-                allOf(withContentDescription("Monthly"),
+        ViewInteraction appCompatButton2 = onView(
+                allOf(withId(R.id.orange),
+                        isDisplayed()));
+        appCompatButton2.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatButton3 = onView(
+                allOf(withId(R.id.purple),
+                        isDisplayed()));
+        appCompatButton3.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatButton4 = onView(
+                allOf(withId(R.id.lightblue),
+                        isDisplayed()));
+        appCompatButton4.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatButton5 = onView(
+                allOf(withId(R.id.yellow),
+                        isDisplayed()));
+        appCompatButton5.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatButton6 = onView(
+                allOf(withId(R.id.magenta),
+                        isDisplayed()));
+        appCompatButton6.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatButton7 = onView(
+                allOf(withId(R.id.green),
+                        isDisplayed()));
+        appCompatButton7.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatButton8 = onView(
+                allOf(withId(R.id.white),
+                        isDisplayed()));
+        appCompatButton8.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatImageButton2 = onView(
+                allOf(withContentDescription("Open"),
                         childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.scoresTabLayout),
-                                        0),
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
                                 1),
                         isDisplayed()));
-        tabView.perform(click());
+        appCompatImageButton2.perform(click());
         Thread.sleep(50);
-        ViewInteraction tabView2 = onView(
-                allOf(withContentDescription("Weekly"),
+        ViewInteraction navigationMenuItemView2 = onView(
+                allOf(withId(R.id.curUser),
                         childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.scoresTabLayout),
-                                        0),
-                                2),
+                                allOf(withId(com.google.android.material.R.id.design_navigation_view),
+                                        childAtPosition(
+                                                withId(R.id.nav_view),
+                                                0)),
+                                1),
                         isDisplayed()));
-        tabView2.perform(click());
+        navigationMenuItemView2.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatImageButton3 = onView(
+                allOf(withContentDescription("Open"),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton3.perform(click());
+        Thread.sleep(50);
+        ViewInteraction navigationMenuItemView3 = onView(
+                allOf(withId(R.id.btnLobby),
+                        childAtPosition(
+                                allOf(withId(com.google.android.material.R.id.design_navigation_view),
+                                        childAtPosition(
+                                                withId(R.id.nav_view),
+                                                0)),
+                                4),
+                        isDisplayed()));
+        navigationMenuItemView3.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatButton9 = onView(
+                allOf(withId(R.id.singlePlayer),
+                        isDisplayed()));
+        appCompatButton9.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatButton10 = onView(
+                allOf(withId(R.id.endGameButton),
+                        isDisplayed()));
+        appCompatButton10.perform(click());
+        Thread.sleep(50);
+        ViewInteraction appCompatButton11 = onView(
+                allOf(withId(R.id.restartButton),
+                        isDisplayed()));
+        appCompatButton11.perform(click());
+        Thread.sleep(50);
         ViewInteraction appCompatImageButton4 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -108,7 +180,7 @@ public class KeenanMainActivityTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
-
+        Thread.sleep(50);
         ViewInteraction navigationMenuItemView4 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

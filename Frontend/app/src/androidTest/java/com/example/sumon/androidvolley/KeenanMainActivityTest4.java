@@ -187,6 +187,27 @@ public class KeenanMainActivityTest4 {
                 allOf(withId(R.id.ban_count),
                         isDisplayed()));
         appCompatButton8.perform(click());
+        ViewInteraction appCompatImageButton4 = onView(
+                allOf(withContentDescription("Open"),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageButton4.perform(click());
+        Thread.sleep(50);
+        ViewInteraction navigationMenuItemView4 = onView(
+                allOf(withId(R.id.logout),
+                        childAtPosition(
+                                allOf(withId(com.google.android.material.R.id.design_navigation_view),
+                                        childAtPosition(
+                                                withId(R.id.nav_view),
+                                                0)),
+                                6),
+                        isDisplayed()));
+        navigationMenuItemView4.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
