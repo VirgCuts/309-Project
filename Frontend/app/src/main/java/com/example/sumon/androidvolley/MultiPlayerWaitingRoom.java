@@ -194,9 +194,6 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
             } else if(message.equals("Lobby is full.")){
                 Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerLobbyActivity.class);
                 intent.putExtra("ERROR_MESSAGE", "Lobby is full, sorry");
-                WebSocketManager.getInstance().disconnectWebSocket();
-                WebSocketManager.getInstance().removeWebSocketListener();
-                isWebSocketConnected = false;
                 startActivity(intent);
                 finish();
             }
