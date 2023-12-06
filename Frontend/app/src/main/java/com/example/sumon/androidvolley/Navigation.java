@@ -38,8 +38,8 @@ public class Navigation extends AppCompatActivity {
     /**
      * Default constructor for the Navigation helper class.
      */
-    public Navigation(Context context) {
-        this.context = context;
+    public Navigation() {
+        
         // Initialize any default values or perform other setup here if needed.
     }
     /**
@@ -49,6 +49,7 @@ public class Navigation extends AppCompatActivity {
      */
     public Navigation(AppCompatActivity activity) {
         this.activity = activity;
+        this.context = activity;
     }
     /**
      * Sets up the navigation drawer and the toggle switch.
