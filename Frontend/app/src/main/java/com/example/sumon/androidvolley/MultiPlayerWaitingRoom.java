@@ -185,6 +185,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
             Log.d("WebMessage",message);
             // Check if the message indicates another player's readiness
             if (message.equals("@ready")) {
+                Log.d("Ready","User clicked ready");
                 // Increment the count of ready users
                 readyUsers++;
                 updateUI();
