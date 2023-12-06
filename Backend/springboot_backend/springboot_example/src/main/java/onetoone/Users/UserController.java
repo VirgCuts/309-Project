@@ -9,6 +9,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.Authenticator;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -27,9 +31,6 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
-    
-    @Autowired
-    private JavaMailSender mailSender;
 
     @ApiOperation(value = "Get all users")
     @GetMapping(path = "/users")
@@ -53,6 +54,8 @@ public class UserController {
     String createAccount(@PathVariable String name, @PathVariable String password, @PathVariable String email)
     {
         User user = new User(name, password, email);
+        if(userRepository.findByName(name) != null)
+            return failure;
         userRepository.save(user);
         return success;
     }
@@ -65,6 +68,14 @@ public class UserController {
         if (user == null)
             return false;
         return user.getPassword().equals(password);
+    }
+
+    @GetMapping(path = "/forgot/{email}")
+    String forgotPassword(@PathVariable String email) throws MessagingException {
+        User user = userRepository.findByEmail(email);
+        if (user == null)
+            return failure;
+        return user.getPassword();
     }
 
     //mappings made for current and/or original leaderboard design

@@ -62,10 +62,10 @@ class Main {
             userRepository.deleteAll();
 //            Album album1 = new Album("Graduation", "Rap");
 //            albumRepository.save(album1);
-            User user1 = new User("Sam", "password", "sdl21@iastate.edu");
-            User user2 = new User("Keenan", "password", "kcjacobs@iastate.edu");
-            User user3 = new User("Conor", "password", "coshea@iastate.edu");
-            User user4 = new User("Carter", "password", "cvcuts@iastate.edu");
+            User user1 = new User("Sam", "password1", "sdl21@iastate.edu");
+            User user2 = new User("Keenan", "password1", "kcjacobs@iastate.edu");
+            User user3 = new User("Conor", "password1", "coshea@iastate.edu");
+            User user4 = new User("Carter", "password1", "cvcuts@iastate.edu");
             userRepository.save(user1);
             userRepository.save(user2);
             userRepository.save(user3);
