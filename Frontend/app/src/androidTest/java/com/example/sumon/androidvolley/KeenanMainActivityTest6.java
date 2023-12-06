@@ -5,11 +5,14 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,74 +32,121 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class KeenanMainActivityTest2 {
+public class KeenanMainActivityTest6 {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest2() throws InterruptedException {
-        Thread.sleep(500);
+    public void keenanMainActivityTest6() throws InterruptedException {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.username_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                1),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Keenan"), closeSoftKeyboard());
-        Thread.sleep(500);
+
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.password_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                2),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
-        Thread.sleep(500);
+
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.login), withText("Login"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                3),
+                allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
         Thread.sleep(500);
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.btnStudy),
+                allOf(withId(R.id.multiPlayer),
                         isDisplayed()));
         appCompatButton2.perform(click());
         Thread.sleep(500);
+        ViewInteraction recyclerView = onView(
+                allOf(withId(R.id.rvLobbies),
+                        childAtPosition(
+                                withClassName(is("android.widget.RelativeLayout")),
+                                1)));
+        recyclerView.perform(actionOnItemAtPosition(0, click()));
+        Thread.sleep(200);
         ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.button),
+                allOf(withId(R.id.btnExit),
                         isDisplayed()));
         appCompatButton3.perform(click());
-        Thread.sleep(500);
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.songGuess),
+        Thread.sleep(200);
+        ViewInteraction recyclerView2 = onView(
+                allOf(withId(R.id.rvLobbies),
                         childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatEditText3.perform(replaceText("Travis Scott"), closeSoftKeyboard());
-        Thread.sleep(500);
+                                withClassName(is("android.widget.RelativeLayout")),
+                                1)));
+        recyclerView2.perform(actionOnItemAtPosition(2, click()));
+
         ViewInteraction appCompatButton4 = onView(
-                allOf(withId(R.id.showAllAnswers), withText("Show Artist songs"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.my_drawer_layout),
-                                        0),
-                                8),
+                allOf(withId(R.id.btnExit),
                         isDisplayed()));
         appCompatButton4.perform(click());
+        Thread.sleep(200);
+        ViewInteraction recyclerView3 = onView(
+                allOf(withId(R.id.rvLobbies),
+                        childAtPosition(
+                                withClassName(is("android.widget.RelativeLayout")),
+                                1)));
+        recyclerView3.perform(actionOnItemAtPosition(4, click()));
+
+        ViewInteraction appCompatButton5 = onView(
+                allOf(withId(R.id.btnExit),
+                        isDisplayed()));
+        appCompatButton5.perform(click());
+        Thread.sleep(200);
+        ViewInteraction recyclerView4 = onView(
+                allOf(withId(R.id.rvLobbies),
+                        childAtPosition(
+                                withClassName(is("android.widget.RelativeLayout")),
+                                1)));
+        recyclerView4.perform(actionOnItemAtPosition(6, click()));
+
+        ViewInteraction appCompatButton6 = onView(
+                allOf(withId(R.id.btnExit),
+                        isDisplayed()));
+        appCompatButton6.perform(click());
+        Thread.sleep(200);
+        ViewInteraction recyclerView5 = onView(
+                allOf(withId(R.id.rvLobbies),
+                        childAtPosition(
+                                withClassName(is("android.widget.RelativeLayout")),
+                                1)));
+        recyclerView5.perform(actionOnItemAtPosition(8, click()));
+
+        ViewInteraction appCompatButton7 = onView(
+                allOf(withId(R.id.btnExit),
+                        isDisplayed()));
+        appCompatButton7.perform(click());
+        Thread.sleep(200);
+        ViewInteraction recyclerView6 = onView(
+                allOf(withId(R.id.rvLobbies),
+                        childAtPosition(
+                                withClassName(is("android.widget.RelativeLayout")),
+                                1)));
+        recyclerView6.perform(actionOnItemAtPosition(0, click()));
+
+        ViewInteraction appCompatEditText3 = onView(
+                allOf(withId(R.id.message_input),
+                        isDisplayed()));
+        appCompatEditText3.perform(replaceText("Hey"), closeSoftKeyboard());
+
+        ViewInteraction appCompatButton8 = onView(
+                allOf(withId(R.id.send_button),
+                        isDisplayed()));
+        appCompatButton8.perform(click());
+        Thread.sleep(200);
+        ViewInteraction appCompatButton9 = onView(
+                allOf(withId(R.id.btnReadyUp),
+                        isDisplayed()));
+        appCompatButton9.perform(click());
+        Thread.sleep(200);
+        ViewInteraction appCompatButton10 = onView(
+                allOf(withId(R.id.btnExit),
+                        isDisplayed()));
+        appCompatButton10.perform(click());
+        Thread.sleep(500);
         ViewInteraction appCompatImageButton4 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -107,7 +157,7 @@ public class KeenanMainActivityTest2 {
                                 1),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
-
+        Thread.sleep(500);
         ViewInteraction navigationMenuItemView4 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(
