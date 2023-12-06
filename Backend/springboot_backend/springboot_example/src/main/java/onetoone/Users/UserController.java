@@ -69,6 +69,21 @@ public class UserController {
         return user.getPassword().equals(password);
     }
 
+    @GetMapping(path = "/forgot/{email}")
+    String forgotPassword(@PathVariable String email)
+    {
+        User user = userRepository.findByEmail(email);
+        if (user == null)
+            return failure;
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("sdl21@iastate.edu");
+        message.setTo(email);
+        message.setSubject("Forgot Password");
+        message.setText("\n\n\n\n\n\n\n\n Your password is " + user.getPassword());
+        mailSender.send(message);
+        return success;
+    }
+
     //mappings made for current and/or original leaderboard design
     @ApiOperation(value = "Get all users and sort by high score")
     @GetMapping(path = "/leaderboard")
