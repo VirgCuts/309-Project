@@ -53,6 +53,8 @@ public class UserController {
     String createAccount(@PathVariable String name, @PathVariable String password, @PathVariable String email)
     {
         User user = new User(name, password, email);
+        if(userRepository.findByName(name) != null)
+            return failure;
         userRepository.save(user);
         return success;
     }
