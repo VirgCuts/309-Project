@@ -73,7 +73,7 @@
             android:layout_height="31dp"
 
             android:background="@color/Transparent"
-            android:text="Create a Account"
+            android:text="Create an Account"
             android:textColor="#FFFFFF" />
 
         <!--    <ImageView-->

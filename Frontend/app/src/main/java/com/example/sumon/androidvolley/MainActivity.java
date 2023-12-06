@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         forgotPW = findViewById(R.id.forgotPW);
         createAcct = findViewById(R.id.createAcct);
 
+
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         String user = prefs.getString(USERNAME_KEY,null);
         if (user != null && !user.isEmpty()) {
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Enter", (dialog, which) -> {
             String email = inputField.getText().toString();
             if(isEmailValid(email)) {
-                sendEmail(email);
+                getPassword(email);
                 //SEND EMAIL TO BACKEND HERE
                 Toast.makeText(MainActivity.this,"Password request sent",Toast.LENGTH_SHORT).show();
             }
@@ -194,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
         builder.show();
     }
-    private void sendEmail(String email) {
+    private void sendEmail(String email, String password) {
         try {
             Log.d("EmailCall","Should be sending email");
             String stringSenderEmail = "immaculatetaste595@gmail.com";
@@ -217,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
             mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(stringReceiverEmail));
 
             mimeMessage.setSubject("DO NOT REPLY: Immaculate Music Password");
-            mimeMessage.setText("Send Password Here");
+            mimeMessage.setText("Here is your account password DO NOT SHARE THIS: "+ password);
 
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -238,13 +239,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void getPassword(String email) {
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/users/"+email;
+        Log.d("EMAIL",email);
+        //http://coms-309-022.class.las.iastate.edu:8080/forgot/cvcuts@iastate.edu
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/forgot/"+email;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("PWREQ", response);
-
+                        sendEmail(email,response);
                     }
 
                 }, new Response.ErrorListener() {
