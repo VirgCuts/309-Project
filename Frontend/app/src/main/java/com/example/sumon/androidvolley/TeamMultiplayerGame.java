@@ -657,12 +657,9 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             int winTally = 0;
             for (int i =0; i < boardValues.length; i++) {
                 if(Integer.parseInt(boardValues[i]) == 1) {
-
                     changeOppColor(i);
-
                 }
             }
-
 
         } catch (JSONException e) {
             e.printStackTrace();

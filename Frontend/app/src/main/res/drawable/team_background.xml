@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gradient background -->
+    <gradient
+        android:startColor="#FF8400"
+    android:endColor="#FFBF00"
+    android:angle="45"/>
+
+    <!-- You can also set a corner radius if you want rounded corners -->
+    <!-- <corners android:radius="8dp"/> -->
+</shape>
