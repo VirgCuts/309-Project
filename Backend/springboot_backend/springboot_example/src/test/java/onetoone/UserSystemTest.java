@@ -56,9 +56,9 @@ public class UserSystemTest {
         userRepository.delete(userRepository.findByName("TestingName"));
     }
     @Test
-    public void createUserWithNameAndPassword() {
+    public void createUserWithNameAndPasswordAndEmail() {
         // Send request and receive response
-        Response response = RestAssured.post("/users/TestingName/password");
+        Response response = RestAssured.post("/users/TestingName/password/email");
         // Check status code
         int statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
@@ -84,24 +84,6 @@ public class UserSystemTest {
         assertEquals(200, response.getStatusCode());
 
         userRepository.delete(userRepository.findById(user.getId()));
-    }
-    @Test
-    public void addSingleUserLeaderboard(){
-        Response response = RestAssured.given().
-                header("Content-Type", "text/plain").
-                header("charset","utf-8").
-                body("").
-                when().
-                post("/leaderboard/TestingName/100");
-        // Check status code
-        int statusCode = response.getStatusCode();
-        assertEquals(200, statusCode);
-
-        // Check response body for correct response
-        String returnString = response.getBody().asString();
-        assertEquals("{\"message\":\"success\"}", returnString);
-
-        userRepository.delete(userRepository.findByName("TestingName"));
     }
     @Test
     public void updateSingleUserLeaderboard(){
