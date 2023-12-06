@@ -86,7 +86,13 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         super.onCreate(savedInstanceState);
         setContentView(R.layout.multi_player);
         fetchCategories();
-//
+        Intent intent = getIntent();
+        if (intent != null) {
+            Player1 = intent.getStringExtra("PLAYER");
+
+            // Use these values as needed in your activity
+            // For example, displaying them or using them in WebSocket connection
+        }
         String serverUrl = BASE_URL + Player1;
         Log.d("URL", "URL is " + serverUrl);
 

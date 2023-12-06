@@ -7,16 +7,15 @@ package com.example.sumon.androidvolley;
  */
 public class PlayerData {
     private String username;
-    private int score;
-    /**
-     * Constructs a new PlayerData object with the specified username and score.
-     *
-     * @param username The username of the player.
-     * @param score    The score of the player.
-     */
-    public PlayerData(String username, int score) {
+    private int highScore;
+    private int highScoreMonthly;
+    private int highScoreWeekly;
+
+    public PlayerData(String username, int highScore, int highScoreMonthly, int highScoreWeekly) {
         this.username = username;
-        this.score = score;
+        this.highScore = highScore;
+        this.highScoreMonthly = highScoreMonthly;
+        this.highScoreWeekly = highScoreWeekly;
     }
 
     /**
@@ -42,18 +41,33 @@ public class PlayerData {
      *
      * @return The score of the player.
      */
-    public int getScore() {
-        return score;
+    public int getHighScore() {
+        return highScore;
     }
+    public int getMonthlyScore() {
+        return highScoreMonthly;
+    }
+    public int getWeeklyScore() {
+        return highScoreWeekly;
+    }
+
 
     /**
      * Sets the score of the player.
      *
      * @param score The new score to set.
      */
-    public void setScore(int score) {
-        this.score = score;
+    public void setHighScore(int score) {
+        this.highScore = score;
     }
+
+    public void setMonthlyScore(int score) {
+        this.highScoreMonthly = score;
+    }
+    public void setWeeklyScore(int score) {
+        this.highScoreWeekly = score;
+    }
+
 
 
 }

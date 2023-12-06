@@ -39,15 +39,24 @@ public class MainActivityTest3 {
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest3() throws InterruptedException {
-        Thread.sleep(50);
+    public void mainActivityTest3() {
+        ViewInteraction editText = onView(
+                allOf(childAtPosition(
+                                allOf(withId(android.R.id.custom),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.FrameLayout")),
+                                                0)),
+                                0),
+                        isDisplayed()));
+        editText.perform(replaceText("Keenan"), closeSoftKeyboard());
+
         ViewInteraction appCompatButton = onView(
-                allOf(withId(android.R.id.button2), withText("Play as Guest"),
+                allOf(withId(android.R.id.button1), withText("OK"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("android.widget.ScrollView")),
                                         0),
-                                2)));
+                                3)));
         appCompatButton.perform(scrollTo(), click());
 
         ViewInteraction appCompatImageButton = onView(

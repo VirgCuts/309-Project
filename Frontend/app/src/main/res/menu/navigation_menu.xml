@@ -14,10 +14,6 @@
         />
 
     <item
-        android:id="@+id/btnArtists"
-        android:title="To Artist Changes" />
-
-    <item
         android:id="@+id/btnWebsocket"
         android:title="To Chat Room" />
 
@@ -32,6 +28,9 @@
     <item
         android:id="@+id/btnAdmin"
         android:title="To Admin" />
+    <item
+        android:id="@+id/btnArtists"
+        android:title="To Artist Changes" />
 
 <!--    <Button-->
 <!--        android:id="@+id/btnleaderboard"-->

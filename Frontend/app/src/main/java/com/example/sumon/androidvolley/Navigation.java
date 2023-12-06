@@ -1,7 +1,9 @@
 package com.example.sumon.androidvolley;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,9 @@ public class Navigation extends AppCompatActivity {
     private AppCompatActivity activity;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private static final String PREFS_NAME = "LeaderboardPrefs";
+    private static final String USERNAME_KEY = "username";
+    private Context context;
 
     /**
      * Default constructor for the Navigation helper class.
@@ -40,12 +45,14 @@ public class Navigation extends AppCompatActivity {
      */
     public Navigation(AppCompatActivity activity) {
         this.activity = activity;
+        this.context = activity; // Initialize context
     }
     /**
      * Sets up the navigation drawer and the toggle switch.
      * This method initializes the {@link NavigationView}, the {@link DrawerLayout}, and the {@link ActionBarDrawerToggle}.
      * It also handles the navigation item click events.
      */
+
     public void setupNavigation() {
         NavigationView navigationView = activity.findViewById(R.id.nav_view);
         drawerLayout = activity.findViewById(R.id.my_drawer_layout);
@@ -55,6 +62,16 @@ public class Navigation extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        String currentUsername = getUsername();
+        Log.d("USER",currentUsername);
+        boolean isAdminUser = currentUsername.equals("Keenan") || currentUsername.equals("Carter")
+                || currentUsername.equals("Sam") || currentUsername.equals("Conor");
+
+        // Find menu items by ID
+        MenuItem toArtistItem = navigationView.getMenu().findItem(R.id.btnArtists);
+        MenuItem adminItem = navigationView.getMenu().findItem(R.id.btnAdmin);
+        toArtistItem.setVisible(isAdminUser);
+        adminItem.setVisible(isAdminUser);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -93,6 +110,11 @@ public class Navigation extends AppCompatActivity {
             }
         });
     }
+    public String getUsername() {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.getString(USERNAME_KEY, "Guest");
+    }
+
     /**
      * Handles the action bar's home/up button clicks.
      *

@@ -62,6 +62,8 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
 
     private LinearLayout messagesContainer;
 
+    private boolean isWebSocketConnected;
+
     private TextView currentlyHighlighted;
 
     public static final String EXTRA_USERNAME = "EXTRA_USERNAME";
@@ -98,6 +100,7 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
             // Establish WebSocket connection and set listener
             WebSocketManager.getInstance().connectWebSocket(serverUrl);
             WebSocketManager.getInstance().setWebSocketListener(ChatActivity.this);
+            isWebSocketConnected = true;
         });
 
         /* send button listener */
@@ -172,10 +175,31 @@ public class ChatActivity extends AppCompatActivity implements WebSocketListener
         }
         scrollToBottom();
     }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Disconnect WebSocket when the activity is no longer in the foreground
+        if (isWebSocketConnected) {
+            WebSocketManager.getInstance().disconnectWebSocket();
+            WebSocketManager.getInstance().removeWebSocketListener();
+            isWebSocketConnected = false;
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Additional check in onDestroy in case the activity is destroyed without onPause being called
+        if (isWebSocketConnected) {
+            WebSocketManager.getInstance().disconnectWebSocket();
+            WebSocketManager.getInstance().removeWebSocketListener();
+            isWebSocketConnected = false;
+        }
+    }
 
-    /**
-     * Scrolls the chat view to the bottom.
-     */
+
+        /**
+         * Scrolls the chat view to the bottom.
+         */
     private void scrollToBottom() {
         recyclerView.scrollToPosition(chatMessages.size() - 1);
     }

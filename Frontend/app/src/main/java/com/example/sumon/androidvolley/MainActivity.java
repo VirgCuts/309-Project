@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class MainActivity extends AppCompatActivity {
     private Navigation navigationHelper;
+    private AlertDialog dialog;
     private static final String PREFS_NAME = "LeaderboardPrefs";
     private static final String USERNAME_KEY = "username";
     /**
@@ -36,9 +37,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu_layout);
-        navigationHelper = new Navigation(this);
-        navigationHelper.setupNavigation();
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        prefs.edit().putString(USERNAME_KEY, "").apply();
+
+
         promptUsername();
+
+
 
     }
     /**
@@ -52,16 +57,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return navigationHelper.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
-    }
-    /**
-     * Retrieves the stored username from SharedPreferences.
-     *
-     * @param context The context used to access the SharedPreferences.
-     * @return String Returns the stored username or null if it's not found.
-     */
-    private String getUsername(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        return prefs.getString(USERNAME_KEY, null); // Return null if username isn't set
     }
 
     /**
@@ -82,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
             // Save the username
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
+            navigationHelper = new Navigation(this); // 'this' refers to MainActivity which is a Context
+            navigationHelper.setupNavigation();
             // Continue with any other actions you need to do with the username
         });
         builder.setNegativeButton("Play as Guest", (dialog, which) -> {
@@ -89,8 +86,18 @@ public class MainActivity extends AppCompatActivity {
             // Save the username
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
+            navigationHelper = new Navigation(this); // 'this' refers to MainActivity which is a Context
+            navigationHelper.setupNavigation();
         });
         builder.show();
+
+    }
+    @Override
+    protected void onDestroy() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        super.onDestroy();
     }
 
     /**
