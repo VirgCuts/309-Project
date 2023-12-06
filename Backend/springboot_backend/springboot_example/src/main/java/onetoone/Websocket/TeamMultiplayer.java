@@ -120,11 +120,12 @@ public class TeamMultiplayer {
         // send updated user1 board to opponent (other user2)
         // this will be jsonified board data
         String boardData = mapper.writeValueAsString(board1);
+
 //        boardData = boardData.replace("score", "team");
 
 //        UNCOMMENT when it is solved how to split given data and get opponent username
-        sendBoardDataToOpponents(name3, name4, boardData);
-
+        sendBoardDataToOpponents(name3, name4, "o" + boardData);
+        sendBoardDataToTeammate(name2, "t" + boardData);
     }
 
     /**
@@ -221,5 +222,11 @@ public class TeamMultiplayer {
             logger.info("[User Data Exception] " + e.getMessage());
         }
     }
-
+    private void sendBoardDataToTeammate(String username, String message) {
+        try {
+            usernameSessionMap.get(username).getBasicRemote().sendText(message);
+        } catch (IOException e) {
+            logger.info("[User Data Exception] " + e.getMessage());
+        }
+    }
 }
