@@ -16,28 +16,19 @@
     android:padding="10dp"
     style="@style/CustomTextStyle" />
 
-    <TextView
-        android:id="@+id/tvSpectators"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Spectators: 0"
-        android:layout_below="@id/tvReadyUsers"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_background2"
-    android:padding="10dp"
-    style="@style/CustomTextStyle" />
+
 
     <Button
         android:id="@+id/btnReadyUp"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvSpectators"
+        android:layout_below="@+id/tvReadyUsers"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:background="@drawable/alternate_button_background"
         android:text="Ready Up"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="5dp"/>
 
     <Button
         android:id="@+id/btnExit"

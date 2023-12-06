@@ -38,7 +38,7 @@ public class MultiPlayerLobbyActivity extends AppCompatActivity implements Lobby
         navigationHelper.setupNavigation();
         // Initialize your lobby list here
         lobbies = new ArrayList<>();
-        lobbies.add(new Lobby("Lobby 1", 2, 2, false));
+        lobbies.add(new Lobby("Lobby 1", 0, 2, false));
         lobbies.add(new Lobby("Lobby 2", 0, 2, false));
         lobbies.add(new Lobby("Lobby 3", 0, 2, false));
         lobbies.add(new Lobby("Lobby 4", 0, 2, false));

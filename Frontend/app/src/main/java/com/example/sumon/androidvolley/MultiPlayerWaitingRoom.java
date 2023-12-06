@@ -47,7 +47,6 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         setContentView(R.layout.multiplayer_waiting_room);
         btnReadyUp = findViewById(R.id.btnReadyUp);
         tvReadyUsers = findViewById(R.id.tvReadyUsers);
-        tvSpectators = findViewById(R.id.tvSpectators);
         // Initialize chat components
         chatRecyclerView = findViewById(R.id.chat_recyclerview);
         messageInput = findViewById(R.id.message_input);
@@ -137,7 +136,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
     private void updateUI() {
         // Update the number of ready users and spectators displayed in the TextViews
         tvReadyUsers.setText(getString(R.string.ready_users, readyUsers));
-        tvSpectators.setText(getString(R.string.spectators, spectators));
+
     }
     /**
      * Adds a message to the chat view.
@@ -183,6 +182,11 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
                 // Increment the count of ready users
                 readyUsers--;
                 updateUI();
+            } else if(message.equals("Lobby is full.")){
+                Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerLobbyActivity.class);
+                intent.putExtra("ERROR_MESSAGE", "Lobby is full, sorry");
+                startActivity(intent);
+                finish();
             }
             else {
                 // Handle other messages (e.g., adding them to the chat view)

@@ -63,7 +63,6 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.ViewHolder> 
         public void bind(Lobby lobby) {
             itemView.setTag(lobby); // Set the tag to the lobby object
             tvLobbyName.setText(lobby.getName());
-            tvNumberOfUsers.setText(lobby.getUserCountText());
             tvGameState.setVisibility(lobby.isGameInProgress() ? View.VISIBLE : View.GONE);
             tvGameState.setText(lobby.isGameInProgress() ? "Game in Progress" : "");
         }
