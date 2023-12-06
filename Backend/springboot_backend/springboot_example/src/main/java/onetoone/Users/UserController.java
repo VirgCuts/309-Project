@@ -3,10 +3,14 @@ package onetoone.Users;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Comparator;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
  *
@@ -23,6 +27,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+    
+    @Autowired
+    private JavaMailSender mailSender;
 
     @ApiOperation(value = "Get all users")
     @GetMapping(path = "/users")
@@ -41,13 +48,23 @@ public class UserController {
         return success;
     }
 
-    @ApiOperation(value = "Register user with provided name and password")
-    @PostMapping(path = "/users/{name}/{password}")
-    String addSingleUserWithPassword(@PathVariable String name, @PathVariable String password)
+    @ApiOperation(value = "Register user with provided name, password, and email")
+    @PostMapping(path = "/users/{name}/{password}/{email}")
+    String createAccount(@PathVariable String name, @PathVariable String password, @PathVariable String email)
     {
-        User user = new User(name, password);
+        User user = new User(name, password, email);
         userRepository.save(user);
         return success;
+    }
+
+    @ApiOperation(value = "Check if username and password are correct")
+    @GetMapping(path = "/users/{name}/{password}")
+    boolean login(@PathVariable String name, @PathVariable String password)
+    {
+        User user = userRepository.findByName(name);
+        if (user == null)
+            return false;
+        return user.getPassword().equals(password);
     }
 
     //mappings made for current and/or original leaderboard design
@@ -65,15 +82,6 @@ public class UserController {
     User getUserLeaderboardInfo(@PathVariable String name)
     {
         return userRepository.findByName(name);
-    }
-
-    @ApiOperation(value = "Deprecated. Add user with provided name and score")
-    @PostMapping(path = "/leaderboard/{name}/{score}")
-    String addUserLeaderboard(@PathVariable String name, @PathVariable int score)
-    {
-        User user = new User(name, score);
-        userRepository.save(user);
-        return success;
     }
 
     @ApiOperation(value = "Update user score with provided name")
@@ -97,13 +105,6 @@ public class UserController {
     }
     //end of leaderboard mappings
 
-//    @ApiOperation(value = "Delete user by database id")
-//    @DeleteMapping(path = "/users/{id}")
-//    String deleteUser(@PathVariable int id)
-//    {
-//        userRepository.deleteById(id);
-//        return success;
-//    }
 
     @ApiOperation(value = "Update user so that they are unbanned from chat")
     @PutMapping(path = "/canChat/{name}/true")

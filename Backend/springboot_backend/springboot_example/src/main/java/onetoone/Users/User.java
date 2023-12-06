@@ -28,6 +28,10 @@ public class User implements Comparator<User>, Comparable<User> {
     private String name;
     @ApiModelProperty(notes = "Password of the User", name="password", required = true)
     private String password;
+    @ApiModelProperty(notes = "Email of the User", name="email", required = true)
+    private String email;
+    @ApiModelProperty(notes = "Reset token for forgotten password", name="resetToken")
+    private String resetToken;
     @ApiModelProperty(notes = "High score of the User", name="highScore")
     private int highScore;
     @ApiModelProperty(notes = "This months high score of the User", name="highScoreMonthly")
@@ -61,9 +65,10 @@ public class User implements Comparator<User>, Comparable<User> {
      * @JoinColumn defines the ownership of the foreign key i.e. the user table will have a field called laptop_id
      */
 
-    public User(String name, String password) {
+    public User(String name, String password, String email) {
         this.name = name;
         this.password = password;
+        this.email = email;
         this.highScore = 0;
         this.highScoreMonthly = 0;
         this.highScoreWeekly = 0;
@@ -72,19 +77,7 @@ public class User implements Comparator<User>, Comparable<User> {
         this.banStrikes = 0;
         inventory = new Inventory();
         this.selectedColor = "white";
-    }
-
-    public User(String name, int highScore) {
-        this.name = name;
-        this.password = "";
-        this.highScore = highScore;
-        this.highScoreMonthly = highScore;
-        this.highScoreWeekly = highScore;
-        this.board = new Board();
-        this.canChat = true;
-        this.banStrikes = 0;
-        inventory = new Inventory();
-        this.selectedColor = "white";
+        this.resetToken = null;
     }
 
     public User()
@@ -124,6 +117,13 @@ public class User implements Comparator<User>, Comparable<User> {
 
     public void setPassword(String password) { this.password = password; }
 
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public String getResetToken() { return resetToken; }
+
+    public void setResetToken(String resetToken) { this.resetToken = resetToken; }
     public int getHighScore(){
         return highScore;
     }

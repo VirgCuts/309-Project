@@ -1,0 +1,210 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Report</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">onetoone.Reports</a>
+</div>
+
+<h1>Coverage Summary for Class: Report (onetoone.Reports)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Report</td>
+<td class="coverageStat">
+  <span class="percent">
+    18.8%
+  </span>
+  <span class="absValue">
+    (3/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    38.1%
+  </span>
+  <span class="absValue">
+    (8/21)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Report$HibernateProxy$D6SJl0gp</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    18.8%
+  </span>
+  <span class="absValue">
+    (3/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    38.1%
+  </span>
+  <span class="absValue">
+    (8/21)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package onetoone.Reports;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonIgnore;
+&nbsp;import io.swagger.annotations.ApiModelProperty;
+&nbsp;import onetoone.Artists.Artist;
+&nbsp;
+&nbsp;import javax.persistence.*;
+&nbsp;import java.util.Date;
+&nbsp;import onetoone.Users.User;
+&nbsp;@Entity
+&nbsp;public class Report {
+&nbsp;    @ApiModelProperty(notes = &quot;Id provided for database&quot;, name=&quot;id&quot;, required = true)
+&nbsp;    @Id
+&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
+&nbsp;    private Long id;
+&nbsp;
+&nbsp;    @ApiModelProperty(notes = &quot;Name of the reporting user&quot;, name=&quot;username&quot;)
+&nbsp;    @Column
+&nbsp;    private String username;
+&nbsp;
+&nbsp;    @ApiModelProperty(notes = &quot;Name of the reported user&quot;, name=&quot;reportedUsername&quot;)
+&nbsp;    @Column
+&nbsp;    private String reportedUsername;
+&nbsp;
+&nbsp;    @ApiModelProperty(notes = &quot;Reason provided by reporting user for why the report was made&quot;, name=&quot;content&quot;)
+&nbsp;    @Lob
+&nbsp;    private String content;
+&nbsp;
+&nbsp;    @ApiModelProperty(notes = &quot;Message that was reported&quot;, name=&quot;reportedMessage&quot;)
+&nbsp;    @Lob
+&nbsp;    private String reportedMessage;
+&nbsp;
+<b class="fc">&nbsp;    @ApiModelProperty(notes = &quot;Date report was sent&quot;, name=&quot;sent&quot;)</b>
+&nbsp;    @Temporal(TemporalType.TIMESTAMP)
+&nbsp;    @Column(name = &quot;sent&quot;)
+&nbsp;    private Date sent = new Date();
+&nbsp;
+&nbsp;    @ApiModelProperty(notes = &quot;User Entity that was reported&quot;, name=&quot;reportedUser&quot;)
+&nbsp;    @ManyToOne
+&nbsp;    @JoinColumn(name = &quot;reportedUser_id&quot;, referencedColumnName = &quot;id&quot;)
+&nbsp;    @JsonIgnore
+&nbsp;    private User reportedUser;
+&nbsp;
+<b class="fc">&nbsp;    public Report() {};</b>
+&nbsp;
+<b class="fc">&nbsp;    public Report(String username, String reportedUsername, String content, String reportedMessage) {</b>
+<b class="fc">&nbsp;        this.username = username;</b>
+<b class="fc">&nbsp;        this.reportedUsername = reportedUsername;</b>
+<b class="fc">&nbsp;        this.content = content;</b>
+<b class="fc">&nbsp;        this.reportedMessage = reportedMessage;</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public Long getId() { return this.id; }</b>
+<b class="nc">&nbsp;    public void setId(Long id) { this.id = id; }</b>
+&nbsp;    public String getUsername() {
+<b class="nc">&nbsp;        return username;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setUsername(String username) {
+<b class="nc">&nbsp;        this.username = username;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getReportedUsername() {
+<b class="nc">&nbsp;        return reportedUsername;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setReportedUsername(String reportedUsername) {
+<b class="nc">&nbsp;        this.reportedUsername = reportedUsername;</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public String getReportedMessage() { return this.reportedMessage; }</b>
+<b class="nc">&nbsp;    public void setReportedMessage(String message) { this.reportedMessage = message; }</b>
+&nbsp;    public String getContent() {
+<b class="nc">&nbsp;        return content;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setContent(String content) {
+<b class="nc">&nbsp;        this.content = content;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Date getSent() {
+<b class="nc">&nbsp;        return sent;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setSent(Date sent) {
+<b class="nc">&nbsp;        this.sent = sent;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public User getReportedUser() {
+<b class="nc">&nbsp;        return reportedUser;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setReportedUser(User user) {
+<b class="fc">&nbsp;        this.reportedUser = user;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-05 17:18</div>
+</div>
+</body>
+</html>
