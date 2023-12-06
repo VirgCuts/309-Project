@@ -80,7 +80,7 @@ public class UserTest {
         assertEquals(user.getHighScoreWeekly(), highscore);
         user.setHighScoreMonthly(highscore);
         assertEquals(user.getHighScoreMonthly(), highscore);
-        
+
         user.setBanStrikes(banStrikes);
         assertEquals(user.getBanStrikes(), banStrikes);
         user.setCanChat(canChat);
