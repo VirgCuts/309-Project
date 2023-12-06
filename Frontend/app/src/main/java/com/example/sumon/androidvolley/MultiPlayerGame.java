@@ -79,6 +79,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/multiplayer/";
     private boolean end = false;
     private boolean concede = false;
+    private boolean isWebSocketConnected=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +100,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         // Establish WebSocket connection and set listener
         WebSocketManager.getInstance().connectWebSocket(serverUrl);
         WebSocketManager.getInstance().setWebSocketListener(MultiPlayerGame.this);
-
+        isWebSocketConnected = true;
         //
         //Set up the player's grid
         r1c2 = findViewById(R.id.r1c2);
@@ -162,6 +163,16 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                 endGame();
             }
         });
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Disconnect WebSocket when the activity is no longer in the foreground
+        if (isWebSocketConnected) {
+            WebSocketManager.getInstance().disconnectWebSocket();
+            WebSocketManager.getInstance().removeWebSocketListener();
+            isWebSocketConnected = false;
+        }
     }
     /**
      * Calls the backend to retrieve the background color for the player and updates the board accordingly.
@@ -393,6 +404,8 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     public void endGame() {
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
         if(end) {
+            WebSocketManager.getInstance().disconnectWebSocket();
+            WebSocketManager.getInstance().removeWebSocketListener();
             startActivity(new Intent(MultiPlayerGame.this,
                     MainActivity.class));
         }
@@ -507,6 +520,9 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null); // Remove any callbacks and messages from the handler
+        WebSocketManager.getInstance().disconnectWebSocket();
+        WebSocketManager.getInstance().removeWebSocketListener();
+
     }
     //Backend Support
     /**
