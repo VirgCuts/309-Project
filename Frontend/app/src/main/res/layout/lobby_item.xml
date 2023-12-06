@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@drawable/rounded_item_background">
+
+    <!-- Lobby Name -->
+    <TextView
+        android:id="@+id/tvLobbyName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lobby 1"
+        android:textSize="20sp"
+
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:gravity="start"/>
+
+    <!-- Number of Users in Lobby -->
+    <TextView
+        android:id="@+id/tvNumberOfUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="10dp"
+        android:text=""
+        android:textSize="16sp"
+        android:gravity="center"/>
+
+    <!-- Game State (Hidden if not in progress) -->
+    <TextView
+        android:id="@+id/tvGameState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvLobbyName"
+        android:layout_marginTop="4dp"
+        android:text="Game in Progress"
+        android:visibility="gone"
+        android:textColor="@android:color/holo_red_dark"
+        android:gravity="center"/>
+
+</RelativeLayout>

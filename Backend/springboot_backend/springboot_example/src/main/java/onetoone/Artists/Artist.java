@@ -43,9 +43,6 @@ public class Artist implements Serializable {
      * in the database (more info : https://www.baeldung.com/jpa-cascade-types)
      * @JoinColumn defines the ownership of the foreign key i.e. the user table will have a field called laptop_id
      */
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "song_id")
-//    private Song song;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Song> songs;
@@ -59,7 +56,6 @@ public class Artist implements Serializable {
         this.numPlatinums = numPlatinums;
         this.numGrammys = numGrammys;
         songs = new ArrayList<>();
-//        albums = new ArrayList<>();
     }
 
     public Artist() {
@@ -100,14 +96,6 @@ public class Artist implements Serializable {
         this.numGrammys = numGrammys;
     }
 
-//    public Song getSong(){
-//        return song;
-//    }
-//
-//    public void setSong(Song song){
-//        this.song = song;
-//    }
-
     public List<Song> getSongs() {
         return songs;
     }
@@ -119,17 +107,5 @@ public class Artist implements Serializable {
     public void addSongs(Song song){
         this.songs.add(song);
     }
-    
-//    public List<Album> getAlbums() {
-//    return albums;
-//}
-//
-//    public void setAlbums(List<Album> albums) {
-//        this.albums = albums;
-//    }
-//
-//    public void addAlbums(Album album){
-//        this.albums.add(album);
-//    }
     
 }

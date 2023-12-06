@@ -49,6 +49,7 @@ import javax.mail.internet.MimeMessage;
  */
 public class MainActivity extends AppCompatActivity {
     private Navigation navigationHelper;
+    private AlertDialog dialog;
     private static final String PREFS_NAME = "LeaderboardPrefs";
     private static final String USERNAME_KEY = "username";
     private static final String PASSWORD_KEY = "password";
@@ -326,6 +327,8 @@ public class MainActivity extends AppCompatActivity {
             // Save the username
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
+            navigationHelper = new Navigation(this); // 'this' refers to MainActivity which is a Context
+            navigationHelper.setupNavigation();
             // Continue with any other actions you need to do with the username
         });
         builder.setNegativeButton("Play as Guest", (dialog, which) -> {
@@ -333,8 +336,18 @@ public class MainActivity extends AppCompatActivity {
             // Save the username
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             prefs.edit().putString(USERNAME_KEY, inputUsername).apply();
+            navigationHelper = new Navigation(this); // 'this' refers to MainActivity which is a Context
+            navigationHelper.setupNavigation();
         });
         builder.show();
+
+    }
+    @Override
+    protected void onDestroy() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        super.onDestroy();
     }
 
 

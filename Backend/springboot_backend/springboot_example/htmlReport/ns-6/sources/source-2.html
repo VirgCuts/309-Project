@@ -1,0 +1,181 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > SongController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">onetoone.Songs</a>
+</div>
+
+<h1>Coverage Summary for Class: SongController (onetoone.Songs)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SongController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    14.3%
+  </span>
+  <span class="absValue">
+    (1/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (3/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package onetoone.Songs;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import io.swagger.annotations.Api;
+&nbsp;import io.swagger.annotations.ApiOperation;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.web.bind.annotation.DeleteMapping;
+&nbsp;import org.springframework.web.bind.annotation.GetMapping;
+&nbsp;import org.springframework.web.bind.annotation.PathVariable;
+&nbsp;import org.springframework.web.bind.annotation.PostMapping;
+&nbsp;import org.springframework.web.bind.annotation.PutMapping;
+&nbsp;import org.springframework.web.bind.annotation.RequestBody;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;
+&nbsp;/**
+&nbsp; * 
+&nbsp; * @author Conor O&#39;Shea
+&nbsp; * 
+&nbsp; */
+&nbsp;
+&nbsp;@Api(value = &quot;SongController&quot;, description = &quot;REST APIs for song controller, created by Conor O&#39;Shea&quot;)
+&nbsp;@RestController
+<b class="fc">&nbsp;public class SongController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    SongRepository songRepository;
+&nbsp;    
+<b class="fc">&nbsp;    private String success = &quot;{\&quot;message\&quot;:\&quot;success\&quot;}&quot;;</b>
+<b class="fc">&nbsp;    private String failure = &quot;{\&quot;message\&quot;:\&quot;failure\&quot;}&quot;;</b>
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Get all Songs in the database&quot;, response = Iterable.class, tags = &quot;song-controller&quot;)
+&nbsp;    @GetMapping(path = &quot;/songs&quot;)
+&nbsp;    List&lt;Song&gt; getAllSongs(){
+<b class="nc">&nbsp;        return songRepository.findAll();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Get a Song by id from the database&quot;, response = Song.class, tags = &quot;song-controller&quot;)
+&nbsp;    @GetMapping(path = &quot;/songs/{id}&quot;)
+&nbsp;    Song getSongById(@PathVariable int id){
+<b class="nc">&nbsp;        return songRepository.findById(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Create a Song and add it to the database&quot;, response = String.class, tags = &quot;song-controller&quot;)
+&nbsp;    @PostMapping(path = &quot;/songs&quot;)
+&nbsp;    String createSong(@RequestBody Song song){
+<b class="nc">&nbsp;        if (song == null)</b>
+<b class="nc">&nbsp;            return failure;</b>
+<b class="nc">&nbsp;        songRepository.save(song);</b>
+<b class="nc">&nbsp;        return success;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Update a Song in the database&quot;, response = Song.class, tags = &quot;song-controller&quot;)
+&nbsp;    @PutMapping(path = &quot;/songs/{id}&quot;)
+&nbsp;    Song updateSong(@PathVariable int id, @RequestBody Song request){
+<b class="nc">&nbsp;        Song song = songRepository.findById(id);</b>
+<b class="nc">&nbsp;        if(song == null)</b>
+<b class="nc">&nbsp;            return null;</b>
+<b class="nc">&nbsp;        songRepository.save(request);</b>
+<b class="nc">&nbsp;        return songRepository.findById(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Delete a song from the database&quot;, response = String.class, tags = &quot;song-controller&quot;)
+&nbsp;    @DeleteMapping(path = &quot;/songs/{id}&quot;)
+&nbsp;    String deleteSong(@PathVariable int id){
+<b class="nc">&nbsp;        songRepository.deleteById(id);</b>
+<b class="nc">&nbsp;        return success;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // for the game directly
+&nbsp;    @ApiOperation(value = &quot;Check if a song contains a string for the game&quot;, response = Boolean.class, tags = &quot;song-controller&quot;)
+&nbsp;    @GetMapping(path = &quot;/songsname/{name}/game/{check}&quot;)
+&nbsp;    boolean checkIfSongContains(@PathVariable String name, @PathVariable String check){
+<b class="nc">&nbsp;        Song song = songRepository.findBySongName(name);</b>
+<b class="nc">&nbsp;        return song.getSongName().contains(check);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-05 17:18</div>
+</div>
+</body>
+</html>

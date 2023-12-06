@@ -137,7 +137,6 @@ public class ChatServer {
                 if (!containsBannedWord) {
                     sendMessageToPArticularUser(destUserName, "[DM from " + username + "]: " + actualMessage);
                     sendMessageToPArticularUser(username, "[DM from " + username + "]: " + actualMessage);
-                    messageRepository.save(new Message(username, message));
                 }
             } else { // Message to whole chat
                 boolean containsBannedWord = messageCheck(message, username);

@@ -62,7 +62,7 @@ public class LobbyActivity extends AppCompatActivity implements OnClickListener 
                 break;
             case R.id.multiPlayer:
                 startActivity(new Intent(LobbyActivity.this,
-                        MultiPlayerGame.class));
+                        MultiPlayerLobbyActivity.class));
                 break;
             case R.id.btnStudy:
                 startActivity(new Intent(LobbyActivity.this,

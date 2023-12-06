@@ -22,21 +22,21 @@ public class UserTest {
     int id;
     String name;
     String password;
+    String email;
     int highestscore;
     int higherscore;
     int highscore;
-    Date date;
     boolean canChat;
     int banStrikes;
 
-    public UserTest(int id, String name, String password, int highestscore, int higherscore, int highscore, Date date, boolean canChat, int banStrikes) {
+    public UserTest(int id, String name, String password, String email, int highestscore, int higherscore, int highscore, boolean canChat, int banStrikes) {
         this.id = id;
         this.name = name;
         this.password = password;
+        this.email = email;
         this.highestscore = highestscore;
         this.higherscore = higherscore;
         this.highscore = highscore;
-        this.date = date;
         this.canChat = canChat;
         this.banStrikes = banStrikes;
     }
@@ -50,10 +50,10 @@ public class UserTest {
         d[0] = 1;
         d[1] = "Sam";
         d[2] = "password";
-        d[3] = 1000;
-        d[4] = 500;
-        d[5] = 250;
-        d[6] = new Date();
+        d[3] = "sdl21@iastate.edu";
+        d[4] = 1000;
+        d[5] = 500;
+        d[6] = 250;
         d[7] = true;
         d[8] = 0;
 
@@ -65,12 +65,14 @@ public class UserTest {
 
     @Test  // run this for each test-case in the above collection
     public void testGetterAndSetters() throws Throwable {
-        User user = new User(name, highscore);
+        User user = new User();
 
         user.setName(name);
         assertEquals(user.getName(), name);
         user.setPassword(password);
         assertEquals(user.getPassword(), password);
+        user.setEmail(email);
+        assertEquals(email, user.getEmail());
         user.setId(id);
         assertEquals(user.getId(), id);
 
@@ -79,34 +81,27 @@ public class UserTest {
         user.setHighScoreWeekly(highscore);
         assertEquals(user.getHighScoreWeekly(), highscore);
         user.setHighScoreMonthly(highscore);
-        assertEquals(user.getHighScoreMontly(), highscore);
-
-        user.setHighScoreTime(date);
-        assertEquals(user.getHighScoreTime(), date);
+        assertEquals(user.getHighScoreMonthly(), highscore);
 
         user.setBanStrikes(banStrikes);
         assertEquals(user.getBanStrikes(), banStrikes);
         user.setCanChat(canChat);
         assertEquals(user.getCanChat(), canChat);
-
-        //testing empty constructor, only non-null value should be highscoretime
-        User user2 = new User();
-        assertNotNull(user2.getHighScoreTime());
     }
 
     @Test
     public void testSettingDifferentScores() throws Throwable {
-        User user = new User(name, password);
+        User user = new User(name, password, email);
         user.setAllHighScores(highestscore);
         user.resetWeeklyScore();
         user.setAllHighScores(highscore);
         assertEquals(user.getHighScore(), highestscore);
         assertEquals(user.getHighScoreWeekly(), highscore);
-        assertEquals(user.getHighScoreMontly(), highestscore);
+        assertEquals(user.getHighScoreMonthly(), highestscore);
         user.resetMonthlyScore();
         user.setAllHighScores(higherscore);
         assertEquals(user.getHighScore(), highestscore);
         assertEquals(user.getHighScoreWeekly(), higherscore);
-        assertEquals(user.getHighScoreMontly(), higherscore);
+        assertEquals(user.getHighScoreMonthly(), higherscore);
     }
 }

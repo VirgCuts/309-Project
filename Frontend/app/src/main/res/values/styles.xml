@@ -74,6 +74,10 @@
         <item name="android:stateListAnimator">@animator/lift_on_touch</item>
     </style>
     <string name="chat_activity_title">Chat Room</string>
-
+    <style name="CustomTextStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#DD000000</item>
+    </style>
 
 </resources>
