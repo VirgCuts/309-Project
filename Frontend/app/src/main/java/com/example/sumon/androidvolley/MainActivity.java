@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class MainActivity extends AppCompatActivity {
     private Navigation navigationHelper;
+    private AlertDialog dialog;
     private static final String PREFS_NAME = "LeaderboardPrefs";
     private static final String USERNAME_KEY = "username";
     /**
@@ -89,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.show();
 
+    }
+    @Override
+    protected void onDestroy() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+        super.onDestroy();
     }
 
     /**
