@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,31 +51,38 @@ public class CreateAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_account);
 
-        usernameText = findViewById(R.id.create_password_input);
+        usernameText = findViewById(R.id.create_username_input);
         emailText = findViewById(R.id.create_email_input);
         passwordText = findViewById(R.id.create_password_input);
         createAccount = findViewById(R.id.create_account);
         have_account = findViewById(R.id.have_account);
 
-
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isValidPassword(passwordText.getText().toString()) && isEmailValid(emailText.getText().toString() )&& isValidUsername(usernameText.getText().toString())) {
+                String password = passwordText.getText().toString();
+                String username = usernameText.getText().toString();
+                String email = emailText.getText().toString();
+                if(isValidPassword(passwordText.getText().toString()) && isEmailValid(emailText.getText().toString()) && isValidUsername(usernameText.getText().toString())) {
 
-                    //sendtoBackend
+                    setUserBackend(username, password,email);
 
-                    prefs.edit().putString(USERNAME_KEY, usernameText.getText().toString()).apply();
-                    prefs.edit().putString(PASSWORD_KEY, passwordText.getText().toString()).apply();
+                    prefs.edit().putString(USERNAME_KEY, username).apply();
+                    prefs.edit().putString(PASSWORD_KEY, password).apply();
                     Toast.makeText(CreateAccount.this, "Account Created",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(CreateAccount.this,
                             LobbyActivity.class));
                 }
-                else {
-                    Toast.makeText(CreateAccount.this, "Please enter a Correct Username and Password (must contain letters and numbers pw > 8",Toast.LENGTH_SHORT).show();
+                else if (!isValidPassword(password)) {
+                    Toast.makeText(CreateAccount.this, "Please enter a valid password (Length 8 one letter and number)",Toast.LENGTH_SHORT).show();
                 }
-
+                else if (!isEmailValid(email)) {
+                    Toast.makeText(CreateAccount.this, "Please enter a valid Email",Toast.LENGTH_SHORT).show();
+                }
+                else if (!isValidUsername(username)) {
+                    Toast.makeText(CreateAccount.this, "Please enter a Username",Toast.LENGTH_SHORT).show();
+                }
             }
         });
         have_account.setOnClickListener(new View.OnClickListener() {
@@ -102,10 +110,16 @@ public class CreateAccount extends AppCompatActivity {
         return matcher.matches();
     }
     public static boolean isValidUsername(String username) {
-        // Check if the password contains both letters and numbers using regular expressions
-        if(username.trim().length() != 0) {
-            return true;
-        }
+        // Check if the username is not null and not empty after trimming leading/trailing spaces
+
+        //check if username is in database
+        if(inUserDatabase(username));
+
+        return username != null && !username.trim().isEmpty();
+    }
+
+    public static boolean inUserDatabase(String username) {
+
         return false;
     }
     public static boolean isEmailValid(String email) {
@@ -118,7 +132,18 @@ public class CreateAccount extends AppCompatActivity {
         // Create a matcher with the provided email
         Matcher matcher = pattern.matcher(email);
 
+        if(inEmailDatabase(email));
+
         // Check if the email matches the pattern
         return matcher.matches();
+    }
+
+    public static boolean inEmailDatabase(String email) {
+
+        return false;
+    }
+
+    public static void setUserBackend(String username, String password, String email) {
+
     }
 }

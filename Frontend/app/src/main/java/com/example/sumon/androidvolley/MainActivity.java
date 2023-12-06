@@ -61,11 +61,20 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isValidPassword(passwordText.getText().toString()) && isValidUsername(usernameText.getText().toString())) {
-                    prefs.edit().putString(USERNAME_KEY, usernameText.getText().toString()).apply();
-                    prefs.edit().putString(PASSWORD_KEY, passwordText.getText().toString()).apply();
-                    startActivity(new Intent(MainActivity.this,
-                            LobbyActivity.class));
+                String username = usernameText.getText().toString();
+                String password = passwordText.getText().toString();
+
+                if(isValidPassword(password) && isValidUsername(username)) {
+
+                    if(inDatabase(username, password)) {
+                        prefs.edit().putString(USERNAME_KEY, usernameText.getText().toString()).apply();
+                        prefs.edit().putString(PASSWORD_KEY, passwordText.getText().toString()).apply();
+                        startActivity(new Intent(MainActivity.this,
+                                LobbyActivity.class));
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "User does not exist",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else {
                     Toast.makeText(MainActivity.this, "Please enter a Correct Username and Password (must contain letters and numbers pw > 8",Toast.LENGTH_SHORT).show();
@@ -88,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
                         CreateAccount.class));
             }
         });
+    }
+    public boolean inDatabase(String username, String password) {
+        //makes call to backend to check if in database returns boolean depending
+        return true;
     }
     /**
      * This hook is called whenever an item in your options menu is selected.
@@ -113,7 +126,9 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton("Enter", (dialog, which) -> {
             String email = inputField.getText().toString();
             if(isEmailValid(email)) {
-                //SEND EMAIL TO BACKEND HEREC
+                sendEmail(email);
+                //SEND EMAIL TO BACKEND HERE
+                Toast.makeText(MainActivity.this,"Password request sent",Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(MainActivity.this,"Error: Not a valid email",Toast.LENGTH_SHORT).show();
@@ -122,6 +137,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+    private void sendEmail(String email) {
+        
     }
     private void showLoginDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -284,3 +302,4 @@ public class MainActivity extends AppCompatActivity {
         return matcher.matches();
     }
 }
+
