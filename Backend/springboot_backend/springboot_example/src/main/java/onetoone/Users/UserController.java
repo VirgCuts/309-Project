@@ -56,6 +56,8 @@ public class UserController {
         User user = new User(name, password, email);
         if(userRepository.findByName(name) != null)
             return failure;
+        if (userRepository.findByEmail(email) != null)
+            return failure;
         userRepository.save(user);
         return success;
     }
