@@ -41,40 +41,40 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">Artist</td>
 <td class="coverageStat">
   <span class="percent">
-    7.7%
+    92.3%
   </span>
   <span class="absValue">
-    (1/13)
+    (12/13)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    11.1%
+    94.4%
   </span>
   <span class="absValue">
-    (2/18)
+    (17/18)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">Artist$HibernateProxy$309u0e86</td>
+    <td class="name">Artist$HibernateProxy$qQtW7txN</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    7.7%
+    92.3%
   </span>
   <span class="absValue">
-    (1/13)
+    (12/13)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    11.1%
+    94.4%
   </span>
   <span class="absValue">
-    (2/18)
+    (17/18)
   </span>
 </td>
 </tr>
@@ -138,61 +138,61 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;////    @JoinColumn(name = &quot;album_id&quot;)
 &nbsp;//    private List&lt;Album&gt; albums;
 &nbsp;
-&nbsp;    public Artist(String name, int numPlatinums, int numGrammys) {
-&nbsp;        this.name = name;
-&nbsp;        this.numPlatinums = numPlatinums;
-<b class="nc">&nbsp;        this.numGrammys = numGrammys;</b>
-<b class="nc">&nbsp;        songs = new ArrayList&lt;&gt;();</b>
-<b class="nc">&nbsp;    }</b>
-<b class="nc">&nbsp;</b>
-<b class="nc">&nbsp;    public Artist() {</b>
-&nbsp;        songs = new ArrayList&lt;&gt;();
+<b class="fc">&nbsp;    public Artist(String name, int numPlatinums, int numGrammys) {</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.numPlatinums = numPlatinums;</b>
+<b class="fc">&nbsp;        this.numGrammys = numGrammys;</b>
+<b class="fc">&nbsp;        songs = new ArrayList&lt;&gt;();</b>
 &nbsp;    }
 &nbsp;
-<b class="fc">&nbsp;    // =============================== Getters and Setters for each field ================================== //</b>
-<b class="fc">&nbsp;</b>
+<b class="fc">&nbsp;    public Artist() {</b>
+<b class="fc">&nbsp;        songs = new ArrayList&lt;&gt;();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // =============================== Getters and Setters for each field ================================== //
+&nbsp;
 &nbsp;    public int getId(){
-&nbsp;        return id;
+<b class="fc">&nbsp;        return id;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setId(int id){
-<b class="nc">&nbsp;        this.id = id;</b>
+<b class="fc">&nbsp;        this.id = id;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public String getName(){
-<b class="nc">&nbsp;        return name;</b>
+<b class="fc">&nbsp;        return name;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setName(String name){
-<b class="nc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.name = name;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public int getNumPlatinums(){
-<b class="nc">&nbsp;        return numPlatinums;</b>
+<b class="fc">&nbsp;        return numPlatinums;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setNumPlatinums(int numPlatinums){
-<b class="nc">&nbsp;        this.numPlatinums = numPlatinums;</b>
+<b class="fc">&nbsp;        this.numPlatinums = numPlatinums;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public int getNumGrammys(){
-<b class="nc">&nbsp;        return numGrammys;</b>
+<b class="fc">&nbsp;        return numGrammys;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setNumGrammys(int numGrammys){
-<b class="nc">&nbsp;        this.numGrammys = numGrammys;</b>
+<b class="fc">&nbsp;        this.numGrammys = numGrammys;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public List&lt;Song&gt; getSongs() {
-<b class="nc">&nbsp;        return songs;</b>
+<b class="fc">&nbsp;        return songs;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void setSongs(List&lt;Song&gt; songs) {
-&nbsp;        this.songs = songs;
+<b class="fc">&nbsp;        this.songs = songs;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public void addSongs(Song song){
-&nbsp;        this.songs.add(song);
+<b class="nc">&nbsp;        this.songs.add(song);</b>
 &nbsp;    }
 &nbsp;    
 &nbsp;}
@@ -219,7 +219,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-12-05 17:18</div>
+    <div style="float:right;">generated on 2023-12-06 15:59</div>
 </div>
 </body>
 </html>

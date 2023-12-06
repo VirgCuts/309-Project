@@ -67,7 +67,43 @@ public class UserSystemTest {
         String returnString = response.getBody().asString();
         assertEquals("{\"message\":\"success\"}", returnString);
 
+        response = RestAssured.post("/users/TestingName/password/email");
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+        returnString = response.getBody().asString();
+        assertEquals("{\"message\":\"failure\"}", returnString);
+
+        response = RestAssured.post("/users/Othername/password/email");
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+        returnString = response.getBody().asString();
+        assertEquals("{\"message\":\"failure\"}", returnString);
+
         userRepository.delete(userRepository.findByName("TestingName"));
+    }
+    @Test
+    public void loginAndForgotPassword()
+    {
+        Response response = RestAssured.get("/users/TestingName/password");
+        assertEquals(200, response.getStatusCode());
+        assertEquals(response.getBody().asString(), "false");
+
+        response = RestAssured.get("/forgot/email");
+        assertEquals(200, response.getStatusCode());
+        assertEquals(response.getBody().asString(), "{\"message\":\"failure\"}");
+
+        User user = new User("TestingName", "password", "email");
+        userRepository.save(user);
+
+        response = RestAssured.get("/users/TestingName/password");
+        assertEquals(200, response.getStatusCode());
+        assertEquals(response.getBody().asString(), "true");
+
+        response = RestAssured.get("/forgot/email");
+        assertEquals(200, response.getStatusCode());
+        assertEquals(response.getBody().asString(), "password");
+
+        userRepository.delete(userRepository.findById(user.getId()));
     }
     @Test
     public void getLeaderboard(){
@@ -89,16 +125,15 @@ public class UserSystemTest {
     public void updateSingleUserLeaderboard(){
         RestAssured.defaultParser = Parser.JSON;
 
+        Response response1 = RestAssured.put("/leaderboard/TestingName/150");
+        assertEquals(200, response1.getStatusCode());
+        assertEquals("", response1.getBody().asString());
+
         User user = new User();
         user.setName("TestingName");
         userRepository.save(user);
 
-        Response response = RestAssured.given().
-                header("Content-Type", "text/plain").
-                header("charset","utf-8").
-                body("").
-                when().
-                put("/leaderboard/TestingName/150");
+        Response response = RestAssured.put("/leaderboard/TestingName/150");
         // Check status code
         int statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
@@ -126,49 +161,37 @@ public class UserSystemTest {
         assertEquals("{\"message\":\"success\"}", returnString);
     }
     @Test
-    public void unbanUserFromChat(){
+    public void userBanning(){
+        Response response1 = RestAssured.put("/canChat/TestingName/true");
+        assertEquals(200, response1.getStatusCode());
+        assertEquals("{\"message\":\"failure\"}", response1.getBody().asString());
+
+        response1 = RestAssured.put("/canChat/TestingName/false");
+        assertEquals(200, response1.getStatusCode());
+        assertEquals("{\"message\":\"failure\"}", response1.getBody().asString());
+
+        response1 = RestAssured.get("/banStrikes/TestingName");
+        assertEquals(200, response1.getStatusCode());
+        assertEquals(0, response1.getBody().as(int.class));
+
         User user = new User();
         user.setName("TestingName");
         userRepository.save(user);
 
-        Response response = RestAssured.given().
-                header("Content-Type", "text/plain").
-                header("charset","utf-8").
-                body("").
-                when().
-                put("/canChat/TestingName/true");
-
+        Response response = RestAssured.given().put("/canChat/TestingName/true");
         int statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
-
         String returnString = response.getBody().asString();
         assertEquals("{\"message\":\"success\"}", returnString);
 
-        userRepository.delete(user);
-    }
-    @Test
-    public void banUserFromChat(){
-        User user = new User();
-        user.setName("TestingName");
-        userRepository.save(user);
-
-        Response response = RestAssured.put("/canChat/TestingName/false");
-
-        int statusCode = response.getStatusCode();
+        response = RestAssured.put("/canChat/TestingName/false");
+        statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
-
-        String returnString = response.getBody().asString();
+        returnString = response.getBody().asString();
         assertEquals("{\"message\":\"success\"}", returnString);
 
-        userRepository.delete(user);
-    }
-    @Test
-    public void getBanStrikes(){
-        User user = new User();
-        user.setName("TestingName");
-        userRepository.save(user);
 
-        Response response = RestAssured.get("/banStrikes/TestingName");
+        response = RestAssured.get("/banStrikes/TestingName");
         assertEquals(200, response.getStatusCode());
         assertEquals(0, response.getBody().as(int.class));
 
@@ -177,6 +200,10 @@ public class UserSystemTest {
 
     @Test
     public void getAndSetSelectedColor(){
+        Response response = RestAssured.put("/gameColor/TestingName/green");
+        assertEquals(200, response.getStatusCode());
+        assertEquals("{\"message\":\"failure\"}", response.getBody().asString());
+
         User user = new User();
         user.setName("TestingName");
         userRepository.save(user);

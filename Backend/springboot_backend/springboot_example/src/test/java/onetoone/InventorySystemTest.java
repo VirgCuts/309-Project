@@ -2,6 +2,7 @@ package onetoone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import onetoone.Inventory.Inventory;
 import onetoone.Users.User;
 import onetoone.Users.UserRepository;
 import org.junit.Before;
@@ -54,6 +55,9 @@ public class InventorySystemTest {
         User user = new User();
         user.setName("TestingInventory");
         userRepository.save(user);
+        Inventory inventory = user.getInventory();
+        inventory.setUser(user);
+        assertEquals(inventory.getUser(), user);
 
         Response response = RestAssured.put("/inventory/TestingInventory/orange");
         assertEquals(200, response.getStatusCode());

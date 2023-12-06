@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > Message</title>
+  <title>Coverage Report > LobbyServer</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,7 +22,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">onetoone.Websocket</a>
 </div>
 
-<h1>Coverage Summary for Class: Message (onetoone.Websocket)</h1>
+<h1>Coverage Summary for Class: LobbyServer (onetoone.Websocket)</h1>
 
 <table class="coverageStats">
 
@@ -38,43 +38,59 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">Message</td>
+  <td class="name">LobbyServer</td>
 <td class="coverageStat">
   <span class="percent">
-    7.1%
+    20%
   </span>
   <span class="absValue">
-    (1/14)
+    (3/15)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    11.1%
+    9.7%
   </span>
   <span class="absValue">
-    (2/18)
+    (9/93)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">Message$HibernateProxy$sYqMAZNG</td>
+    <td class="name">LobbyServer$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    7.1%
+    25%
   </span>
   <span class="absValue">
-    (1/14)
+    (4/16)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    11.1%
+    12.5%
   </span>
   <span class="absValue">
-    (2/18)
+    (12/96)
   </span>
 </td>
 </tr>
@@ -87,81 +103,248 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package onetoone.Websocket;
 &nbsp;
-&nbsp;import java.util.Date;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.*;
+&nbsp;import javax.websocket.OnClose;
+&nbsp;import javax.websocket.OnError;
+&nbsp;import javax.websocket.OnMessage;
+&nbsp;import javax.websocket.OnOpen;
+&nbsp;import javax.websocket.Session;
+&nbsp;import javax.websocket.server.PathParam;
+&nbsp;import javax.websocket.server.ServerEndpoint;
 &nbsp;
-&nbsp;import com.fasterxml.jackson.core.JsonProcessingException;
-&nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
-&nbsp;import onetoone.Songs.Song;
+&nbsp;import onetoone.Users.User;
+&nbsp;import onetoone.Users.UserRepository;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Component;
 &nbsp;
-&nbsp;import javax.persistence.*;
-&nbsp;import java.util.Comparator;
+&nbsp;/**
+&nbsp; * Represents a WebSocket chat server for handling real-time communication
+&nbsp; * between users. Each user connects to the server using their unique
+&nbsp; * username.
+&nbsp; *
+&nbsp; * This class is annotated with Spring&#39;s `@ServerEndpoint` and `@Component`
+&nbsp; * annotations, making it a WebSocket endpoint that can handle WebSocket
+&nbsp; * connections at the &quot;/chat/{username}&quot; endpoint.
+&nbsp; *
+&nbsp; * Example URL: ws://localhost:8080/chat/username
+&nbsp; *
+&nbsp; * The server provides functionality for broadcasting messages to all connected
+&nbsp; * users and sending messages to specific users.
+&nbsp; */
+&nbsp;@ServerEndpoint(&quot;/lobby/{lobbyNumber}/{username}&quot;)
+&nbsp;@Component
+<b class="fc">&nbsp;public class LobbyServer {</b>
 &nbsp;
-&nbsp;@Entity
-&nbsp;public class Message {
-&nbsp;    @Id
-&nbsp;    @GeneratedValue(strategy = GenerationType.IDENTITY)
-&nbsp;    private Long id;
+&nbsp;    // Store all socket session and their corresponding username
+&nbsp;    // Two maps for the ease of retrieval by key
+<b class="fc">&nbsp;    private static Map &lt; Session, String &gt; sessionUsernameMap = new Hashtable &lt; &gt; ();</b>
+<b class="fc">&nbsp;    private static Map &lt; String, Session &gt; usernameSessionMap = new Hashtable &lt; &gt; ();</b>
+<b class="fc">&nbsp;    private static Map &lt; String, Integer &gt; usernameLobbyMap = new Hashtable&lt;&gt;();</b>
+<b class="fc">&nbsp;    private static Map &lt; Integer, Integer &gt; lobbyPopulation = new Hashtable&lt;&gt;() {{</b>
+<b class="fc">&nbsp;        put(1, 0); put(2, 0); put(3, 0); put(4, 0); put(5, 0);</b>
+<b class="fc">&nbsp;        put(6, 0); put(7, 0); put(8, 0); put(9, 0); put(10, 0);</b>
+&nbsp;    }};
 &nbsp;
-&nbsp;    @Column
-&nbsp;    private String userName;
+<b class="fc">&nbsp;    private static Map &lt; String, Boolean &gt; userReady = new Hashtable&lt;&gt;();</b>
 &nbsp;
-&nbsp;    @Lob
-&nbsp;    private String content;
+&nbsp;    // server side logger
+<b class="fc">&nbsp;    private final Logger logger = LoggerFactory.getLogger(LobbyServer.class);</b>
 &nbsp;
-<b class="fc">&nbsp;    @Temporal(TemporalType.TIMESTAMP)</b>
-&nbsp;    @Column(name = &quot;sent&quot;)
-&nbsp;    private Date sent = new Date();
-&nbsp;
-&nbsp;    private int likes;
+&nbsp;    //user database
+&nbsp;    private static UserRepository userRepository;
 &nbsp;
 &nbsp;
-<b class="fc">&nbsp;    public Message() {};</b>
-&nbsp;
-<b class="nc">&nbsp;    public Message(String userName, String content) {</b>
-<b class="nc">&nbsp;        this.userName = userName;</b>
-<b class="nc">&nbsp;        this.content = content;</b>
-<b class="nc">&nbsp;        this.likes = 0;</b>
+&nbsp;    @Autowired
+&nbsp;    public void setUserRepository(UserRepository usrRepo) {
+<b class="fc">&nbsp;        userRepository = usrRepo;  // we are setting the static variable</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public Long getId() {
-<b class="nc">&nbsp;        return id;</b>
+<b class="fc">&nbsp;    private final List&lt;String&gt; bannedWords = Arrays.asList(&quot;test&quot;, &quot;testing&quot;);</b>
+&nbsp;
+&nbsp;    @OnOpen
+&nbsp;    public void onOpen(Session session, @PathParam(&quot;lobbyNumber&quot;) int lobbyNumber, @PathParam(&quot;username&quot;) String username) throws IOException {
+&nbsp;
+&nbsp;        // server side log
+<b class="nc">&nbsp;        logger.info(&quot;[LobbyonOpen] &quot;+ lobbyNumber + username);</b>
+&nbsp;
+<b class="nc">&nbsp;        User existingUser = userRepository.findByName(username);</b>
+&nbsp;
+&nbsp;        // Handle the case of a duplicate username
+<b class="nc">&nbsp;        if (usernameSessionMap.containsKey(username)) {</b>
+<b class="nc">&nbsp;            session.getBasicRemote().sendText(&quot;Username is already in use&quot;);</b>
+<b class="nc">&nbsp;            session.close();</b>
+<b class="nc">&nbsp;        } else if (existingUser == null) {</b>
+<b class="nc">&nbsp;            session.getBasicRemote().sendText(&quot;Username doesn&#39;t exist within database&quot;);</b>
+<b class="nc">&nbsp;            session.close();</b>
+<b class="nc">&nbsp;        } else if (lobbyPopulation.get(lobbyNumber) &gt; 1) {</b>
+<b class="nc">&nbsp;            session.getBasicRemote().sendText(&quot;Lobby is full.&quot;);</b>
+<b class="nc">&nbsp;            session.close();</b>
+&nbsp;        } else{
+&nbsp;            // map current session with username
+<b class="nc">&nbsp;            sessionUsernameMap.put(session, username);</b>
+&nbsp;            // map current username with session
+<b class="nc">&nbsp;            usernameSessionMap.put(username, session);</b>
+&nbsp;
+<b class="nc">&nbsp;            usernameLobbyMap.put(username, lobbyNumber);</b>
+&nbsp;
+<b class="nc">&nbsp;            lobbyPopulation.replace(lobbyNumber, lobbyPopulation.get(lobbyNumber) + 1);</b>
+&nbsp;
+<b class="nc">&nbsp;            userReady.put(username, false);</b>
+&nbsp;
+<b class="nc">&nbsp;            if (existingUser.getCanChat()){</b>
+&nbsp;                // send to everyone in the lobby
+<b class="nc">&nbsp;                sendMessageToLobby(username, &quot;User: &quot; + username + &quot; has joined the lobby&quot;);</b>
+&nbsp;            } else {
+&nbsp;                // send to everyone in the lobby
+<b class="nc">&nbsp;                sendMessageToLobby(username, &quot;User: &quot; + username + &quot; has joined the lobby, but can&#39;t say anything because they&#39;ve been bad.&quot;);</b>
+&nbsp;            }
+&nbsp;        }
 &nbsp;    }
 &nbsp;
-&nbsp;    public void setId(Long id) {
-<b class="nc">&nbsp;        this.id = id;</b>
+&nbsp;    /**
+&nbsp;     * Handles incoming WebSocket messages from a client.
+&nbsp;     *
+&nbsp;     * @param session The WebSocket session representing the client&#39;s connection.
+&nbsp;     * @param message The message received from the client.
+&nbsp;     */
+&nbsp;    @OnMessage
+&nbsp;    public void onMessage(Session session, String message) throws IOException {
+&nbsp;
+&nbsp;        // get the username by session
+<b class="nc">&nbsp;        String username = sessionUsernameMap.get(session);</b>
+<b class="nc">&nbsp;        User user = userRepository.findByName(username);</b>
+&nbsp;
+&nbsp;        // server side log
+<b class="nc">&nbsp;        logger.info(&quot;[onMessage] &quot; + username + &quot;: &quot; + message);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (message.equals(&quot;@ready&quot;)) {</b>
+<b class="nc">&nbsp;            userReady.replace(username, true);</b>
+<b class="nc">&nbsp;            sendMessageToOtherLobbyMember(username, &quot;@ready&quot;);</b>
+<b class="nc">&nbsp;            lobbyReadyCheck(username);</b>
+<b class="nc">&nbsp;        } else if (message.equals(&quot;@unready&quot;)) {</b>
+<b class="nc">&nbsp;            userReady.replace(username, false);</b>
+<b class="nc">&nbsp;            sendMessageToOtherLobbyMember(username, &quot;@unready&quot;);</b>
+<b class="nc">&nbsp;        } else if (user.getCanChat()) {</b>
+<b class="nc">&nbsp;            boolean containsBannedWord = messageCheck(message, username);</b>
+<b class="nc">&nbsp;            if (!containsBannedWord) {</b>
+<b class="nc">&nbsp;                sendMessageToLobby(username,username + &quot;: &quot; + message);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            sendMessageToParticularUser(username, &quot;[DM from server]: sorry buddy, you&#39;ve been banned, no messaging for you.&quot;);</b>
+&nbsp;        }
 &nbsp;    }
 &nbsp;
-&nbsp;    public String getUserName() {
-<b class="nc">&nbsp;        return userName;</b>
+&nbsp;    /**
+&nbsp;     * Handles the closure of a WebSocket connection.
+&nbsp;     *
+&nbsp;     * @param session The WebSocket session that is being closed.
+&nbsp;     */
+&nbsp;    @OnClose
+&nbsp;    public void onClose(Session session) throws IOException {
+&nbsp;
+&nbsp;        // get the username from session-username mapping
+<b class="nc">&nbsp;        String username = sessionUsernameMap.get(session);</b>
+<b class="nc">&nbsp;        int lobby = usernameLobbyMap.get(username);</b>
+&nbsp;
+&nbsp;        // server side log
+<b class="nc">&nbsp;        logger.info(&quot;[onClose] &quot; + username);</b>
+&nbsp;
+&nbsp;
+&nbsp;        // send the message to chat
+<b class="nc">&nbsp;        sendMessageToLobby(username, username + &quot; disconnected&quot;);</b>
+&nbsp;        
+&nbsp;        // remove user from memory mappings
+<b class="nc">&nbsp;        sessionUsernameMap.remove(session);</b>
+<b class="nc">&nbsp;        usernameSessionMap.remove(username);</b>
+<b class="nc">&nbsp;        lobbyPopulation.replace(lobby, lobbyPopulation.get(lobby) - 1);</b>
+<b class="nc">&nbsp;        if (lobbyPopulation.get(lobby) &lt; 0)</b>
+<b class="nc">&nbsp;            lobbyPopulation.replace(lobby, 0);</b>
+<b class="nc">&nbsp;        usernameLobbyMap.remove(username);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public void setUserName(String userName) {
-<b class="nc">&nbsp;        this.userName = userName;</b>
+&nbsp;    /**
+&nbsp;     * Handles WebSocket errors that occur during the connection.
+&nbsp;     *
+&nbsp;     * @param session   The WebSocket session where the error occurred.
+&nbsp;     * @param throwable The Throwable representing the error condition.
+&nbsp;     */
+&nbsp;    @OnError
+&nbsp;    public void onError(Session session, Throwable throwable) {
+&nbsp;
+&nbsp;        // get the username from session-username mapping
+<b class="nc">&nbsp;        String username = sessionUsernameMap.get(session);</b>
+&nbsp;
+&nbsp;        // do error handling here
+<b class="nc">&nbsp;        logger.info(&quot;[onError]&quot; + username + &quot;: &quot; + throwable.getMessage());</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public String getContent() {
-<b class="nc">&nbsp;        return content;</b>
+&nbsp;    private void lobbyReadyCheck(String username) {
+<b class="nc">&nbsp;        int[] count = new int[1];</b>
+<b class="nc">&nbsp;        int lobbyNumber = usernameLobbyMap.get(username);</b>
+<b class="nc">&nbsp;        usernameLobbyMap.forEach((name, lobby) -&gt; {</b>
+<b class="nc">&nbsp;            if (lobby == lobbyNumber &amp;&amp; userReady.get(name)) {</b>
+<b class="nc">&nbsp;                count[0]++;</b>
+&nbsp;            }
+&nbsp;        });
+<b class="nc">&nbsp;        if (count[0] == 2)</b>
+<b class="nc">&nbsp;            sendMessageToLobby(username, &quot;Start game&quot;);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public void setContent(String content) {
-<b class="nc">&nbsp;        this.content = content;</b>
+&nbsp;    private void sendMessageToLobby(String username, String message) {
+&nbsp;        try {
+<b class="nc">&nbsp;            int lobbyNumber = usernameLobbyMap.get(username);</b>
+<b class="nc">&nbsp;            usernameLobbyMap.forEach((name, lobby) -&gt; {</b>
+<b class="nc">&nbsp;                if (lobby == lobbyNumber) {</b>
+<b class="nc">&nbsp;                    sendMessageToParticularUser(name, message);</b>
+&nbsp;                }
+&nbsp;            });
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            logger.info(&quot;[Lobby Exception, not in lobby for message] &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;    private void sendMessageToOtherLobbyMember(String username, String message) {
+&nbsp;        try {
+<b class="nc">&nbsp;            int lobbyNumber = usernameLobbyMap.get(username);</b>
+<b class="nc">&nbsp;            usernameLobbyMap.forEach((name, lobby) -&gt; {</b>
+<b class="nc">&nbsp;                if (lobby == lobbyNumber &amp;&amp; !name.equals(username)) {</b>
+<b class="nc">&nbsp;                    sendMessageToParticularUser(name, message);</b>
+&nbsp;                }
+&nbsp;            });
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            logger.info(&quot;[Lobby Exception, not in lobby for message] &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;        }</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public Date getSent() {
-<b class="nc">&nbsp;        return sent;</b>
+&nbsp;    private void sendMessageToParticularUser(String username, String message) {
+&nbsp;        try {
+<b class="nc">&nbsp;            usernameSessionMap.get(username).getBasicRemote().sendText(message);</b>
+<b class="nc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            logger.info(&quot;[DM Exception] &quot; + e.getMessage());</b>
+<b class="nc">&nbsp;        }</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    public void setSent(Date sent) {
-<b class="nc">&nbsp;        this.sent = sent;</b>
+&nbsp;
+&nbsp;
+&nbsp;    private boolean messageCheck(String message, String sender) {
+<b class="nc">&nbsp;        for (String bannedWord : bannedWords) {</b>
+<b class="nc">&nbsp;            if (message.contains(bannedWord)) {</b>
+<b class="nc">&nbsp;                User user = userRepository.findByName(sender);</b>
+<b class="nc">&nbsp;                sendMessageToParticularUser(sender, &quot;Please refrain from using that language. You have received one strike on your account.&quot;);</b>
+<b class="nc">&nbsp;                user.setBanStrikes(user.getBanStrikes() + 1);</b>
+<b class="nc">&nbsp;                sendMessageToParticularUser(sender, &quot;Current strikes: &quot; + user.getBanStrikes() + &quot;/3&quot;);</b>
+<b class="nc">&nbsp;                if (user.getBanStrikes() &gt;= 3) {</b>
+<b class="nc">&nbsp;                    user.setCanChat(false);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                userRepository.save(user);</b>
+<b class="nc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return false;</b>
 &nbsp;    }
-&nbsp;
-<b class="nc">&nbsp;    public int getLikes() {return likes;}</b>
-&nbsp;
-<b class="nc">&nbsp;    public void setLikes(int likes) {this.likes = likes;}</b>
-<b class="nc">&nbsp;    public void addLike() {this.likes++;}</b>
-<b class="nc">&nbsp;    public void removeLike() {this.likes--;}</b>
 &nbsp;}
-&nbsp;
 </code>
 </pre>
 </div>
@@ -185,7 +368,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-12-05 17:18</div>
+    <div style="float:right;">generated on 2023-12-06 15:59</div>
 </div>
 </body>
 </html>

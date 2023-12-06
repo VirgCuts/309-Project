@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    66.7%
+    100%
   </span>
   <span class="absValue">
-    (4/6)
+    (6/6)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    55.6%
+    100%
   </span>
   <span class="absValue">
-    (10/18)
+    (18/18)
   </span>
 </td>
 </tr>
@@ -102,19 +102,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;    //user has won if no zeros
 &nbsp;    private boolean winCheck() {
-<b class="nc">&nbsp;        for (int i = 0; i &lt; gameSize; i++)</b>
-<b class="nc">&nbsp;            for (int j = 0; j &lt; gameSize; j++)</b>
-<b class="nc">&nbsp;                if (this.game[i][j] == 0){</b>
-<b class="nc">&nbsp;                    return false;</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; gameSize; i++)</b>
+<b class="fc">&nbsp;            for (int j = 0; j &lt; gameSize; j++)</b>
+<b class="fc">&nbsp;                if (this.game[i][j] == 0){</b>
+<b class="fc">&nbsp;                    return false;</b>
 &nbsp;                }
-<b class="nc">&nbsp;        return true;</b>
+<b class="fc">&nbsp;        return true;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    //only call when user guesses correctly
 &nbsp;    public void updateBoard(int x, int y) {
-<b class="nc">&nbsp;        this.game[x][y] = 1;</b>
-<b class="nc">&nbsp;        this.score++;</b>
-<b class="nc">&nbsp;        this.won = this.winCheck();</b>
+<b class="fc">&nbsp;        this.game[x][y] = 1;</b>
+<b class="fc">&nbsp;        this.score++;</b>
+<b class="fc">&nbsp;        this.won = this.winCheck();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    public int getScore() {
@@ -147,7 +147,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-12-05 17:18</div>
+    <div style="float:right;">generated on 2023-12-06 15:59</div>
 </div>
 </body>
 </html>

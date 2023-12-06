@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > InventoryRepository</title>
+  <title>Coverage Report > MessageRepository</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -19,17 +19,17 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">onetoone.Inventory</a>
+    <a href="../index.html">onetoone.Websocket</a>
 </div>
 
-<h1>Coverage Summary for Class: InventoryRepository (onetoone.Inventory)</h1>
+<h1>Coverage Summary for Class: MessageRepository (onetoone.Websocket)</h1>
 
 <table class="coverageStats">
 <tr>
   <th class="name">Class</th>
 </tr>
 <tr>
-  <td class="name">InventoryRepository</td>
+  <td class="name">MessageRepository</td>
 </tr>
 
 </table>
@@ -39,13 +39,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<code class="sourceCode" id="sourceCode">&nbsp;package onetoone.Inventory;
-&nbsp;
-&nbsp;import onetoone.Inventory.Inventory;
+<code class="sourceCode" id="sourceCode">&nbsp;package onetoone.Websocket;
 &nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+&nbsp;import org.springframework.transaction.annotation.Transactional;
 &nbsp;
-&nbsp;public interface InventoryRepository extends JpaRepository&lt;Inventory, Long&gt; {
-&nbsp;    Inventory findById(int id);
+&nbsp;public interface MessageRepository extends JpaRepository&lt;Message, Long&gt;{
 &nbsp;}
 </code>
 </pre>

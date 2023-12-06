@@ -55,15 +55,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (14/14)
+    (15/15)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    88.5%
+    98.4%
   </span>
   <span class="absValue">
-    (46/52)
+    (60/61)
   </span>
 </td>
 </tr>
@@ -86,6 +86,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;import org.springframework.mail.SimpleMailMessage;
 &nbsp;import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 &nbsp;
+&nbsp;import javax.mail.Authenticator;
+&nbsp;import javax.mail.MessagingException;
+&nbsp;import javax.mail.PasswordAuthentication;
+&nbsp;import javax.mail.Session;
 &nbsp;import javax.servlet.http.HttpServletRequest;
 &nbsp;import java.util.*;
 &nbsp;
@@ -93,82 +97,91 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp; *
 &nbsp; * @author Sam Lickteig
 &nbsp; *
-<b class="fc">&nbsp; */</b>
+&nbsp; */
 &nbsp;
-<b class="fc">&nbsp;@Api(value = &quot;UserController&quot;, description = &quot;REST APIs related to User Entity, created by Sam Lickteig&quot;)</b>
-<b class="fc">&nbsp;@RestController</b>
-&nbsp;public class UserController {
+&nbsp;@Api(value = &quot;UserController&quot;, description = &quot;REST APIs related to User Entity, created by Sam Lickteig&quot;)
+&nbsp;@RestController
+<b class="fc">&nbsp;public class UserController {</b>
 &nbsp;
-&nbsp;    private String success = &quot;{\&quot;message\&quot;:\&quot;success\&quot;}&quot;;
-&nbsp;    private String failure = &quot;{\&quot;message\&quot;:\&quot;failure\&quot;}&quot;;
+<b class="fc">&nbsp;    private String success = &quot;{\&quot;message\&quot;:\&quot;success\&quot;}&quot;;</b>
+<b class="fc">&nbsp;    private String failure = &quot;{\&quot;message\&quot;:\&quot;failure\&quot;}&quot;;</b>
 &nbsp;
 &nbsp;    @Autowired
 &nbsp;    UserRepository userRepository;
-&nbsp;    
-<b class="fc">&nbsp;    @Autowired</b>
-&nbsp;    private JavaMailSender mailSender;
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Get all users&quot;)
 &nbsp;    @GetMapping(path = &quot;/users&quot;)
 &nbsp;    List&lt;User&gt; getAllUsers()
 &nbsp;    {
 <b class="fc">&nbsp;        return userRepository.findAll();</b>
-<b class="fc">&nbsp;    }</b>
-<b class="fc">&nbsp;</b>
-<b class="fc">&nbsp;    @ApiOperation(value = &quot;Add user with provided name&quot;)</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Add user with provided name&quot;)
 &nbsp;    @PostMapping(path = &quot;/users/{name}&quot;)
 &nbsp;    String addSingleUser(@PathVariable String name)
 &nbsp;    {
-&nbsp;        User user = new User();
-&nbsp;        user.setName(name);
-&nbsp;        userRepository.save(user);
+<b class="fc">&nbsp;        User user = new User();</b>
+<b class="fc">&nbsp;        user.setName(name);</b>
+<b class="fc">&nbsp;        userRepository.save(user);</b>
 <b class="fc">&nbsp;        return success;</b>
-<b class="fc">&nbsp;    }</b>
-<b class="fc">&nbsp;</b>
+&nbsp;    }
+&nbsp;
 &nbsp;    @ApiOperation(value = &quot;Register user with provided name, password, and email&quot;)
 &nbsp;    @PostMapping(path = &quot;/users/{name}/{password}/{email}&quot;)
 &nbsp;    String createAccount(@PathVariable String name, @PathVariable String password, @PathVariable String email)
 &nbsp;    {
-&nbsp;        User user = new User(name, password, email);
-&nbsp;        userRepository.save(user);
-&nbsp;        return success;
-<b class="fc">&nbsp;    }</b>
-<b class="fc">&nbsp;</b>
-<b class="fc">&nbsp;    @ApiOperation(value = &quot;Check if username and password are correct&quot;)</b>
+<b class="fc">&nbsp;        User user = new User(name, password, email);</b>
+<b class="fc">&nbsp;        if(userRepository.findByName(name) != null)</b>
+<b class="fc">&nbsp;            return failure;</b>
+<b class="fc">&nbsp;        if (userRepository.findByEmail(email) != null)</b>
+<b class="fc">&nbsp;            return failure;</b>
+<b class="fc">&nbsp;        userRepository.save(user);</b>
+<b class="fc">&nbsp;        return success;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Check if username and password are correct&quot;)
 &nbsp;    @GetMapping(path = &quot;/users/{name}/{password}&quot;)
 &nbsp;    boolean login(@PathVariable String name, @PathVariable String password)
 &nbsp;    {
-&nbsp;        User user = userRepository.findByName(name);
-&nbsp;        if (user == null)
-&nbsp;            return false;
+<b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
+<b class="fc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;            return false;</b>
 <b class="fc">&nbsp;        return user.getPassword().equals(password);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(path = &quot;/forgot/{email}&quot;)
+&nbsp;    String forgotPassword(@PathVariable String email) throws MessagingException {
+<b class="fc">&nbsp;        User user = userRepository.findByEmail(email);</b>
+<b class="fc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;            return failure;</b>
+<b class="fc">&nbsp;        return user.getPassword();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    //mappings made for current and/or original leaderboard design
 &nbsp;    @ApiOperation(value = &quot;Get all users and sort by high score&quot;)
 &nbsp;    @GetMapping(path = &quot;/leaderboard&quot;)
 &nbsp;    List&lt;User&gt; getLeaderboard()
-<b class="fc">&nbsp;    {</b>
+&nbsp;    {
 <b class="fc">&nbsp;        List&lt;User&gt; test = userRepository.findAll();</b>
 <b class="fc">&nbsp;        test.sort(User::compareTo);</b>
-&nbsp;        return test;
+<b class="fc">&nbsp;        return test;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Find individual user information for leaderboard&quot;)
 &nbsp;    @GetMapping(path = &quot;/leaderboard/{name}&quot;)
 &nbsp;    User getUserLeaderboardInfo(@PathVariable String name)
-<b class="fc">&nbsp;    {</b>
+&nbsp;    {
 <b class="fc">&nbsp;        return userRepository.findByName(name);</b>
-<b class="nc">&nbsp;    }</b>
-<b class="fc">&nbsp;</b>
-<b class="fc">&nbsp;    @ApiOperation(value = &quot;Update user score with provided name&quot;)</b>
-<b class="fc">&nbsp;    @PutMapping(path = &quot;/leaderboard/{name}/{score}&quot;)</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @ApiOperation(value = &quot;Update user score with provided name&quot;)
+&nbsp;    @PutMapping(path = &quot;/leaderboard/{name}/{score}&quot;)
 &nbsp;    User putUserLeaderboard(@PathVariable String name, @PathVariable int score)
 &nbsp;    {
-&nbsp;        User user = userRepository.findByName(name);
-&nbsp;        if (user == null)
-&nbsp;            return null;
-&nbsp;        user.setAllHighScores(score);
+<b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
+<b class="fc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;            return null;</b>
+<b class="fc">&nbsp;        user.setAllHighScores(score);</b>
 <b class="fc">&nbsp;        userRepository.save(user);</b>
 <b class="fc">&nbsp;        return userRepository.findByName(name);</b>
 &nbsp;    }
@@ -177,8 +190,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @DeleteMapping(path = &quot;/leaderboard/{name}&quot;)
 &nbsp;    String deleteUser(@PathVariable String name)
 &nbsp;    {
-&nbsp;        userRepository.deleteByName(name);
-&nbsp;        return success;
+<b class="fc">&nbsp;        userRepository.deleteByName(name);</b>
+<b class="fc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;    //end of leaderboard mappings
 &nbsp;
@@ -186,35 +199,35 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;Update user so that they are unbanned from chat&quot;)
 &nbsp;    @PutMapping(path = &quot;/canChat/{name}/true&quot;)
 &nbsp;    String unbanUserFromChat(@PathVariable String name)
-<b class="fc">&nbsp;    {</b>
+&nbsp;    {
 <b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
-<b class="nc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;        if (user == null)</b>
 <b class="fc">&nbsp;            return failure;</b>
 <b class="fc">&nbsp;        user.setCanChat(true);</b>
 <b class="fc">&nbsp;        userRepository.save(user);</b>
-&nbsp;        return success;
+<b class="fc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Update user so that they are banned from chat&quot;)
 &nbsp;    @PutMapping(path = &quot;/canChat/{name}/false&quot;)
 &nbsp;    String banUserFromChat(@PathVariable String name)
-<b class="fc">&nbsp;    {</b>
+&nbsp;    {
 <b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
-<b class="nc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;        if (user == null)</b>
 <b class="fc">&nbsp;            return failure;</b>
 <b class="fc">&nbsp;        user.setCanChat(false);</b>
 <b class="fc">&nbsp;        userRepository.save(user);</b>
-&nbsp;        return success;
+<b class="fc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Get amount of ban strikes user has&quot;)
 &nbsp;    @GetMapping(path = &quot;/banStrikes/{name}&quot;)
 &nbsp;    int getBanStrikeCountForUser(@PathVariable String name)
-<b class="fc">&nbsp;    {</b>
+&nbsp;    {
 <b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
-<b class="nc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;        if (user == null)</b>
 <b class="fc">&nbsp;            return 0;</b>
-&nbsp;        return user.getBanStrikes();
+<b class="fc">&nbsp;        return user.getBanStrikes();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;
@@ -224,23 +237,23 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;Get user&#39;s selected color for game&quot;)
 &nbsp;    @GetMapping(path = &quot;/gameColor/{name}&quot;)
 &nbsp;    String getSelectedColor(@PathVariable String name)
-<b class="fc">&nbsp;    {</b>
+&nbsp;    {
 <b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
-<b class="nc">&nbsp;        if (user == null)</b>
-<b class="fc">&nbsp;            return failure;</b>
-&nbsp;        return &quot;{\&quot;color\&quot;:\&quot;&quot; + user.getSelectedColor() + &quot;\&quot;}&quot;;
+<b class="fc">&nbsp;        if (user == null)</b>
+<b class="nc">&nbsp;            return failure;</b>
+<b class="fc">&nbsp;        return &quot;{\&quot;color\&quot;:\&quot;&quot; + user.getSelectedColor() + &quot;\&quot;}&quot;;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Update user&#39;s selected color for game&quot;)
 &nbsp;    @PutMapping(path = &quot;/gameColor/{name}/{color}&quot;)
 &nbsp;    String setSelectedColor(@PathVariable String name, @PathVariable String color)
-<b class="fc">&nbsp;    {</b>
+&nbsp;    {
 <b class="fc">&nbsp;        User user = userRepository.findByName(name);</b>
-<b class="nc">&nbsp;        if (user == null)</b>
+<b class="fc">&nbsp;        if (user == null)</b>
 <b class="fc">&nbsp;            return failure;</b>
 <b class="fc">&nbsp;        user.setSelectedColor(color);</b>
 <b class="fc">&nbsp;        userRepository.save(user);</b>
-&nbsp;        return success;
+<b class="fc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -266,7 +279,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-12-05 17:18</div>
+    <div style="float:right;">generated on 2023-12-06 15:59</div>
 </div>
 </body>
 </html>

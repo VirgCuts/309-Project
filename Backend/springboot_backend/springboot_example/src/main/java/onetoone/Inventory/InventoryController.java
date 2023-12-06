@@ -58,6 +58,7 @@ public class InventoryController {
         if (color.equals("green"))
             inventory.setGreen(true);
         user.setInventory(inventory);
+        inventory.setUser(user);
         userRepository.save(user);
         return success;
     }

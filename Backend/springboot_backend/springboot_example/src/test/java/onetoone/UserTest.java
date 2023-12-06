@@ -1,8 +1,5 @@
 package onetoone;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -10,11 +7,14 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Scanner;
 
+import onetoone.Users.Board;
 import onetoone.Users.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
 public class UserTest {
@@ -87,6 +87,22 @@ public class UserTest {
         assertEquals(user.getBanStrikes(), banStrikes);
         user.setCanChat(canChat);
         assertEquals(user.getCanChat(), canChat);
+
+        Board board = new Board();
+        user.setBoard(board);
+        assertEquals(user.boardToString(), "{\"won\":false,\"game\":[[0,0,0],[0,0,0],[0,0,0]],\"score\":0}");
+        board.updateBoard(0, 0);
+        assertFalse(user.hasWon());
+        assertEquals(user.boardToString(), "{\"won\":false,\"game\":[[1,0,0],[0,0,0],[0,0,0]],\"score\":1}");
+        board.updateBoard(0, 1);
+        board.updateBoard(0, 2);
+        board.updateBoard(1, 0);
+        board.updateBoard(1, 1);
+        board.updateBoard(1, 2);
+        board.updateBoard(2, 0);
+        board.updateBoard(2, 1);
+        board.updateBoard(2, 2);
+        assertTrue(user.hasWon());
     }
 
     @Test
@@ -103,5 +119,7 @@ public class UserTest {
         assertEquals(user.getHighScore(), highestscore);
         assertEquals(user.getHighScoreWeekly(), higherscore);
         assertEquals(user.getHighScoreMonthly(), higherscore);
+        User user2 = new User(name, password, email);
+        assertTrue((user.compare(user, user2) < 0));
     }
 }
