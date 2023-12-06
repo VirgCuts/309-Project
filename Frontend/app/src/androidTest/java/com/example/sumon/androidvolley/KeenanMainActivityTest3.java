@@ -65,25 +65,25 @@ public class KeenanMainActivityTest3 {
                                 0),
                         isDisplayed()));
         appCompatButton2.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.r1c1),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("Test"), closeSoftKeyboard());
         onView(withId(R.id.r1c1)).perform(pressImeActionButton());
-        Thread.sleep(500);
+
         ViewInteraction appCompatEditText4 = onView(
                 allOf(withId(R.id.r1c2),
                         isDisplayed()));
         appCompatEditText4.perform(replaceText("Test"), closeSoftKeyboard());
         onView(withId(R.id.r1c2)).perform(pressImeActionButton());
-        Thread.sleep(500);
+
         ViewInteraction appCompatEditText5 = onView(
                 allOf(withId(R.id.r1c3),
                         isDisplayed()));
         appCompatEditText5.perform(replaceText("Test"), closeSoftKeyboard());
         onView(withId(R.id.r1c3)).perform(pressImeActionButton());
-        Thread.sleep(500);
+
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.endGameButton),
                         isDisplayed()));

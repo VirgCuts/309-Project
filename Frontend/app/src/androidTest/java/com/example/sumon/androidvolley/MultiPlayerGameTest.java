@@ -95,22 +95,22 @@ public class MultiPlayerGameTest {
                 allOf(withId(R.id.r3c2),
                         isDisplayed()));
         appCompatEditText16.perform(replaceText("barry"), closeSoftKeyboard());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText17 = onView(
                 allOf(withId(R.id.r3c3),
                         isDisplayed()));
         appCompatEditText17.perform(replaceText("wally"), closeSoftKeyboard());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.endGameButton),
                         isDisplayed()));
         appCompatButton3.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton4 = onView(
                 allOf(withId(R.id.restartButton),
                         isDisplayed()));
         appCompatButton4.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
 
     }
 }

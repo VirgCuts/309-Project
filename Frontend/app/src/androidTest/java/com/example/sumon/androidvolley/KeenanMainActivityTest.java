@@ -41,17 +41,17 @@ public class KeenanMainActivityTest {
                 allOf(withId(R.id.username_input),
                         isDisplayed()));
         appCompatEditText.perform(click());
-        Thread.sleep(100);
+        Thread.sleep(50);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.username_input),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("Keenan"), closeSoftKeyboard());
-        Thread.sleep(100);
+        Thread.sleep(50);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.password_input),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("password1"), closeSoftKeyboard());
-        Thread.sleep(100);
+        Thread.sleep(50);
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.login),
                         isDisplayed()));
@@ -108,7 +108,7 @@ public class KeenanMainActivityTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
-
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView4 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

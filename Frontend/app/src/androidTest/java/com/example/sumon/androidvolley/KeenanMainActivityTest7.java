@@ -51,7 +51,7 @@ public class KeenanMainActivityTest7 {
                 allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -62,7 +62,7 @@ public class KeenanMainActivityTest7 {
                                 1),
                         isDisplayed()));
         appCompatImageButton.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView = onView(
                 allOf(withId(R.id.btnArtists),
                         childAtPosition(
@@ -73,7 +73,7 @@ public class KeenanMainActivityTest7 {
                                 8),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.artistName),
                         isDisplayed()));
@@ -108,7 +108,7 @@ public class KeenanMainActivityTest7 {
                 allOf(withId(R.id.deleteArtist),
                         isDisplayed()));
         appCompatButton3.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton4 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -119,7 +119,7 @@ public class KeenanMainActivityTest7 {
                                 1),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView4 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

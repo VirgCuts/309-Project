@@ -91,7 +91,7 @@ public class LogoutTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton3.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton4 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -102,7 +102,7 @@ public class LogoutTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView2 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

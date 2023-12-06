@@ -45,17 +45,17 @@ public class KeenanMainActivityTest4 {
                 allOf(withId(R.id.username_input),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Keenan"), closeSoftKeyboard());
-        Thread.sleep(100);
+        Thread.sleep(50);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.password_input),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
-        Thread.sleep(100);
+        Thread.sleep(50);
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -82,7 +82,7 @@ public class KeenanMainActivityTest4 {
                 allOf(withId(R.id.username_input),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("Keenan"), closeSoftKeyboard());
-        Thread.sleep(100);
+
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.connect_button), withText("Connect"),
                         isDisplayed()));
@@ -115,7 +115,7 @@ public class KeenanMainActivityTest4 {
                 allOf(withId(R.id.etReportBody),
                         isDisplayed()));
         appCompatEditText5.perform(replaceText("hey"), closeSoftKeyboard());
-        Thread.sleep(100);
+
         ViewInteraction appCompatButton4 = onView(
                 allOf(withId(R.id.btnSendReport),
                         isDisplayed()));

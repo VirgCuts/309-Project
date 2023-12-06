@@ -54,7 +54,7 @@ public class SinglePlayerTest {
                 allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -151,22 +151,22 @@ public class SinglePlayerTest {
                 allOf(withId(R.id.r3c2),
                         isDisplayed()));
         appCompatEditText16.perform(replaceText("barry"), closeSoftKeyboard());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText17 = onView(
                 allOf(withId(R.id.r3c3),
                         isDisplayed()));
         appCompatEditText17.perform(replaceText("wally"), closeSoftKeyboard());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.endGameButton),
                         isDisplayed()));
         appCompatButton3.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton4 = onView(
                 allOf(withId(R.id.showScoreButton),
                         isDisplayed()));
         appCompatButton4.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton3 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -177,27 +177,27 @@ public class SinglePlayerTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton3.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView = onView(
                 allOf(withId(R.id.btnLobby),
                         isDisplayed()));
         navigationMenuItemView.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton5 = onView(
                 allOf(withId(R.id.singlePlayer),
                         isDisplayed()));
         appCompatButton5.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton6 = onView(
                 allOf(withId(R.id.endGameButton),
                         isDisplayed()));
         appCompatButton6.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton7 = onView(
                 allOf(withId(R.id.restartButton),
                         isDisplayed()));
         appCompatButton7.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton10 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -208,7 +208,7 @@ public class SinglePlayerTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton10.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView10 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

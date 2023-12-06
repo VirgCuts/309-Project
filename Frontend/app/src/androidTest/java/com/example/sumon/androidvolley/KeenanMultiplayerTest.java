@@ -41,55 +41,55 @@ public class KeenanMultiplayerTest {
                     isDisplayed()));
         appCompatEditText3.perform(replaceText("h"), closeSoftKeyboard());
         onView(withId(R.id.r1c1)).perform(pressImeActionButton());
-        Thread.sleep(200);
+        Thread.sleep(100);
     ViewInteraction appCompatEditText4 = onView(
             allOf(withId(R.id.r1c2),
                     isDisplayed()));
         appCompatEditText4.perform(replaceText("j"), closeSoftKeyboard());
         onView(withId(R.id.r1c2)).perform(pressImeActionButton());
-        Thread.sleep(200);
+        Thread.sleep(100);
     ViewInteraction appCompatEditText5 = onView(
             allOf(withId(R.id.r1c3),
                     isDisplayed()));
         appCompatEditText5.perform(replaceText("l"), closeSoftKeyboard());
         onView(withId(R.id.r1c3)).perform(pressImeActionButton());
-        Thread.sleep(200);
+        Thread.sleep(100);
     ViewInteraction appCompatEditText6 = onView(
             allOf(withId(R.id.r2c1),
                     isDisplayed()));
         appCompatEditText6.perform(replaceText("q"), closeSoftKeyboard());
         onView(withId(R.id.r2c1)).perform(pressImeActionButton());
-        Thread.sleep(200);
+        Thread.sleep(100);
     ViewInteraction appCompatEditText7 = onView(
             allOf(withId(R.id.r2c2),
                     isDisplayed()));
         appCompatEditText7.perform(replaceText("w"), closeSoftKeyboard());
         onView(withId(R.id.r2c2)).perform(pressImeActionButton());
-        Thread.sleep(200);
+        Thread.sleep(100);
     ViewInteraction appCompatEditText8 = onView(
             allOf(withId(R.id.r2c3),
                     isDisplayed()));
         appCompatEditText8.perform(replaceText("e"), closeSoftKeyboard());
         onView(withId(R.id.r2c3)).perform(pressImeActionButton());
-        Thread.sleep(200);
+        Thread.sleep(100);
     ViewInteraction appCompatEditText9 = onView(
             allOf(withId(R.id.r3c1),
                     isDisplayed()));
         appCompatEditText9.perform(replaceText("t"), closeSoftKeyboard());
         onView(withId(R.id.r3c1)).perform(pressImeActionButton());
-        Thread.sleep(200);
+        Thread.sleep(100);
     ViewInteraction appCompatEditText10 = onView(
             allOf(withId(R.id.r3c2),
                     isDisplayed()));
         appCompatEditText10.perform(replaceText("g"), closeSoftKeyboard());
         onView(withId(R.id.r3c2)).perform(pressImeActionButton());
-        Thread.sleep(200);
+        Thread.sleep(100);
     ViewInteraction appCompatEditText11 = onView(
             allOf(withId(R.id.r3c3),
                     isDisplayed()));
         appCompatEditText11.perform(replaceText("p"), closeSoftKeyboard());
         onView(withId(R.id.r3c3)).perform(pressImeActionButton());
-        Thread.sleep(200);
+        Thread.sleep(100);
     ViewInteraction appCompatButton4 = onView(
             allOf(withId(R.id.endGameButton),
                     isDisplayed()));

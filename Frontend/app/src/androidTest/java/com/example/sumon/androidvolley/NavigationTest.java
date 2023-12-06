@@ -252,7 +252,7 @@ public class NavigationTest {
         navigationMenuItemView8.perform(click());
         Thread.sleep(50);
         pressBack();
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton10 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -263,7 +263,7 @@ public class NavigationTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton10.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView10 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

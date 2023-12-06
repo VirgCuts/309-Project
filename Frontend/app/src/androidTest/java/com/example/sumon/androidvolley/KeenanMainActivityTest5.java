@@ -80,37 +80,37 @@ public class KeenanMainActivityTest5 {
                 allOf(withId(R.id.orange),
                         isDisplayed()));
         appCompatButton2.perform(click());
-        Thread.sleep(100);
+
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.purple),
                         isDisplayed()));
         appCompatButton3.perform(click());
-        Thread.sleep(100);
+
         ViewInteraction appCompatButton4 = onView(
                 allOf(withId(R.id.lightblue),
                         isDisplayed()));
         appCompatButton4.perform(click());
-        Thread.sleep(100);
+
         ViewInteraction appCompatButton5 = onView(
                 allOf(withId(R.id.yellow),
                         isDisplayed()));
         appCompatButton5.perform(click());
-        Thread.sleep(100);
+
         ViewInteraction appCompatButton6 = onView(
                 allOf(withId(R.id.magenta),
                         isDisplayed()));
         appCompatButton6.perform(click());
-        Thread.sleep(100);
+
         ViewInteraction appCompatButton7 = onView(
                 allOf(withId(R.id.green),
                         isDisplayed()));
         appCompatButton7.perform(click());
-        Thread.sleep(100);
+
         ViewInteraction appCompatButton8 = onView(
                 allOf(withId(R.id.white),
                         isDisplayed()));
         appCompatButton8.perform(click());
-        Thread.sleep(100);
+
         ViewInteraction appCompatImageButton2 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -164,12 +164,12 @@ public class KeenanMainActivityTest5 {
                 allOf(withId(R.id.endGameButton),
                         isDisplayed()));
         appCompatButton10.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(200);
         ViewInteraction appCompatButton11 = onView(
                 allOf(withId(R.id.restartButton),
                         isDisplayed()));
         appCompatButton11.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(200);
         ViewInteraction appCompatImageButton4 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -180,7 +180,7 @@ public class KeenanMainActivityTest5 {
                                 1),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(200);
         ViewInteraction navigationMenuItemView4 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

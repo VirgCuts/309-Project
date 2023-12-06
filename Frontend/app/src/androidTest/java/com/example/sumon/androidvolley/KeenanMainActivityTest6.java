@@ -54,24 +54,24 @@ public class KeenanMainActivityTest6 {
                 allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.multiPlayer),
                         isDisplayed()));
         appCompatButton2.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction recyclerView = onView(
                 allOf(withId(R.id.rvLobbies),
                         childAtPosition(
                                 withClassName(is("android.widget.RelativeLayout")),
                                 1)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.btnExit),
                         isDisplayed()));
         appCompatButton3.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction recyclerView2 = onView(
                 allOf(withId(R.id.rvLobbies),
                         childAtPosition(
@@ -83,7 +83,7 @@ public class KeenanMainActivityTest6 {
                 allOf(withId(R.id.btnExit),
                         isDisplayed()));
         appCompatButton4.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction recyclerView3 = onView(
                 allOf(withId(R.id.rvLobbies),
                         childAtPosition(
@@ -95,7 +95,7 @@ public class KeenanMainActivityTest6 {
                 allOf(withId(R.id.btnExit),
                         isDisplayed()));
         appCompatButton5.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction recyclerView4 = onView(
                 allOf(withId(R.id.rvLobbies),
                         childAtPosition(
@@ -107,7 +107,7 @@ public class KeenanMainActivityTest6 {
                 allOf(withId(R.id.btnExit),
                         isDisplayed()));
         appCompatButton6.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction recyclerView5 = onView(
                 allOf(withId(R.id.rvLobbies),
                         childAtPosition(
@@ -119,7 +119,7 @@ public class KeenanMainActivityTest6 {
                 allOf(withId(R.id.btnExit),
                         isDisplayed()));
         appCompatButton7.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction recyclerView6 = onView(
                 allOf(withId(R.id.rvLobbies),
                         childAtPosition(
@@ -136,17 +136,17 @@ public class KeenanMainActivityTest6 {
                 allOf(withId(R.id.send_button),
                         isDisplayed()));
         appCompatButton8.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton9 = onView(
                 allOf(withId(R.id.btnReadyUp),
                         isDisplayed()));
         appCompatButton9.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton10 = onView(
                 allOf(withId(R.id.btnExit),
                         isDisplayed()));
         appCompatButton10.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton4 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -157,7 +157,7 @@ public class KeenanMainActivityTest6 {
                                 1),
                         isDisplayed()));
         appCompatImageButton4.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView4 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

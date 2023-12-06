@@ -100,7 +100,7 @@ public class MessageBoardTest {
                 allOf(withId(R.id.send_button),
                         isDisplayed()));
         appCompatButton3.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton2 = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -111,7 +111,7 @@ public class MessageBoardTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton2.perform(click());
-        Thread.sleep(500);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView2 = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(

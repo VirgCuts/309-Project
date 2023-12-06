@@ -37,42 +37,42 @@ public class StudyTest {
 
     @Test
     public void studyTest() throws InterruptedException {
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.username_input),
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Carter"), closeSoftKeyboard());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.password_input),
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("password1"), closeSoftKeyboard());
-        Thread.sleep(300);
+        Thread.sleep(100);
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.login),
                         isDisplayed()));
         appCompatButton.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.btnStudy),
                         isDisplayed()));
         appCompatButton2.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton3 = onView(
                 allOf(withId(R.id.button),
                         isDisplayed()));
         appCompatButton3.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatButton4 = onView(
                 allOf(withId(R.id.showAllAnswers),
                         isDisplayed()));
         appCompatButton4.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.songGuess),
                         isDisplayed()));
         appCompatEditText3.perform(replaceText("Wild"), closeSoftKeyboard());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open"),
                         childAtPosition(
@@ -83,7 +83,7 @@ public class StudyTest {
                                 1),
                         isDisplayed()));
         appCompatImageButton.perform(click());
-        Thread.sleep(200);
+        Thread.sleep(100);
         ViewInteraction navigationMenuItemView = onView(
                 allOf(withId(R.id.logout),
                         childAtPosition(
