@@ -147,6 +147,10 @@ public class LobbyServer {
         // server side log
         logger.info("[onClose] " + username);
 
+
+        // send the message to chat
+        sendMessageToLobby(username, username + " disconnected");
+        
         // remove user from memory mappings
         sessionUsernameMap.remove(session);
         usernameSessionMap.remove(username);
@@ -154,9 +158,6 @@ public class LobbyServer {
         if (lobbyPopulation.get(lobby) < 0)
             lobbyPopulation.replace(lobby, 0);
         usernameLobbyMap.remove(username);
-
-        // send the message to chat
-        sendMessageToLobby(username, username + " disconnected");
     }
 
     /**
