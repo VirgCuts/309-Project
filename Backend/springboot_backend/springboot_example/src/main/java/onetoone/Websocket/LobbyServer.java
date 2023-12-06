@@ -119,11 +119,11 @@ public class LobbyServer {
 
         if (message.equals("@ready")) {
             userReady.replace(username, true);
-            sendMessageToLobby(username, "@ready");
+            sendMessageToOtherLobbyMember(username, "@ready");
             lobbyReadyCheck(username);
         } else if (message.equals("@unready")) {
             userReady.replace(username, false);
-            sendMessageToLobby(username, "@unready");
+            sendMessageToOtherLobbyMember(username, "@unready");
         } else if (user.getCanChat()) {
             boolean containsBannedWord = messageCheck(message, username);
             if (!containsBannedWord) {
@@ -202,6 +202,18 @@ public class LobbyServer {
             logger.info("[Lobby Exception, not in lobby for message] " + e.getMessage());
         }
     }
+    private void sendMessageToOtherLobbyMember(String username, String message) {
+        try {
+            int lobbyNumber = usernameLobbyMap.get(username);
+            usernameLobbyMap.forEach((name, lobby) -> {
+                if (lobby == lobbyNumber && !name.equals(username)) {
+                    sendMessageToParticularUser(name, message);
+                }
+            });
+        } catch (Exception e) {
+            logger.info("[Lobby Exception, not in lobby for message] " + e.getMessage());
+        }
+    }
 
     private void sendMessageToParticularUser(String username, String message) {
         try {
@@ -210,6 +222,8 @@ public class LobbyServer {
             logger.info("[DM Exception] " + e.getMessage());
         }
     }
+
+
 
     private boolean messageCheck(String message, String sender) {
         for (String bannedWord : bannedWords) {
