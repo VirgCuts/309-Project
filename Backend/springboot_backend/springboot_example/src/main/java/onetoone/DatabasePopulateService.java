@@ -43,7 +43,6 @@ public class DatabasePopulateService {
         album.addSongs(song);
         song.setAlbum(album);
         song.setArtist(artist);
-        artistRepository.save(artist);
         albumRepository.save(album);
     }
 
@@ -55,7 +54,5 @@ public class DatabasePopulateService {
         album.addSongs(song);
         song.setAlbum(album);
         song.setArtist(artist);
-        artistRepository.save(artist);
-        albumRepository.save(album);
     }
 }
