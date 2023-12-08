@@ -132,6 +132,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
         getSelectColor();
 
+
         endGameButton = findViewById(R.id.endGameButton);
         endGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -651,13 +652,10 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
      * @param callback   The callback to handle the result.
      */
     private void checkIfArtistsHaveSongTogether(String artist1, String artist2, AnswerCheckCallback callback, final EditText editText) {
-        try {
-            // Encode the artist names to handle spaces and special characters
-            String encodedArtist1 = URLEncoder.encode(artist1, "UTF-8");
-            String encodedArtist2 = URLEncoder.encode(artist2, "UTF-8");
+
 
             // Update the URL to use names instead of IDs
-            String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + encodedArtist1 + "/with/" + encodedArtist2;
+            String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artist1 + "/with/" + artist2;
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
@@ -693,11 +691,6 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
             // Add the request to your RequestQueue
             queue.add(stringRequest);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            // Handle the exception or invoke the callback with 'false'
-            callback.onResult(false, editText);
-        }
     }
 
     /**
@@ -708,13 +701,10 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
      * @param callback   The callback to handle the result.
      */
     private void checkIfArtistFeaturing(String artistName, String featuredArtist, AnswerCheckCallback callback, final EditText editText) {
-        try {
-            // Encode the artist names to handle spaces and special characters
-            String encodedArtistName = URLEncoder.encode(artistName, "UTF-8");
-            String encodedFeaturedArtist = URLEncoder.encode(featuredArtist, "UTF-8");
+
 
             // Construct the URL for the request
-            String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + encodedArtistName + "/featuring/" + encodedFeaturedArtist;
+            String url = "http://coms-309-022.class.las.iastate.edu:8080/artists/" + artistName + "/featuring/" + featuredArtist;
 
             StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                     new Response.Listener<String>() {
@@ -749,16 +739,10 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
 
             // Add the request to your RequestQueue
             queue.add(stringRequest);
-        } catch (UnsupportedEncodingException e) {
-            // Handle encoding error
-            callback.onResult(false, editText);
-        }
+
     }
     private void getArtistOnAlbum(String artistName, String albumName, AnswerCheckCallback callback, final EditText editText) {
-        try {
-            // Replace with your server URL
-            String encodedArtist1 = URLEncoder.encode(artistName, "UTF-8");
-            String encodedArtist2 = URLEncoder.encode(albumName, "UTF-8");
+
             String baseUrl = "http://coms-309-022.class.las.iastate.edu:8080";
             String endpoint = "/artists/" + artistName + "/on/" + albumName;
 
@@ -798,9 +782,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             );
             // Add the request to the RequestQueue
             queue.add(stringRequest);
-        }catch(UnsupportedEncodingException e){
-            callback.onResult(false, editText);
-        }
+
     }
 
     /**
