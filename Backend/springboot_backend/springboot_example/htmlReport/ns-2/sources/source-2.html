@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    16.7%
+    83.3%
   </span>
   <span class="absValue">
-    (1/6)
+    (5/6)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    18.8%
+    62.5%
   </span>
   <span class="absValue">
-    (3/16)
+    (10/16)
   </span>
 </td>
 </tr>
@@ -110,22 +110,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;Get all Albums in the database&quot;, response = Iterable.class, tags = &quot;album-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/albums&quot;)
 &nbsp;    List&lt;Album&gt; getAllAlbums(){
-<b class="nc">&nbsp;        return albumRepository.findAll();</b>
+<b class="fc">&nbsp;        return albumRepository.findAll();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Get Album by id from the database&quot;, response = Album.class, tags = &quot;album-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/albums/{id}&quot;)
 &nbsp;    Album getAlbumById(@PathVariable int id){
-<b class="nc">&nbsp;        return albumRepository.findById(id);</b>
+<b class="fc">&nbsp;        return albumRepository.findById(id);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Create an album and save it to the database&quot;, response = String.class, tags = &quot;album-controller&quot;)
 &nbsp;    @PostMapping(path = &quot;/albums&quot;)
 &nbsp;    String createAlbum(@RequestBody Album album){
-<b class="nc">&nbsp;        if (album == null)</b>
+<b class="fc">&nbsp;        if (album == null)</b>
 <b class="nc">&nbsp;            return failure;</b>
-<b class="nc">&nbsp;        albumRepository.save(album);</b>
-<b class="nc">&nbsp;        return success;</b>
+<b class="fc">&nbsp;        albumRepository.save(album);</b>
+<b class="fc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Update an Album by id in the database&quot;, response = Album.class, tags = &quot;album-controller&quot;)
@@ -141,8 +141,8 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;Delete Album by id from the database&quot;, response = String.class, tags = &quot;album-controller&quot;)
 &nbsp;    @DeleteMapping(path = &quot;/albums/{id}&quot;)
 &nbsp;    String deleteAlbum(@PathVariable int id){
-<b class="nc">&nbsp;        albumRepository.deleteById(id);</b>
-<b class="nc">&nbsp;        return success;</b>
+<b class="fc">&nbsp;        albumRepository.deleteById(id);</b>
+<b class="fc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -168,7 +168,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-12-06 15:59</div>
+    <div style="float:right;">generated on 2023-12-11 02:09</div>
 </div>
 </body>
 </html>
