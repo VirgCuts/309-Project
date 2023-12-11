@@ -1,12 +1,11 @@
 package onetoone;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import onetoone.Songs.Song;
-import onetoone.Songs.SongRepository;
+import onetoone.Albums.Album;
+import onetoone.Albums.AlbumRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 
 @RunWith(SpringRunner.class)
-public class SongSystemTest {
+public class AlbumSystemTest {
 
     @LocalServerPort
     int port;
@@ -39,79 +38,66 @@ public class SongSystemTest {
     }
 
     @Autowired
-    SongRepository songRepository;
+    AlbumRepository albumRepository;
 
     @Test
-    public void getAllSongs() {
-        Response response = RestAssured.get("/songs");
+    public void getAllAlbums() {
+        Response response = RestAssured.get("/albums");
         assertEquals(200, response.getStatusCode());
     }
 
     @Test
-    public void getSongById() throws JsonProcessingException {
-        Response response = RestAssured.get("/songs/1");
+    public void getAlbumById() throws JsonProcessingException {
+        Response response = RestAssured.get("/albums/1");
         assertEquals(200, response.getStatusCode());
         String returnString = response.getBody().asString();
         ObjectMapper mapper = new ObjectMapper();
-        Song song = mapper.readValue(returnString, Song.class);
-        assertEquals("HYAENA", song.getSongName());
+        Album album = mapper.readValue(returnString, Album.class);
+        assertEquals("UTOPIA", album.getAlbumName());
     }
 
     @Test
-    public void createSong() {
+    public void createAlbum() {
         Map<String, Object> map = new HashMap<>();
-        map.put("songName", "TestingName");
+        map.put("albumName", "TestingName");
         map.put("genre", "Test");
-        map.put("feature", "");
 
         Response response =
                 RestAssured.given().
                         header("Content-Type", "application/JSON").
                         body(map).
                         when().
-                        post("/songs");
+                        post("/albums");
         assertEquals(200, response.getStatusCode());
 
         String returnString = response.getBody().asString();
         assertEquals("{\"message\":\"success\"}", returnString);
 
-        songRepository.deleteBySongName("TestingName");
+        albumRepository.deleteByAlbumName("TestingName");
     }
 
     @Test
-    public void deleteSong() {
+    public void deleteAlbum() {
         Map<String, Object> map = new HashMap<>();
-        map.put("songName", "TestingName");
+        map.put("albumName", "TestingName");
         map.put("genre", "Test");
-        map.put("feature", "");
 
         Response response =
                 RestAssured.given().
                         header("Content-Type", "application/JSON").
                         body(map).
                         when().
-                        post("/songs");
+                        post("/albums");
         assertEquals(200, response.getStatusCode());
 
         String returnString = response.getBody().asString();
         assertEquals("{\"message\":\"success\"}", returnString);
 
-        Response response1 = RestAssured.delete("/songs/102");
-        assertEquals(200, response.getStatusCode());
+        Response response1 = RestAssured.delete("/albums/21");
+        assertEquals(200, response1.getStatusCode());
 
         String returnString2 = response1.getBody().asString();
         assertEquals("{\"message\":\"success\"}", returnString2);
-
-        songRepository.deleteBySongName("TestingName");
     }
 
-    @Test
-    public void getSongNameContains() throws JsonProcessingException {
-        Response response = RestAssured.get("/songsname/HYAENA/game/YAE");
-        assertEquals(200, response.getStatusCode());
-        String returnString = response.getBody().asString();
-        ObjectMapper mapper = new ObjectMapper();
-        boolean response2 = mapper.readValue(returnString, Boolean.class);
-        assertTrue(response2);
-    }
 }
