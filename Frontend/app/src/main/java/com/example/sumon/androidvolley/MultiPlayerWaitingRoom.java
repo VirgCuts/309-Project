@@ -159,7 +159,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
     }
     private void sendReadyMessage() {
         try {
-            String message = isPlayerReady ? (matchType.equals("2v2") ? "@ready2" : "@ready1") : "@ready";
+            String message = matchType.equals("2v2") ? "@ready2" : "@ready";
             WebSocketManager.getInstance().sendMessage(message);
         } catch (Exception e) {
             Log.e("WebSocket", "Error sending ready message", e);
@@ -168,7 +168,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
 
     private void sendUnreadyMessage() {
         try {
-            String message = isPlayerReady ? (matchType.equals("2v2") ? "@unready2" : "@unready1") : "@unready";
+            String message = matchType.equals("2v2") ? "@unready2" : "@unready";
             WebSocketManager.getInstance().sendMessage(message);
         } catch (Exception e) {
             Log.e("WebSocket", "Error sending unready message", e);
@@ -185,13 +185,10 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
             Log.d("WebMessage",message);
             // Check if the message indicates another player's readiness
             if(matchType =="2v2"){
-                if (message.equals("@ready1") || message.equals("@ready2")) {
-                    Log.d("Ready","User clicked ready");
-                    // Increment the count of ready users
+                if (message.equals("@ready2")) {
                     readyUsers++;
                     updateUI();
-                } else if (message.equals("@unready1") || message.equals("@unready2")) {
-                    // Decrement the count of ready users
+                } else if (message.equals("@unready2")) {
                     readyUsers--;
                     updateUI();
                 } else if(message.equals("Lobby is full.")){
@@ -208,14 +205,11 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
                     // Handle other messages (e.g., adding them to the chat view)
                     addMessageToView(message);
                 }
-            }else if(matchType == "1v1"){
+            }else if (matchType.equals("1v1")) {
                 if (message.equals("@ready")) {
-                    Log.d("Ready","User clicked ready");
-                    // Increment the count of ready users
                     readyUsers++;
                     updateUI();
                 } else if (message.equals("@unready")) {
-                    // Increment the count of ready users
                     readyUsers--;
                     updateUI();
                 } else if(message.equals("Lobby is full.")){
