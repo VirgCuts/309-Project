@@ -16,4 +16,7 @@ public interface SongRepository extends JpaRepository<Song, Long> {
 
     @Transactional
     void deleteById(int id);
+
+    @Transactional
+    void deleteBySongName(String songName);
 }
