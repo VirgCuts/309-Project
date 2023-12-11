@@ -149,5 +149,25 @@ public class sendBoard {
         return sb.toString();
     }
 
+    public void edit(int row, int col) {
+        if (isValidPosition(row, col)) {
+            if(col == 0) {
+                griddle[row][col] = "[1,";
+            }
+            else if(row == 2 && col == 2) {
+                griddle[row][col] = "1]";
+            }
+            else if(col == 2) {
+                griddle[row][col] = "1],";
+            }
+            else {
+                griddle[row][col] = "1,";
+            }
+        } else {
+            // Handle invalid positions (e.g., throw an exception or print an error)
+            System.out.println("Invalid position!");
+        }
+    }
+
 }
 

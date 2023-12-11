@@ -312,6 +312,20 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             }
         });
     }
+    private void updatePlayerBoard(int row , int col) {
+            try {
+                // Update the playerBoard with the answer at the specified row and column
+                sendBoard.edit(row,col);
+                points = points+100;
+                setPoints();
+                sendBoardState(sendBoard);
+
+            } catch (NumberFormatException e) {
+                Log.e("updatePlayerBoard", "Invalid tag format for EditText: ", e);
+            }
+        }
+
+
     /**
      * Sends the current game board state to the opponent via WebSocket.
      *
@@ -319,11 +333,6 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
      */
     private void sendBoardState(sendBoard board) {
         try {
-            String winBool = "false";
-            if(concede) {
-                winBool = "True";
-            }
-
             // sends the edit text message
 
             String boardState = "{" +
@@ -333,7 +342,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     "    \"game\": [" +
                     board.toString() +
                     "    ]," +
-                    "    \"won\": "+ winBool + "," +
+                    "    \"won\": "+ false + "," +
                     "    \"score\": 0" +
                     "  }" +
                     "}";
@@ -793,6 +802,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     public void onResult(boolean colIsCorrect, EditText editText) {
                         if (rowIsCorrect && colIsCorrect) {
                             Log.d("YES","yes");
+                            updatePlayerBoard(row, col);
                             sendBoardState(sendBoard);
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
