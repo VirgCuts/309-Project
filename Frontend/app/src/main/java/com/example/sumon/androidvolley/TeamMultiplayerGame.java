@@ -168,6 +168,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         playerBoard = new PlayerBoard();
         sendBoard = new sendBoard();
         endGameButton = findViewById(R.id.endGameButton);
+
         endGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -340,9 +341,10 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     }
     private void updatePlayerBoard(int row , int col) {
         try {
+            Log.d("UPDATEBOARD","UpdatePlayerBoard Called R:"+ Integer.toString(row) + " C:" + Integer.toString(col)) ;
             // Update the playerBoard with the answer at the specified row and column
             sendBoard.edit(row,col);
-            sendBoardState(sendBoard);
+
 
         } catch (NumberFormatException e) {
             Log.e("updatePlayerBoard", "Invalid tag format for EditText: ", e);
@@ -772,6 +774,63 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             callEnd();
         }
     }
+    //changes the colors of the o1-09 squares to reflect what the opponent has answered correctly
+
+    /**
+     * Changes the colors of the o1-o9 squares to reflect what the opponent has answered correctly.
+     *
+     * @param view The index of the square to change color (0-8).
+     */
+    private void changeTeamBoard(int view) {
+        EditText textView = findViewById(R.id.r1c1);
+        int row = 0;
+        int col = 0;
+        switch (view) {
+            case 0:
+                textView = findViewById(R.id.r1c1);
+                row=0; col=0;
+                break;
+            case 1:
+                textView = findViewById(R.id.r1c2);
+                row=0; col=1;
+                break;
+            case 2:
+                textView = findViewById(R.id.r1c3);
+                row=0; col=2;
+                break;
+            case 3:
+                textView = findViewById(R.id.r2c1);
+                row=1; col=0;
+                break;
+            case 4:
+                textView = findViewById(R.id.r2c2);
+                row=1; col=1;
+                break;
+            case 5:
+                textView = findViewById(R.id.r2c3);
+                row=1; col=2;
+                break;
+            case 6:
+                textView = findViewById(R.id.r3c1);
+                row=2; col=0;
+                break;
+            case 7:
+                textView = findViewById(R.id.r3c2);
+                row=2; col=1;
+                break;
+            case 8:
+                textView = findViewById(R.id.r3c3);
+                row=2; col=2;
+                break;
+        }
+
+            int semiTransparentGreen = Color.argb(128, 0, 255, 0);
+            ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentGreen, PorterDuff.Mode.SRC_ATOP);
+            textView.getBackground().mutate().setColorFilter(colorFilter);
+
+            textView.setEnabled(false);
+            updatePlayerBoard(row, col);
+    }
 
     /**
      * Handles the incoming WebSocket message.
@@ -803,13 +862,21 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             if(jsonObject.getBoolean("won")) {
                 showConcedeDialog(local);
             }
-            String[] boardValues = boardGrid.split(",");
-            for (int i =0; i < boardValues.length; i++) {
 
-                if(Integer.parseInt(boardValues[i]) == 1) {
-                    changeOppColor(i);
+                correctGuesses++;
+                String[] boardValues = boardGrid.split(",");
+                for (int i = 0; i < boardValues.length; i++) {
+
+                    if(jsonTeamState == "o") {
+                        if (Integer.parseInt(boardValues[i]) == 1) {
+                            changeOppColor(i);
+                        }
+                    }
+                    else {
+                        changeTeamBoard(i);
+                    }
                 }
-            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -859,7 +926,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
                             updatePlayerBoard(row, col);
-
+                            sendBoardState(sendBoard);
                             correctGuesses++;
                             points += 15;
                             setPoints();
