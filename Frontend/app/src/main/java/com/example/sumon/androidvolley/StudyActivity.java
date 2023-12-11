@@ -137,12 +137,12 @@ public class StudyActivity extends AppCompatActivity {
                                 int grammys = artistJson.getInt("numGrammys");
                                 String songs = artistJson.getString("songs");
 
-                                String albums = artistJson.getString("albums");
+
 
                                 Log.d("PLAT", Integer.toString(plat));
                                 Log.d("GRAM", Integer.toString(grammys));
                                 Log.d("SONGS", songs);
-                                Log.d("ALBUMS", albums);
+
 
                                 random.setText(name);
                                 currentArtist = name;

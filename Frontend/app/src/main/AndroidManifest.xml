@@ -35,6 +35,8 @@
             android:exported="true"></activity>
         <activity android:name=".MultiPlayerGame"
             android:exported="true"></activity>
+        <activity android:name=".TeamMultiplayerGame"
+            android:exported="true"></activity>
         <activity android:name=".ShopActivity"
             android:exported="true">
 
