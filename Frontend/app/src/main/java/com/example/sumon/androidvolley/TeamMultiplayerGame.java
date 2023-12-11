@@ -315,7 +315,18 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             }
         });
     }
+    private void updatePlayerBoard(int row , int col) {
+        try {
+            // Update the playerBoard with the answer at the specified row and column
+            sendBoard.edit(row,col);
+            points = points+100;
+            setPoints();
+            sendBoardState(sendBoard);
 
+        } catch (NumberFormatException e) {
+            Log.e("updatePlayerBoard", "Invalid tag format for EditText: ", e);
+        }
+    }
     /**
      * Sends the current game board state to the opponent via WebSocket.
      *
@@ -811,6 +822,8 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
                             Log.d("YES", "yes");
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
+                            updatePlayerBoard(row, col);
+
                             correctGuesses++;
                             points += 15;
                             setPoints();

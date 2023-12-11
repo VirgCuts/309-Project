@@ -738,7 +738,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             //1,1,1,1,1,0,0,0,0
             Log.d("CONCEDED", String.valueOf(jsonObject.getBoolean("won")));
             if(jsonObject.getBoolean("won")) {
-                endGame();
+                showLoserDialog(Player1);
             }
             String[] boardValues = boardGrid.split(",");
             int endcounter = 0;
@@ -804,7 +804,6 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                         if (rowIsCorrect && colIsCorrect) {
                             Log.d("YES","yes");
                             updatePlayerBoard(row, col);
-                            sendBoardState(sendBoard);
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
                             correctGuesses++;
