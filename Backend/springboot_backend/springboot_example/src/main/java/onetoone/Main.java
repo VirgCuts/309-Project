@@ -21,6 +21,7 @@ import onetoone.Users.UserRepository;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -42,10 +43,6 @@ class Main {
         SpringApplication.run(Main.class, args);
     }
 
-    @Bean
-    public JavaMailSender javaMailSender() {
-        return new JavaMailSenderImpl();
-    }
 
     // Create 3 users with their machines
     /**
@@ -57,7 +54,9 @@ class Main {
      * As mentioned in User.java just associating the Laptop object with the User will save it into the database because of the CascadeType
      */
     @Bean
-    CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository, AlbumRepository albumRepository, MessageRepository messageRepository, ReportRepository reportRepository, InventoryRepository inventoryRepository) {
+    CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository,
+                               AlbumRepository albumRepository, MessageRepository messageRepository, ReportRepository reportRepository,
+                               InventoryRepository inventoryRepository, DatabasePopulateService dbService) {
         return args -> {
             userRepository.deleteAll();
 //            Album album1 = new Album("Graduation", "Rap");
@@ -76,7 +75,7 @@ class Main {
                 HashMap<String, Artist> hash = new HashMap<>();
                 HashMap<String, Album> albumhash = new HashMap<>();
                 String[] categories = reader.readLine().split(",");
-                if (artistRepository.findById(1) == null) {
+                if (artistRepository.findAll().isEmpty()) {
                     for (int i = 0; i < 101; i++) {
                         String[] input = reader.readLine().split(",");
                         String artist_name = input[0];
@@ -100,44 +99,18 @@ class Main {
                         if (!hash.containsKey(artist_name)) {
                             Artist artist = new Artist(artist_name, 0, 0);
                             hash.put(artist_name, artist);
-                            artistRepository.save(artist);
-
                             Album album = new Album(album_name, genre);
                             albumhash.put(album_name, album);
-                            albumRepository.save(album);
-
-                            artist.addSongs(song);
-                            song.setArtist(artist);
-
-                            album.addSongs(song);
-                            song.setAlbum(album);
-                        } else if (!albumhash.containsKey(album_name)) {
+                            dbService.connectSongToArtistAndAlbum(artist, album, song);
+                        }
+                        else if (!albumhash.containsKey(album_name)) {
                             Album album = new Album(album_name, genre);
                             albumhash.put(album_name, album);
-                            albumRepository.save(album);
-
-                            Artist getter = hash.get(artist_name);
-                            getter.addSongs(song);
-
-                            getter.addSongs(song);
-                            song.setArtist(getter);
-
-                            album.addSongs(song);
-                            song.setAlbum(album);
+                            dbService.connectSongToArtistStringAndAlbum(artist_name, album, song);
                         }
                         else {
-                            Artist getter = hash.get(artist_name);
-                            getter.addSongs(song);
-                            song.setArtist(getter);
-
-                            Album getter2 = albumhash.get(album_name);
-                            getter2.addSongs(song);
-                            song.setAlbum(getter2);
+                            dbService.connectSongToArtistStringAndAlbumString(artist_name, album_name, song);
                         }
-
-                        songRepository.save(song);
-
-
                     }
 
                 }
