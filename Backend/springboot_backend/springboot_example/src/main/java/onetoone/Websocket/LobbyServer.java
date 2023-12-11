@@ -190,6 +190,7 @@ public class LobbyServer {
     private void lobbyReadyCheck(String username) {
         int[] count = new int[1];
         int lobbyNumber = usernameLobbyMap.get(username);
+        String[] names = new String[1];
         if (lobbyNumber < 6) {
             usernameLobbyMap.forEach((name, lobby) -> {
                 if (lobby == lobbyNumber && userReady.get(name)) {
@@ -202,10 +203,14 @@ public class LobbyServer {
             usernameLobbyMap.forEach((name, lobby) -> {
                 if (lobby == lobbyNumber && userReady.get(name)) {
                     count[0]++;
+                    if (count[0] == 1)
+                        names[0] = name;
+                    else
+                        names[0] = names[0] + "," + name;
                 }
+                if (count[0] == 4)
+                    sendMessageToLobby(username, "Start Team Game:" + names[0]);
             });
-            if (count[0] == 4)
-                sendMessageToLobby(username, "Start Team Game");
         }
         
     }
