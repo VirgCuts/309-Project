@@ -99,6 +99,11 @@ public class MultiPlayerLobbyActivity extends AppCompatActivity implements Lobby
             Intent intent = new Intent(MultiPlayerLobbyActivity.this, MultiPlayerWaitingRoom.class);
             intent.putExtra("LOBBY_NAME", lobby.getNum());
             intent.putExtra("USERNAME", username);
+            if (lobby.getNum() >= 1 && lobby.getNum() <= 5) {
+                intent.putExtra("MATCH_TYPE", "1v1");
+            } else if (lobby.getNum() >= 6 && lobby.getNum() <= 10) {
+                intent.putExtra("MATCH_TYPE", "2v2");
+            }
             startActivity(intent);
         }
     }

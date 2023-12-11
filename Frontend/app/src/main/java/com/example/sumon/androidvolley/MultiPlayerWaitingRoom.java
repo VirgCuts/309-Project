@@ -40,6 +40,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
     private String username = "";
     private int lobbyNum;
     private boolean isWebSocketConnected;
+    private String matchType;
 
 
     @Override
@@ -60,6 +61,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         if (intent != null) {
             lobbyNum = intent.getIntExtra("LOBBY_NAME",0);
             username = intent.getStringExtra("USERNAME");
+            matchType = intent.getStringExtra("MATCH_TYPE");
         }
 
 
@@ -157,8 +159,8 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
     }
     private void sendReadyMessage() {
         try {
-            // Send @ready message to the server via WebSocket
-            WebSocketManager.getInstance().sendMessage("@ready");
+            String message = isPlayerReady ? (matchType.equals("2v2") ? "@ready2" : "@ready1") : "@ready";
+            WebSocketManager.getInstance().sendMessage(message);
         } catch (Exception e) {
             Log.e("WebSocket", "Error sending ready message", e);
         }
@@ -166,10 +168,10 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
 
     private void sendUnreadyMessage() {
         try {
-            // Send @ready message to the server via WebSocket
-            WebSocketManager.getInstance().sendMessage("@unready");
+            String message = isPlayerReady ? (matchType.equals("2v2") ? "@unready2" : "@unready1") : "@unready";
+            WebSocketManager.getInstance().sendMessage(message);
         } catch (Exception e) {
-            Log.e("WebSocket", "Error sending ready message", e);
+            Log.e("WebSocket", "Error sending unready message", e);
         }
     }
 
@@ -182,13 +184,13 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         runOnUiThread(() -> {
             Log.d("WebMessage",message);
             // Check if the message indicates another player's readiness
-            if (message.equals("@ready")) {
+            if (message.equals("@ready1") || message.equals("@ready2")) {
                 Log.d("Ready","User clicked ready");
                 // Increment the count of ready users
                 readyUsers++;
                 updateUI();
-            } else if (message.equals("@unready")) {
-                // Increment the count of ready users
+            } else if (message.equals("@unready1") || message.equals("@unready2")) {
+                // Decrement the count of ready users
                 readyUsers--;
                 updateUI();
             } else if(message.equals("Lobby is full.")){
@@ -200,7 +202,11 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
                 Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerGame.class);
                 intent.putExtra("PLAYER", username);
                 startActivity(intent);
-            }
+            } //else if(message.equals("Start team game")){
+                //Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerGame.class); //Change MultiPlayerGame.class to new Team class
+                //intent.putExtra("PLAYER", username); //Whatever intents you need
+                //startActivity(intent);
+            //}
             else {
                 // Handle other messages (e.g., adding them to the chat view)
                 addMessageToView(message);
