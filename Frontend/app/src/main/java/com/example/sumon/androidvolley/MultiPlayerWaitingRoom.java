@@ -184,34 +184,55 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         runOnUiThread(() -> {
             Log.d("WebMessage",message);
             // Check if the message indicates another player's readiness
-            if (message.equals("@ready1") || message.equals("@ready2")) {
-                Log.d("Ready","User clicked ready");
-                // Increment the count of ready users
-                readyUsers++;
-                updateUI();
-            } else if (message.equals("@unready1") || message.equals("@unready2")) {
-                // Decrement the count of ready users
-                readyUsers--;
-                updateUI();
-            } else if(message.equals("Lobby is full.")){
-                Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerLobbyActivity.class);
-                intent.putExtra("ERROR_MESSAGE", "Lobby is full, sorry");
-                startActivity(intent);
-                finish();
-            }else if(message.equals("Start game")){
-                Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerGame.class);
-                intent.putExtra("PLAYER", username);
-                startActivity(intent);
-            } //else if(message.equals("Start team game")){
+            if(matchType =="2v2"){
+                if (message.equals("@ready1") || message.equals("@ready2")) {
+                    Log.d("Ready","User clicked ready");
+                    // Increment the count of ready users
+                    readyUsers++;
+                    updateUI();
+                } else if (message.equals("@unready1") || message.equals("@unready2")) {
+                    // Decrement the count of ready users
+                    readyUsers--;
+                    updateUI();
+                } else if(message.equals("Lobby is full.")){
+                    Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerLobbyActivity.class);
+                    intent.putExtra("ERROR_MESSAGE", "Lobby is full, sorry");
+                    startActivity(intent);
+                    finish();
+                }//else if(message.equals("Start team game")){
                 //Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerGame.class); //Change MultiPlayerGame.class to new Team class
                 //intent.putExtra("PLAYER", username); //Whatever intents you need
                 //startActivity(intent);
-            //}
-            else {
-                // Handle other messages (e.g., adding them to the chat view)
-                addMessageToView(message);
+                //}
+                else {
+                    // Handle other messages (e.g., adding them to the chat view)
+                    addMessageToView(message);
+                }
+            }else if(matchType == "1v1"){
+                if (message.equals("@ready")) {
+                    Log.d("Ready","User clicked ready");
+                    // Increment the count of ready users
+                    readyUsers++;
+                    updateUI();
+                } else if (message.equals("@unready")) {
+                    // Increment the count of ready users
+                    readyUsers--;
+                    updateUI();
+                } else if(message.equals("Lobby is full.")){
+                    Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerLobbyActivity.class);
+                    intent.putExtra("ERROR_MESSAGE", "Lobby is full, sorry");
+                    startActivity(intent);
+                    finish();
+                }else if(message.equals("Start game")){
+                    Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerGame.class);
+                    intent.putExtra("PLAYER", username);
+                    startActivity(intent);
+                }
+                else {
+                    // Handle other messages (e.g., adding them to the chat view)
+                    addMessageToView(message);
+                }
             }
-
         });
 
     }
