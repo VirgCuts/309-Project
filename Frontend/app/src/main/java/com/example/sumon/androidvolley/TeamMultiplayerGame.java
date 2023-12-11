@@ -471,7 +471,24 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         turnOffEdit(r3c3);
 
     }
+    private void showConcedeDialog(String loser) {
+        Log.d("Winner", "Calling ENDGAME CONCEDE");
+        end = true;
+        pointView.setText("OPPONENT CONCEDED");
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(r1c1.getWindowToken(), 0);
+        r1c1.clearFocus();
+        turnOffEdit(r1c1);
+        turnOffEdit(r1c2);
+        turnOffEdit(r1c3);
+        turnOffEdit(r2c1);
+        turnOffEdit(r2c2);
+        turnOffEdit(r2c3);
+        turnOffEdit(r3c1);
+        turnOffEdit(r3c2);
+        turnOffEdit(r3c3);
 
+    }
     /**
      * Shows a custom dialog displaying the winner, time remaining, points, and the final game board.
      *
@@ -766,10 +783,12 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             boardGrid = boardGrid.replace("[", "").replace("]", "");
             Log.d("ARRCL",boardGrid);
             //1,1,1,1,1,0,0,0,0
-
+            if(jsonObject.getBoolean("won")) {
+                showConcedeDialog(Player1);
+            }
             String[] boardValues = boardGrid.split(",");
-            int winTally = 0;
             for (int i =0; i < boardValues.length; i++) {
+
                 if(Integer.parseInt(boardValues[i]) == 1) {
                     changeOppColor(i);
                 }

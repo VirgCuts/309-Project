@@ -463,6 +463,24 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         turnOffEdit(r3c3);
 
     }
+    private void showConcedeDialog(String loser) {
+        Log.d("Winner", "Calling ENDGAME CONCEDE");
+        end = true;
+        pointView.setText("OPPONENT CONCEDED");
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(r1c1.getWindowToken(), 0);
+        r1c1.clearFocus();
+        turnOffEdit(r1c1);
+        turnOffEdit(r1c2);
+        turnOffEdit(r1c3);
+        turnOffEdit(r2c1);
+        turnOffEdit(r2c2);
+        turnOffEdit(r2c3);
+        turnOffEdit(r3c1);
+        turnOffEdit(r3c2);
+        turnOffEdit(r3c3);
+
+    }
     /**
      * Shows a custom dialog displaying the winner, time remaining, points, and the final game board.
      *
@@ -738,25 +756,15 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             //1,1,1,1,1,0,0,0,0
             Log.d("CONCEDED", String.valueOf(jsonObject.getBoolean("won")));
             if(jsonObject.getBoolean("won")) {
-                showLoserDialog(Player1);
+                showConcedeDialog(Player1);
             }
             String[] boardValues = boardGrid.split(",");
-            int endcounter = 0;
             for (int i =0; i < boardValues.length; i++) {
 
                 if(Integer.parseInt(boardValues[i]) == 1) {
                     changeOppColor(i);
-
-                }
-                else {
-                    endcounter++;
                 }
             }
-            Log.d("Count", Integer.toString(endcounter));
-            if(endcounter == 9) {
-                endGame();
-            }
-
 
 
         } catch (JSONException e) {
