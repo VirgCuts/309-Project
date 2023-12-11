@@ -44,7 +44,6 @@ public class LobbyServer {
         put(1, 0); put(2, 0); put(3, 0); put(4, 0); put(5, 0);
         put(6, 0); put(7, 0); put(8, 0); put(9, 0); put(10, 0);
     }};
-
     private static Map < String, Boolean > userReady = new Hashtable<>();
 
     // server side logger
@@ -76,7 +75,7 @@ public class LobbyServer {
         } else if (existingUser == null) {
             session.getBasicRemote().sendText("Username doesn't exist within database");
             session.close();
-        } else if (lobbyPopulation.get(lobbyNumber) > 1) {
+        } else if ((lobbyPopulation.get(lobbyNumber) > 1 && lobbyNumber < 6) || (lobbyPopulation.get(lobbyNumber) > 3 && lobbyNumber > 5)) {
             session.getBasicRemote().sendText("Lobby is full.");
             session.close();
         } else{
@@ -113,6 +112,8 @@ public class LobbyServer {
         // get the username by session
         String username = sessionUsernameMap.get(session);
         User user = userRepository.findByName(username);
+        
+        Integer lobby = usernameLobbyMap.get(username);
 
         // server side log
         logger.info("[onMessage] " + username + ": " + message);
@@ -124,6 +125,13 @@ public class LobbyServer {
         } else if (message.equals("@unready")) {
             userReady.replace(username, false);
             sendMessageToOtherLobbyMember(username, "@unready");
+        } else if (message.equals("@ready2")) {
+            userReady.replace(username, true);;
+            sendMessageToOtherLobbyMember(username, "@ready2");
+            lobbyReadyCheck(username);
+        } else if (message.equals("@unready2")) {
+            userReady.replace(username, false);
+            sendMessageToOtherLobbyMember(username, "@unready2");
         } else if (user.getCanChat()) {
             boolean containsBannedWord = messageCheck(message, username);
             if (!containsBannedWord) {
@@ -159,6 +167,7 @@ public class LobbyServer {
         lobbyPopulation.replace(lobby, lobbyPopulation.get(lobby) - 1);
         if (lobbyPopulation.get(lobby) < 0)
             lobbyPopulation.replace(lobby, 0);
+        userReady.remove(username);
         usernameLobbyMap.remove(username);
     }
 
@@ -181,15 +190,31 @@ public class LobbyServer {
     private void lobbyReadyCheck(String username) {
         int[] count = new int[1];
         int lobbyNumber = usernameLobbyMap.get(username);
-        usernameLobbyMap.forEach((name, lobby) -> {
-            if (lobby == lobbyNumber && userReady.get(name)) {
-                count[0]++;
-            }
-        });
-        if (count[0] == 2)
-            sendMessageToLobby(username, "Start game");
+        String[] names = new String[1];
+        if (lobbyNumber < 6) {
+            usernameLobbyMap.forEach((name, lobby) -> {
+                if (lobby == lobbyNumber && userReady.get(name)) {
+                    count[0]++;
+                }
+            });
+            if (count[0] == 2)
+                sendMessageToLobby(username, "Start game");
+        } else {
+            usernameLobbyMap.forEach((name, lobby) -> {
+                if (lobby == lobbyNumber && userReady.get(name)) {
+                    count[0]++;
+                    if (count[0] == 1)
+                        names[0] = name;
+                    else
+                        names[0] = names[0] + "," + name;
+                }
+                if (count[0] == 4)
+                    sendMessageToLobby(username, "Start Team Game:" + names[0]);
+            });
+        }
+        
     }
-
+    
     private void sendMessageToLobby(String username, String message) {
         try {
             int lobbyNumber = usernameLobbyMap.get(username);
@@ -222,8 +247,6 @@ public class LobbyServer {
             logger.info("[DM Exception] " + e.getMessage());
         }
     }
-
-
 
     private boolean messageCheck(String message, String sender) {
         for (String bannedWord : bannedWords) {
