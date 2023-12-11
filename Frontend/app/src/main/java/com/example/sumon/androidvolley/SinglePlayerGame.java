@@ -801,7 +801,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
             requestBody.put("highScore", score);
 
             JsonObjectRequest request = new JsonObjectRequest(
-                    Request.Method.POST,
+                    Request.Method.PUT,
                     url,
                     requestBody,
                     new Response.Listener<JSONObject>() {
