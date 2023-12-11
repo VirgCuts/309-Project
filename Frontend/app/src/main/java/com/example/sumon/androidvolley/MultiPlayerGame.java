@@ -342,7 +342,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     "    \"game\": [" +
                     board.toString() +
                     "    ]," +
-                    "    \"won\": "+ false + "," +
+                    "    \"won\": "+ concede + "," +
                     "    \"score\": 0" +
                     "  }" +
                     "}";
@@ -752,6 +752,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     endcounter++;
                 }
             }
+            Log.d("Count", Integer.toString(endcounter));
             if(endcounter == 9) {
                 endGame();
             }
