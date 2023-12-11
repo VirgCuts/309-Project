@@ -1,5 +1,7 @@
 package com.example.sumon.androidvolley;
 
+import static java.lang.String.valueOf;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -387,7 +389,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         timeRemainingText.setText("Time Remaining: " + timerTextView.getText().toString());
 
         TextView pointsText = dialogView.findViewById(R.id.pointsTextView);
-        pointsText.setText("Points: " + String.valueOf(points));
+        pointsText.setText("Points: " + valueOf(points));
 
         // Populate the winner's board grid
         int[] cellIds = {
@@ -569,7 +571,7 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
                     final int row = Integer.parseInt(parts[0]);
                     final int column = Integer.parseInt(parts[1]);
                     final String userAnswer = editText.getText().toString().trim();
-                    checkAnswer(editText, userAnswer, row, column);
+                    checkAnswer(editText, userAnswer, row-1, column);
                     Log.d("This","This line has been reached");
                     return true;
                 }
@@ -613,6 +615,10 @@ public class SinglePlayerGame extends AppCompatActivity implements GameViewInter
         String rowCheck = categories.get(row).get("check");
         String colKeyword = categories.get(2 + col).get("keyword");
         String rowKeyword = categories.get(row).get("keyword");
+        Log.d("COLSUBJECT",colKeyword);
+        Log.d("ROWSUBJECT",rowKeyword);
+        Log.d("ROW",valueOf(row));
+        Log.d("COLUMN",valueOf(col));
         performCheck(rowSubject, rowCheck, rowKeyword, userAnswer, new AnswerCheckCallback() {
             @Override
             public void onResult(boolean rowIsCorrect, EditText editText) {

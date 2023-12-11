@@ -641,7 +641,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     final int row = Integer.parseInt(parts[0]);
                     final int column = Integer.parseInt(parts[1]);
                     final String userAnswer = editText.getText().toString().trim();
-                    checkAnswer(editText, userAnswer, row, column);
+                    checkAnswer(editText, userAnswer, row-1, column);
                     Log.d("This","This line has been reached");
                     return true;
                 }
