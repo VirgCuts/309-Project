@@ -732,13 +732,21 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                 endGame();
             }
             String[] boardValues = boardGrid.split(",");
-
+            int endcounter = 0;
             for (int i =0; i < boardValues.length; i++) {
+
                 if(Integer.parseInt(boardValues[i]) == 1) {
                     changeOppColor(i);
 
                 }
+                else {
+                    endcounter++;
+                }
             }
+            if(endcounter == 9) {
+                endGame();
+            }
+
 
 
         } catch (JSONException e) {
@@ -785,6 +793,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     public void onResult(boolean colIsCorrect, EditText editText) {
                         if (rowIsCorrect && colIsCorrect) {
                             Log.d("YES","yes");
+                            sendBoardState(sendBoard);
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
                             correctGuesses++;
