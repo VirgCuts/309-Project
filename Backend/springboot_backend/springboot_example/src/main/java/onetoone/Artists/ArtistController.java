@@ -70,7 +70,7 @@ public class ArtistController {
     @GetMapping(path = "/artists/random")
     Artist getRandomArtist() {
         Random rand = new Random();
-        int randomNum = rand.nextInt(437);
+        int randomNum = rand.nextInt(12);
         return artistRepository.findById(randomNum);
     }
 
@@ -98,28 +98,64 @@ public class ArtistController {
     @GetMapping(path = "/artists/{name1}/with/{name2}")
     String getArtistHaveSongTogether( @PathVariable String name1, @PathVariable String name2) {
         Artist artist1 = artistRepository.findByName(name1);
-        String artist1name = artist1.getName();
-        List<Song> songList1 = artist1.getSongs();
         Artist artist2 = artistRepository.findByName(name2);
-        String artist2name = artist2.getName();
-        List<Song> songList2 = artist2.getSongs();
-        boolean returner = false;
-        for (int i = 0; i < songList1.size(); i++) {
-            if (songList1.get(i).getFeature().contains(artist2name)) {
-                returner =  true;
+        if (artist1 != null && artist2 != null) {
+            String artist1name = artist1.getName();
+            List<Song> songList1 = artist1.getSongs();
+
+            String artist2name = artist2.getName();
+            List<Song> songList2 = artist2.getSongs();
+            boolean returner = false;
+            for (int i = 0; i < songList1.size(); i++) {
+                if (songList1.get(i).getFeature().contains(artist2name)) {
+                    returner =  true;
+                }
+            }
+            for (int i = 0; i < songList2.size(); i++) {
+                if (songList2.get(i).getFeature().contains(artist1name)) {
+                    returner =  true;
+                }
+            }
+            if (returner) {
+                return success;
+            }
+            else {
+                return failure;
             }
         }
-        for (int i = 0; i < songList2.size(); i++) {
-            if (songList2.get(i).getFeature().contains(artist1name)) {
-                returner =  true;
+        else if (artist1 == null) {
+            String artist2name = artist2.getName();
+            List<Song> songList2 = artist2.getSongs();
+            boolean returner = false;
+            for (int i = 0; i < songList2.size(); i++) {
+                if (songList2.get(i).getFeature().contains(name1)) {
+                    returner =  true;
+                }
             }
-        }
-        if (returner) {
-            return success;
+            if (returner) {
+                return success;
+            }
+            else {
+                return failure;
+            }
         }
         else {
-            return failure;
+            String artist1name = artist1.getName();
+            List<Song> songList1 = artist1.getSongs();
+            boolean returner = false;
+            for (int i = 0; i < songList1.size(); i++) {
+                if (songList1.get(i).getFeature().contains(name2)) {
+                    returner =  true;
+                }
+            }
+            if (returner) {
+                return success;
+            }
+            else {
+                return failure;
+            }
         }
+
     }
 
     @GetMapping(path = "/artists/{name}/on/{album}")
@@ -171,19 +207,6 @@ public class ArtistController {
         return success;
     }
 
-//    @ApiOperation(value = "Assign an Album to an Artist in the database", response = String.class, tags = "artist-controller")
-//    @PutMapping("/artists/{artistId}/albums/{albumId}")
-//    String assignAlbumToArtist(@PathVariable int artistId,@PathVariable int albumId){
-//        Artist artist = artistRepository.findById(artistId);
-//        Album album = albumRepository.findById(albumId);
-//        if(artist == null || album == null)
-//            return failure;
-//        album.setArtist(artist);
-//        artist.addAlbums(album);
-//        artistRepository.save(artist);
-//        return success;
-//    }
-
     @ApiOperation(value = "Delete an Artist from the database", response = String.class, tags = "artist-controller")
     @DeleteMapping(path = "/artists/{id}")
     String deleteArtist(@PathVariable int id){
@@ -192,26 +215,26 @@ public class ArtistController {
     }
 
     // for the game directly
-    @ApiOperation(value = "Check if an Artist name contains a given string for the game", response = Boolean.class, tags = "artist-controller")
-    @GetMapping(path = "/artists/{name}/game/{check}")
-    boolean checkIfArtistContains(@PathVariable String name, @PathVariable String check){
-        Artist artist = artistRepository.findByName(name);
-        return artist.getName().contains(check);
-    }
+//    @ApiOperation(value = "Check if an Artist name contains a given string for the game", response = Boolean.class, tags = "artist-controller")
+//    @GetMapping(path = "/artists/{name}/game/{check}")
+//    boolean checkIfArtistContains(@PathVariable String name, @PathVariable String check){
+//        Artist artist = artistRepository.findByName(name);
+//        return artist.getName().contains(check);
+//    }
 
-    @ApiOperation(value = "Check if a song by an artist contains a given string", response = Boolean.class, tags = "artist-controller")
-    @GetMapping(path = "/artists/{name}/songs/{songId}/game/{check}")
-    boolean checkIfSongContains(@PathVariable String name, @PathVariable int songId,
-                                @PathVariable String check){
-        Artist artist = artistRepository.findByName(name);
-        List<Song> songList = artist.getSongs();
-        for (int i = 0; i < songList.size(); i++) {
-            if (songList.get(i).getSongName().contains(check)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    @ApiOperation(value = "Check if a song by an artist contains a given string", response = Boolean.class, tags = "artist-controller")
+//    @GetMapping(path = "/artists/{name}/songs/{songId}/game/{check}")
+//    boolean checkIfSongContains(@PathVariable String name, @PathVariable int songId,
+//                                @PathVariable String check){
+//        Artist artist = artistRepository.findByName(name);
+//        List<Song> songList = artist.getSongs();
+//        for (int i = 0; i < songList.size(); i++) {
+//            if (songList.get(i).getSongName().contains(check)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     @ApiOperation(value = "Check if an Artist and a Song contain strings for the game", response = String.class, tags = "artist-controller")
     @GetMapping(path = "/artists/{name}/artist/{check1}/songs/{check2}")
