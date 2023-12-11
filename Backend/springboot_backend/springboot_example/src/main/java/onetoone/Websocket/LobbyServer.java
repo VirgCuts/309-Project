@@ -44,7 +44,13 @@ public class LobbyServer {
         put(1, 0); put(2, 0); put(3, 0); put(4, 0); put(5, 0);
         put(6, 0); put(7, 0); put(8, 0); put(9, 0); put(10, 0);
     }};
-
+    private static Map < Integer, Integer > lobbyReadyTeam1 = new Hashtable<>() {{
+       put(6, 0); put(7, 0); put(8, 0); put(9, 0); put(10, 0);
+    }};
+    private static Map < Integer, Integer > lobbyReadyTeam2 = new Hashtable<>() {{
+        put(6, 0); put(7, 0); put(8, 0); put(9, 0); put(10, 0);
+    }};
+    private static Map < String, Integer > teamMap = new Hashtable<>();
     private static Map < String, Boolean > userReady = new Hashtable<>();
 
     // server side logger
@@ -76,7 +82,7 @@ public class LobbyServer {
         } else if (existingUser == null) {
             session.getBasicRemote().sendText("Username doesn't exist within database");
             session.close();
-        } else if (lobbyPopulation.get(lobbyNumber) > 1) {
+        } else if ((lobbyPopulation.get(lobbyNumber) > 1 && lobbyNumber < 6) || (lobbyPopulation.get(lobbyNumber) > 3 && lobbyNumber > 5)) {
             session.getBasicRemote().sendText("Lobby is full.");
             session.close();
         } else{
@@ -113,6 +119,8 @@ public class LobbyServer {
         // get the username by session
         String username = sessionUsernameMap.get(session);
         User user = userRepository.findByName(username);
+        
+        Integer lobby = usernameLobbyMap.get(username);
 
         // server side log
         logger.info("[onMessage] " + username + ": " + message);
@@ -124,6 +132,32 @@ public class LobbyServer {
         } else if (message.equals("@unready")) {
             userReady.replace(username, false);
             sendMessageToOtherLobbyMember(username, "@unready");
+        } else if (message.equals("@ready1") && lobbyReadyTeam1.get(lobby) < 2) {
+            userReady.replace(username, true);
+            teamMap.put(username, 1);
+            lobbyReadyTeam1.put(lobby, lobbyReadyTeam1.get(lobby) + 1);
+            sendMessageToOtherLobbyMember(username, "@ready1");
+            lobbyReadyCheck(username);
+        } else if (message.equals("@unready1")) {
+            userReady.replace(username, false);
+            teamMap.put(username, 0);
+            lobbyReadyTeam1.put(lobby, lobbyReadyTeam1.get(lobby) - 1);
+            if (lobbyReadyTeam1.get(lobby) < 0)
+                lobbyReadyTeam1.put(lobby, 0);
+            sendMessageToOtherLobbyMember(username, "@unready1");
+        } else if (message.equals("@ready2")) {
+            userReady.replace(username, true);
+            teamMap.put(username, 2);
+            lobbyReadyTeam2.put(lobby, lobbyReadyTeam2.get(lobby) + 1);
+            sendMessageToOtherLobbyMember(username, "@ready2");
+            lobbyReadyCheck(username);
+        } else if (message.equals("@unready2")) {
+            userReady.replace(username, false);
+            teamMap.put(username, 0);
+            lobbyReadyTeam2.put(lobby, lobbyReadyTeam2.get(lobby) - 1);
+            if (lobbyReadyTeam2.get(lobby) < 0)
+                lobbyReadyTeam2.put(lobby, 0);
+            sendMessageToOtherLobbyMember(username, "@unready2");
         } else if (user.getCanChat()) {
             boolean containsBannedWord = messageCheck(message, username);
             if (!containsBannedWord) {
@@ -159,7 +193,17 @@ public class LobbyServer {
         lobbyPopulation.replace(lobby, lobbyPopulation.get(lobby) - 1);
         if (lobbyPopulation.get(lobby) < 0)
             lobbyPopulation.replace(lobby, 0);
+        if (lobby > 5) {
+            if (userReady.get(username)) {
+                if (teamMap.get(username) == 1)
+                    lobbyReadyTeam1.replace(lobby, lobbyReadyTeam1.get(lobby) - 1);
+                else
+                    lobbyReadyTeam2.replace(lobby, lobbyReadyTeam2.get(lobby) - 1);
+            }
+        }
+        userReady.remove(username);
         usernameLobbyMap.remove(username);
+        teamMap.remove(username);
     }
 
     /**
@@ -179,17 +223,31 @@ public class LobbyServer {
     }
 
     private void lobbyReadyCheck(String username) {
-        int[] count = new int[1];
+        int[] count1 = new int[1];
+        int[] count2 = new int[1];
         int lobbyNumber = usernameLobbyMap.get(username);
-        usernameLobbyMap.forEach((name, lobby) -> {
-            if (lobby == lobbyNumber && userReady.get(name)) {
-                count[0]++;
-            }
-        });
-        if (count[0] == 2)
-            sendMessageToLobby(username, "Start game");
+        if (lobbyNumber < 6) {
+            usernameLobbyMap.forEach((name, lobby) -> {
+                if (lobby == lobbyNumber && userReady.get(name)) {
+                    count1[0]++;
+                }
+            });
+            if (count1[0] == 2)
+                sendMessageToLobby(username, "Start Team Game");
+        } else {
+            usernameLobbyMap.forEach((name, lobby) -> {
+                if (lobby == lobbyNumber && userReady.get(name) && teamMap.get(name) == 1) {
+                    count1[0]++;
+                } else if (lobby == lobbyNumber && userReady.get(name) && teamMap.get(name) == 2){
+                    count2[0]++;
+                }
+            });
+            if (count1[0] == 2 && count2[0] == 2)
+                sendMessageToLobby(username, "Start game");
+        }
+        
     }
-
+    
     private void sendMessageToLobby(String username, String message) {
         try {
             int lobbyNumber = usernameLobbyMap.get(username);
