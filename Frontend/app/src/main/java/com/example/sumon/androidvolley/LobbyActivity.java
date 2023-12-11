@@ -71,8 +71,11 @@ public class LobbyActivity extends AppCompatActivity implements OnClickListener 
                         StudyActivity.class));
                 break;
             case R.id.teamMultiplayer:
-                startActivity(new Intent(LobbyActivity.this,
-                        TeamMultiplayerGame.class));
+                Intent intent = new Intent(LobbyActivity.this, TeamMultiplayerGame.class);
+                intent.putExtra("DATA", "Start Team Game:Carter,Conor,Sam,Keenan");
+                startActivity(intent);
+//                startActivity(new Intent(LobbyActivity.this,
+//                        TeamMultiplayerGame.class));
                 break;
             default:
                 break;

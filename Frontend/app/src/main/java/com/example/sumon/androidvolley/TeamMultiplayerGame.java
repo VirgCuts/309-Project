@@ -3,6 +3,7 @@ package com.example.sumon.androidvolley;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
@@ -28,7 +29,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -38,15 +38,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Represents the multiplayer game activity where two players interact with a game board,
@@ -63,6 +59,8 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     private int seconds = 240;
     public int points = 0;
 
+    private Context context;
+
     private PlayerBoard playerBoard;
     private sendBoard sendBoard;
     private int correctGuesses = 0;
@@ -75,27 +73,40 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     //Used for the categories. Stored in a String[][] format.
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
-    private String Player1 = "Carter", Player2 = "Carter";
+    private String local;
     private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/multiplayer/";
     private boolean end = false;
-    private boolean concede = false;
     private boolean isWebSocketConnected = false;
 
-    private String currentPlayer, teammate, opponent1, opponent2, team;
+    private String Player1, Player2, Player3, Player4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        context = this;
         queue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.multi_player);
         fetchCategories();
+        local = getUsername();
+        Log.d("CURRENTUSER", local);
         Intent intent = getIntent();
-        if (intent != null) {
-            Player1 = intent.getStringExtra("PLAYER");
+            if(intent != null ) {
+                String users = intent.getStringExtra("DATA");
+                Log.d("INTENT", users);
 
-            // Use these values as needed in your activity
-            // For example, displaying them or using them in WebSocket connection
-        }
+                String[] usersSplt = users.split(",");
+                Player1 = usersSplt[0];
+                String[] extractPlayer1 = Player1.split(":");
+                Player1 = extractPlayer1[1].trim();
+                usersSplt[0] = Player1;
+                Player2 = usersSplt[1];
+                Player3 = usersSplt[2];
+                Player4 = usersSplt[3];
+                Log.d("FINALPLAYER", Arrays.toString(usersSplt));
+            }
+            else {
+                Log.d("ERRINT","NO INTENT FOUND");
+            }
         String serverUrl = BASE_URL + Player1;
         Log.d("URL", "URL is " + serverUrl);
 
@@ -160,7 +171,6 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         endGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                concede = true;
                 sendBoardState(sendBoard);
                 endGame();
             }
@@ -177,7 +187,20 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             isWebSocketConnected = false;
         }
     }
-
+    public int getPlayerNum() {
+        if(local.equals(Player1)) {
+            return 1;
+        }
+        else if(local.equals(Player2)) {
+            return 2;
+        }
+        else if(local.equals(Player3)) {
+            return 3;
+        }
+        else {
+            return 4;
+        }
+    }
     /**
      * Calls the backend to retrieve the background color for the player and updates the board accordingly.
      *
@@ -204,7 +227,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
      * Calls the backend to get the selected background color for the player.
      */
     public void getSelectColor() {
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/" + Player1;
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/" + local;
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -319,8 +342,6 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         try {
             // Update the playerBoard with the answer at the specified row and column
             sendBoard.edit(row,col);
-            points = points+100;
-            setPoints();
             sendBoardState(sendBoard);
 
         } catch (NumberFormatException e) {
@@ -333,20 +354,21 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
      * @param board The current game board state.
      */
     private void sendBoardState(sendBoard board) {
+        int team = 1;
         try {
             // sends the edit text message
 
             String boardState = "{" +
-                    "  \"name1\": \""+ currentPlayer + "\"," +
-                    "  \"name2\": \""+ teammate + "\"," +
-                    "  \"name3\": \""+ opponent1 + "\"," +
-                    "  \"name4\": \""+ opponent2 + "\"," +
+                    "  \"name1\": \""+ Player1 + "\"," +
+                    "  \"name2\": \""+ Player2 + "\"," +
+                    "  \"name3\": \""+ Player3 + "\"," +
+                    "  \"name4\": \""+ Player4 + "\"," +
                     "  \"board\": {" +
                     "    \"game\": [" +
                     board.toString() +
                     "    ]," +
                     "    \"won\": false," +
-                    "    \"score\":"+  team +
+                    "    \"score\":"+  getPlayerNum() +
                     "  }" +
                     "}";
             Log.d("SENDBOARD",boardState);
@@ -372,9 +394,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
      */
     public void setPoints() {
         TextView pointView = findViewById(R.id.Points);
-        pointView.setText("Points: " + points);
-
-
+        pointView.setText("");
     }
 
     /**
@@ -403,7 +423,6 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             }, 280);// Set a delay to revert the color
         }
     }
-
     /**
      * Animates a flash effect on the provided EditText.
      *
@@ -413,7 +432,6 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         Animation flash = AnimationUtils.loadAnimation(this, R.anim.shake_and_flash_animation);
         editText.startAnimation(flash);
     }
-
     /**
      * Ends the game by displaying the winner or loser dialog and navigating to the main activity.
      */
@@ -426,7 +444,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             startActivity(new Intent(TeamMultiplayerGame.this,
                     MainActivity.class));
         } else {
-            showWinnerDialog(Player1, playerBoard.getGrid());
+            showWinnerDialog(local, playerBoard.getGrid());
         }
 
     }
@@ -456,7 +474,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     private void showLoserDialog(String loser) {
         Log.d("LOSER", "Calling ENDGAME LOSER");
         end = true;
-        pointView.setText("YOU LOSE- LPoints: " + points);
+        pointView.setText("YOU LOSE");
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(r1c1.getWindowToken(), 0);
         r1c1.clearFocus();
@@ -469,7 +487,6 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         turnOffEdit(r3c1);
         turnOffEdit(r3c2);
         turnOffEdit(r3c3);
-
     }
     private void showConcedeDialog(String loser) {
         Log.d("Winner", "Calling ENDGAME CONCEDE");
@@ -642,7 +659,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
      * Calls the method to end the game when the opponent has won.
      */
     private void callEnd() {
-        showLoserDialog(Player1);
+        showLoserDialog(local);
     }
 
     /**
@@ -784,7 +801,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             Log.d("ARRCL",boardGrid);
             //1,1,1,1,1,0,0,0,0
             if(jsonObject.getBoolean("won")) {
-                showConcedeDialog(Player1);
+                showConcedeDialog(local);
             }
             String[] boardValues = boardGrid.split(",");
             for (int i =0; i < boardValues.length; i++) {
@@ -993,5 +1010,9 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         );
         // Add the request to the RequestQueue
         queue.add(stringRequest);
+    }
+    public String getUsername() {
+        SharedPreferences prefs = context.getSharedPreferences("LeaderboardPrefs", Context.MODE_PRIVATE);
+        return prefs.getString("username", "Guest");
     }
 }
