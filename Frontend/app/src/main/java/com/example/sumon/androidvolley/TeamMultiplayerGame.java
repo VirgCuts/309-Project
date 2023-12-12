@@ -74,7 +74,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
     private String local;
-    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/multiplayer/";
+    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/team_multiplayer/";
     private boolean end = false;
     private boolean isWebSocketConnected = false;
 
@@ -107,7 +107,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             else {
                 Log.d("ERRINT","NO INTENT FOUND");
             }
-        String serverUrl = BASE_URL + Player1;
+        String serverUrl = BASE_URL + local;
         Log.d("URL", "URL is " + serverUrl);
 
         // Establish WebSocket connection and set listener
@@ -356,7 +356,6 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
      * @param board The current game board state.
      */
     private void sendBoardState(sendBoard board) {
-        int team = 1;
         try {
             // sends the edit text message
 
@@ -370,11 +369,12 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
                     board.toString() +
                     "    ]," +
                     "    \"won\": false," +
-                    "    \"score\":"+  getPlayerNum() +
+                    "    \"score\": "+  getPlayerNum() +
                     "  }" +
                     "}";
             Log.d("SENDBOARD",boardState);
             WebSocketManager.getInstance().sendMessage(boardState);
+
         } catch (Exception e) {
             Log.d("ExceptionSendMessage:", e.getMessage().toString());
         }
@@ -894,7 +894,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
      */
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {
-
+        Log.d("CLOSURE LOG", reason);
     }
 
     /**
@@ -925,7 +925,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
                             Log.d("YES", "yes");
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
-                            updatePlayerBoard(row, col);
+                            updatePlayerBoard(row, col-1);
                             sendBoardState(sendBoard);
                             correctGuesses++;
                             points += 15;
