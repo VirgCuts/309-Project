@@ -184,7 +184,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         runOnUiThread(() -> {
             Log.d("WebMessage",message);
             // Check if the message indicates another player's readiness
-            if(matchType =="2v2"){
+            if(matchType.equals("2v2")){
                 if (message.equals("@ready2")) {
                     readyUsers++;
                     updateUI();
