@@ -180,6 +180,14 @@ public class ArtistSystemTest {
     }
 
     @Test
+    public void getArtistHaveSong4() {
+        Response response = RestAssured.get("/artists/21 Savage/with/James Blake");
+        assertEquals(200, response.getStatusCode());
+        String returnString = response.getBody().asString();
+        assertEquals("{\"message\":\"success\"}", returnString);
+    }
+
+    @Test
     public void getArtistOnAlbum() {
         Response response = RestAssured.get("/artists/Kid Cudi/on/Whole Lotta Red");
         assertEquals(200, response.getStatusCode());
