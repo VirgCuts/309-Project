@@ -184,7 +184,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         runOnUiThread(() -> {
             Log.d("WebMessage",message);
             // Check if the message indicates another player's readiness
-            if(matchType =="2v2"){
+            if(matchType.equals("2v2")){
                 if (message.equals("@ready2")) {
                     readyUsers++;
                     updateUI();
@@ -196,11 +196,11 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
                     intent.putExtra("ERROR_MESSAGE", "Lobby is full, sorry");
                     startActivity(intent);
                     finish();
-                }//else if(message.equals("Start team game")){
-                //Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerGame.class); //Change MultiPlayerGame.class to new Team class
-                //intent.putExtra("PLAYER", username); //Whatever intents you need
-                //startActivity(intent);
-                //}
+                }else if(message.contains("Start Team Game")){
+                Intent intent = new Intent(MultiPlayerWaitingRoom.this, TeamMultiplayerGame.class);
+                intent.putExtra("DATA", message);
+                startActivity(intent);
+                }
                 else {
                     // Handle other messages (e.g., adding them to the chat view)
                     addMessageToView(message);
@@ -217,7 +217,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
                     intent.putExtra("ERROR_MESSAGE", "Lobby is full, sorry");
                     startActivity(intent);
                     finish();
-                }else if(message.equals("Start game")){
+                }else if(message.contains("Start game: ")){
                     Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerGame.class);
                     intent.putExtra("PLAYER", username);
                     startActivity(intent);
@@ -390,3 +390,4 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
         }
     }
 }
+

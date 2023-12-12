@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * It provides buttons for navigating to single player, multiplayer, and study sections of the app.
  */
 public class LobbyActivity extends AppCompatActivity implements OnClickListener {
-    private Button singlePlayer, multiPlayer, btnStudy;
+    private Button singlePlayer, multiPlayer, btnStudy, teamMultiplayer;
     private Navigation navigationHelper;
     /**
      * Called when the activity is starting. This method initializes the UI components
@@ -34,10 +34,12 @@ public class LobbyActivity extends AppCompatActivity implements OnClickListener 
         multiPlayer = (Button) findViewById(R.id.multiPlayer);
         btnStudy = (Button) findViewById(R.id.btnStudy);
 
+
         // button click listeners
         singlePlayer.setOnClickListener(this);
         multiPlayer.setOnClickListener(this);
         btnStudy.setOnClickListener(this);
+
     }
     /**
      * Handles item selections in the options menu.

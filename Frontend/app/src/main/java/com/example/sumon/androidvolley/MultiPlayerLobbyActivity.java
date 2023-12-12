@@ -43,11 +43,11 @@ public class MultiPlayerLobbyActivity extends AppCompatActivity implements Lobby
         lobbies.add(new Lobby(3, 0, 2, false));
         lobbies.add(new Lobby(4, 0, 2, false));
         lobbies.add(new Lobby(5, 0, 2, false));
-        lobbies.add(new Lobby(6, 0, 2, false));
-        lobbies.add(new Lobby(7, 0, 2, false));
-        lobbies.add(new Lobby(8, 0, 2, false));
-        lobbies.add(new Lobby(9, 0, 2, false));
-        lobbies.add(new Lobby(10, 0, 2, false));
+        lobbies.add(new Lobby(6, 0, 4, false));
+        lobbies.add(new Lobby(7, 0, 4, false));
+        lobbies.add(new Lobby(8, 0, 4, false));
+        lobbies.add(new Lobby(9, 0, 4, false));
+        lobbies.add(new Lobby(10, 0, 4, false));
 
 
         lobbyAdapter = new LobbyAdapter(lobbies, this);

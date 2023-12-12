@@ -3,6 +3,7 @@ package com.example.sumon.androidvolley;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
@@ -28,7 +29,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -38,15 +38,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Represents the multiplayer game activity where two players interact with a game board,
@@ -56,50 +52,68 @@ import java.util.regex.Pattern;
  * and WebSocketListener interfaces, providing methods for handling UI updates, game logic,
  * and WebSocket communication.
  */
-public class MultiPlayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface,WebSocketListener {
+public class TeamMultiplayerGame extends AppCompatActivity implements GameViewInterface, GameControllerInterface,WebSocketListener {
     private TextView timerTextView;
     private Button endGameButton;
     private Handler handler = new Handler();
     private int seconds = 240;
     public int points = 0;
 
+    private Context context;
+
     private PlayerBoard playerBoard;
     private sendBoard sendBoard;
     private int correctGuesses = 0;
     private final int TOTAL_EDIT_TEXTS = 9;
     private RequestQueue queue;
-    private EditText r1c1,r1c2,r1c3,r2c1,r2c2,r2c3,r3c1,r3c2,r3c3;
-    private TextView o1,o2,o3,o4,o5,o6,o7,o8,o9;
-    private TextView col1,col2,col3,row1,row2,row3, pointView;
+    private EditText r1c1, r1c2, r1c3, r2c1, r2c2, r2c3, r3c1, r3c2, r3c3;
+    private TextView o1, o2, o3, o4, o5, o6, o7, o8, o9;
+    private TextView col1, col2, col3, row1, row2, row3, pointView;
     private boolean categoriesLoaded = false;
     //Used for the categories. Stored in a String[][] format.
     //Each category has [[text, subject, check, keyword],[...]]
     List<Map<String, String>> categories;
-    private String Player1 = "Carter", Player2 = "Carter";
-    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/multiplayer/";
+    private String local;
+    private String BASE_URL = "ws://coms-309-022.class.las.iastate.edu:8080/team_multiplayer/";
     private boolean end = false;
+    private boolean isWebSocketConnected = false;
+
     private boolean concede = false;
-    private boolean isWebSocketConnected=false;
+    private String Player1, Player2, Player3, Player4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        context = this;
         queue = Volley.newRequestQueue(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.multi_player);
         fetchCategories();
+        local = getUsername();
+        Log.d("CURRENTUSER", local);
         Intent intent = getIntent();
-        if (intent != null) {
-            Player1 = intent.getStringExtra("PLAYER");
+            if(intent != null ) {
+                String users = intent.getStringExtra("DATA");
+                Log.d("INTENT", users);
 
-            // Use these values as needed in your activity
-            // For example, displaying them or using them in WebSocket connection
-        }
-        String serverUrl = BASE_URL + Player1;
+                String[] usersSplt = users.split(",");
+                Player1 = usersSplt[0];
+                String[] extractPlayer1 = Player1.split(":");
+                Player1 = extractPlayer1[1].trim();
+                usersSplt[0] = Player1;
+                Player2 = usersSplt[1];
+                Player3 = usersSplt[2];
+                Player4 = usersSplt[3];
+                Log.d("FINALPLAYER", Arrays.toString(usersSplt));
+            }
+            else {
+                Log.d("ERRINT","NO INTENT FOUND");
+            }
+        String serverUrl = BASE_URL + local;
         Log.d("URL", "URL is " + serverUrl);
 
         // Establish WebSocket connection and set listener
         WebSocketManager.getInstance().connectWebSocket(serverUrl);
-        WebSocketManager.getInstance().setWebSocketListener(MultiPlayerGame.this);
+        WebSocketManager.getInstance().setWebSocketListener(TeamMultiplayerGame.this);
         isWebSocketConnected = true;
         //
         //Set up the player's grid
@@ -155,15 +169,18 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         playerBoard = new PlayerBoard();
         sendBoard = new sendBoard();
         endGameButton = findViewById(R.id.endGameButton);
+
         endGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 concede = true;
                 sendBoardState(sendBoard);
                 endGame();
+                showLoserDialog(local);
             }
         });
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -174,37 +191,47 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             isWebSocketConnected = false;
         }
     }
+    public int getPlayerNum() {
+        if(local.equals(Player1)) {
+            return 1;
+        }
+        else if(local.equals(Player2)) {
+            return 2;
+        }
+        else if(local.equals(Player3)) {
+            return 3;
+        }
+        else {
+            return 4;
+        }
+    }
     /**
      * Calls the backend to retrieve the background color for the player and updates the board accordingly.
      *
      * @param color The string representation of the selected background color.
      */
     public void getBackground(String color) {
-        Log.d("BCKCOL",color);
-        if(color.equals("orange")) {
+        Log.d("BCKCOL", color);
+        if (color.equals("orange")) {
             changeBoardColor("orange");
-        }
-        else if(color.equals("purple")) {
+        } else if (color.equals("purple")) {
             changeBoardColor("purple");
-        }
-        else if(color.equals("lightblue")) {
+        } else if (color.equals("lightblue")) {
             changeBoardColor("lightblue");
-        }
-        else if(color.equals("yellow")) {
+        } else if (color.equals("yellow")) {
             changeBoardColor("yellow");
-        }
-        else if(color.equals("magenta")) {
+        } else if (color.equals("magenta")) {
             changeBoardColor("magenta");
-        }
-        else if(color.equals("green")) {
+        } else if (color.equals("green")) {
             changeBoardColor("green");
         }
     }
+
     /**
      * Calls the backend to get the selected background color for the player.
      */
     public void getSelectColor() {
-        String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/"+Player1;
+        String url = "http://coms-309-022.class.las.iastate.edu:8080/gameColor/" + local;
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -213,7 +240,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("SINGLEGET",response.toString());
+                        Log.d("SINGLEGET", response.toString());
                         String value = response.toString();
                         String[] splitValue = value.split(":");
                         value = splitValue[1];
@@ -227,13 +254,14 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("ERRGET",error.toString());
+                        Log.d("ERRGET", error.toString());
 
                     }
                 }
         );
         Volley.newRequestQueue(this).add(request);
     }
+
     /**
      * Sets the background color of the given EditText based on the specified color.
      *
@@ -266,6 +294,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentColor, PorterDuff.Mode.SRC_ATOP);
         editText.getBackground().mutate().setColorFilter(colorFilter);
     }
+
     /**
      * Changes the background color of the entire board based on the specified color.
      *
@@ -282,6 +311,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         setBackColor(r3c2, color);
         setBackColor(r3c3, color);
     }
+
     /**
      * Not used in Multiplayer but implemented in case,
      * Implements the countdown timer for the game, updating the UI and handling the end of the game.
@@ -313,19 +343,16 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         });
     }
     private void updatePlayerBoard(int row , int col) {
-            try {
-                // Update the playerBoard with the answer at the specified row and column
-                sendBoard.edit(row,col);
-                points = points+100;
-                setPoints();
-                sendBoardState(sendBoard);
+        try {
+            Log.d("UPDATEBOARD","UpdatePlayerBoard Called R:"+ Integer.toString(row) + " C:" + Integer.toString(col)) ;
+            // Update the playerBoard with the answer at the specified row and column
+            sendBoard.edit(row,col);
 
-            } catch (NumberFormatException e) {
-                Log.e("updatePlayerBoard", "Invalid tag format for EditText: ", e);
-            }
+
+        } catch (NumberFormatException e) {
+            Log.e("updatePlayerBoard", "Invalid tag format for EditText: ", e);
         }
-
-
+    }
     /**
      * Sends the current game board state to the opponent via WebSocket.
      *
@@ -338,20 +365,24 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             String boardState = "{" +
                     "  \"name1\": \""+ Player1 + "\"," +
                     "  \"name2\": \""+ Player2 + "\"," +
+                    "  \"name3\": \""+ Player3 + "\"," +
+                    "  \"name4\": \""+ Player4 + "\"," +
                     "  \"board\": {" +
                     "    \"game\": [" +
                     board.toString() +
                     "    ]," +
-                    "    \"won\": "+ concede + "," +
-                    "    \"score\": 0" +
+                    "    \"won\": " + concede + "," +
+                    "    \"score\": "+  getPlayerNum() +
                     "  }" +
                     "}";
             Log.d("SENDBOARD",boardState);
             WebSocketManager.getInstance().sendMessage(boardState);
+
         } catch (Exception e) {
             Log.d("ExceptionSendMessage:", e.getMessage().toString());
         }
     }
+
     /**
      * Sets the text of the given TextView with the specified text.
      *
@@ -362,20 +393,20 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     public void setBoxText(TextView textView, String text) {
         textView.setText(text);
     }
+
     /**
      * Holdover from Singleplayer, would update points if implemented
      */
     public void setPoints() {
         TextView pointView = findViewById(R.id.Points);
-        pointView.setText("Points: "+ points);
-
-
+        pointView.setText("");
     }
+
     /**
      * Changes the background color of the provided EditText based on whether the answer is correct.
      *
-     * @param editText   The EditText to change the color of.
-     * @param isCorrect  True if the answer is correct, false otherwise.
+     * @param editText  The EditText to change the color of.
+     * @param isCorrect True if the answer is correct, false otherwise.
      */
     @Override
     public void changeBoxColor(EditText editText, boolean isCorrect) {
@@ -412,17 +443,17 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     @Override
     public void endGame() {
         handler.removeCallbacksAndMessages(null); // Remove any pending callbacks
-        if(end) {
+        if (end) {
             WebSocketManager.getInstance().disconnectWebSocket();
             WebSocketManager.getInstance().removeWebSocketListener();
-            startActivity(new Intent(MultiPlayerGame.this,
+            startActivity(new Intent(TeamMultiplayerGame.this,
                     MainActivity.class));
-        }
-        else {
-            showWinnerDialog(Player1, playerBoard.getGrid());
+        } else {
+            showWinnerDialog(local, playerBoard.getGrid());
         }
 
     }
+
     /**
      * Disables user interaction with the given EditText, changes its background color to a semi-transparent red,
      * and applies a flash animation to visually indicate the disabling. Used in endGmae
@@ -439,7 +470,17 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         editText.getBackground().mutate().setColorFilter(colorFilter);
         animateFlash(editText);
     }
+    private void turnOffEditWinner(EditText editText) {
 
+        editText.setFocusable(false);
+        editText.setFocusableInTouchMode(false);
+        editText.setClickable(false);
+        int semiTransparentGreen = Color.argb(128, 0, 255, 0);
+        ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentGreen, PorterDuff.Mode.SRC_ATOP);
+        editText.getBackground().mutate().setColorFilter(colorFilter);
+        animateFlash(editText);
+    }
+//
     /**
      * Shows a loser dialog indicating that the player has lost the game.
      *
@@ -448,7 +489,24 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     private void showLoserDialog(String loser) {
         Log.d("LOSER", "Calling ENDGAME LOSER");
         end = true;
-        pointView.setText("YOU LOSE- LPoints: " + points);
+        pointView.setText("YOU LOSE");
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(r1c1.getWindowToken(), 0);
+        r1c1.clearFocus();
+        turnOffEdit(r1c1);
+        turnOffEdit(r1c2);
+        turnOffEdit(r1c3);
+        turnOffEdit(r2c1);
+        turnOffEdit(r2c2);
+        turnOffEdit(r2c3);
+        turnOffEdit(r3c1);
+        turnOffEdit(r3c2);
+        turnOffEdit(r3c3);
+    }
+    private void showConcedeDialog(String loser) {
+        Log.d("Concede", "Calling ENDGAME CONCEDE");
+        end = true;
+        pointView.setText("SOMEONE CONCEDED");
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(r1c1.getWindowToken(), 0);
         r1c1.clearFocus();
@@ -463,23 +521,22 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         turnOffEdit(r3c3);
 
     }
-    private void showConcedeDialog(String loser) {
-        Log.d("Winner", "Calling ENDGAME CONCEDE");
+    private void showTeammateWinDialog(String loser) {
+        Log.d("Teammatewin", "Calling ENDGAME TEAMWIN");
         end = true;
-        pointView.setText("OPPONENT CONCEDED");
+        pointView.setText("YOU WIN");
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(r1c1.getWindowToken(), 0);
         r1c1.clearFocus();
-        turnOffEdit(r1c1);
-        turnOffEdit(r1c2);
-        turnOffEdit(r1c3);
-        turnOffEdit(r2c1);
-        turnOffEdit(r2c2);
-        turnOffEdit(r2c3);
-        turnOffEdit(r3c1);
-        turnOffEdit(r3c2);
-        turnOffEdit(r3c3);
-
+        turnOffEditWinner(r1c1);
+        turnOffEditWinner(r1c2);
+        turnOffEditWinner(r1c3);
+        turnOffEditWinner(r2c1);
+        turnOffEditWinner(r2c2);
+        turnOffEditWinner(r2c3);
+        turnOffEditWinner(r3c1);
+        turnOffEditWinner(r3c2);
+        turnOffEditWinner(r3c3);
     }
     /**
      * Shows a custom dialog displaying the winner, time remaining, points, and the final game board.
@@ -496,8 +553,11 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
 
         // Set Winner Text
         TextView winnerText = dialogView.findViewById(R.id.winnerText);
-        if(!end) {winnerText.setText(winner + " forfeited!");  // Change 'Player X' dynamically based on game result
-        } else {       winnerText.setText(winner + " Wins!"); }
+        if (!end) {
+            winnerText.setText(winner + " Won!");  // Change 'Player X' dynamically based on game result
+        } else {
+            winnerText.setText(winner + " Wins!");
+        }
         // Populate the winner's board grid
         int[] cellIds = {
                 R.id.r1c1, R.id.r1c2, R.id.r1c3,
@@ -534,11 +594,12 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                 // Restart your game here
                 correctGuesses = 0;
                 alertDialog.dismiss();
-                startActivity(new Intent(MultiPlayerGame.this,
+                startActivity(new Intent(TeamMultiplayerGame.this,
                         MainActivity.class));
             }
         });
     }
+
     /**
      * Called when the activity is being destroyed.
      * Removes any pending callbacks and messages from the handler to prevent memory leaks.
@@ -552,6 +613,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
 
     }
     //Backend Support
+
     /**
      * Fetches categories from the backend server and sets up the game board.
      */
@@ -578,6 +640,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
 
         queue.add(stringRequest); // Add the request to the RequestQueue
     }
+
     /**
      * Parses the JSON response into a List of Maps representing categories.
      *
@@ -603,6 +666,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         }
         return categoryList;
     }
+
     /**
      * Sets up the game board with the provided categories.
      *
@@ -622,12 +686,8 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         categoriesLoaded = true;
         startGame();
     }
-    /**
-     * Calls the method to end the game when the opponent has won.
-     */
-    private void callEnd() {
-        showLoserDialog(Player1);
-    }
+
+
     /**
      * Displays an error dialog to the user when categories cannot be fetched.
      */
@@ -640,6 +700,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+
     /**
      * Starts the game by initializing the timer and setting initial points.
      */
@@ -649,6 +710,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         }
     }
     // Update the setEditTextListener to use the new checkAnswer method with a callback
+
     /**
      * Sets an Listener for the given EditText.
      * Handles user input, checks answers, and updates the game state accordingly.
@@ -661,24 +723,26 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && event.getAction() == KeyEvent.ACTION_DOWN && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER || event.getKeyCode() == KeyEvent.KEYCODE_TAB))
                         || actionId == EditorInfo.IME_ACTION_DONE
-                        || actionId == EditorInfo.IME_ACTION_NEXT){
+                        || actionId == EditorInfo.IME_ACTION_NEXT) {
                     // Get the relevant tag data
                     String tag = (String) editText.getTag();
                     String[] parts = tag.split(",");
                     final int row = Integer.parseInt(parts[0]);
                     final int column = Integer.parseInt(parts[1]);
                     final String userAnswer = editText.getText().toString().trim();
-                    checkAnswer(editText, userAnswer, row-1, column);
-                    Log.d("This","This line has been reached");
+                    checkAnswer(editText, userAnswer, row - 1, column);
+                    Log.d("This", "This line has been reached");
                     return true;
                 }
                 return false;
             }
         });
     }
+
     interface AnswerCheckCallback {
         void onResult(boolean isCorrect, EditText editText);
     }
+
     private void performCheck(String subject, String check, String keyword, String userAnswer, SinglePlayerGame.AnswerCheckCallback callback, EditText editText) {
         switch (check) {
             case "featuring":
@@ -701,6 +765,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                 break;
         }
     }
+
     /**
      * Sets the listener for the WebSocket open event.
      * Required to implement
@@ -710,6 +775,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
 
     }
     //changes the colors of the o1-09 squares to reflect what the opponent has answered correctly
+
     /**
      * Changes the colors of the o1-o9 squares to reflect what the opponent has answered correctly.
      *
@@ -728,10 +794,69 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentGreen, PorterDuff.Mode.SRC_ATOP);
             textView.getBackground().mutate().setColorFilter(colorFilter);
         }
-        if(view == 8) {
-            callEnd();
-        }
+
     }
+    //changes the colors of the o1-09 squares to reflect what the opponent has answered correctly
+
+    /**
+     * Changes the colors of the o1-o9 squares to reflect what the opponent has answered correctly.
+     *
+     * @param view The index of the square to change color (0-8).
+     */
+    private void changeTeamBoard(int view) {
+        EditText textView = findViewById(R.id.r1c1);
+        int row = 0;
+        int col = 0;
+        switch (view) {
+            case 0:
+                textView = findViewById(R.id.r1c1);
+                row=0; col=0;
+                break;
+            case 1:
+                textView = findViewById(R.id.r1c2);
+                row=0; col=1;
+                break;
+            case 2:
+                textView = findViewById(R.id.r1c3);
+                row=0; col=2;
+                break;
+            case 3:
+                textView = findViewById(R.id.r2c1);
+                row=1; col=0;
+                break;
+            case 4:
+                textView = findViewById(R.id.r2c2);
+                row=1; col=1;
+                break;
+            case 5:
+                textView = findViewById(R.id.r2c3);
+                row=1; col=2;
+                break;
+            case 6:
+                textView = findViewById(R.id.r3c1);
+                row=2; col=0;
+                break;
+            case 7:
+                textView = findViewById(R.id.r3c2);
+                row=2; col=1;
+                break;
+            case 8:
+                textView = findViewById(R.id.r3c3);
+                row=2; col=2;
+                break;
+        }
+
+            int semiTransparentGreen = Color.argb(128, 0, 255, 0);
+            ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentGreen, PorterDuff.Mode.SRC_ATOP);
+            textView.getBackground().mutate().setColorFilter(colorFilter);
+
+            textView.setEnabled(false);
+            updatePlayerBoard(row, col);
+            if(view == 8) {
+                showWinnerDialog(local, playerBoard.getGrid());
+            }
+    }
+
     /**
      * Handles the incoming WebSocket message.
      *
@@ -740,31 +865,69 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
     @Override
     public void onWebSocketMessage(String message) {
         Log.d("RECIEVED", message);
-
         try {
+            String jsonTeamState = message.substring(0,1);
+            Log.d("TEAMSTATE",jsonTeamState);
             // Parse the JSON string
-            JSONObject jsonObject = new JSONObject(message);
+            Log.d("SUBSTRING",message.substring(1, message.length()));
+            JSONObject jsonObject = new JSONObject(message.substring(1,message.length()));
+//            JSONObject jsonObject = new JSONObject(message);
             Log.d("GAMIE",jsonObject.toString());
             // Extract the "game" object
             JSONArray gameS = jsonObject.getJSONArray("game");
             //creates a string representation of the board to be changed
+            int gameTeam = jsonObject.getInt("score");
+            Log.d("TEAM",Integer.toString(gameTeam));
             String boardGrid = gameS.toString();
             Log.d("ARRIQ",boardGrid.toString());
             //[[1,1,1],[1,1,0],[0,0,0]]
             boardGrid = boardGrid.replace("[", "").replace("]", "");
             Log.d("ARRCL",boardGrid);
             //1,1,1,1,1,0,0,0,0
-            Log.d("CONCEDED", String.valueOf(jsonObject.getBoolean("won")));
             if(jsonObject.getBoolean("won")) {
-                showConcedeDialog(Player1);
+                showConcedeDialog(local);
             }
-            String[] boardValues = boardGrid.split(",");
-            for (int i =0; i < boardValues.length; i++) {
+                correctGuesses++;
+                String[] boardValues = boardGrid.split(",");
+                 int winCounter = 0;
+                 int loseCounter = 0;
 
-                if(Integer.parseInt(boardValues[i]) == 1) {
-                    changeOppColor(i);
+                for (int i = 0; i < boardValues.length; i++) {
+                    if (Integer.parseInt(boardValues[i]) == 1) {
+                        if (jsonTeamState.equals("o")) {
+                            loseCounter++;
+                        } else {
+                            winCounter++;
+                        }
+                    }
                 }
-            }
+                Log.d("LOSECOUNT",Integer.toString(loseCounter));
+                Log.d("WINCOUNT",Integer.toString(winCounter));
+                if(winCounter == 9) {
+                    showTeammateWinDialog(local);
+                }
+                if(loseCounter == 9) {
+                    showLoserDialog(local);
+                }
+                int changeTeamBoardCounter = 0;
+                for (int i = 0; i < boardValues.length; i++) {
+                    if(jsonTeamState.equals("o")) {
+                        if (Integer.parseInt(boardValues[i]) == 1) {
+                            changeOppColor(i);
+                        }
+                    }
+                    else {
+                        if (Integer.parseInt(boardValues[i]) == 1) {
+                            changeTeamBoardCounter++; // Increment the counter
+                            if (changeTeamBoardCounter == 9) {
+                                Log.d("ENTERWIN",local);
+                                showWinnerDialog(local, playerBoard.getGrid());
+                                sendBoardState(sendBoard);
+                            }
+                            changeTeamBoard(i);
+                        }
+                    }
+                }
 
 
         } catch (JSONException e) {
@@ -783,8 +946,9 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
      */
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {
-
+        Log.d("CLOSURE LOG", reason);
     }
+
     /**
      * Handles WebSocket errors.
      *
@@ -810,10 +974,11 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                     @Override
                     public void onResult(boolean colIsCorrect, EditText editText) {
                         if (rowIsCorrect && colIsCorrect) {
-                            Log.d("YES","yes");
-                            updatePlayerBoard(row, col);
+                            Log.d("YES", "yes");
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
+                            updatePlayerBoard(row, col-1);
+                            sendBoardState(sendBoard);
                             correctGuesses++;
                             points += 15;
                             setPoints();
@@ -824,7 +989,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
                             }
                         } else {
                             // Update the UI for incorrect answer
-                            Log.d("NO","no");
+                            Log.d("NO", "no");
                             changeBoxColor(editText, false);
                             points -= 5;
                             setPoints();
@@ -834,6 +999,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
             }
         }, editText);
     }
+
     private void checkIfArtistsHaveSongTogether(String artist1, String artist2, SinglePlayerGame.AnswerCheckCallback callback, final EditText editText) {
 
 
@@ -875,12 +1041,13 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         // Add the request to your RequestQueue
         queue.add(stringRequest);
     }
+
     /**
      * Checks if two artists have a song together based on their IDs.
      *
-     * @param artistName  The name of the first artist.
-     * @param featuredArtist  The name of the featured artist.
-     * @param callback   The callback to handle the result.
+     * @param artistName     The name of the first artist.
+     * @param featuredArtist The name of the featured artist.
+     * @param callback       The callback to handle the result.
      */
     private void checkIfArtistFeaturing(String artistName, String featuredArtist, SinglePlayerGame.AnswerCheckCallback callback, final EditText editText) {
 
@@ -921,6 +1088,7 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         // Add the request to your RequestQueue
         queue.add(stringRequest);
     }
+
     private void getArtistOnAlbum(String artistName, String albumName, SinglePlayerGame.AnswerCheckCallback callback, final EditText editText) {
         String baseUrl = "http://coms-309-022.class.las.iastate.edu:8080";
         String endpoint = "/artists/" + artistName + "/on/" + albumName;
@@ -961,5 +1129,9 @@ public class MultiPlayerGame extends AppCompatActivity implements GameViewInterf
         );
         // Add the request to the RequestQueue
         queue.add(stringRequest);
+    }
+    public String getUsername() {
+        SharedPreferences prefs = context.getSharedPreferences("LeaderboardPrefs", Context.MODE_PRIVATE);
+        return prefs.getString("username", "Guest");
     }
 }
