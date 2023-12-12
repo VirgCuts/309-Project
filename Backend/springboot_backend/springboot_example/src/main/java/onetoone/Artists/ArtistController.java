@@ -99,6 +99,12 @@ public class ArtistController {
     String getArtistHaveSongTogether( @PathVariable String name1, @PathVariable String name2) {
         Artist artist1 = artistRepository.findByName(name1);
         Artist artist2 = artistRepository.findByName(name2);
+        List<Song> songList = songRepository.findAll();
+        for (Song song : songList) {
+            if(song.getFeature().contains(name1) && song.getFeature().contains(name2)) {
+                return success;
+            }
+        }
         if (artist1 != null && artist2 != null) {
             String artist1name = artist1.getName();
             List<Song> songList1 = artist1.getSongs();
