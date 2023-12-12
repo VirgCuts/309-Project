@@ -176,6 +176,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
                 concede = true;
                 sendBoardState(sendBoard);
                 endGame();
+                showLoserDialog(local);
             }
         });
     }
@@ -469,7 +470,17 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         editText.getBackground().mutate().setColorFilter(colorFilter);
         animateFlash(editText);
     }
+    private void turnOffEditWinner(EditText editText) {
 
+        editText.setFocusable(false);
+        editText.setFocusableInTouchMode(false);
+        editText.setClickable(false);
+        int semiTransparentGreen = Color.argb(128, 0, 255, 0);
+        ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentGreen, PorterDuff.Mode.SRC_ATOP);
+        editText.getBackground().mutate().setColorFilter(colorFilter);
+        animateFlash(editText);
+    }
+//
     /**
      * Shows a loser dialog indicating that the player has lost the game.
      *
@@ -493,9 +504,9 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         turnOffEdit(r3c3);
     }
     private void showConcedeDialog(String loser) {
-        Log.d("Winner", "Calling ENDGAME CONCEDE");
+        Log.d("Concede", "Calling ENDGAME CONCEDE");
         end = true;
-        pointView.setText("OPPONENT CONCEDED");
+        pointView.setText("SOMEONE CONCEDED");
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(r1c1.getWindowToken(), 0);
         r1c1.clearFocus();
@@ -509,6 +520,23 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         turnOffEdit(r3c2);
         turnOffEdit(r3c3);
 
+    }
+    private void showTeammateWinDialog(String loser) {
+        Log.d("Teammatewin", "Calling ENDGAME TEAMWIN");
+        end = true;
+        pointView.setText("YOU WIN");
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(r1c1.getWindowToken(), 0);
+        r1c1.clearFocus();
+        turnOffEditWinner(r1c1);
+        turnOffEditWinner(r1c2);
+        turnOffEditWinner(r1c3);
+        turnOffEditWinner(r2c1);
+        turnOffEditWinner(r2c2);
+        turnOffEditWinner(r2c3);
+        turnOffEditWinner(r3c1);
+        turnOffEditWinner(r3c2);
+        turnOffEditWinner(r3c3);
     }
     /**
      * Shows a custom dialog displaying the winner, time remaining, points, and the final game board.
@@ -766,9 +794,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             ColorFilter colorFilter = new PorterDuffColorFilter(semiTransparentGreen, PorterDuff.Mode.SRC_ATOP);
             textView.getBackground().mutate().setColorFilter(colorFilter);
         }
-        if (view == 8) {
-            showLoserDialog(local);
-        }
+
     }
     //changes the colors of the o1-09 squares to reflect what the opponent has answered correctly
 
@@ -826,6 +852,9 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
 
             textView.setEnabled(false);
             updatePlayerBoard(row, col);
+            if(view == 8) {
+                showWinnerDialog(local, playerBoard.getGrid());
+            }
     }
 
     /**
@@ -858,10 +887,29 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             if(jsonObject.getBoolean("won")) {
                 showConcedeDialog(local);
             }
-
                 correctGuesses++;
                 String[] boardValues = boardGrid.split(",");
-                 int changeTeamBoardCounter = 0;
+                 int winCounter = 0;
+                 int loseCounter = 0;
+
+                for (int i = 0; i < boardValues.length; i++) {
+                    if (Integer.parseInt(boardValues[i]) == 1) {
+                        if (jsonTeamState.equals("o")) {
+                            loseCounter++;
+                        } else {
+                            winCounter++;
+                        }
+                    }
+                }
+                Log.d("LOSECOUNT",Integer.toString(loseCounter));
+                Log.d("WINCOUNT",Integer.toString(winCounter));
+                if(winCounter == 9) {
+                    showTeammateWinDialog(local);
+                }
+                if(loseCounter == 9) {
+                    showLoserDialog(local);
+                }
+                int changeTeamBoardCounter = 0;
                 for (int i = 0; i < boardValues.length; i++) {
                     if(jsonTeamState.equals("o")) {
                         if (Integer.parseInt(boardValues[i]) == 1) {
@@ -870,12 +918,13 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
                     }
                     else {
                         if (Integer.parseInt(boardValues[i]) == 1) {
-                            changeTeamBoard(i);
                             changeTeamBoardCounter++; // Increment the counter
-
                             if (changeTeamBoardCounter == 9) {
+                                Log.d("ENTERWIN",local);
                                 showWinnerDialog(local, playerBoard.getGrid());
+                                sendBoardState(sendBoard);
                             }
+                            changeTeamBoard(i);
                         }
                     }
                 }
@@ -924,7 +973,9 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
                 performCheck(colSubject, colCheck, colKeyword, userAnswer, new SinglePlayerGame.AnswerCheckCallback() {
                     @Override
                     public void onResult(boolean colIsCorrect, EditText editText) {
-                        if (rowIsCorrect && colIsCorrect) {
+                     boolean bal = true;
+//                        if (rowIsCorrect && colIsCorrect) {
+                        if(bal == true) {
                             Log.d("YES", "yes");
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
