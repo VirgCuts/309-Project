@@ -41,18 +41,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name">LobbyServer</td>
 <td class="coverageStat">
   <span class="percent">
-    20%
+    18.8%
   </span>
   <span class="absValue">
-    (3/15)
+    (3/16)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    9.7%
+    8.2%
   </span>
   <span class="absValue">
-    (9/93)
+    (13/158)
   </span>
 </td>
 </tr>
@@ -79,18 +79,18 @@ Current scope:     <a href="../../index.html">all classes</a>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    25%
+    23.5%
   </span>
   <span class="absValue">
-    (4/16)
+    (4/17)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    12.5%
+    9.9%
   </span>
   <span class="absValue">
-    (12/96)
+    (16/161)
   </span>
 </td>
 </tr>
@@ -147,12 +147,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;        put(1, 0); put(2, 0); put(3, 0); put(4, 0); put(5, 0);</b>
 <b class="fc">&nbsp;        put(6, 0); put(7, 0); put(8, 0); put(9, 0); put(10, 0);</b>
 &nbsp;    }};
-&nbsp;
 <b class="fc">&nbsp;    private static Map &lt; String, Boolean &gt; userReady = new Hashtable&lt;&gt;();</b>
-&nbsp;
+<b class="fc">&nbsp;</b>
 &nbsp;    // server side logger
 <b class="fc">&nbsp;    private final Logger logger = LoggerFactory.getLogger(LobbyServer.class);</b>
-&nbsp;
+<b class="fc">&nbsp;</b>
 &nbsp;    //user database
 &nbsp;    private static UserRepository userRepository;
 &nbsp;
@@ -160,18 +159,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @Autowired
 &nbsp;    public void setUserRepository(UserRepository usrRepo) {
 <b class="fc">&nbsp;        userRepository = usrRepo;  // we are setting the static variable</b>
-&nbsp;    }
+<b class="fc">&nbsp;    }</b>
 &nbsp;
 <b class="fc">&nbsp;    private final List&lt;String&gt; bannedWords = Arrays.asList(&quot;test&quot;, &quot;testing&quot;);</b>
-&nbsp;
+<b class="fc">&nbsp;</b>
 &nbsp;    @OnOpen
 &nbsp;    public void onOpen(Session session, @PathParam(&quot;lobbyNumber&quot;) int lobbyNumber, @PathParam(&quot;username&quot;) String username) throws IOException {
 &nbsp;
 &nbsp;        // server side log
 <b class="nc">&nbsp;        logger.info(&quot;[LobbyonOpen] &quot;+ lobbyNumber + username);</b>
-&nbsp;
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;        User existingUser = userRepository.findByName(username);</b>
-&nbsp;
+<b class="nc">&nbsp;</b>
 &nbsp;        // Handle the case of a duplicate username
 <b class="nc">&nbsp;        if (usernameSessionMap.containsKey(username)) {</b>
 <b class="nc">&nbsp;            session.getBasicRemote().sendText(&quot;Username is already in use&quot;);</b>
@@ -179,28 +178,28 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;        } else if (existingUser == null) {</b>
 <b class="nc">&nbsp;            session.getBasicRemote().sendText(&quot;Username doesn&#39;t exist within database&quot;);</b>
 <b class="nc">&nbsp;            session.close();</b>
-<b class="nc">&nbsp;        } else if (lobbyPopulation.get(lobbyNumber) &gt; 1) {</b>
+<b class="nc">&nbsp;        } else if ((lobbyPopulation.get(lobbyNumber) &gt; 1 &amp;&amp; lobbyNumber &lt; 6) || (lobbyPopulation.get(lobbyNumber) &gt; 3 &amp;&amp; lobbyNumber &gt; 5)) {</b>
 <b class="nc">&nbsp;            session.getBasicRemote().sendText(&quot;Lobby is full.&quot;);</b>
 <b class="nc">&nbsp;            session.close();</b>
-&nbsp;        } else{
+<b class="nc">&nbsp;        } else{</b>
 &nbsp;            // map current session with username
 <b class="nc">&nbsp;            sessionUsernameMap.put(session, username);</b>
-&nbsp;            // map current username with session
+<b class="nc">&nbsp;            // map current username with session</b>
 <b class="nc">&nbsp;            usernameSessionMap.put(username, session);</b>
-&nbsp;
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;            usernameLobbyMap.put(username, lobbyNumber);</b>
-&nbsp;
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;            lobbyPopulation.replace(lobbyNumber, lobbyPopulation.get(lobbyNumber) + 1);</b>
-&nbsp;
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;            userReady.put(username, false);</b>
-&nbsp;
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;            if (existingUser.getCanChat()){</b>
-&nbsp;                // send to everyone in the lobby
+<b class="nc">&nbsp;                // send to everyone in the lobby</b>
 <b class="nc">&nbsp;                sendMessageToLobby(username, &quot;User: &quot; + username + &quot; has joined the lobby&quot;);</b>
-&nbsp;            } else {
+<b class="nc">&nbsp;            } else {</b>
 &nbsp;                // send to everyone in the lobby
 <b class="nc">&nbsp;                sendMessageToLobby(username, &quot;User: &quot; + username + &quot; has joined the lobby, but can&#39;t say anything because they&#39;ve been bad.&quot;);</b>
-&nbsp;            }
+<b class="nc">&nbsp;            }</b>
 &nbsp;        }
 &nbsp;    }
 &nbsp;
@@ -216,10 +215,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;        // get the username by session
 <b class="nc">&nbsp;        String username = sessionUsernameMap.get(session);</b>
 <b class="nc">&nbsp;        User user = userRepository.findByName(username);</b>
+<b class="nc">&nbsp;        </b>
+<b class="nc">&nbsp;        Integer lobby = usernameLobbyMap.get(username);</b>
 &nbsp;
-&nbsp;        // server side log
+<b class="nc">&nbsp;        // server side log</b>
 <b class="nc">&nbsp;        logger.info(&quot;[onMessage] &quot; + username + &quot;: &quot; + message);</b>
-&nbsp;
+<b class="nc">&nbsp;</b>
 <b class="nc">&nbsp;        if (message.equals(&quot;@ready&quot;)) {</b>
 <b class="nc">&nbsp;            userReady.replace(username, true);</b>
 <b class="nc">&nbsp;            sendMessageToOtherLobbyMember(username, &quot;@ready&quot;);</b>
@@ -227,6 +228,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;        } else if (message.equals(&quot;@unready&quot;)) {</b>
 <b class="nc">&nbsp;            userReady.replace(username, false);</b>
 <b class="nc">&nbsp;            sendMessageToOtherLobbyMember(username, &quot;@unready&quot;);</b>
+<b class="nc">&nbsp;        } else if (message.equals(&quot;@ready2&quot;)) {</b>
+<b class="nc">&nbsp;            userReady.replace(username, true);;</b>
+<b class="nc">&nbsp;            sendMessageToOtherLobbyMember(username, &quot;@ready2&quot;);</b>
+<b class="nc">&nbsp;            lobbyReadyCheck(username);</b>
+<b class="nc">&nbsp;        } else if (message.equals(&quot;@unready2&quot;)) {</b>
+<b class="nc">&nbsp;            userReady.replace(username, false);</b>
+<b class="nc">&nbsp;            sendMessageToOtherLobbyMember(username, &quot;@unready2&quot;);</b>
 <b class="nc">&nbsp;        } else if (user.getCanChat()) {</b>
 <b class="nc">&nbsp;            boolean containsBannedWord = messageCheck(message, username);</b>
 <b class="nc">&nbsp;            if (!containsBannedWord) {</b>
@@ -238,22 +246,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    /**
-&nbsp;     * Handles the closure of a WebSocket connection.
-&nbsp;     *
+<b class="nc">&nbsp;     * Handles the closure of a WebSocket connection.</b>
+<b class="nc">&nbsp;     *</b>
 &nbsp;     * @param session The WebSocket session that is being closed.
 &nbsp;     */
-&nbsp;    @OnClose
+<b class="nc">&nbsp;    @OnClose</b>
 &nbsp;    public void onClose(Session session) throws IOException {
 &nbsp;
 &nbsp;        // get the username from session-username mapping
 <b class="nc">&nbsp;        String username = sessionUsernameMap.get(session);</b>
 <b class="nc">&nbsp;        int lobby = usernameLobbyMap.get(username);</b>
 &nbsp;
-&nbsp;        // server side log
+<b class="nc">&nbsp;        // server side log</b>
 <b class="nc">&nbsp;        logger.info(&quot;[onClose] &quot; + username);</b>
-&nbsp;
-&nbsp;
-&nbsp;        // send the message to chat
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        // send the message to chat</b>
 <b class="nc">&nbsp;        sendMessageToLobby(username, username + &quot; disconnected&quot;);</b>
 &nbsp;        
 &nbsp;        // remove user from memory mappings
@@ -262,37 +270,54 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;        lobbyPopulation.replace(lobby, lobbyPopulation.get(lobby) - 1);</b>
 <b class="nc">&nbsp;        if (lobbyPopulation.get(lobby) &lt; 0)</b>
 <b class="nc">&nbsp;            lobbyPopulation.replace(lobby, 0);</b>
+<b class="nc">&nbsp;        userReady.remove(username);</b>
 <b class="nc">&nbsp;        usernameLobbyMap.remove(username);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    /**
-&nbsp;     * Handles WebSocket errors that occur during the connection.
+<b class="nc">&nbsp;     * Handles WebSocket errors that occur during the connection.</b>
 &nbsp;     *
 &nbsp;     * @param session   The WebSocket session where the error occurred.
-&nbsp;     * @param throwable The Throwable representing the error condition.
+<b class="nc">&nbsp;     * @param throwable The Throwable representing the error condition.</b>
 &nbsp;     */
 &nbsp;    @OnError
 &nbsp;    public void onError(Session session, Throwable throwable) {
-&nbsp;
-&nbsp;        // get the username from session-username mapping
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        // get the username from session-username mapping</b>
 <b class="nc">&nbsp;        String username = sessionUsernameMap.get(session);</b>
-&nbsp;
-&nbsp;        // do error handling here
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;        // do error handling here</b>
 <b class="nc">&nbsp;        logger.info(&quot;[onError]&quot; + username + &quot;: &quot; + throwable.getMessage());</b>
 &nbsp;    }
-&nbsp;
-&nbsp;    private void lobbyReadyCheck(String username) {
+<b class="nc">&nbsp;</b>
+<b class="nc">&nbsp;    private void lobbyReadyCheck(String username) {</b>
 <b class="nc">&nbsp;        int[] count = new int[1];</b>
 <b class="nc">&nbsp;        int lobbyNumber = usernameLobbyMap.get(username);</b>
-<b class="nc">&nbsp;        usernameLobbyMap.forEach((name, lobby) -&gt; {</b>
-<b class="nc">&nbsp;            if (lobby == lobbyNumber &amp;&amp; userReady.get(name)) {</b>
-<b class="nc">&nbsp;                count[0]++;</b>
-&nbsp;            }
-&nbsp;        });
-<b class="nc">&nbsp;        if (count[0] == 2)</b>
-<b class="nc">&nbsp;            sendMessageToLobby(username, &quot;Start game&quot;);</b>
+<b class="nc">&nbsp;        String[] names = new String[1];</b>
+<b class="nc">&nbsp;        if (lobbyNumber &lt; 6) {</b>
+<b class="nc">&nbsp;            usernameLobbyMap.forEach((name, lobby) -&gt; {</b>
+<b class="nc">&nbsp;                if (lobby == lobbyNumber &amp;&amp; userReady.get(name)) {</b>
+<b class="nc">&nbsp;                    count[0]++;</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            });
+<b class="nc">&nbsp;            if (count[0] == 2)</b>
+<b class="nc">&nbsp;                sendMessageToLobby(username, &quot;Start game&quot;);</b>
+<b class="nc">&nbsp;        } else {</b>
+<b class="nc">&nbsp;            usernameLobbyMap.forEach((name, lobby) -&gt; {</b>
+<b class="nc">&nbsp;                if (lobby == lobbyNumber &amp;&amp; userReady.get(name)) {</b>
+<b class="nc">&nbsp;                    count[0]++;</b>
+<b class="nc">&nbsp;                    if (count[0] == 1)</b>
+<b class="nc">&nbsp;                        names[0] = name;</b>
+<b class="nc">&nbsp;                    else</b>
+<b class="nc">&nbsp;                        names[0] = names[0] + &quot;,&quot; + name;</b>
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;                if (count[0] == 4)</b>
+<b class="nc">&nbsp;                    sendMessageToLobby(username, &quot;Start Team Game:&quot; + names[0]);</b>
+<b class="nc">&nbsp;            });</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        </b>
 &nbsp;    }
-&nbsp;
+&nbsp;    
 &nbsp;    private void sendMessageToLobby(String username, String message) {
 &nbsp;        try {
 <b class="nc">&nbsp;            int lobbyNumber = usernameLobbyMap.get(username);</b>
@@ -304,20 +329,20 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;        } catch (Exception e) {</b>
 <b class="nc">&nbsp;            logger.info(&quot;[Lobby Exception, not in lobby for message] &quot; + e.getMessage());</b>
 <b class="nc">&nbsp;        }</b>
-&nbsp;    }
-&nbsp;    private void sendMessageToOtherLobbyMember(String username, String message) {
-&nbsp;        try {
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;    private void sendMessageToOtherLobbyMember(String username, String message) {</b>
+<b class="nc">&nbsp;        try {</b>
 <b class="nc">&nbsp;            int lobbyNumber = usernameLobbyMap.get(username);</b>
 <b class="nc">&nbsp;            usernameLobbyMap.forEach((name, lobby) -&gt; {</b>
 <b class="nc">&nbsp;                if (lobby == lobbyNumber &amp;&amp; !name.equals(username)) {</b>
 <b class="nc">&nbsp;                    sendMessageToParticularUser(name, message);</b>
-&nbsp;                }
+<b class="nc">&nbsp;                }</b>
 &nbsp;            });
 <b class="nc">&nbsp;        } catch (Exception e) {</b>
 <b class="nc">&nbsp;            logger.info(&quot;[Lobby Exception, not in lobby for message] &quot; + e.getMessage());</b>
 <b class="nc">&nbsp;        }</b>
-&nbsp;    }
-&nbsp;
+<b class="nc">&nbsp;    }</b>
+<b class="nc">&nbsp;</b>
 &nbsp;    private void sendMessageToParticularUser(String username, String message) {
 &nbsp;        try {
 <b class="nc">&nbsp;            usernameSessionMap.get(username).getBasicRemote().sendText(message);</b>
@@ -325,8 +350,6 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;            logger.info(&quot;[DM Exception] &quot; + e.getMessage());</b>
 <b class="nc">&nbsp;        }</b>
 &nbsp;    }
-&nbsp;
-&nbsp;
 &nbsp;
 &nbsp;    private boolean messageCheck(String message, String sender) {
 <b class="nc">&nbsp;        for (String bannedWord : bannedWords) {</b>
@@ -368,7 +391,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-12-06 15:59</div>
+    <div style="float:right;">generated on 2023-12-11 02:09</div>
 </div>
 </body>
 </html>

@@ -99,6 +99,12 @@ public class ArtistController {
     String getArtistHaveSongTogether( @PathVariable String name1, @PathVariable String name2) {
         Artist artist1 = artistRepository.findByName(name1);
         Artist artist2 = artistRepository.findByName(name2);
+        List<Song> songList = songRepository.findAll();
+        for (Song song : songList) {
+            if(song.getFeature().contains(name1) && song.getFeature().contains(name2)) {
+                return success;
+            }
+        }
         if (artist1 != null && artist2 != null) {
             String artist1name = artist1.getName();
             List<Song> songList1 = artist1.getSongs();
@@ -299,7 +305,7 @@ public class ArtistController {
 
                 jsonArray[3] = "{\"text\":\"Artist that has a Song with Swae Lee\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Swae Lee\"}";
                 jsonArray[4] = "{\"text\":\"Artist that has a Song with Playboi Carti\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Playboi Carti\"}";
-                jsonArray[5] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+                jsonArray[5] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spider-Verse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spider-Verse\"}";
             }
             else if (selector2 == 1) {
                 jsonArray[2] = "{\"text\":\"Artist that has a Song with Tyler The Creator\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Tyler The Creator\"}";
@@ -308,7 +314,7 @@ public class ArtistController {
 
                 jsonArray[3] = "{\"text\":\"Artist that has a Song with Swae Lee\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Swae Lee\"}";
                 jsonArray[5] = "{\"text\":\"Artist that has a Song with Playboi Carti\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Playboi Carti\"}";
-                jsonArray[4] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+                jsonArray[4] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spider-Verse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spider-Verse\"}";
             }
             else {
                 jsonArray[1] = "{\"text\":\"Artist that has a Song with Tyler The Creator\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Tyler The Creator\"}";
@@ -317,7 +323,7 @@ public class ArtistController {
 
                 jsonArray[5] = "{\"text\":\"Artist that has a Song with Swae Lee\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Swae Lee\"}";
                 jsonArray[4] = "{\"text\":\"Artist that has a Song with Playboi Carti\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Playboi Carti\"}";
-                jsonArray[3] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+                jsonArray[3] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spider-Verse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spider-Verse\"}";
             }
         }
         else {
@@ -327,7 +333,7 @@ public class ArtistController {
                 jsonArray[1] = "{\"text\":\"Artist that has a Song with Drake\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Drake\"}";
                 jsonArray[2] = "{\"text\":\"Artist that has a Song with 21 Savage\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"21 Savage\"}";
 
-                jsonArray[3] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+                jsonArray[3] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spider-Verse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spider-Verse\"}";
                 jsonArray[4] = "{\"text\":\"Artist that has a Song with Metro Boomin\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Metro Boomin\"}";
                 jsonArray[5] = "{\"text\":\"Artist that has a Song with Lil Uzi Vert\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Lil Uzi Vert\"}";
             }
@@ -336,7 +342,7 @@ public class ArtistController {
                 jsonArray[2] = "{\"text\":\"Artist that has a Song with Drake\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Drake\"}";
                 jsonArray[1] = "{\"text\":\"Artist that has a Song with 21 Savage\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"21 Savage\"}";
 
-                jsonArray[5] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+                jsonArray[5] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spider-Verse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spider-Verse\"}";
                 jsonArray[4] = "{\"text\":\"Artist that has a Song with Metro Boomin\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Metro Boomin\"}";
                 jsonArray[3] = "{\"text\":\"Artist that has a Song with Lil Uzi Vert\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Lil Uzi Vert\"}";
             }
@@ -345,7 +351,7 @@ public class ArtistController {
                 jsonArray[1] = "{\"text\":\"Artist that has a Song with Drake\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Drake\"}";
                 jsonArray[0] = "{\"text\":\"Artist that has a Song with 21 Savage\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"21 Savage\"}";
 
-                jsonArray[4] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spiderverse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spiderverse\"}";
+                jsonArray[4] = "{\"text\":\"Artist that has a Song on Spider-Man: Across the Spider-Verse\",\"subject\":\"Artist\",\"check\":\"on\",\"keyword\":\"Spider-Man: Across the Spider-Verse\"}";
                 jsonArray[3] = "{\"text\":\"Artist that has a Song with Metro Boomin\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Metro Boomin\"}";
                 jsonArray[5] = "{\"text\":\"Artist that has a Song with Lil Uzi Vert\",\"subject\":\"Artist\",\"check\":\"with\",\"keyword\":\"Lil Uzi Vert\"}";
             }

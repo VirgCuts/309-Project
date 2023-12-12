@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    14.3%
+    85.7%
   </span>
   <span class="absValue">
-    (1/7)
+    (6/7)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    16.7%
+    66.7%
   </span>
   <span class="absValue">
-    (3/18)
+    (12/18)
   </span>
 </td>
 </tr>
@@ -109,22 +109,22 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;Get all Songs in the database&quot;, response = Iterable.class, tags = &quot;song-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/songs&quot;)
 &nbsp;    List&lt;Song&gt; getAllSongs(){
-<b class="nc">&nbsp;        return songRepository.findAll();</b>
+<b class="fc">&nbsp;        return songRepository.findAll();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Get a Song by id from the database&quot;, response = Song.class, tags = &quot;song-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/songs/{id}&quot;)
 &nbsp;    Song getSongById(@PathVariable int id){
-<b class="nc">&nbsp;        return songRepository.findById(id);</b>
+<b class="fc">&nbsp;        return songRepository.findById(id);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Create a Song and add it to the database&quot;, response = String.class, tags = &quot;song-controller&quot;)
 &nbsp;    @PostMapping(path = &quot;/songs&quot;)
 &nbsp;    String createSong(@RequestBody Song song){
-<b class="nc">&nbsp;        if (song == null)</b>
+<b class="fc">&nbsp;        if (song == null)</b>
 <b class="nc">&nbsp;            return failure;</b>
-<b class="nc">&nbsp;        songRepository.save(song);</b>
-<b class="nc">&nbsp;        return success;</b>
+<b class="fc">&nbsp;        songRepository.save(song);</b>
+<b class="fc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Update a Song in the database&quot;, response = Song.class, tags = &quot;song-controller&quot;)
@@ -140,16 +140,16 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;Delete a song from the database&quot;, response = String.class, tags = &quot;song-controller&quot;)
 &nbsp;    @DeleteMapping(path = &quot;/songs/{id}&quot;)
 &nbsp;    String deleteSong(@PathVariable int id){
-<b class="nc">&nbsp;        songRepository.deleteById(id);</b>
-<b class="nc">&nbsp;        return success;</b>
+<b class="fc">&nbsp;        songRepository.deleteById(id);</b>
+<b class="fc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    // for the game directly
 &nbsp;    @ApiOperation(value = &quot;Check if a song contains a string for the game&quot;, response = Boolean.class, tags = &quot;song-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/songsname/{name}/game/{check}&quot;)
 &nbsp;    boolean checkIfSongContains(@PathVariable String name, @PathVariable String check){
-<b class="nc">&nbsp;        Song song = songRepository.findBySongName(name);</b>
-<b class="nc">&nbsp;        return song.getSongName().contains(check);</b>
+<b class="fc">&nbsp;        Song song = songRepository.findBySongName(name);</b>
+<b class="fc">&nbsp;        return song.getSongName().contains(check);</b>
 &nbsp;    }
 &nbsp;}
 </code>
@@ -175,7 +175,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-12-06 15:59</div>
+    <div style="float:right;">generated on 2023-12-11 02:09</div>
 </div>
 </body>
 </html>

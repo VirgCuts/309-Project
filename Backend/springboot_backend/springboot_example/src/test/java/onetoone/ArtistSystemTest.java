@@ -19,6 +19,9 @@ import io.restassured.response.Response;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
@@ -87,6 +90,54 @@ public class ArtistSystemTest {
     }
 
     @Test
+    public void createArtist() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "TestingName");
+        map.put("numPlatinums", "3");
+        map.put("numGrammys", "1");
+
+        Response response =
+                RestAssured.given().
+                        header("Content-Type", "application/JSON").
+                        body(map).
+                        when().
+                        post("/artists");
+        assertEquals(200, response.getStatusCode());
+
+        String returnString = response.getBody().asString();
+        assertEquals("{\"message\":\"success\"}", returnString);
+
+        artistRepository.deleteByName("TestingName");
+    }
+
+    @Test
+    public void deleteSong() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "TestingName");
+        map.put("numPlatinums", "3");
+        map.put("numGrammys", "1");
+
+        Response response =
+                RestAssured.given().
+                        header("Content-Type", "application/JSON").
+                        body(map).
+                        when().
+                        post("/artists");
+        assertEquals(200, response.getStatusCode());
+
+        String returnString = response.getBody().asString();
+        assertEquals("{\"message\":\"success\"}", returnString);
+
+        Response response1 = RestAssured.delete("/artists/14");
+        assertEquals(200, response.getStatusCode());
+
+        String returnString2 = response1.getBody().asString();
+        assertEquals("{\"message\":\"success\"}", returnString2);
+
+        artistRepository.deleteByName("TestingName");
+    }
+
+    @Test
     public void getArtistNameContains() throws JsonProcessingException {
         Response response = RestAssured.get("/artists/Travis Scott/name/vis");
         assertEquals(200, response.getStatusCode());
@@ -123,6 +174,14 @@ public class ArtistSystemTest {
     @Test
     public void getArtistHaveSong3() {
         Response response = RestAssured.get("/artists/Future/with/Playboi Carti");
+        assertEquals(200, response.getStatusCode());
+        String returnString = response.getBody().asString();
+        assertEquals("{\"message\":\"success\"}", returnString);
+    }
+
+    @Test
+    public void getArtistHaveSong4() {
+        Response response = RestAssured.get("/artists/21 Savage/with/James Blake");
         assertEquals(200, response.getStatusCode());
         String returnString = response.getBody().asString();
         assertEquals("{\"message\":\"success\"}", returnString);

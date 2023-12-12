@@ -5,7 +5,7 @@
 <html id="htmlId">
 <head>
   <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
-  <title>Coverage Report > Main</title>
+  <title>Coverage Report > DatabasePopulateService</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/idea.min.css";
@@ -22,7 +22,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">onetoone</a>
 </div>
 
-<h1>Coverage Summary for Class: Main (onetoone)</h1>
+<h1>Coverage Summary for Class: DatabasePopulateService (onetoone)</h1>
 
 <table class="coverageStats">
 
@@ -38,49 +38,46 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">Main</td>
+  <td class="name">DatabasePopulateService</td>
 <td class="coverageStat">
   <span class="percent">
-    80%
+    25%
   </span>
   <span class="absValue">
-    (4/5)
+    (1/4)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    28.8%
+    5.3%
   </span>
   <span class="absValue">
-    (19/66)
+    (1/19)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">Main$$EnhancerBySpringCGLIB$$c1c3ea4e</td>
+    <td class="name">DatabasePopulateService$$EnhancerBySpringCGLIB$$bdaa6702</td>
   </tr>
   <tr>
-    <td class="name">Main$$EnhancerBySpringCGLIB$$c1c3ea4e$$FastClassBySpringCGLIB$$74d793e2</td>
-  </tr>
-  <tr>
-    <td class="name">Main$$FastClassBySpringCGLIB$$e6e8dec2</td>
+    <td class="name">DatabasePopulateService$$EnhancerBySpringCGLIB$$f417edbf</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    80%
+    25%
   </span>
   <span class="absValue">
-    (4/5)
+    (1/4)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    28.8%
+    5.3%
   </span>
   <span class="absValue">
-    (19/66)
+    (1/19)
   </span>
 </td>
 </tr>
@@ -93,155 +90,61 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package onetoone;
 &nbsp;
-&nbsp;import onetoone.Inventory.InventoryRepository;
-&nbsp;import onetoone.Reports.ReportRepository;
-&nbsp;import onetoone.Websocket.MessageRepository;
-&nbsp;import org.springframework.boot.CommandLineRunner;
-&nbsp;import org.springframework.boot.SpringApplication;
-&nbsp;import org.springframework.boot.autoconfigure.SpringBootApplication;
-&nbsp;import org.springframework.context.annotation.Bean;
-&nbsp;import org.springframework.context.annotation.ComponentScan;
-&nbsp;import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-&nbsp;
 &nbsp;import onetoone.Albums.Album;
 &nbsp;import onetoone.Albums.AlbumRepository;
-&nbsp;import onetoone.Songs.Song;
-&nbsp;import onetoone.Songs.SongRepository;
 &nbsp;import onetoone.Artists.Artist;
 &nbsp;import onetoone.Artists.ArtistRepository;
-&nbsp;import onetoone.Users.User;
+&nbsp;import onetoone.Songs.Song;
+&nbsp;import onetoone.Songs.SongRepository;
 &nbsp;import onetoone.Users.UserRepository;
-&nbsp;import org.springframework.mail.javamail.JavaMailSender;
-&nbsp;import org.springframework.mail.javamail.JavaMailSenderImpl;
-&nbsp;import org.springframework.scheduling.annotation.EnableScheduling;
+&nbsp;import org.hibernate.Session;
+&nbsp;import org.hibernate.SessionFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
 &nbsp;
-&nbsp;import java.io.BufferedReader;
-&nbsp;import java.io.FileReader;
-&nbsp;import java.net.URL;
-&nbsp;import java.util.HashMap;
+&nbsp;import javax.transaction.Transactional;
 &nbsp;
-&nbsp;/**
-&nbsp; * 
-&nbsp; * @author Conor O&#39;Shea
-&nbsp; * 
-&nbsp; */ 
+&nbsp;@Service
+<b class="fc">&nbsp;public class DatabasePopulateService {</b>
 &nbsp;
-&nbsp;@SpringBootApplication
-&nbsp;@EnableJpaRepositories
-&nbsp;@EnableScheduling
-<b class="fc">&nbsp;class Main {</b>
+&nbsp;    @Autowired
+&nbsp;    ArtistRepository artistRepository;
 &nbsp;
-&nbsp;    public static void main(String[] args) {
-<b class="nc">&nbsp;        SpringApplication.run(Main.class, args);</b>
+&nbsp;    @Autowired
+&nbsp;    AlbumRepository albumRepository;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    SessionFactory sessionFactory;
+&nbsp;
+&nbsp;    @Transactional
+&nbsp;    public void connectSongToArtistAndAlbum(Artist artist, Album album, Song song) {
+<b class="nc">&nbsp;        artist.addSongs(song);</b>
+<b class="nc">&nbsp;        album.addSongs(song);</b>
+<b class="nc">&nbsp;        song.setAlbum(album);</b>
+<b class="nc">&nbsp;        song.setArtist(artist);</b>
+<b class="nc">&nbsp;        artistRepository.save(artist);</b>
+<b class="nc">&nbsp;        albumRepository.save(album);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    @Bean
-&nbsp;    public JavaMailSender javaMailSender() {
-<b class="fc">&nbsp;        return new JavaMailSenderImpl();</b>
+&nbsp;    @Transactional
+&nbsp;    public void connectSongToArtistStringAndAlbum(String artistname, Album album, Song song) {
+<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(artistname);</b>
+<b class="nc">&nbsp;        artist.addSongs(song);</b>
+<b class="nc">&nbsp;        album.addSongs(song);</b>
+<b class="nc">&nbsp;        song.setAlbum(album);</b>
+<b class="nc">&nbsp;        song.setArtist(artist);</b>
+<b class="nc">&nbsp;        albumRepository.save(album);</b>
 &nbsp;    }
 &nbsp;
-&nbsp;    // Create 3 users with their machines
-&nbsp;    /**
-&nbsp;     * 
-&nbsp;     * @param artistRepository repository for the Artist entity
-&nbsp;     * @param songRepository repository for the Song entity
-&nbsp;     * @param albumRepository repository for the Album entity
-&nbsp;     * Creates a commandLine runner to enter dummy data into the database
-&nbsp;     * As mentioned in User.java just associating the Laptop object with the User will save it into the database because of the CascadeType
-&nbsp;     */
-&nbsp;    @Bean
-&nbsp;    CommandLineRunner initUser(ArtistRepository artistRepository, SongRepository songRepository, UserRepository userRepository, AlbumRepository albumRepository, MessageRepository messageRepository, ReportRepository reportRepository, InventoryRepository inventoryRepository) {
-<b class="fc">&nbsp;        return args -&gt; {</b>
-<b class="fc">&nbsp;            userRepository.deleteAll();</b>
-&nbsp;//            Album album1 = new Album(&quot;Graduation&quot;, &quot;Rap&quot;);
-&nbsp;//            albumRepository.save(album1);
-<b class="fc">&nbsp;            User user1 = new User(&quot;Sam&quot;, &quot;password1&quot;, &quot;sdl21@iastate.edu&quot;);</b>
-<b class="fc">&nbsp;            User user2 = new User(&quot;Keenan&quot;, &quot;password1&quot;, &quot;kcjacobs@iastate.edu&quot;);</b>
-<b class="fc">&nbsp;            User user3 = new User(&quot;Conor&quot;, &quot;password1&quot;, &quot;coshea@iastate.edu&quot;);</b>
-<b class="fc">&nbsp;            User user4 = new User(&quot;Carter&quot;, &quot;password1&quot;, &quot;cvcuts@iastate.edu&quot;);</b>
-<b class="fc">&nbsp;            userRepository.save(user1);</b>
-<b class="fc">&nbsp;            userRepository.save(user2);</b>
-<b class="fc">&nbsp;            userRepository.save(user3);</b>
-<b class="fc">&nbsp;            userRepository.save(user4);</b>
-&nbsp;            try {
-&nbsp;//                BufferedReader reader = new BufferedReader(new FileReader(&quot;km203_song_db.csv&quot;));
-<b class="fc">&nbsp;                BufferedReader reader = new BufferedReader(new FileReader(&quot;cs309newsongdb.csv&quot;));</b>
-<b class="fc">&nbsp;                HashMap&lt;String, Artist&gt; hash = new HashMap&lt;&gt;();</b>
-<b class="fc">&nbsp;                HashMap&lt;String, Album&gt; albumhash = new HashMap&lt;&gt;();</b>
-<b class="fc">&nbsp;                String[] categories = reader.readLine().split(&quot;,&quot;);</b>
-<b class="fc">&nbsp;                if (artistRepository.findById(1) == null) {</b>
-<b class="nc">&nbsp;                    for (int i = 0; i &lt; 101; i++) {</b>
-<b class="nc">&nbsp;                        String[] input = reader.readLine().split(&quot;,&quot;);</b>
-<b class="nc">&nbsp;                        String artist_name = input[0];</b>
-<b class="nc">&nbsp;                        String song_name = input[1];</b>
-<b class="nc">&nbsp;                        String genre = input[2];</b>
-<b class="nc">&nbsp;                        String features = &quot;&quot;;</b>
-<b class="nc">&nbsp;                        String album_name = &quot;&quot;;</b>
-<b class="nc">&nbsp;                        if (input.length == 5) {</b>
-<b class="nc">&nbsp;                            features = input[3];</b>
-<b class="nc">&nbsp;                            album_name = input[4];</b>
-&nbsp;                        }
-&nbsp;                        else {
-<b class="nc">&nbsp;                            for (int j = 3; j &lt; input.length - 1; j++) {</b>
-<b class="nc">&nbsp;                                features = features + &quot;,&quot; + input[j];</b>
-&nbsp;                            }
-<b class="nc">&nbsp;                            features = features.substring(2, features.length() - 1);</b>
-<b class="nc">&nbsp;                            album_name = input[input.length - 1];</b>
-&nbsp;                        }
-<b class="nc">&nbsp;                        Song song = new Song(song_name, genre, features);</b>
-&nbsp;
-<b class="nc">&nbsp;                        if (!hash.containsKey(artist_name)) {</b>
-<b class="nc">&nbsp;                            Artist artist = new Artist(artist_name, 0, 0);</b>
-<b class="nc">&nbsp;                            hash.put(artist_name, artist);</b>
-<b class="nc">&nbsp;                            artistRepository.save(artist);</b>
-&nbsp;
-<b class="nc">&nbsp;                            Album album = new Album(album_name, genre);</b>
-<b class="nc">&nbsp;                            albumhash.put(album_name, album);</b>
-<b class="nc">&nbsp;                            albumRepository.save(album);</b>
-&nbsp;
-<b class="nc">&nbsp;                            artist.addSongs(song);</b>
-<b class="nc">&nbsp;                            song.setArtist(artist);</b>
-&nbsp;
-<b class="nc">&nbsp;                            album.addSongs(song);</b>
-<b class="nc">&nbsp;                            song.setAlbum(album);</b>
-<b class="nc">&nbsp;                        } else if (!albumhash.containsKey(album_name)) {</b>
-<b class="nc">&nbsp;                            Album album = new Album(album_name, genre);</b>
-<b class="nc">&nbsp;                            albumhash.put(album_name, album);</b>
-<b class="nc">&nbsp;                            albumRepository.save(album);</b>
-&nbsp;
-<b class="nc">&nbsp;                            Artist getter = hash.get(artist_name);</b>
-<b class="nc">&nbsp;                            getter.addSongs(song);</b>
-&nbsp;
-<b class="nc">&nbsp;                            getter.addSongs(song);</b>
-<b class="nc">&nbsp;                            song.setArtist(getter);</b>
-&nbsp;
-<b class="nc">&nbsp;                            album.addSongs(song);</b>
-<b class="nc">&nbsp;                            song.setAlbum(album);</b>
-<b class="nc">&nbsp;                        }</b>
-&nbsp;                        else {
-<b class="nc">&nbsp;                            Artist getter = hash.get(artist_name);</b>
-<b class="nc">&nbsp;                            getter.addSongs(song);</b>
-<b class="nc">&nbsp;                            song.setArtist(getter);</b>
-&nbsp;
-<b class="nc">&nbsp;                            Album getter2 = albumhash.get(album_name);</b>
-<b class="nc">&nbsp;                            getter2.addSongs(song);</b>
-<b class="nc">&nbsp;                            song.setAlbum(getter2);</b>
-&nbsp;                        }
-&nbsp;
-<b class="nc">&nbsp;                        songRepository.save(song);</b>
-&nbsp;
-&nbsp;
-&nbsp;                    }
-&nbsp;
-&nbsp;                }
-<b class="fc">&nbsp;                reader.close();</b>
-&nbsp;            }
-<b class="nc">&nbsp;            catch (Exception e) {</b>
-<b class="nc">&nbsp;                e.printStackTrace();</b>
-<b class="fc">&nbsp;            }</b>
-&nbsp;        };
+&nbsp;    @Transactional
+&nbsp;    public void connectSongToArtistStringAndAlbumString(String artistname, String albumname, Song song) {
+<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(artistname);</b>
+<b class="nc">&nbsp;        Album album = albumRepository.findByAlbumName(albumname);</b>
+<b class="nc">&nbsp;        artist.addSongs(song);</b>
+<b class="nc">&nbsp;        album.addSongs(song);</b>
+<b class="nc">&nbsp;        song.setAlbum(album);</b>
+<b class="nc">&nbsp;        song.setArtist(artist);</b>
 &nbsp;    }
-&nbsp;
 &nbsp;}
 </code>
 </pre>
@@ -266,7 +169,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-12-06 15:59</div>
+    <div style="float:right;">generated on 2023-12-11 02:09</div>
 </div>
 </body>
 </html>

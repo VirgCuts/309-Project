@@ -52,18 +52,18 @@ Current scope:     <a href="../../index.html">all classes</a>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    4.8%
+    89.5%
   </span>
   <span class="absValue">
-    (1/21)
+    (17/19)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    1.8%
+    79.8%
   </span>
   <span class="absValue">
-    (3/166)
+    (142/178)
   </span>
 </td>
 </tr>
@@ -121,51 +121,51 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;Get all Artists in the database&quot;, response = Iterable.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists&quot;)
 &nbsp;    List&lt;Artist&gt; getAllArtists(){
-<b class="nc">&nbsp;        return artistRepository.findAll();</b>
+<b class="fc">&nbsp;        return artistRepository.findAll();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Get Artists by id in the database&quot;, response = Artist.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/{id}&quot;)
 &nbsp;    Artist getArtistById( @PathVariable int id){
-<b class="nc">&nbsp;        return artistRepository.findById(id);</b>
+<b class="fc">&nbsp;        return artistRepository.findById(id);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Get all Songs by an Artist in the database&quot;, response = Iterable.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/{id}/songs&quot;)
 &nbsp;    List&lt;Song&gt; getArtistSongs( @PathVariable int id) {
-<b class="nc">&nbsp;        Artist artist = artistRepository.findById(id);</b>
-<b class="nc">&nbsp;        return artist.getSongs();</b>
+<b class="fc">&nbsp;        Artist artist = artistRepository.findById(id);</b>
+<b class="fc">&nbsp;        return artist.getSongs();</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Get all Artists by name in the database&quot;, response = Artist.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/{name}/study&quot;)
 &nbsp;    Artist getArtistByName( @PathVariable String name) {
-<b class="nc">&nbsp;        return artistRepository.findByName(name);</b>
+<b class="fc">&nbsp;        return artistRepository.findByName(name);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Get a random Artist from the database&quot;, response = Iterable.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/random&quot;)
 &nbsp;    Artist getRandomArtist() {
-<b class="nc">&nbsp;        Random rand = new Random();</b>
-<b class="nc">&nbsp;        int randomNum = rand.nextInt(437);</b>
-<b class="nc">&nbsp;        return artistRepository.findById(randomNum);</b>
+<b class="fc">&nbsp;        Random rand = new Random();</b>
+<b class="fc">&nbsp;        int randomNum = rand.nextInt(12);</b>
+<b class="fc">&nbsp;        return artistRepository.findById(randomNum);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Check if an Artist&#39;s name contains a string&quot;, response = Boolean.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/{name}/name/{check}&quot;)
 &nbsp;    boolean getArtistNameContains( @PathVariable String name, @PathVariable String check) {
-<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
-<b class="nc">&nbsp;        return artist.getName().contains(check);</b>
+<b class="fc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
+<b class="fc">&nbsp;        return artist.getName().contains(check);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Check if an Artist has a song featuring another specified Artist&quot;, response = Boolean.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/{name}/featuring/{feature}&quot;)
 &nbsp;    String getArtistFeatureCheck( @PathVariable String name, @PathVariable String feature) {
-<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
-<b class="nc">&nbsp;        List&lt;Song&gt; songList = artist.getSongs();</b>
-<b class="nc">&nbsp;        for (int i = 0; i &lt; songList.size(); i++) {</b>
-<b class="nc">&nbsp;            if (songList.get(i).getFeature().contains(feature)) {</b>
-<b class="nc">&nbsp;                return success;</b>
+<b class="fc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
+<b class="fc">&nbsp;        List&lt;Song&gt; songList = artist.getSongs();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; songList.size(); i++) {</b>
+<b class="fc">&nbsp;            if (songList.get(i).getFeature().contains(feature)) {</b>
+<b class="fc">&nbsp;                return success;</b>
 &nbsp;            }
 &nbsp;        }
 <b class="nc">&nbsp;        return failure;</b>
@@ -174,42 +174,78 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;CHeck if two artists have any song together&quot;, response = Boolean.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/{name1}/with/{name2}&quot;)
 &nbsp;    String getArtistHaveSongTogether( @PathVariable String name1, @PathVariable String name2) {
-<b class="nc">&nbsp;        Artist artist1 = artistRepository.findByName(name1);</b>
-<b class="nc">&nbsp;        String artist1name = artist1.getName();</b>
-<b class="nc">&nbsp;        List&lt;Song&gt; songList1 = artist1.getSongs();</b>
-<b class="nc">&nbsp;        Artist artist2 = artistRepository.findByName(name2);</b>
-<b class="nc">&nbsp;        String artist2name = artist2.getName();</b>
-<b class="nc">&nbsp;        List&lt;Song&gt; songList2 = artist2.getSongs();</b>
-<b class="nc">&nbsp;        boolean returner = false;</b>
-<b class="nc">&nbsp;        for (int i = 0; i &lt; songList1.size(); i++) {</b>
-<b class="nc">&nbsp;            if (songList1.get(i).getFeature().contains(artist2name)) {</b>
-<b class="nc">&nbsp;                returner =  true;</b>
+<b class="fc">&nbsp;        Artist artist1 = artistRepository.findByName(name1);</b>
+<b class="fc">&nbsp;        Artist artist2 = artistRepository.findByName(name2);</b>
+<b class="fc">&nbsp;        if (artist1 != null &amp;&amp; artist2 != null) {</b>
+<b class="fc">&nbsp;            String artist1name = artist1.getName();</b>
+<b class="fc">&nbsp;            List&lt;Song&gt; songList1 = artist1.getSongs();</b>
+&nbsp;
+<b class="fc">&nbsp;            String artist2name = artist2.getName();</b>
+<b class="fc">&nbsp;            List&lt;Song&gt; songList2 = artist2.getSongs();</b>
+<b class="fc">&nbsp;            boolean returner = false;</b>
+<b class="fc">&nbsp;            for (int i = 0; i &lt; songList1.size(); i++) {</b>
+<b class="fc">&nbsp;                if (songList1.get(i).getFeature().contains(artist2name)) {</b>
+<b class="fc">&nbsp;                    returner =  true;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            for (int i = 0; i &lt; songList2.size(); i++) {</b>
+<b class="fc">&nbsp;                if (songList2.get(i).getFeature().contains(artist1name)) {</b>
+<b class="nc">&nbsp;                    returner =  true;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            if (returner) {</b>
+<b class="fc">&nbsp;                return success;</b>
+&nbsp;            }
+&nbsp;            else {
+<b class="nc">&nbsp;                return failure;</b>
 &nbsp;            }
 &nbsp;        }
-<b class="nc">&nbsp;        for (int i = 0; i &lt; songList2.size(); i++) {</b>
-<b class="nc">&nbsp;            if (songList2.get(i).getFeature().contains(artist1name)) {</b>
-<b class="nc">&nbsp;                returner =  true;</b>
+<b class="fc">&nbsp;        else if (artist1 == null) {</b>
+<b class="fc">&nbsp;            String artist2name = artist2.getName();</b>
+<b class="fc">&nbsp;            List&lt;Song&gt; songList2 = artist2.getSongs();</b>
+<b class="fc">&nbsp;            boolean returner = false;</b>
+<b class="fc">&nbsp;            for (int i = 0; i &lt; songList2.size(); i++) {</b>
+<b class="fc">&nbsp;                if (songList2.get(i).getFeature().contains(name1)) {</b>
+<b class="fc">&nbsp;                    returner =  true;</b>
+&nbsp;                }
 &nbsp;            }
-&nbsp;        }
-<b class="nc">&nbsp;        if (returner) {</b>
-<b class="nc">&nbsp;            return success;</b>
+<b class="fc">&nbsp;            if (returner) {</b>
+<b class="fc">&nbsp;                return success;</b>
+&nbsp;            }
+&nbsp;            else {
+<b class="nc">&nbsp;                return failure;</b>
+&nbsp;            }
 &nbsp;        }
 &nbsp;        else {
-<b class="nc">&nbsp;            return failure;</b>
+<b class="fc">&nbsp;            String artist1name = artist1.getName();</b>
+<b class="fc">&nbsp;            List&lt;Song&gt; songList1 = artist1.getSongs();</b>
+<b class="fc">&nbsp;            boolean returner = false;</b>
+<b class="fc">&nbsp;            for (int i = 0; i &lt; songList1.size(); i++) {</b>
+<b class="fc">&nbsp;                if (songList1.get(i).getFeature().contains(name2)) {</b>
+<b class="fc">&nbsp;                    returner =  true;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;            if (returner) {</b>
+<b class="fc">&nbsp;                return success;</b>
+&nbsp;            }
+&nbsp;            else {
+<b class="nc">&nbsp;                return failure;</b>
+&nbsp;            }
 &nbsp;        }
+&nbsp;
 &nbsp;    }
 &nbsp;
 &nbsp;    @GetMapping(path = &quot;/artists/{name}/on/{album}&quot;)
 &nbsp;    String getArtistOnAlbum( @PathVariable String name, @PathVariable String album) {
-<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
-<b class="nc">&nbsp;        Album album_object = albumRepository.findByAlbumName(album);</b>
-<b class="nc">&nbsp;        List&lt;Song&gt; songList = album_object.getSongs();</b>
-<b class="nc">&nbsp;        if (songList.get(0).getArtist().getName().equals(name)) {</b>
+<b class="fc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
+<b class="fc">&nbsp;        Album album_object = albumRepository.findByAlbumName(album);</b>
+<b class="fc">&nbsp;        List&lt;Song&gt; songList = album_object.getSongs();</b>
+<b class="fc">&nbsp;        if (songList.get(0).getArtist().getName().equals(name)) {</b>
 <b class="nc">&nbsp;            return success;</b>
 &nbsp;        }
-<b class="nc">&nbsp;        for (int i = 0; i &lt; songList.size(); i++) {</b>
-<b class="nc">&nbsp;            if (songList.get(i).getFeature().contains(name)) {</b>
-<b class="nc">&nbsp;                return success;</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; songList.size(); i++) {</b>
+<b class="fc">&nbsp;            if (songList.get(i).getFeature().contains(name)) {</b>
+<b class="fc">&nbsp;                return success;</b>
 &nbsp;            }
 &nbsp;        }
 <b class="nc">&nbsp;        return failure;</b>
@@ -219,10 +255,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;Create an Artist and add it to the database&quot;, response = String.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @PostMapping(path = &quot;/artists&quot;)
 &nbsp;    String createArtist(@RequestBody Artist artist){
-<b class="nc">&nbsp;        if (artist == null)</b>
+<b class="fc">&nbsp;        if (artist == null)</b>
 <b class="nc">&nbsp;            return failure;</b>
-<b class="nc">&nbsp;        artistRepository.save(artist);</b>
-<b class="nc">&nbsp;        return success;</b>
+<b class="fc">&nbsp;        artistRepository.save(artist);</b>
+<b class="fc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Update an Artist in the database&quot;, response = Artist.class, tags = &quot;artist-controller&quot;)
@@ -248,59 +284,46 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;
-&nbsp;//    @ApiOperation(value = &quot;Assign an Album to an Artist in the database&quot;, response = String.class, tags = &quot;artist-controller&quot;)
-&nbsp;//    @PutMapping(&quot;/artists/{artistId}/albums/{albumId}&quot;)
-&nbsp;//    String assignAlbumToArtist(@PathVariable int artistId,@PathVariable int albumId){
-&nbsp;//        Artist artist = artistRepository.findById(artistId);
-&nbsp;//        Album album = albumRepository.findById(albumId);
-&nbsp;//        if(artist == null || album == null)
-&nbsp;//            return failure;
-&nbsp;//        album.setArtist(artist);
-&nbsp;//        artist.addAlbums(album);
-&nbsp;//        artistRepository.save(artist);
-&nbsp;//        return success;
-&nbsp;//    }
-&nbsp;
 &nbsp;    @ApiOperation(value = &quot;Delete an Artist from the database&quot;, response = String.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @DeleteMapping(path = &quot;/artists/{id}&quot;)
 &nbsp;    String deleteArtist(@PathVariable int id){
-<b class="nc">&nbsp;        artistRepository.deleteById(id);</b>
-<b class="nc">&nbsp;        return success;</b>
+<b class="fc">&nbsp;        artistRepository.deleteById(id);</b>
+<b class="fc">&nbsp;        return success;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    // for the game directly
-&nbsp;    @ApiOperation(value = &quot;Check if an Artist name contains a given string for the game&quot;, response = Boolean.class, tags = &quot;artist-controller&quot;)
-&nbsp;    @GetMapping(path = &quot;/artists/{name}/game/{check}&quot;)
-&nbsp;    boolean checkIfArtistContains(@PathVariable String name, @PathVariable String check){
-<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
-<b class="nc">&nbsp;        return artist.getName().contains(check);</b>
-&nbsp;    }
+&nbsp;//    @ApiOperation(value = &quot;Check if an Artist name contains a given string for the game&quot;, response = Boolean.class, tags = &quot;artist-controller&quot;)
+&nbsp;//    @GetMapping(path = &quot;/artists/{name}/game/{check}&quot;)
+&nbsp;//    boolean checkIfArtistContains(@PathVariable String name, @PathVariable String check){
+&nbsp;//        Artist artist = artistRepository.findByName(name);
+&nbsp;//        return artist.getName().contains(check);
+&nbsp;//    }
 &nbsp;
-&nbsp;    @ApiOperation(value = &quot;Check if a song by an artist contains a given string&quot;, response = Boolean.class, tags = &quot;artist-controller&quot;)
-&nbsp;    @GetMapping(path = &quot;/artists/{name}/songs/{songId}/game/{check}&quot;)
-&nbsp;    boolean checkIfSongContains(@PathVariable String name, @PathVariable int songId,
-&nbsp;                                @PathVariable String check){
-<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
-<b class="nc">&nbsp;        List&lt;Song&gt; songList = artist.getSongs();</b>
-<b class="nc">&nbsp;        for (int i = 0; i &lt; songList.size(); i++) {</b>
-<b class="nc">&nbsp;            if (songList.get(i).getSongName().contains(check)) {</b>
-<b class="nc">&nbsp;                return true;</b>
-&nbsp;            }
-&nbsp;        }
-<b class="nc">&nbsp;        return false;</b>
-&nbsp;    }
+&nbsp;//    @ApiOperation(value = &quot;Check if a song by an artist contains a given string&quot;, response = Boolean.class, tags = &quot;artist-controller&quot;)
+&nbsp;//    @GetMapping(path = &quot;/artists/{name}/songs/{songId}/game/{check}&quot;)
+&nbsp;//    boolean checkIfSongContains(@PathVariable String name, @PathVariable int songId,
+&nbsp;//                                @PathVariable String check){
+&nbsp;//        Artist artist = artistRepository.findByName(name);
+&nbsp;//        List&lt;Song&gt; songList = artist.getSongs();
+&nbsp;//        for (int i = 0; i &lt; songList.size(); i++) {
+&nbsp;//            if (songList.get(i).getSongName().contains(check)) {
+&nbsp;//                return true;
+&nbsp;//            }
+&nbsp;//        }
+&nbsp;//        return false;
+&nbsp;//    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Check if an Artist and a Song contain strings for the game&quot;, response = String.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/{name}/artist/{check1}/songs/{check2}&quot;)
 &nbsp;    String checkIfSongAndArtistContains(@PathVariable String name, @PathVariable String check1,
 &nbsp;                                        @PathVariable String check2){
-<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
-<b class="nc">&nbsp;        if (artist != null) {</b>
-<b class="nc">&nbsp;            if (artist.getName().contains(check1)) {</b>
-<b class="nc">&nbsp;                List&lt;Song&gt; songList = artist.getSongs();</b>
-<b class="nc">&nbsp;                for (int i = 0; i &lt; songList.size(); i++) {</b>
-<b class="nc">&nbsp;                    if (songList.get(i).getSongName().contains(check2)) {</b>
-<b class="nc">&nbsp;                        return success;</b>
+<b class="fc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
+<b class="fc">&nbsp;        if (artist != null) {</b>
+<b class="fc">&nbsp;            if (artist.getName().contains(check1)) {</b>
+<b class="fc">&nbsp;                List&lt;Song&gt; songList = artist.getSongs();</b>
+<b class="fc">&nbsp;                for (int i = 0; i &lt; songList.size(); i++) {</b>
+<b class="fc">&nbsp;                    if (songList.get(i).getSongName().contains(check2)) {</b>
+<b class="fc">&nbsp;                        return success;</b>
 &nbsp;                    }
 &nbsp;                }
 &nbsp;            }
@@ -311,28 +334,28 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;Return categories to be used by the game&quot;, response = String.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/categories&quot;)
 &nbsp;    String[] getCategories(){
-<b class="nc">&nbsp;        String[] jsonArray = new String[6];</b>
-<b class="nc">&nbsp;        Random random = new Random();</b>
-<b class="nc">&nbsp;        int selector1 = random.nextInt(3);</b>
-<b class="nc">&nbsp;        if (selector1 == 0) {</b>
-<b class="nc">&nbsp;            int selector2 = random.nextInt(3);</b>
-<b class="nc">&nbsp;            if (selector2 == 0) {</b>
-<b class="nc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist with a Song featuring Teezo Touchdown\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;featuring\&quot;,\&quot;keyword\&quot;:\&quot;Teezo Touchdown\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Travis Scott\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Travis Scott\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Playboi Carti\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Playboi Carti\&quot;}&quot;;</b>
+<b class="fc">&nbsp;        String[] jsonArray = new String[6];</b>
+<b class="fc">&nbsp;        Random random = new Random();</b>
+<b class="fc">&nbsp;        int selector1 = random.nextInt(3);</b>
+<b class="fc">&nbsp;        if (selector1 == 0) {</b>
+<b class="fc">&nbsp;            int selector2 = random.nextInt(3);</b>
+<b class="fc">&nbsp;            if (selector2 == 0) {</b>
+<b class="fc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist with a Song featuring Teezo Touchdown\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;featuring\&quot;,\&quot;keyword\&quot;:\&quot;Teezo Touchdown\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Travis Scott\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Travis Scott\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Playboi Carti\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Playboi Carti\&quot;}&quot;;</b>
 &nbsp;
-<b class="nc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Kanye West\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Kanye West\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Yeat\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Yeat\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Kanye West\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Kanye West\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Yeat\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Yeat\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
 &nbsp;            }
-<b class="nc">&nbsp;            else if (selector2 == 1) {</b>
-<b class="nc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist with a Song featuring Teezo Touchdown\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;featuring\&quot;,\&quot;keyword\&quot;:\&quot;Teezo Touchdown\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Travis Scott\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Travis Scott\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Playboi Carti\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Playboi Carti\&quot;}&quot;;</b>
+<b class="fc">&nbsp;            else if (selector2 == 1) {</b>
+<b class="fc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist with a Song featuring Teezo Touchdown\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;featuring\&quot;,\&quot;keyword\&quot;:\&quot;Teezo Touchdown\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Travis Scott\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Travis Scott\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Playboi Carti\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Playboi Carti\&quot;}&quot;;</b>
 &nbsp;
-<b class="nc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Kanye West\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Kanye West\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Yeat\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Yeat\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Kanye West\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Kanye West\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Yeat\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Yeat\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
 &nbsp;            }
 &nbsp;            else {
 <b class="nc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist with a Song featuring Teezo Touchdown\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;featuring\&quot;,\&quot;keyword\&quot;:\&quot;Teezo Touchdown\&quot;}&quot;;</b>
@@ -343,68 +366,68 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="nc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Yeat\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Yeat\&quot;}&quot;;</b>
 <b class="nc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
 &nbsp;            }
-<b class="nc">&nbsp;        }</b>
-<b class="nc">&nbsp;        else if (selector1 == 1) {</b>
-<b class="nc">&nbsp;            int selector2 = random.nextInt(3);</b>
-<b class="nc">&nbsp;            if (selector2 == 0) {</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        else if (selector1 == 1) {</b>
+<b class="fc">&nbsp;            int selector2 = random.nextInt(3);</b>
+<b class="fc">&nbsp;            if (selector2 == 0) {</b>
 <b class="nc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Tyler The Creator\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Tyler The Creator\&quot;}&quot;;</b>
 <b class="nc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on HEROES &amp; VILLAINS\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;HEROES &amp; VILLAINS\&quot;}&quot;;</b>
 <b class="nc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
 &nbsp;
 <b class="nc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Swae Lee\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Swae Lee\&quot;}&quot;;</b>
 <b class="nc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Playboi Carti\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Playboi Carti\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spiderverse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spiderverse\&quot;}&quot;;</b>
+<b class="nc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spider-Verse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spider-Verse\&quot;}&quot;;</b>
 &nbsp;            }
-<b class="nc">&nbsp;            else if (selector2 == 1) {</b>
-<b class="nc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Tyler The Creator\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Tyler The Creator\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on HEROES &amp; VILLAINS\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;HEROES &amp; VILLAINS\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
+<b class="fc">&nbsp;            else if (selector2 == 1) {</b>
+<b class="fc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Tyler The Creator\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Tyler The Creator\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on HEROES &amp; VILLAINS\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;HEROES &amp; VILLAINS\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
 &nbsp;
-<b class="nc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Swae Lee\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Swae Lee\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Playboi Carti\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Playboi Carti\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spiderverse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spiderverse\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Swae Lee\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Swae Lee\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Playboi Carti\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Playboi Carti\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spider-Verse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spider-Verse\&quot;}&quot;;</b>
 &nbsp;            }
 &nbsp;            else {
-<b class="nc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Tyler The Creator\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Tyler The Creator\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on HEROES &amp; VILLAINS\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;HEROES &amp; VILLAINS\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Tyler The Creator\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Tyler The Creator\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on HEROES &amp; VILLAINS\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;HEROES &amp; VILLAINS\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
 &nbsp;
-<b class="nc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Swae Lee\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Swae Lee\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Playboi Carti\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Playboi Carti\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spiderverse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spiderverse\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Swae Lee\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Swae Lee\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Playboi Carti\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Playboi Carti\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spider-Verse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spider-Verse\&quot;}&quot;;</b>
 &nbsp;            }
-<b class="nc">&nbsp;        }</b>
+<b class="fc">&nbsp;        }</b>
 &nbsp;        else {
-<b class="nc">&nbsp;            int selector2 = random.nextInt(3);</b>
-<b class="nc">&nbsp;            if (selector2 == 0) {</b>
-<b class="nc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Drake\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Drake\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
+<b class="fc">&nbsp;            int selector2 = random.nextInt(3);</b>
+<b class="fc">&nbsp;            if (selector2 == 0) {</b>
+<b class="fc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Drake\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Drake\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
 &nbsp;
-<b class="nc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spiderverse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spiderverse\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Metro Boomin\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Metro Boomin\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Lil Uzi Vert\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Lil Uzi Vert\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spider-Verse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spider-Verse\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Metro Boomin\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Metro Boomin\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Lil Uzi Vert\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Lil Uzi Vert\&quot;}&quot;;</b>
 &nbsp;            }
-<b class="nc">&nbsp;            else if (selector2 == 1) {</b>
-<b class="nc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Drake\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Drake\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
+<b class="fc">&nbsp;            else if (selector2 == 1) {</b>
+<b class="fc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Drake\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Drake\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
 &nbsp;
-<b class="nc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spiderverse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spiderverse\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Metro Boomin\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Metro Boomin\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Lil Uzi Vert\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Lil Uzi Vert\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spider-Verse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spider-Verse\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Metro Boomin\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Metro Boomin\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Lil Uzi Vert\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Lil Uzi Vert\&quot;}&quot;;</b>
 &nbsp;            }
 &nbsp;            else {
-<b class="nc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Drake\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Drake\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[2] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on UTOPIA\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;UTOPIA\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[1] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Drake\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Drake\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[0] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with 21 Savage\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;21 Savage\&quot;}&quot;;</b>
 &nbsp;
-<b class="nc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spiderverse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spiderverse\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Metro Boomin\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Metro Boomin\&quot;}&quot;;</b>
-<b class="nc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Lil Uzi Vert\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Lil Uzi Vert\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[4] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song on Spider-Man: Across the Spider-Verse\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;on\&quot;,\&quot;keyword\&quot;:\&quot;Spider-Man: Across the Spider-Verse\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[3] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Metro Boomin\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Metro Boomin\&quot;}&quot;;</b>
+<b class="fc">&nbsp;                jsonArray[5] = &quot;{\&quot;text\&quot;:\&quot;Artist that has a Song with Lil Uzi Vert\&quot;,\&quot;subject\&quot;:\&quot;Artist\&quot;,\&quot;check\&quot;:\&quot;with\&quot;,\&quot;keyword\&quot;:\&quot;Lil Uzi Vert\&quot;}&quot;;</b>
 &nbsp;            }
 &nbsp;        }
-<b class="nc">&nbsp;        return jsonArray;</b>
+<b class="fc">&nbsp;        return jsonArray;</b>
 &nbsp;
 &nbsp;    }
 &nbsp;
@@ -412,35 +435,35 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    @ApiOperation(value = &quot;Check if an Artist has a song by song name&quot;, response = String.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/{name}/songs/{songName}&quot;)
 &nbsp;    String getArtistHasSong( @PathVariable String name, @PathVariable String songName) {
-<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
-<b class="nc">&nbsp;        List&lt;Song&gt; songList = artist.getSongs();</b>
-<b class="nc">&nbsp;        for (int i = 0; i &lt; songList.size(); i++) {</b>
-<b class="nc">&nbsp;            if (songList.get(i).getSongName().equals(songName)) {</b>
+<b class="fc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
+<b class="fc">&nbsp;        List&lt;Song&gt; songList = artist.getSongs();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; songList.size(); i++) {</b>
+<b class="fc">&nbsp;            if (songList.get(i).getSongName().equals(songName)) {</b>
 <b class="nc">&nbsp;                return success;</b>
 &nbsp;            }
 &nbsp;        }
-<b class="nc">&nbsp;        return failure;</b>
+<b class="fc">&nbsp;        return failure;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Check how many songs an Artist has in the database&quot;, response = String.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/{name}/songs/study&quot;)
 &nbsp;    String getArtistSongNumber( @PathVariable String name) {
-<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
-<b class="nc">&nbsp;        int returner = artist.getSongs().size();</b>
-<b class="nc">&nbsp;        return &quot;{\&quot;numSongs\&quot;:\&quot;&quot; + returner + &quot;\&quot;}&quot;;</b>
+<b class="fc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
+<b class="fc">&nbsp;        int returner = artist.getSongs().size();</b>
+<b class="fc">&nbsp;        return &quot;{\&quot;numSongs\&quot;:\&quot;&quot; + returner + &quot;\&quot;}&quot;;</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @ApiOperation(value = &quot;Get the song list of an Artist in the database&quot;, response = String.class, tags = &quot;artist-controller&quot;)
 &nbsp;    @GetMapping(path = &quot;/artists/{name}/songs/string/study&quot;)
 &nbsp;    String getArtistSongsStringForm( @PathVariable String name) {
-<b class="nc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
-<b class="nc">&nbsp;        List&lt;Song&gt; songList = artist.getSongs();</b>
-<b class="nc">&nbsp;        String returner = &quot;&quot;;</b>
-<b class="nc">&nbsp;        for (int i = 0; i &lt; songList.size() - 1; i++) {</b>
+<b class="fc">&nbsp;        Artist artist = artistRepository.findByName(name);</b>
+<b class="fc">&nbsp;        List&lt;Song&gt; songList = artist.getSongs();</b>
+<b class="fc">&nbsp;        String returner = &quot;&quot;;</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; songList.size() - 1; i++) {</b>
 <b class="nc">&nbsp;            returner = returner + songList.get(i).getSongName() + &quot;, &quot;;</b>
 &nbsp;        }
-<b class="nc">&nbsp;        returner = returner + songList.get(songList.size() - 1).getSongName();</b>
-<b class="nc">&nbsp;        return &quot;{\&quot;list\&quot;:\&quot;&quot; + returner + &quot;\&quot;}&quot;;</b>
+<b class="fc">&nbsp;        returner = returner + songList.get(songList.size() - 1).getSongName();</b>
+<b class="fc">&nbsp;        return &quot;{\&quot;list\&quot;:\&quot;&quot; + returner + &quot;\&quot;}&quot;;</b>
 &nbsp;    }
 &nbsp;}
 &nbsp;
@@ -467,7 +490,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2023-12-06 15:59</div>
+    <div style="float:right;">generated on 2023-12-11 02:09</div>
 </div>
 </body>
 </html>

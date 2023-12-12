@@ -65,8 +65,8 @@ public class MultiplayerServer {
 
         // Handle the case of a duplicate username
         if (usernameSessionMap.containsKey(username)) {
-            session.getBasicRemote().sendText("Username already exists");
-            session.close();
+//            session.getBasicRemote().sendText("Username already exists");
+//            session.close();
         }
         else {
             // map current session with username
