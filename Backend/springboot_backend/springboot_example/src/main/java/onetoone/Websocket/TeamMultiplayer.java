@@ -88,9 +88,9 @@ public class TeamMultiplayer {
 
         // get the username by session
         Set<Session> keys = sessionUsernameMap.keySet();
-        StringBuilder log_s = new StringBuilder();
+        String log_s = "";
         for (Session key : keys) {
-            log_s.append(sessionUsernameMap.get(key)).append(" , ");
+            log_s = log_s + sessionUsernameMap.get(key) + " , ";
         }
         logger.info("Here's all of the names in the session: " + log_s);
         String username = sessionUsernameMap.get(session);
