@@ -973,9 +973,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
                 performCheck(colSubject, colCheck, colKeyword, userAnswer, new SinglePlayerGame.AnswerCheckCallback() {
                     @Override
                     public void onResult(boolean colIsCorrect, EditText editText) {
-                     boolean bal = true;
-//                        if (rowIsCorrect && colIsCorrect) {
-                        if(bal == true) {
+                        if (rowIsCorrect && colIsCorrect) {
                             Log.d("YES", "yes");
                             changeBoxColor(editText, true);
                             editText.setEnabled(false);
