@@ -78,6 +78,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     private boolean end = false;
     private boolean isWebSocketConnected = false;
 
+    private boolean concede = false;
     private String Player1, Player2, Player3, Player4;
 
     @Override
@@ -172,6 +173,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         endGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                concede = true;
                 sendBoardState(sendBoard);
                 endGame();
             }
@@ -368,7 +370,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
                     "    \"game\": [" +
                     board.toString() +
                     "    ]," +
-                    "    \"won\": false," +
+                    "    \"won\": " + concede + "," +
                     "    \"score\": "+  getPlayerNum() +
                     "  }" +
                     "}";
@@ -524,7 +526,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         // Set Winner Text
         TextView winnerText = dialogView.findViewById(R.id.winnerText);
         if (!end) {
-            winnerText.setText(winner + " forfeited!");  // Change 'Player X' dynamically based on game result
+            winnerText.setText(winner + " Won!");  // Change 'Player X' dynamically based on game result
         } else {
             winnerText.setText(winner + " Wins!");
         }
@@ -657,12 +659,6 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
         startGame();
     }
 
-    /**
-     * Calls the method to end the game when the opponent has won.
-     */
-    private void callEnd() {
-        showLoserDialog(local);
-    }
 
     /**
      * Displays an error dialog to the user when categories cannot be fetched.
@@ -771,7 +767,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             textView.getBackground().mutate().setColorFilter(colorFilter);
         }
         if (view == 8) {
-            callEnd();
+            showLoserDialog(local);
         }
     }
     //changes the colors of the o1-09 squares to reflect what the opponent has answered correctly
@@ -845,7 +841,7 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
             Log.d("TEAMSTATE",jsonTeamState);
             // Parse the JSON string
             Log.d("SUBSTRING",message.substring(1, message.length()));
-            JSONObject jsonObject = new JSONObject(message.substring(2,message.length()));
+            JSONObject jsonObject = new JSONObject(message.substring(1,message.length()));
 //            JSONObject jsonObject = new JSONObject(message);
             Log.d("GAMIE",jsonObject.toString());
             // Extract the "game" object
@@ -865,15 +861,22 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
 
                 correctGuesses++;
                 String[] boardValues = boardGrid.split(",");
+                 int changeTeamBoardCounter = 0;
                 for (int i = 0; i < boardValues.length; i++) {
-
-                    if(jsonTeamState == "o") {
+                    if(jsonTeamState.equals("o")) {
                         if (Integer.parseInt(boardValues[i]) == 1) {
                             changeOppColor(i);
                         }
                     }
                     else {
-                        changeTeamBoard(i);
+                        if (Integer.parseInt(boardValues[i]) == 1) {
+                            changeTeamBoard(i);
+                            changeTeamBoardCounter++; // Increment the counter
+
+                            if (changeTeamBoardCounter == 9) {
+                                showWinnerDialog(local, playerBoard.getGrid());
+                            }
+                        }
                     }
                 }
 
