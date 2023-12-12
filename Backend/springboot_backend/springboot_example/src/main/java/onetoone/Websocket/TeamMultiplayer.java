@@ -87,6 +87,12 @@ public class TeamMultiplayer {
     public void onMessage(Session session, String message) throws IOException {
 
         // get the username by session
+        Set<Session> keys = sessionUsernameMap.keySet();
+        StringBuilder log_s = new StringBuilder();
+        for (Session key : keys) {
+            log_s.append(sessionUsernameMap.get(key)).append(" , ");
+        }
+        logger.info("Here's all of the names in the session: " + log_s);
         String username = sessionUsernameMap.get(session);
 
         // server side log
