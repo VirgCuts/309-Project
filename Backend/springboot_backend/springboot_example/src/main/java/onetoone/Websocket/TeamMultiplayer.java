@@ -180,42 +180,42 @@ public class TeamMultiplayer {
         logger.info("After the user has been saved in close");
         Board board1 = user1.getBoard();
         logger.info("User 1: " + user1 + " Board 1: " + board1);
-        if (board1 != null) {
-            if (user1.getHighScore() < board1.getScore()) {
-                user1.setHighScore(board1.getScore());
-                userRepository.save(user1);
-            }
-            logger.info("After high score is saved");
-            ObjectMapper mapper = new ObjectMapper();
-            String boardData = mapper.writeValueAsString(board1);
-            logger.info("Before keys check");
+//        if (board1 != null) {
+//            if (user1.getHighScore() < board1.getScore()) {
+//                user1.setHighScore(board1.getScore());
+//                userRepository.save(user1);
+//            }
+//            logger.info("After high score is saved");
+//            ObjectMapper mapper = new ObjectMapper();
+//            String boardData = mapper.writeValueAsString(board1);
+//            logger.info("Before keys check");
+//
+//            Set<Session> keys = sessionUsernameMap.keySet();
+//            String user2 = "opponent";
+//            String user3 = "opponent2";
+//            for (Session key : keys) {
+//                if (!key.getId().equals(session.getId())) {
+//                    user2 = sessionUsernameMap.get(key);
+//                    if (!user2.equals(username)) {
+//                        break;
+//                    }
+//                }
+//            }
+//            for (Session key : keys) {
+//                if (!key.getId().equals(session.getId())) {
+//                    user3 = sessionUsernameMap.get(key);
+//                    if (!user3.equals(username) && !user3.equals(user2)) {
+//                        break;
+//                    }
+//                }
+//            }
+//            logger.info("After keys check");
+//
+//            sendBoardDataToOpponents(user2, user3, boardData);
+//            logger.info("After sendboardata");
+//        }
 
-            Set<Session> keys = sessionUsernameMap.keySet();
-            String user2 = "opponent";
-            String user3 = "opponent2";
-            for (Session key : keys) {
-                if (!key.getId().equals(session.getId())) {
-                    user2 = sessionUsernameMap.get(key);
-                    if (!user2.equals(username)) {
-                        break;
-                    }
-                }
-            }
-            for (Session key : keys) {
-                if (!key.getId().equals(session.getId())) {
-                    user3 = sessionUsernameMap.get(key);
-                    if (!user3.equals(username) && !user3.equals(user2)) {
-                        break;
-                    }
-                }
-            }
-            logger.info("After keys check");
-
-            sendBoardDataToOpponents(user2, user3, boardData);
-            logger.info("After sendboardata");
-        }
-
-
+        logger.info("Before removal");
         // remove user from memory mappings
         sessionUsernameMap.remove(session);
         usernameSessionMap.remove(username);
