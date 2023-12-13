@@ -217,7 +217,7 @@ public class MultiPlayerWaitingRoom extends AppCompatActivity implements WebSock
                     intent.putExtra("ERROR_MESSAGE", "Lobby is full, sorry");
                     startActivity(intent);
                     finish();
-                }else if(message.contains("Start game: ")){
+                }else if(message.contains("Start game")){
                     Intent intent = new Intent(MultiPlayerWaitingRoom.this, MultiPlayerGame.class);
                     intent.putExtra("PLAYER", username);
                     startActivity(intent);
