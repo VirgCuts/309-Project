@@ -958,8 +958,6 @@ public class TeamMultiplayerGame extends AppCompatActivity implements GameViewIn
     public void onWebSocketError(Exception ex) {
 
     }
-
-    // Modified checkAnswer method with network call
     public void checkAnswer(EditText editText, String userAnswer, int row, int col) {
         String colSubject = categories.get(2 + col).get("subject");
         String rowSubject = categories.get(row).get("subject");
