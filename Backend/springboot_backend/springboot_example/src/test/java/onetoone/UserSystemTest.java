@@ -189,8 +189,7 @@ public class UserSystemTest {
         assertEquals(200, statusCode);
         returnString = response.getBody().asString();
         assertEquals("{\"message\":\"success\"}", returnString);
-
-
+        
         response = RestAssured.get("/banStrikes/TestingName");
         assertEquals(200, response.getStatusCode());
         assertEquals(0, response.getBody().as(int.class));
